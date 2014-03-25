@@ -1,0 +1,28 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="WebApplication.Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="header">
+            <h1>Pierwsze kroki z ADOMD.NET</h1>
+        </div>
+        <div id="menu">
+            <a href="CustomQuery.aspx">Generowanie dowolnego zapytania</a><br />
+            <a href="MetaData.aspx">Struktura dostępnych kostek</a><br />
+            <a href="Help.aspx">Pomoc</a>
+        </div>
+        <div id="mainContent">
+            <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>

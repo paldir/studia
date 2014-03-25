@@ -1,0 +1,5 @@
+D:\umk\inzynierka\adomd\programowanie klienta\WebApplication\WebApplication\bin\WebApplication.dll
+D:\umk\inzynierka\adomd\programowanie klienta\WebApplication\WebApplication\bin\WebApplication.pdb
+D:\umk\inzynierka\adomd\programowanie klienta\WebApplication\WebApplication\obj\Debug\WebApplication.csprojResolveAssemblyReference.cache
+D:\umk\inzynierka\adomd\programowanie klienta\WebApplication\WebApplication\obj\Debug\WebApplication.dll
+D:\umk\inzynierka\adomd\programowanie klienta\WebApplication\WebApplication\obj\Debug\WebApplication.pdb
