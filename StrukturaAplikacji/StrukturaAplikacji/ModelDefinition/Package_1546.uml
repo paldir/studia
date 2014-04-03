@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="1765ab46-be76-4d57-8235-fdd3c5d2a3e1"
+  name="Warstwa prezentacji" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <ownedCommentsInternal>
+    <comment
+      Id="f6f76bc9-38e3-49c2-bd0b-974e17e06a48">
+      <body>Jest to aplikacja ASP.NET Web Forms. Odbiera dane wejściowe od użytkownika i sprawdza ich poprawność. Pokazuje rezultat żądań użytkownika o dane.</body>
+    </comment>
+  </ownedCommentsInternal>
+  <suppliersInternal>
+    <dependency
+      Id="1a8a0427-6d41-4ca8-8ae6-f067e3d8ba95">
+      <packageMoniker
+        Id="99b2e5df-0a58-41a8-8e88-bb415c211280"
+        LastKnownName="Warstwa logiki biznesowej"
+        LastKnownLocation="Package1_1546.uml" />
+    </dependency>
+  </suppliersInternal>
+</package>

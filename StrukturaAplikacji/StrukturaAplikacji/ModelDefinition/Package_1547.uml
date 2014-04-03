@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="8b26fcd6-4b01-45d7-bef7-4b16993b3b82"
+  name="Warstwa dostępu do danych" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <ownedCommentsInternal>
+    <comment
+      Id="300bf9b6-a111-4cfa-b978-0f29cb5139a5">
+      <body>Tworzy połączenie z serwerem Analysis Services i odpytuje o wymagane dane, aby później przekazać je do wyższej warstwy.</body>
+    </comment>
+  </ownedCommentsInternal>
+  <suppliersInternal>
+    <dependency
+      Id="d58600ee-c513-4311-bd37-9c0f37ab8ac5">
+      <packageMoniker
+        Id="99b2e5df-0a58-41a8-8e88-bb415c211280"
+        LastKnownName="Warstwa logiki biznesowej"
+        LastKnownLocation="Package1_1546.uml" />
+    </dependency>
+    <dependency
+      Id="029ef90e-05e7-453a-8c00-9d73c461fe9b">
+      <packageMoniker
+        Id="33bb2263-d171-41e4-8d3e-afc6f316caec"
+        LastKnownName="Warstwa danych"
+        LastKnownLocation="Package1_1547.uml" />
+    </dependency>
+  </suppliersInternal>
+</package>

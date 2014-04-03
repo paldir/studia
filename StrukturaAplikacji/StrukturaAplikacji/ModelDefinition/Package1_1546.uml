@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="99b2e5df-0a58-41a8-8e88-bb415c211280"
+  name="Warstwa logiki biznesowej" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <ownedCommentsInternal>
+    <comment
+      Id="5893a2d1-e2af-4158-aeab-8a0ee5dff61b">
+      <body>Wykonuje niezbędne obliczenia na surowych danych, przygotowując je do zaprezentowania użytkownikowi.</body>
+    </comment>
+  </ownedCommentsInternal>
+  <suppliersInternal>
+    <dependency
+      Id="e43fb084-0748-45b5-a27f-2e8d3050a376">
+      <packageMoniker
+        Id="1765ab46-be76-4d57-8235-fdd3c5d2a3e1"
+        LastKnownName="Warstwa prezentacji"
+        LastKnownLocation="Package_1546.uml" />
+    </dependency>
+    <dependency
+      Id="01515d3b-3378-4aba-ae95-9dcdc3f957b8">
+      <packageMoniker
+        Id="8b26fcd6-4b01-45d7-bef7-4b16993b3b82"
+        LastKnownName="Warstwa dostępu do danych"
+        LastKnownLocation="Package_1547.uml" />
+    </dependency>
+  </suppliersInternal>
+</package>
