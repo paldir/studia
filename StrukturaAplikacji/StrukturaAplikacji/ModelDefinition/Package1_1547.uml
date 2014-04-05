@@ -9,13 +9,24 @@
       <body>Przechowuje dane, wymiary, miary i inne elementy struktury kostki OLAP, a także samą kostkę.</body>
     </comment>
   </ownedCommentsInternal>
-  <suppliersInternal>
-    <dependency
-      Id="b0dac521-c03b-4205-813c-8bd940636e82">
-      <packageMoniker
-        Id="8b26fcd6-4b01-45d7-bef7-4b16993b3b82"
-        LastKnownName="Warstwa dostępu do danych"
-        LastKnownLocation="Package_1547.uml" />
-    </dependency>
-  </suppliersInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="1405ca1f-f0c5-4874-bca1-5939ab58b450"
+        name="Serwer Analysis Services"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="11846405-9e79-4b52-815a-d0edcf0b218c">
+            <classMoniker
+              Id="015ec061-4cbf-4c13-946e-c44bca5e0429"
+              LastKnownName="DataAccessManagement"
+              LastKnownLocation="Package_1547.uml" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
 </package>

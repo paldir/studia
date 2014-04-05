@@ -8,14 +8,72 @@
       Id="f6f76bc9-38e3-49c2-bd0b-974e17e06a48">
       <body>Jest to aplikacja ASP.NET Web Forms. Odbiera dane wejściowe od użytkownika i sprawdza ich poprawność. Pokazuje rezultat żądań użytkownika o dane.</body>
     </comment>
+    <comment
+      Id="7290ce4f-c204-425e-9c7c-ffc61c24c261">
+      <body>Plik aspx przechowujący elementy interfejsu.</body>
+      <annotatedElements>
+        <classMoniker
+          Id="c418e8c3-f275-4ee8-baf0-bf8af95dc9b3"
+          LastKnownName="AspxFile"
+          LastKnownLocation="Package_1546.uml" />
+      </annotatedElements>
+    </comment>
+    <comment
+      Id="254e150e-795b-4ed7-ac6a-6f579293bb30">
+      <body>Umieszcza dane w znacznikach HTML, podłącza je do odpowiednich kontrolek itd. w sposób właściwy dla danego typu wyświetlania danych.</body>
+      <annotatedElements>
+        <classMoniker
+          Id="f0cbfdc4-0e03-4b1a-b82d-b9ced1450d3d"
+          LastKnownName="CodeBehind"
+          LastKnownLocation="Package_1546.uml" />
+      </annotatedElements>
+    </comment>
   </ownedCommentsInternal>
-  <suppliersInternal>
-    <dependency
-      Id="1a8a0427-6d41-4ca8-8ae6-f067e3d8ba95">
-      <packageMoniker
-        Id="99b2e5df-0a58-41a8-8e88-bb415c211280"
-        LastKnownName="Warstwa logiki biznesowej"
-        LastKnownLocation="Package1_1546.uml" />
-    </dependency>
-  </suppliersInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="06b78c55-81ea-4303-9113-b536133ae93b"
+        name="PresentationManagement"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="23924363-e49a-46ff-8c53-1483a19061e9">
+            <classMoniker
+              Id="b93542f0-e1d3-41de-a58e-f853c9db775c"
+              LastKnownName="BusinessLogicManagement"
+              LastKnownLocation="Package1_1546.uml" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="c418e8c3-f275-4ee8-baf0-bf8af95dc9b3"
+        name="AspxFile"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="f0cbfdc4-0e03-4b1a-b82d-b9ced1450d3d"
+        name="CodeBehind"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="a991f545-ebd8-440c-9e93-c77bd2d83211"
+            isSubstitutable="false">
+            <classMoniker
+              Id="c418e8c3-f275-4ee8-baf0-bf8af95dc9b3"
+              LastKnownName="AspxFile"
+              LastKnownLocation="Package_1546.uml" />
+          </generalization>
+        </generalsInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
 </package>

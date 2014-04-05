@@ -8,21 +8,50 @@
       Id="5893a2d1-e2af-4158-aeab-8a0ee5dff61b">
       <body>Wykonuje niezbędne obliczenia na surowych danych, przygotowując je do zaprezentowania użytkownikowi.</body>
     </comment>
+    <comment
+      Id="1aaf680b-ba80-4f50-a85c-512d6e086a3a">
+      <body>Otrzymuje dane z niższej warstwy i wydobywa z nich elementy spełniające aktualne wymagania użytkownika.</body>
+      <annotatedElements>
+        <classMoniker
+          Id="f991445d-de40-4fc0-b1d1-0c8e938a2859"
+          LastKnownName="DataParser"
+          LastKnownLocation="Package1_1546.uml" />
+      </annotatedElements>
+    </comment>
   </ownedCommentsInternal>
-  <suppliersInternal>
-    <dependency
-      Id="e43fb084-0748-45b5-a27f-2e8d3050a376">
-      <packageMoniker
-        Id="1765ab46-be76-4d57-8235-fdd3c5d2a3e1"
-        LastKnownName="Warstwa prezentacji"
-        LastKnownLocation="Package_1546.uml" />
-    </dependency>
-    <dependency
-      Id="01515d3b-3378-4aba-ae95-9dcdc3f957b8">
-      <packageMoniker
-        Id="8b26fcd6-4b01-45d7-bef7-4b16993b3b82"
-        LastKnownName="Warstwa dostępu do danych"
-        LastKnownLocation="Package_1547.uml" />
-    </dependency>
-  </suppliersInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="b93542f0-e1d3-41de-a58e-f853c9db775c"
+        name="BusinessLogicManagement"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="28001c07-d5b5-4c5b-b1d8-a1b4e3cc73bb">
+            <classMoniker
+              Id="015ec061-4cbf-4c13-946e-c44bca5e0429"
+              LastKnownName="DataAccessManagement"
+              LastKnownLocation="Package_1547.uml" />
+          </dependency>
+          <dependency
+            Id="d0239769-772e-4e60-8143-8cc5fdd3a3af">
+            <classMoniker
+              Id="06b78c55-81ea-4303-9113-b536133ae93b"
+              LastKnownName="PresentationManagement"
+              LastKnownLocation="Package_1546.uml" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="f991445d-de40-4fc0-b1d1-0c8e938a2859"
+        name="DataParser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
 </package>
