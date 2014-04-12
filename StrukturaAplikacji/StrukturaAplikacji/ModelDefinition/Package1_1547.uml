@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="33bb2263-d171-41e4-8d3e-afc6f316caec"
+  name="Warstwa danych" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <ownedCommentsInternal>
+    <comment
+      Id="2b60e192-b3a0-4eb8-913d-1d4e03a06e99">
+      <body>Przechowuje dane, wymiary, miary i inne elementy struktury kostki OLAP, a także samą kostkę.</body>
+    </comment>
+  </ownedCommentsInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="1405ca1f-f0c5-4874-bca1-5939ab58b450"
+        name="Serwer Analysis Services"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="11846405-9e79-4b52-815a-d0edcf0b218c">
+            <classMoniker
+              Id="015ec061-4cbf-4c13-946e-c44bca5e0429"
+              LastKnownName="DataAccessManagement"
+              LastKnownLocation="Package_1547.uml" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+</package>
