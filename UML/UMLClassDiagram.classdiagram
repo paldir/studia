@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="b542ce9e-c2e2-4119-a28d-a6f60486c4a5" name="UMLClassDiagram" linkedPackageId="06493835-8191-4eaf-a39c-36ec40f08f35" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="11bd8526-d341-440f-8f46-a7b7e554983f">
+      <profileInstance Id="16bd67b0-1b9f-42aa-98f6-655203f11780" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="dda70142-4a22-43ad-bfc6-d3848fb18682">
+      <profileInstance Id="322e5fee-a93d-4bf7-b58a-640e877882d4" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="82f5bf62-8c08-4a92-b79d-c24e4484de39" name="Warstwa prezentacji">
+        <ownedCommentsInternal>
+          <comment Id="8260553c-64cc-4329-a37c-28a6fc7e42a0">
+            <elementDefinition Id="1f167ab9-bae2-44ad-94d3-3a6d0b255339" />
+            <body>Jest to aplikacja ASP.NET Web Forms. Odbiera dane wejściowe od użytkownika i sprawdza ich poprawność. Pokazuje rezultat żądań użytkownika o dane.</body>
+          </comment>
+          <comment Id="41ab2b88-ab4d-4eaa-94d0-f311685ab4c2">
+            <elementDefinition Id="1309c24e-6880-4490-91c2-ce8331345562" />
+            <body>Plik aspx przechowujący elementy interfejsu.</body>
+            <annotatedElements>
+              <classMoniker Id="ab16a7a7-2aaa-4808-ab10-5ed8d5e1f9f3" LastKnownName="AspxFile" />
+            </annotatedElements>
+          </comment>
+          <comment Id="c7ae25f8-124f-4d98-878a-75b8e552dc3b">
+            <elementDefinition Id="74aaceb0-2fc3-4915-8edf-2170bdc56869" />
+            <body>Umieszcza dane w znacznikach HTML, podłącza je do odpowiednich kontrolek itd. w sposób właściwy dla danego typu wyświetlania danych.</body>
+            <annotatedElements>
+              <classMoniker Id="84b82ffc-b1bd-47bc-8131-a01500b91d55" LastKnownName="CodeBehind" />
+            </annotatedElements>
+          </comment>
+        </ownedCommentsInternal>
+        <elementDefinition Id="d4add067-04ad-4aff-a0b2-067d50b33592" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="677d9818-cb46-43f1-a8ec-1eb6afb7f36c" name="PresentationManagement" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="a3eb5c5c-fe67-4309-832f-2d351215f515" />
+              <suppliersInternal>
+                <dependency Id="0211739a-01bd-44e9-b2c0-57f9cb9bf234">
+                  <classMoniker Id="313ae4e5-39f0-4834-b3d0-c2e77b1fa8a7" LastKnownName="BusinessLogicManagement" />
+                  <elementDefinition Id="79431803-9ccc-47ac-b9c6-2bff9707c9cc" />
+                </dependency>
+              </suppliersInternal>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="ab16a7a7-2aaa-4808-ab10-5ed8d5e1f9f3" name="AspxFile" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="4693d718-d70e-415a-b965-71f09ac236b6" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="84b82ffc-b1bd-47bc-8131-a01500b91d55" name="CodeBehind" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="269639c5-cf42-4630-b73a-62e742d41206" />
+              <generalsInternal>
+                <generalization Id="3d8a50b7-5eac-42b0-9e78-3cd085c4cd08" isSubstitutable="false">
+                  <classMoniker Id="ab16a7a7-2aaa-4808-ab10-5ed8d5e1f9f3" LastKnownName="AspxFile" />
+                  <elementDefinition Id="f24b2518-db2d-411c-937d-81a960de26ab" />
+                </generalization>
+              </generalsInternal>
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="9986334e-0753-4a15-b848-5910b1a7efd2" name="Warstwa logiki biznesowej">
+        <ownedCommentsInternal>
+          <comment Id="f2f85466-a2ef-4e30-b4ae-2afa4a26ee72">
+            <elementDefinition Id="f7d38eb8-e3f7-43a7-864e-03a5e7f41095" />
+            <body>Wykonuje niezbędne obliczenia na surowych danych, przygotowując je do zaprezentowania użytkownikowi.</body>
+          </comment>
+          <comment Id="637d05e8-633e-4555-9731-6b398a23dcd3">
+            <elementDefinition Id="4445d40a-886e-4a6f-9cee-5df8132b72bc" />
+            <body>Otrzymuje dane z niższej warstwy i wydobywa z nich elementy spełniające aktualne wymagania użytkownika.</body>
+            <annotatedElements>
+              <classMoniker Id="424a88e1-8ef4-40d2-9c43-99d2c4f799fa" LastKnownName="DataParser" />
+            </annotatedElements>
+          </comment>
+        </ownedCommentsInternal>
+        <elementDefinition Id="3b30cee9-387b-4e77-974b-8b3b3d26f336" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="313ae4e5-39f0-4834-b3d0-c2e77b1fa8a7" name="BusinessLogicManagement" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="a37d90bd-9ed2-4078-bf8b-21b733744ada" />
+              <suppliersInternal>
+                <dependency Id="877fa8c2-3464-4e0c-910c-b729185b7f66">
+                  <classMoniker Id="940b7d28-9719-496d-ad3b-e1816d5deeee" LastKnownName="DataAccessManagement" />
+                  <elementDefinition Id="1d58b24d-6a9b-4bd6-9160-0a00c75ea9ba" />
+                </dependency>
+                <dependency Id="4a1d320f-75e1-414f-8ae8-6e2c553f4ddb">
+                  <classMoniker Id="677d9818-cb46-43f1-a8ec-1eb6afb7f36c" LastKnownName="PresentationManagement" />
+                  <elementDefinition Id="45d25fc1-6775-4ade-91e1-722d117f013d" />
+                </dependency>
+              </suppliersInternal>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="424a88e1-8ef4-40d2-9c43-99d2c4f799fa" name="DataParser" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="7ed2b423-679b-4831-ab64-8a5aa1fa10ca" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="d5d9134e-cc0a-4516-8370-cb804af96b0d" name="Warstwa dostępu do danych">
+        <ownedCommentsInternal>
+          <comment Id="04e1d53f-8222-4c04-85c2-7fb223e5e490">
+            <elementDefinition Id="1afa58a1-50d5-4be3-b758-110f3256bdff" />
+            <body>Tworzy połączenie z serwerem Analysis Services i odpytuje o wymagane dane, aby później przekazać je do wyższej warstwy.</body>
+          </comment>
+          <comment Id="690a6d49-9f78-4017-aa0c-2b3576d2a766">
+            <elementDefinition Id="5a0ed156-8e08-45f8-bf3c-21e9e06d8699" />
+            <body>Otwiera i zamyka połączenie.</body>
+            <annotatedElements>
+              <classMoniker Id="2fac605b-f531-4ef5-ade9-5856d9840343" LastKnownName="Connection" />
+            </annotatedElements>
+          </comment>
+          <comment Id="845101cb-6b22-4e63-98a5-3dd27fa595bf">
+            <elementDefinition Id="88bd5cf9-7fc6-4757-a6c5-163d4793129c" />
+            <body>Dziedziczy obiekt przechowujący połączenie. Pozwala na wykonywanie zapytań na serwerze AS i zwraca ich wyniki.</body>
+            <annotatedElements>
+              <classMoniker Id="5e3a98a6-2a78-4757-bb96-1483f47ea800" LastKnownName="Command" />
+            </annotatedElements>
+          </comment>
+        </ownedCommentsInternal>
+        <elementDefinition Id="f2c42241-5afb-4cf7-b558-351ee35b1233" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="2fac605b-f531-4ef5-ade9-5856d9840343" name="Connection" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="70373409-75aa-44f0-9f70-ac2d51618902" />
+              <ownedAttributesInternal>
+                <property Id="76f5e3cb-b53b-469d-ab44-74cf618a626e" name="connection" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="e3b77e3f-effb-4ea7-a076-3075bd1ea20f" />
+                </property>
+              </ownedAttributesInternal>
+              <ownedOperationsInternal>
+                <operation Id="ddc4960a-d01d-4b64-8b7f-10fd2f4efb91" name="EstablishConnection" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+                  <elementDefinition Id="6d942e3c-4c56-4882-ad32-c79dae732edb" />
+                </operation>
+                <operation Id="fbef4a95-8e38-4d39-b188-b360348c98f5" name="CloseConnection" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+                  <elementDefinition Id="b649e1d8-0984-4e38-802b-342c3c9cecde" />
+                </operation>
+              </ownedOperationsInternal>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="5e3a98a6-2a78-4757-bb96-1483f47ea800" name="Command" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="edd09570-0ce3-48eb-82b7-94265460369d" />
+              <generalsInternal>
+                <generalization Id="a942739e-025f-4faf-b4ca-90968a2ed7dc" isSubstitutable="false">
+                  <classMoniker Id="2fac605b-f531-4ef5-ade9-5856d9840343" LastKnownName="Connection" />
+                  <elementDefinition Id="3e8c8492-99c4-4758-b531-274d0214f49b" />
+                </generalization>
+              </generalsInternal>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="940b7d28-9719-496d-ad3b-e1816d5deeee" name="DataAccessManagement" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="f8e559ce-f91e-4ac4-b97c-d728dc98666b" />
+              <suppliersInternal>
+                <dependency Id="e60245a6-da64-48bf-865b-9ee36658912e">
+                  <classMoniker Id="fd5cee32-4dc0-4603-9f31-81c7d8f1c38d" LastKnownName="Serwer Analysis Services" />
+                  <elementDefinition Id="f9fd5b61-8ea4-4f36-9cfd-c86763a8f091" />
+                </dependency>
+                <dependency Id="b7dfeeaf-424d-4cf1-820c-5d9d3957d722">
+                  <classMoniker Id="313ae4e5-39f0-4834-b3d0-c2e77b1fa8a7" LastKnownName="BusinessLogicManagement" />
+                  <elementDefinition Id="ee205048-6f5e-416d-a4c1-cc5193bf014e" />
+                </dependency>
+              </suppliersInternal>
+              <ownedAttributesInternal>
+                <property Id="1390de91-17bf-4143-94a9-1266304858dc" name="Connection connection" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="86bd0ae9-e04e-4560-b638-d16dc9775258" />
+                </property>
+              </ownedAttributesInternal>
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="b1364079-2e67-48a7-ba54-e43590972c0d" name="Warstwa danych">
+        <ownedCommentsInternal>
+          <comment Id="10bf0c36-3e05-4bfe-821e-e7dbe33901e0">
+            <elementDefinition Id="fa94d29d-1a2a-4765-a287-271a758f111c" />
+            <body>Przechowuje dane, wymiary, miary i inne elementy struktury kostki OLAP, a także samą kostkę.</body>
+          </comment>
+        </ownedCommentsInternal>
+        <elementDefinition Id="6696d294-417f-43db-b7f1-c2fc9b0c58a0" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="fd5cee32-4dc0-4603-9f31-81c7d8f1c38d" name="Serwer Analysis Services" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="3ada62e6-49b8-4e09-a7b0-05c6ce91bf19" />
+              <suppliersInternal>
+                <dependency Id="de6ea8e0-587d-4f1d-b3e0-421efee00efb">
+                  <classMoniker Id="940b7d28-9719-496d-ad3b-e1816d5deeee" LastKnownName="DataAccessManagement" />
+                  <elementDefinition Id="2fef2b46-1077-49ea-90c3-2383ab8dd166" />
+                </dependency>
+              </suppliersInternal>
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+  </packagedElements>
+  <package Id="06493835-8191-4eaf-a39c-36ec40f08f35" name="UML">
+    <elementDefinition Id="419ff9ee-fb3a-4290-8c70-2a2fe56b6443" />
+  </package>
+</logicalClassDesignerModel>
