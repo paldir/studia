@@ -1,0 +1,7 @@
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\bin\Debug\BusinessLogic.dll
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\bin\Debug\BusinessLogic.pdb
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\bin\Debug\DataAccess.dll
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\bin\Debug\DataAccess.pdb
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\obj\Debug\BusinessLogic.csprojResolveAssemblyReference.cache
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\obj\Debug\BusinessLogic.dll
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\BusinessLogic\obj\Debug\BusinessLogic.pdb

@@ -1,0 +1,5 @@
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\Presentation\bin\Presentation.dll
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\Presentation\bin\Presentation.pdb
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\Presentation\obj\Debug\Presentation.csprojResolveAssemblyReference.cache
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\Presentation\obj\Debug\Presentation.dll
+C:\Users\Zawadzcy\Documents\GitHub\inzynierka\Presentation\obj\Debug\Presentation.pdb
