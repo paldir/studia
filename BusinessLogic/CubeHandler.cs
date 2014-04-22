@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
-    class CubeHandler
+    public class CubeHandler
     {
         DataAccess.CubeASAccess cubeAS;
 
@@ -15,15 +15,15 @@ namespace BusinessLogic
             cubeAS = new DataAccess.CubeASAccess();
         }
 
-        public Cube[] GetCubesStructure()
+        public Cube GetCubesStructure()
         {
             DataAccess.Cube[] DACubes = cubeAS.GetCubesStructure();
-            Cube[] cubes = new Cube[DACubes.Length];
+            Cube cube = null;
 
             for (int i = 0; i < DACubes.Length; i++)
-                cubes[i] = new Cube(DACubes[i]);
+                    cube = new Cube(DACubes[i]);
 
-            return cubes;
+            return cube;
         }
     }
 }

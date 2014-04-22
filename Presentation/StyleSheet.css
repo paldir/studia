@@ -1,0 +1,7 @@
+﻿#columns {
+    display: table-row;
+}
+
+.column {
+    display: table-cell;
+}

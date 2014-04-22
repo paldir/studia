@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeHierarchy.cs" />
     <Compile Include="Cube.cs" />
     <Compile Include="CubeASAccess.cs" />
     <Compile Include="ASHelper.cs" />
     <Compile Include="Dimension.cs" />
+    <Compile Include="Member.cs" />
     <Compile Include="Measure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,6 +11,12 @@ namespace DataAccess
     {
         const string connectionString = "Data Source=localhost;";
 
-        public static AdomdConnection EstablishConnection() { return new AdomdConnection(connectionString); }
+        public static AdomdConnection EstablishConnection()
+        {
+            AdomdConnection connection = new AdomdConnection(connectionString);
+            connection.Open();
+
+            return connection;
+        }
     }
 }
