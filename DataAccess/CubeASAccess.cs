@@ -15,10 +15,11 @@ namespace DataAccess
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
-                cubes = new Cube[connection.Cubes.Count];
+                cubes = new Cube[1];
 
-                for (int i = 0; i < cubes.Length; i++)
-                    cubes[i] = new Cube(connection.Cubes[i]);
+                for (int i = 0; i < connection.Cubes.Count; i++)
+                    if (connection.Cubes[i].Name == "Adventure Works")
+                        cubes[0] = new Cube(connection.Cubes[i]);
             }
 
             return cubes;

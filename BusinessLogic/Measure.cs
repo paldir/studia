@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
-    class Measure
+    public class Measure
     {
         string name;
         string description;
@@ -16,5 +16,8 @@ namespace BusinessLogic
             name = measure.GetName();
             description = measure.GetDescription();
         }
+
+        public string GetName() { return name; }
+        public string GetDescription() { return description; }
     }
 }

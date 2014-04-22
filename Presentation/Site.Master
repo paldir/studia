@@ -12,8 +12,8 @@
 <body>
     <form id="form1" runat="server">
     <div id="columns">
-        <div id="leftColumn" class="column"></div>
-        <div id="rightColumn" class="column">
+        <div id="leftColumn" class="column" runat="server"></div>
+        <div id="rightColumn" class="column">rightColumn
             <asp:ContentPlaceHolder ID="rightColumnContentPlaceHolder" runat="server">
         
             </asp:ContentPlaceHolder>

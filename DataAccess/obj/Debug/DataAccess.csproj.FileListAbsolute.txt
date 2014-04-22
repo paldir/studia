@@ -1,5 +1,0 @@
-C:\Users\Zawadzcy\Documents\GitHub\inzynierka\DataAccess\bin\Debug\DataAccess.dll
-C:\Users\Zawadzcy\Documents\GitHub\inzynierka\DataAccess\bin\Debug\DataAccess.pdb
-C:\Users\Zawadzcy\Documents\GitHub\inzynierka\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
-C:\Users\Zawadzcy\Documents\GitHub\inzynierka\DataAccess\obj\Debug\DataAccess.dll
-C:\Users\Zawadzcy\Documents\GitHub\inzynierka\DataAccess\obj\Debug\DataAccess.pdb
