@@ -18,7 +18,7 @@ namespace DataAccess
             description = member.Description;
             Microsoft.AnalysisServices.AdomdClient.MemberCollection aSChildren = null;
 
-            if (member.GetChildren().Count < 100)
+            if (member.GetChildren().Count < 10)
             {
                 aSChildren = member.GetChildren();
                 children = new Member[aSChildren.Count];

@@ -16,12 +16,10 @@ namespace Presentation
 
             cube = cubeHandler.GetCubesStructure();
         }
-
+        
         public TreeView DimensionsTreeView()
         {
             TreeView treeView = new TreeView();
-
-            treeView.ID = cube.GetName().Replace(" ", String.Empty) + "Structure";
             
             foreach (BusinessLogic.Dimension dimension in cube.GetDimensions())
             {
@@ -43,10 +41,10 @@ namespace Presentation
                 }
             }
 
-            return treeView;
+            return TreeViewConfig(treeView);
         }
 
-        CheckBoxList MeasuresCheckBoxList()
+        public CheckBoxList MeasuresCheckBoxList()
         {
             CheckBoxList checkBoxList = new CheckBoxList();
             BusinessLogic.Measure[] measures=cube.GetMeasures();
@@ -62,20 +60,12 @@ namespace Presentation
             return checkBoxList;
         }
 
-        public List<WebControl> CubeStructureControls()
-        {
-            List<WebControl> controls = new List<WebControl>();
-            
-            controls.Add(TreeViewConfig(DimensionsTreeView()));
-            controls.Add(MeasuresCheckBoxList());
-
-            return controls;
-        }
-
         TreeView TreeViewConfig(TreeView treeView)
         {
+            treeView.ID = cube.GetName().Replace(" ", String.Empty) + "Structure";
             treeView.ImageSet = TreeViewImageSet.Arrows;
             treeView.ExpandDepth = 0;
+            treeView.Attributes.Add("onclick", "generatePostBack()");
 
             return treeView;
         }
