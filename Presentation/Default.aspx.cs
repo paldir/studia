@@ -9,30 +9,35 @@ namespace Presentation
 {
     public partial class Default : System.Web.UI.Page
     {
+        BusinessLogic.CubeHandler cubeHandler;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
+            cubeHandler = new BusinessLogic.CubeHandler();
+            
             InitializeLeftColumn();
+            InitializeCentralColumn();
         }
 
         void InitializeLeftColumn()
         {
-            CubesStructure cubesStructure = new CubesStructure();
-
-            TreeView treeView = cubesStructure.DimensionsTreeView();
-            treeView.TreeNodeCheckChanged += new TreeNodeEventHandler(treeView_TreeNodeCheckChanged);
-            leftColumn.Controls.Add(treeView);
-
-            CheckBoxList checkBoxList = cubesStructure.MeasuresCheckBoxList();
-            leftColumn.Controls.Add(checkBoxList);
+            DropDownList dimensionsList = CubeStructure.DimensionsDropDownList(cubeHandler.GetDimensionsNames());
+            dimensionsList.SelectedIndexChanged += dimensionsList_SelectedIndexChanged;
+            leftColumn.Controls.Add(dimensionsList);
         }
 
-        void treeView_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
+        void InitializeCentralColumn()
         {
-            TreeView treeView = (TreeView)sender;
-            rightColumn.InnerText = String.Empty;
+            CheckBoxList measuresList = CubeStructure.MeasuresCheckBoxList(cubeHandler.GetMeasuresNames());
+            centralColumn.Controls.Add(measuresList);
+        }
 
-            foreach (TreeNode treeNode in treeView.CheckedNodes)
-                rightColumn.InnerHtml += treeNode.ValuePath + "<br />";
+        void dimensionsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList dropDownList = (DropDownList)sender;
+            
+            TreeView dimensionTreeView = CubeStructure.DimensionTreeView(cubeHandler.GetDimensionStructure(dropDownList.SelectedItem.Text));
+            leftColumn.Controls.Add(dimensionTreeView);
         }
     }
 }

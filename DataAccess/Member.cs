@@ -16,13 +16,10 @@ namespace DataAccess
         {
             name = member.Name;
             description = member.Description;
-            Microsoft.AnalysisServices.AdomdClient.MemberCollection aSChildren = null;
+            Microsoft.AnalysisServices.AdomdClient.MemberCollection aSChildren = member.GetChildren();
 
-            if (member.GetChildren().Count < 10)
-            {
-                aSChildren = member.GetChildren();
+            if (aSChildren.Count < 100)
                 children = new Member[aSChildren.Count];
-            }
             else
                 children = new Member[0];
 
