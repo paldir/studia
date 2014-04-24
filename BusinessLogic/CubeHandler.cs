@@ -8,22 +8,10 @@ namespace BusinessLogic
 {
     public class CubeHandler
     {
-        DataAccess.CubeASAccess cubeAS;
+        DataAccess.CubeASAccess cubeAccess=null;
 
-        public CubeHandler()
-        {
-            cubeAS = new DataAccess.CubeASAccess();
-        }
+        public CubeHandler() { cubeAccess = new DataAccess.CubeASAccess(); }
 
-        public Cube GetCubesStructure()
-        {
-            DataAccess.Cube[] DACubes = cubeAS.GetCubesStructure();
-            Cube cube = null;
-
-            for (int i = 0; i < DACubes.Length; i++)
-                    cube = new Cube(DACubes[i]);
-
-            return cube;
-        }
+        public DataAccess.Cube GetCubeStructure() { return cubeAccess.GetCubeStructure(); }
     }
 }
