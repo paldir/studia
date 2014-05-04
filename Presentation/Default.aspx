@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Presentation.Default" %>
 <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
-    <script src="Scripts.js"></script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="contentPlaceHolder" runat="server">
     <asp:ScriptManager ID="scriptManager" runat="server" />
