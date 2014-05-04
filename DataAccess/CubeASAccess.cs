@@ -48,5 +48,41 @@ namespace DataAccess
 
             return dimension;
         }
+
+        public string[,] ExecuteMDXQuery(string mDXQuery)
+        {
+            string[,] result;
+
+            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            {
+                AdomdCommand command = connection.CreateCommand();
+                command.CommandText = mDXQuery;
+
+                result = ConvertCellSetToArray(command.ExecuteCellSet());
+            }
+
+            return result;
+        }
+
+        string[,] ConvertCellSetToArray(CellSet cellSet)
+        {
+            Microsoft.AnalysisServices.AdomdClient.TupleCollection tuplesOnColumns = cellSet.Axes[0].Set.Tuples;
+            Microsoft.AnalysisServices.AdomdClient.TupleCollection tuplesOnRows = cellSet.Axes[1].Set.Tuples;
+            string[,] result = new string[tuplesOnRows.Count, tuplesOnColumns.Count];
+            result[0, 0] = String.Empty;
+
+            for (int i = 1; i <= tuplesOnColumns.Count; i++)
+                result[0, i] = tuplesOnColumns[i - 1].Members[0].Caption;
+
+            for (int i = 1; i <= tuplesOnRows.Count; i++)
+            {
+                result[i, 0] = tuplesOnRows[i - 1].Members[0].Caption;
+
+                for (int j = 1; j <= tuplesOnColumns.Count; j++)
+                    result[i, j] = cellSet.Cells[i - 1, j - 1].FormattedValue;
+            }
+
+            return result;
+        }
     }
 }
