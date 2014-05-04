@@ -13,21 +13,84 @@ namespace Presentation {
     public partial class Default {
         
         /// <summary>
-        /// leftColumn control.
+        /// scriptManager control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl leftColumn;
+        protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
-        /// rightColumn control.
+        /// dimensionsListPlace control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl rightColumn;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dimensionsListPlace;
+        
+        /// <summary>
+        /// dimensionTreeViewUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel dimensionTreeViewUpdatePanel;
+        
+        /// <summary>
+        /// dimensionTreeViewPlace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dimensionTreeViewPlace;
+        
+        /// <summary>
+        /// dimensionTreeViewPostBackButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button dimensionTreeViewPostBackButton;
+        
+        /// <summary>
+        /// measuresListPlace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl measuresListPlace;
+        
+        /// <summary>
+        /// selectedItemsUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel selectedItemsUpdatePanel;
+        
+        /// <summary>
+        /// selectedDimensionsPlace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl selectedDimensionsPlace;
+        
+        /// <summary>
+        /// selectedMeasuresPlace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl selectedMeasuresPlace;
     }
 }

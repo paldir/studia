@@ -8,19 +8,45 @@ using Microsoft.AnalysisServices.AdomdClient;
 namespace DataAccess
 {
     public class CubeASAccess
-    {
-        public Cube GetCubeStructure()
+    {        
+        const string cubeName="Adventure Works";
+        
+        public List<string> GetMeasuresNames()
         {
-            Cube cube = null;
+            List<string> measuresList = new List<string>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
-                for (int i = 0; i < connection.Cubes.Count; i++)
-                    if (connection.Cubes[i].Name == "Adventure Works")
-                        cube = new Cube(connection.Cubes[i]);
+                foreach (Measure measure in connection.Cubes[cubeName].Measures)
+                    measuresList.Add(measure.Name);
             }
 
-            return cube;
+            return measuresList;
+        }
+
+        public List<string> GetDimensionsNames()
+        {
+            List<String> dimensionsList = new List<string>();
+
+            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            {
+                foreach (Microsoft.AnalysisServices.AdomdClient.Dimension dimension in connection.Cubes[cubeName].Dimensions)
+                    dimensionsList.Add(dimension.Name);
+            }
+
+            return dimensionsList;
+        }
+
+        public Dimension GetDimensionStructure(string dimensionName)
+        {
+            Dimension dimension;
+
+            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            {
+                dimension = new Dimension(connection.Cubes[cubeName].Dimensions[dimensionName]);
+            }
+
+            return dimension;
         }
     }
 }
