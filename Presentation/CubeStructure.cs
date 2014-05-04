@@ -11,7 +11,7 @@ namespace Presentation
         static public CheckBoxList MeasuresCheckBoxList(List<string> measuresNames)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
-            checkBoxList.ID = "Measures";
+            checkBoxList.ID = "MeasuresList";
             checkBoxList.AutoPostBack = true;
 
             foreach (string measureName in measuresNames)
@@ -23,9 +23,9 @@ namespace Presentation
         static public DropDownList DimensionsDropDownList(List<string> dimensionsNames)
         {
             DropDownList dropDownList = new DropDownList();
-            dropDownList.ID = "Dimensions";
+            dropDownList.ID = "DimensionsList";
             dropDownList.AutoPostBack = true;
-
+            
             foreach (string dimensionName in dimensionsNames)
                 dropDownList.Items.Add(dimensionName);
 
@@ -35,10 +35,9 @@ namespace Presentation
         static public TreeView DimensionTreeView(DataAccess.Dimension dimension)
         {
             TreeView treeView = new TreeView();
-            treeView.ID = "Dimension";
+            treeView.ID = "DimensionTreeView";
             treeView.ImageSet = TreeViewImageSet.Arrows;
             treeView.ExpandDepth = 0;
-            treeView.Attributes.Add("onclick", "generatePostBack()");
 
             foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies())
             {
@@ -59,18 +58,7 @@ namespace Presentation
         static TreeNode TreeNodeConfig(TreeNode treeNode)
         {
             treeNode.SelectAction = TreeNodeSelectAction.None;
-
-            switch (treeNode.Depth)
-            {
-                case 0:
-                    treeNode.ShowCheckBox = false;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                    treeNode.ShowCheckBox = true;
-                    break;
-            }
+            treeNode.ShowCheckBox = true;
 
             return treeNode;
         }
