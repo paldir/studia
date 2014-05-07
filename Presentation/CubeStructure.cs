@@ -8,26 +8,26 @@ namespace Presentation
 {
     public class CubeStructure
     {
-        static public CheckBoxList MeasuresCheckBoxList(List<string> measuresNames)
+        static public CheckBoxList GetCheckBoxListOfMeasures(List<string> namesOfMeasures)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
-            checkBoxList.ID = "MeasuresList";
+            checkBoxList.ID = "ListOfMeasures";
             checkBoxList.AutoPostBack = true;
 
-            foreach (string measureName in measuresNames)
-                checkBoxList.Items.Add(measureName);
+            foreach (string nameOfMeasure in namesOfMeasures)
+                checkBoxList.Items.Add(new ListItem(nameOfMeasure, "[Measures].[" + nameOfMeasure + "]"));
 
             return checkBoxList;
         }
 
-        static public DropDownList DimensionsDropDownList(List<string> dimensionsNames)
+        static public DropDownList GetDropDownListOfDimensions(List<string> namesOfDimensions)
         {
             DropDownList dropDownList = new DropDownList();
-            dropDownList.ID = "DimensionsList";
+            dropDownList.ID = "ListOfDimensions";
             dropDownList.AutoPostBack = true;
             
-            foreach (string dimensionName in dimensionsNames)
-                dropDownList.Items.Add(dimensionName);
+            foreach (string nameOfDimension in namesOfDimensions)
+                dropDownList.Items.Add(nameOfDimension);
 
             return dropDownList;
         }
@@ -41,14 +41,14 @@ namespace Presentation
 
             foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies())
             {
-                treeView.Nodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName())));
+                treeView.Nodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName())));
 
                 foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
                 {
-                    treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName())));
+                    treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName())));
 
                     foreach (DataAccess.Member child in member.GetChildren())
-                        treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes[treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName())));
+                        treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes[treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName())));
                 }
             }
 

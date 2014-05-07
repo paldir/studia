@@ -9,12 +9,14 @@ namespace DataAccess
     public class AttributeHierarchy
     {
         string name;
+        string uniqueName;
         string description;
         Member[] members;
 
         public AttributeHierarchy(Microsoft.AnalysisServices.AdomdClient.Hierarchy attributeHierarchy)
         {
             name = attributeHierarchy.Name;
+            uniqueName = attributeHierarchy.UniqueName;
             description = attributeHierarchy.Description;
             Microsoft.AnalysisServices.AdomdClient.MemberCollection ASMembers = attributeHierarchy.Levels[0].GetMembers();
 
@@ -25,6 +27,7 @@ namespace DataAccess
         }
 
         public string GetName() { return name; }
+        public string GetUniqueName() { return uniqueName; }
         public string GetDescription() { return description; }
         public Member[] GetMembers() { return members; }
     }

@@ -11,78 +11,80 @@ namespace DataAccess
     {        
         const string cubeName="Adventure Works";
         
-        public List<string> GetMeasuresNames()
+        public List<string> GetNamesOfMeasures()
         {
-            List<string> measuresList = new List<string>();
+            List<string> listOfMeasures = new List<string>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Measure measure in connection.Cubes[cubeName].Measures)
-                    measuresList.Add(measure.Name);
+                    listOfMeasures.Add(measure.Name);
             }
 
-            return measuresList;
+            return listOfMeasures;
         }
 
-        public List<string> GetDimensionsNames()
+        public List<string> GetNamesOfDimensions()
         {
-            List<String> dimensionsList = new List<string>();
+            List<String> listOfDimensions = new List<string>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Dimension dimension in connection.Cubes[cubeName].Dimensions)
-                    dimensionsList.Add(dimension.Name);
+                    listOfDimensions.Add(dimension.Name);
             }
 
-            return dimensionsList;
+            return listOfDimensions;
         }
 
-        public Dimension GetDimensionStructure(string dimensionName)
+        public Dimension GetDimensionStructure(string nameOfDimension)
         {
             Dimension dimension;
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
-                dimension = new Dimension(connection.Cubes[cubeName].Dimensions[dimensionName]);
+                dimension = new Dimension(connection.Cubes[cubeName].Dimensions[nameOfDimension]);
             }
 
             return dimension;
         }
 
-        public string[,] ExecuteMDXQuery(string mDXQuery)
+        public string[,] GetArrayFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
         {
-            string[,] result;
+            string mDXQuery = String.Empty;
 
-            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            /*for (int i = 0; i < selectedDimensions.Count; i++)
             {
-                AdomdCommand command = connection.CreateCommand();
-                command.CommandText = mDXQuery;
-
-                result = ConvertCellSetToArray(command.ExecuteCellSet());
+                selectedDimensions[i] = String.Concat("[", selectedDimensions.ElementAt(i));
+                selectedDimensions[i] = selectedDimensions.ElementAt(i).Replace("/", "].[");
+                selectedDimensions[i] += "]";
             }
 
-            return result;
-        }
-
-        string[,] ConvertCellSetToArray(CellSet cellSet)
-        {
-            Microsoft.AnalysisServices.AdomdClient.TupleCollection tuplesOnColumns = cellSet.Axes[0].Set.Tuples;
-            Microsoft.AnalysisServices.AdomdClient.TupleCollection tuplesOnRows = cellSet.Axes[1].Set.Tuples;
-            string[,] result = new string[tuplesOnRows.Count, tuplesOnColumns.Count];
-            result[0, 0] = String.Empty;
-
-            for (int i = 1; i <= tuplesOnColumns.Count; i++)
-                result[0, i] = tuplesOnColumns[i - 1].Members[0].Caption;
-
-            for (int i = 1; i <= tuplesOnRows.Count; i++)
+            for (int i = 0; i < selectedMeasures.Count; i++)
             {
-                result[i, 0] = tuplesOnRows[i - 1].Members[0].Caption;
+                selectedMeasures[i] = String.Concat("[Measures].[", selectedMeasures.ElementAt(i));
+                selectedMeasures[i] += "]";
+            }*/
 
-                for (int j = 1; j <= tuplesOnColumns.Count; j++)
-                    result[i, j] = cellSet.Cells[i - 1, j - 1].FormattedValue;
+            mDXQuery += "SELECT ";
+
+            if (selectedDimensions.Count != 0)
+            {
+                mDXQuery += selectedDimensions.ElementAt(0);
+                mDXQuery += " ON 1, ";
             }
 
-            return result;
+            mDXQuery += "{";
+
+            foreach (string selectedMeasure in selectedMeasures)
+                mDXQuery += selectedMeasure + ", ";
+
+            mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+            mDXQuery += "}";
+            mDXQuery += " ON 0 ";
+            mDXQuery += "FROM [" + cubeName + "]";
+
+            return ASHelper.ConvertCellSetToArray(ASHelper.ExecuteMDXQuery(mDXQuery));
         }
     }
 }

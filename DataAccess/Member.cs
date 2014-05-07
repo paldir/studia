@@ -9,12 +9,14 @@ namespace DataAccess
     public class Member
     {
         string name;
+        string uniqueName;
         string description;
         Member[] children;
 
         public Member(Microsoft.AnalysisServices.AdomdClient.Member member)
         {
             name = member.Name;
+            uniqueName = member.UniqueName;
             description = member.Description;
             Microsoft.AnalysisServices.AdomdClient.MemberCollection aSChildren = member.GetChildren();
 
@@ -28,6 +30,7 @@ namespace DataAccess
         }
 
         public string GetName() { return name; }
+        public string GetUniqueName() { return uniqueName; }
         public string GetDescription() { return description; }
         public Member[] GetChildren() { return children; }
     }
