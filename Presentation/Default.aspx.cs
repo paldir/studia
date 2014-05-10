@@ -10,18 +10,99 @@ namespace Presentation
 {
     public partial class Default : System.Web.UI.Page
     {
+        #region fields
         BusinessLogic.CubeHandler cubeHandler;
         DropDownList listOfDimensions;
         CheckBoxList listOfMeasures;
 
+        List<string> selectedDimensions
+        {
+            get
+            {
+                if (ViewState["selectedDimensions"] == null)
+                    ViewState["selectedDimensions"] = new List<string>();
+
+                return (List<string>)ViewState["selectedDimensions"]; 
+            }
+
+            set { ViewState["selectedDimensions"] = value; }
+        }
+
+        List<string> selectedDimensionsValues
+        {
+            get 
+            {
+                if (ViewState["selectedDimensionsValues"] == null)
+                    ViewState["selectedDimensionsValues"] = new List<string>();
+
+                return (List<string>)ViewState["selectedDimensionsValues"]; 
+            }
+
+            set { ViewState["selectedDimensionsValues"] = value; }
+        }
+
+        List<string> pathsOfSelectedDimensions
+        {
+            get
+            {
+                if (ViewState["pathsOfSelectedDimensions"] == null)
+                    ViewState["pathsOfSelectedDimensions"] = new List<string>();
+
+                return (List<string>)ViewState["pathsOfSelectedDimensions"]; 
+            }
+
+            set { ViewState["pathsOfSelectedDimensions"] = value; }
+        }
+
+        List<string> selectedMeasures
+        {
+            get
+            {
+                if (ViewState["selectedMeasures"] == null)
+                    ViewState["selectedMeasures"] = new List<string>();
+
+                return (List<string>)ViewState["selectedMeasures"];
+            }
+
+            set { ViewState["selectedMeasures"] = value; }
+        }
+
+        List<string> selectedMeasuresValues
+        {
+            get
+            {
+                if (ViewState["selectedMeasuresValues"] == null)
+                    ViewState["selectedMeasuresValues"] = new List<string>();
+
+                return (List<string>)ViewState["selectedMeasuresValues"];
+            }
+
+            set { ViewState["selectedMeasuresValues"] = value; }
+        }
+
+        string selectedValueOfListOfDimensions
+        {
+            get { return ViewState["selectedValueOfListOfDimensions"].ToString(); }
+            set { ViewState["selectedValueOfListOfDimensions"] = value; }
+        }
+
+        TreeView dimensionTreeView
+        {
+            get { return (TreeView)Session["dimensionTreeView"]; }
+            set { Session["dimensionTreeView"] = value; }
+        }
+
+        string treeViewDataSource
+        {
+            get { return ViewState["treeViewDataSource"].ToString(); }
+            set { ViewState["treeViewDataSource"] = value; }
+        }
+        #endregion
+
+        #region methods
         protected void Page_Init(object sender, EventArgs e)
         {
             cubeHandler = new BusinessLogic.CubeHandler();
-            ViewState["selectedDimensions"] = new List<string>();
-            ViewState["selectedDimensionsValues"] = new List<string>();
-            ViewState["pathsOfSelectedDimensions"] = new List<string>();
-            ViewState["selectedMeasures"] = new List<string>();
-            ViewState["selectedMeasuresValues"] = new List<string>();
 
             InitializeLeftColumn();
             InitializeCentralColumn();
@@ -31,10 +112,9 @@ namespace Presentation
         void InitializeLeftColumn()
         {
             listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetDimensionsNames());
-            listOfDimensions.SelectedValue = "Date";
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
-            postBackButtonOfDimensionTreeView.Click += postBackButtonOfDimensionTreeView_Click;
-            ViewState["selectedValueOfListOfDimensions"] = listOfDimensions.SelectedValue;
+            dimensionTreeViewPostBackButton.Click += dimensionTreeViewPostBackButton_Click;
+            selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
 
             placeOfListOfDimensions.Controls.Add(listOfDimensions);
 
@@ -59,10 +139,8 @@ namespace Presentation
             triggerOfListOfMeasures.ControlID = "ListOfMeasures";
             triggerOfListOfMeasures.EventName = "SelectedIndexChanged";
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
-            triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
+            triggerOfDimensionTreeView.ControlID = "dimensionTreeViewPostBackButton";
 
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
         }
@@ -71,18 +149,22 @@ namespace Presentation
         {
             base.CreateChildControls();
             CreateDimensionTreeView();
+            //CreateListsOfSelectedItems();
         }
 
         void CreateDimensionTreeView()
         {
-            TreeView dimensionTreeView = CubeStructure.DimensionTreeView(cubeHandler.GetDimensionStructure(ViewState["selectedValueOfListOfDimensions"].ToString()));
-            dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
-            List<string> selectedDimensions = (List<string>)ViewState["selectedDimensions"];
-            List<string> pathsOfSelectedDimensions = (List<string>)ViewState["pathsOfSelectedDimensions"];
-
+            if (dimensionTreeView == null || treeViewDataSource != selectedValueOfListOfDimensions)
+            {
+                dimensionTreeView = CubeStructure.GetDimensionTreeView(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
+                treeViewDataSource = selectedValueOfListOfDimensions;
+            }
+            
             for (int i = 0; i < selectedDimensions.Count; i++)
                 if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
                     dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
+
+            dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
 
             placeOfDimensionTreeView.Controls.Clear();
             placeOfDimensionTreeView.Controls.Add(dimensionTreeView);
@@ -90,60 +172,53 @@ namespace Presentation
 
         void UpdateSelectedItems()
         {
-            List<string> selectedDimensions = (List<string>)ViewState["selectedDimensions"];
-            List<string> selectedMeasures = (List<string>)ViewState["selectedMeasures"];
-
-            placeOfSelectedDimensions.InnerHtml = String.Empty;
+            placeOfListOfSelectedDimensions.InnerHtml = String.Empty;
             foreach (string selectedDimension in selectedDimensions)
-                placeOfSelectedDimensions.InnerHtml += selectedDimension + "<br />";
+                placeOfListOfSelectedDimensions.InnerHtml += selectedDimension + "<br />";
 
-            placeOfSelectedMeasures.InnerHtml = String.Empty;
+            placeOfListOfSelectedMeasures.InnerHtml = String.Empty;
             foreach (string selectedMeasure in selectedMeasures)
-                placeOfSelectedMeasures.InnerHtml += selectedMeasure + "<br />";
-        }
-
-        void UpdateTableOfResults()
-        {
-            List<string> selectedDimensionsValues = (List<string>)ViewState["selectedDimensionsValues"];
-            List<string> selectedMeasuresValues = (List<string>)ViewState["selectedMeasuresValues"];
+                placeOfListOfSelectedMeasures.InnerHtml += selectedMeasure + "<br />";
 
             placeOfTableOfResults.Controls.Clear();
-
+            
             if (selectedMeasuresValues.Count > 0)
                 placeOfTableOfResults.Controls.Add(TableOfResults.GetTableOfResults(cubeHandler.GetArrayFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues)));
         }
+        #endregion
 
+        #region events handlers
         void listOfDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ViewState["selectedValueOfListOfDimensions"] = listOfDimensions.SelectedValue;
+            selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
 
             CreateDimensionTreeView();
         }
 
         void dimensionTreeView_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
         {
-            List<string> selectedDimensions = (List<string>)ViewState["selectedDimensions"];
-            List<string> selectedDimensionsValues = (List<string>)ViewState["selectedDimensionsValues"];
-            List<string> pathsOfSelectedDimensions = (List<string>)ViewState["pathsOfSelectedDimensions"];
             TreeNode checkedNode = e.Node;
             TreeView dimensionTreeView = (TreeView)sender;
 
             if (checkedNode.Checked)
             {
-                string nodeTextPath = "/" + checkedNode.Text;
-                StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
-
-                for (int i = 0; i < checkedNode.Depth; i++)
+                if (selectedDimensionsValues.FindIndex(s => s == checkedNode.Value) == -1)
                 {
-                    nodeValuePath = new StringBuilder(nodeValuePath.ToString().Substring(0, nodeValuePath.ToString().LastIndexOf("/")));
-                    nodeTextPath = String.Concat("/", dimensionTreeView.FindNode(nodeValuePath.ToString()).Text, nodeTextPath);
+                    string nodeTextPath = "/" + checkedNode.Text;
+                    StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
+
+                    for (int i = 0; i < checkedNode.Depth; i++)
+                    {
+                        nodeValuePath = new StringBuilder(nodeValuePath.ToString().Substring(0, nodeValuePath.ToString().LastIndexOf("/")));
+                        nodeTextPath = String.Concat("/", dimensionTreeView.FindNode(nodeValuePath.ToString()).Text, nodeTextPath);
+                    }
+
+                    nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
+
+                    selectedDimensions.Add(nodeTextPath);
+                    selectedDimensionsValues.Add(checkedNode.Value);
+                    pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
                 }
-
-                nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
-
-                selectedDimensions.Add(nodeTextPath);
-                selectedDimensionsValues.Add(checkedNode.Value);
-                pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
             }
             else
                 for (int i = 0; i < selectedDimensions.Count; i++)
@@ -155,23 +230,18 @@ namespace Presentation
                             pathsOfSelectedDimensions.RemoveAt(i);
                         }
 
-            ViewState["selectedDimensions"] = selectedDimensions;
-            ViewState["selectedDimensionsValues"] = selectedDimensionsValues;
-            ViewState["pathsOfSelectedDimensions"] = pathsOfSelectedDimensions;
-
             UpdateSelectedItems();
-            UpdateTableOfResults();
         }
 
-        void postBackButtonOfDimensionTreeView_Click(object sender, EventArgs e)
+        void dimensionTreeViewPostBackButton_Click(object sender, EventArgs e)
         {
-            UpdateTableOfResults();
+            UpdateSelectedItems();
         }
 
         void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<string> selectedMeasures = new List<string>();
-            List<string> selectedMeasuresValues = new List<string>();
+            selectedMeasures = new List<string>();
+            selectedMeasuresValues = new List<string>();
 
             foreach (ListItem item in listOfMeasures.Items)
                 if (item.Selected)
@@ -180,11 +250,28 @@ namespace Presentation
                     selectedMeasuresValues.Add(item.Value);
                 }
 
-            ViewState["selectedMeasures"] = selectedMeasures;
-            ViewState["selectedMeasuresValues"] = selectedMeasuresValues;
-
             UpdateSelectedItems();
-            UpdateTableOfResults();
         }
+
+        void listOfSelectedDimensions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        
+        void listOfSelectedMeasures_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CheckBoxList listOfSelectedMeasures = (CheckBoxList)sender;
+
+            for (int i = 0; i < listOfSelectedMeasures.Items.Count; i++)
+                if (!listOfSelectedMeasures.Items[i].Selected)
+                {
+                    selectedMeasures.RemoveAt(i);
+                    selectedMeasuresValues.RemoveAt(i);
+                    listOfMeasures.Items.FindByText(listOfSelectedMeasures.Items[i].Text).Selected = false;
+                }
+
+            //CreateListsOfSelectedItems();
+        }
+        #endregion
     }
 }

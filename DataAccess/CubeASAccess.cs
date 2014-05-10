@@ -53,25 +53,42 @@ namespace DataAccess
         {
             string mDXQuery = String.Empty;
 
-            /*for (int i = 0; i < selectedDimensions.Count; i++)
-            {
-                selectedDimensions[i] = String.Concat("[", selectedDimensions.ElementAt(i));
-                selectedDimensions[i] = selectedDimensions.ElementAt(i).Replace("/", "].[");
-                selectedDimensions[i] += "]";
-            }
-
-            for (int i = 0; i < selectedMeasures.Count; i++)
-            {
-                selectedMeasures[i] = String.Concat("[Measures].[", selectedMeasures.ElementAt(i));
-                selectedMeasures[i] += "]";
-            }*/
-
             mDXQuery += "SELECT ";
 
             if (selectedDimensions.Count != 0)
             {
-                mDXQuery += selectedDimensions.ElementAt(0);
-                mDXQuery += " ON 1, ";
+                List<string> hierarchiesOfSelectedDimensions = new List<string>();
+                string nameOfHierarchy;
+
+                foreach (string selectedDimension in selectedDimensions)
+                {
+                    if (selectedDimension.Count(d => d == '.') > 1)
+                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.LastIndexOf('.'));
+                    else
+                        nameOfHierarchy = selectedDimension;
+
+                    if (hierarchiesOfSelectedDimensions.FindIndex(h => h == nameOfHierarchy) == -1)
+                        hierarchiesOfSelectedDimensions.Add(nameOfHierarchy);
+                }
+
+                if (hierarchiesOfSelectedDimensions.Count > 1)
+                    mDXQuery += "Crossjoin";
+
+                mDXQuery += "(";
+
+                foreach (string hierarchyOfSelectedDimension in hierarchiesOfSelectedDimensions)
+                {
+                    mDXQuery += "{";
+
+                    foreach (string selectedDimensionBelongingToHierarchy in selectedDimensions.FindAll(d => d.StartsWith(hierarchyOfSelectedDimension)))
+                        mDXQuery += selectedDimensionBelongingToHierarchy + ", ";
+
+                    mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+                    mDXQuery += "}, ";
+                }
+
+                mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+                mDXQuery += ") ON 1, ";
             }
 
             mDXQuery += "{";

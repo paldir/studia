@@ -32,7 +32,7 @@ namespace Presentation
             return dropDownList;
         }
 
-        static public TreeView DimensionTreeView(DataAccess.Dimension dimension)
+        static public TreeView GetDimensionTreeView(DataAccess.Dimension dimension)
         {
             TreeView treeView = new TreeView();
             treeView.ID = "DimensionTreeView";
@@ -61,6 +61,38 @@ namespace Presentation
             treeNode.ShowCheckBox = true;
 
             return treeNode;
+        }
+
+        static public CheckBoxList GetCheckBoxListOfSelectedDimensions(List<string> namesOfSelectedDimensions)
+        {
+            CheckBoxList listOfSelectedDimensions = new CheckBoxList();
+
+            for (int i = 0; i < namesOfSelectedDimensions.Count; i++)
+            {
+                listOfSelectedDimensions.Items.Add(namesOfSelectedDimensions.ElementAt(i));
+                listOfSelectedDimensions.Items[i].Selected = true;
+            }
+
+            listOfSelectedDimensions.AutoPostBack = true;
+            listOfSelectedDimensions.ID = "ListOfSelectedDimensions";
+
+            return listOfSelectedDimensions;
+        }
+
+        static public CheckBoxList GetCheckBoxListOfSelectedMeasures(List<string> namesOfSelectedMeasures)
+        {
+            CheckBoxList listOfSelectedMeasures = new CheckBoxList();
+
+            for (int i = 0; i < namesOfSelectedMeasures.Count; i++)
+            {
+                listOfSelectedMeasures.Items.Add(namesOfSelectedMeasures.ElementAt(i));
+                listOfSelectedMeasures.Items[i].Selected = true;
+            }
+
+            listOfSelectedMeasures.AutoPostBack = true;
+            listOfSelectedMeasures.ID = "ListOfSelectedMeasures";
+
+            return listOfSelectedMeasures;
         }
     }
 }
