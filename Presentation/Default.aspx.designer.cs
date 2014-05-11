@@ -76,13 +76,13 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfMeasures;
         
         /// <summary>
-        /// tableOfResultsUpdatePanel control.
+        /// selectedItemsUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel tableOfResultsUpdatePanel;
+        protected global::System.Web.UI.UpdatePanel selectedItemsUpdatePanel;
         
         /// <summary>
         /// placeOfListOfSelectedDimensions control.
@@ -101,6 +101,15 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedMeasures;
+        
+        /// <summary>
+        /// tableOfResultsUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel tableOfResultsUpdatePanel;
         
         /// <summary>
         /// placeOfTableOfResults control.

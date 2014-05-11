@@ -32,25 +32,31 @@ namespace Presentation
             return dropDownList;
         }
 
-        static public TreeView GetDimensionTreeView(DataAccess.Dimension dimension)
+        static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
         {
-            TreeView treeView = new TreeView();
-            treeView.ID = "DimensionTreeView";
-            treeView.ImageSet = TreeViewImageSet.Arrows;
-            treeView.ExpandDepth = 0;
+            List<TreeNode> treeViewNodes = new List<TreeNode>();
 
             foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies())
             {
-                treeView.Nodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName())));
+                treeViewNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName())));
 
                 foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
                 {
-                    treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName())));
+                    treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName())));
 
                     foreach (DataAccess.Member child in member.GetChildren())
-                        treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes[treeView.Nodes[treeView.Nodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName())));
+                        treeViewNodes[treeViewNodes.Count - 1].ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName())));
                 }
             }
+
+            return treeViewNodes;
+        }
+
+        static public TreeView TreeViewConfig(TreeView treeView)
+        {
+            treeView.ID = "DimensionTreeView";
+            treeView.ImageSet = TreeViewImageSet.Arrows;
+            treeView.ExpandDepth = 0;
 
             return treeView;
         }

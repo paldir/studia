@@ -86,10 +86,16 @@ namespace Presentation
             set { ViewState["selectedValueOfListOfDimensions"] = value; }
         }
 
-        TreeView dimensionTreeView
+        List<TreeNode> treeViewNodes
         {
-            get { return (TreeView)Session["dimensionTreeView"]; }
-            set { Session["dimensionTreeView"] = value; }
+            get
+            {
+                if (Session["treeViewNodes"] == null)
+                    Session["treeViewNodes"] = new List<TreeNode>();
+
+                return (List<TreeNode>)Session["treeViewNodes"];
+            }
+            set { Session["treeViewNodes"] = value; }
         }
 
         string treeViewDataSource
@@ -141,6 +147,8 @@ namespace Presentation
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
             triggerOfDimensionTreeView.ControlID = "dimensionTreeViewPostBackButton";
 
+            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
+            selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
         }
@@ -149,39 +157,61 @@ namespace Presentation
         {
             base.CreateChildControls();
             CreateDimensionTreeView();
-            //CreateListsOfSelectedItems();
+            CreateSelectedItemsLists();
         }
 
         void CreateDimensionTreeView()
         {
-            if (dimensionTreeView == null || treeViewDataSource != selectedValueOfListOfDimensions)
+            if (treeViewNodes.Count == 0 || treeViewDataSource != selectedValueOfListOfDimensions)
             {
-                dimensionTreeView = CubeStructure.GetDimensionTreeView(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
+                treeViewNodes = CubeStructure.GetDimensionTreeViewNodes(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
                 treeViewDataSource = selectedValueOfListOfDimensions;
             }
-            
+
+            TreeView dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
+            dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
+
+            foreach (TreeNode treeNode in treeViewNodes)
+                dimensionTreeView.Nodes.Add(treeNode);
+
             for (int i = 0; i < selectedDimensions.Count; i++)
                 if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
                     dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
-
-            dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
 
             placeOfDimensionTreeView.Controls.Clear();
             placeOfDimensionTreeView.Controls.Add(dimensionTreeView);
         }
 
-        void UpdateSelectedItems()
+        void CreateSelectedItemsLists()
         {
-            placeOfListOfSelectedDimensions.InnerHtml = String.Empty;
-            foreach (string selectedDimension in selectedDimensions)
-                placeOfListOfSelectedDimensions.InnerHtml += selectedDimension + "<br />";
 
-            placeOfListOfSelectedMeasures.InnerHtml = String.Empty;
-            foreach (string selectedMeasure in selectedMeasures)
-                placeOfListOfSelectedMeasures.InnerHtml += selectedMeasure + "<br />";
+            CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
+            listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
+            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
+            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
 
+            placeOfListOfSelectedDimensions.Controls.Clear();
+            placeOfListOfSelectedDimensions.Controls.Add(listOfSelectedDimensions);
+            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+
+            CheckBoxList listOfSelectedMeasures = CubeStructure.GetCheckBoxListOfSelectedMeasures(selectedMeasures);
+            listOfSelectedMeasures.SelectedIndexChanged += listOfSelectedMeasures_SelectedIndexChanged;
+            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
+            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
+
+            placeOfListOfSelectedMeasures.Controls.Clear();
+            placeOfListOfSelectedMeasures.Controls.Add(listOfSelectedMeasures);
+            listOfMeasuresUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+        }
+
+        void UpdateTableOfResults()
+        {
             placeOfTableOfResults.Controls.Clear();
-            
+
             if (selectedMeasuresValues.Count > 0)
                 placeOfTableOfResults.Controls.Add(TableOfResults.GetTableOfResults(cubeHandler.GetArrayFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues)));
         }
@@ -202,23 +232,20 @@ namespace Presentation
 
             if (checkedNode.Checked)
             {
-                if (selectedDimensionsValues.FindIndex(s => s == checkedNode.Value) == -1)
+                string nodeTextPath = "/" + checkedNode.Text;
+                StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
+
+                for (int i = 0; i < checkedNode.Depth; i++)
                 {
-                    string nodeTextPath = "/" + checkedNode.Text;
-                    StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
-
-                    for (int i = 0; i < checkedNode.Depth; i++)
-                    {
-                        nodeValuePath = new StringBuilder(nodeValuePath.ToString().Substring(0, nodeValuePath.ToString().LastIndexOf("/")));
-                        nodeTextPath = String.Concat("/", dimensionTreeView.FindNode(nodeValuePath.ToString()).Text, nodeTextPath);
-                    }
-
-                    nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
-
-                    selectedDimensions.Add(nodeTextPath);
-                    selectedDimensionsValues.Add(checkedNode.Value);
-                    pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
+                    nodeValuePath = new StringBuilder(nodeValuePath.ToString().Substring(0, nodeValuePath.ToString().LastIndexOf("/")));
+                    nodeTextPath = String.Concat("/", dimensionTreeView.FindNode(nodeValuePath.ToString()).Text, nodeTextPath);
                 }
+
+                nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
+
+                selectedDimensions.Add(nodeTextPath);
+                selectedDimensionsValues.Add(checkedNode.Value);
+                pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
             }
             else
                 for (int i = 0; i < selectedDimensions.Count; i++)
@@ -230,12 +257,14 @@ namespace Presentation
                             pathsOfSelectedDimensions.RemoveAt(i);
                         }
 
-            UpdateSelectedItems();
+            CreateSelectedItemsLists();
+            UpdateTableOfResults();
         }
 
         void dimensionTreeViewPostBackButton_Click(object sender, EventArgs e)
         {
-            UpdateSelectedItems();
+            CreateSelectedItemsLists();
+            UpdateTableOfResults();
         }
 
         void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
@@ -250,14 +279,32 @@ namespace Presentation
                     selectedMeasuresValues.Add(item.Value);
                 }
 
-            UpdateSelectedItems();
+            CreateSelectedItemsLists();
+            UpdateTableOfResults();
         }
 
         void listOfSelectedDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            CheckBoxList listOfSelectedDimensions = (CheckBoxList)sender;
+
+            for (int i = 0; i < listOfSelectedDimensions.Items.Count; i++)
+                if (!listOfSelectedDimensions.Items[i].Selected)
+                {
+                    if (listOfSelectedDimensions.Items[i].Text.Substring(0, listOfSelectedDimensions.Items[i].Text.IndexOf('/')) == treeViewDataSource)
+                    {
+                        TreeView dimensionTreeView = (TreeView)placeOfDimensionTreeView.FindControl("DimensionTreeView");
+                        dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = false;
+                    }
+                    
+                    selectedDimensions.RemoveAt(i);
+                    selectedDimensionsValues.RemoveAt(i);
+                    pathsOfSelectedDimensions.RemoveAt(i);
+                }
+
+            CreateSelectedItemsLists();
+            UpdateTableOfResults();
         }
-        
+
         void listOfSelectedMeasures_SelectedIndexChanged(object sender, EventArgs e)
         {
             CheckBoxList listOfSelectedMeasures = (CheckBoxList)sender;
@@ -270,7 +317,8 @@ namespace Presentation
                     listOfMeasures.Items.FindByText(listOfSelectedMeasures.Items[i].Text).Selected = false;
                 }
 
-            //CreateListsOfSelectedItems();
+            CreateSelectedItemsLists();
+            UpdateTableOfResults();
         }
         #endregion
     }
