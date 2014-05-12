@@ -22,13 +22,13 @@ namespace Presentation {
         protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
-        /// dimensionsListPlace control.
+        /// placeOfListOfDimensions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dimensionsListPlace;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfDimensions;
         
         /// <summary>
         /// dimensionTreeViewUpdatePanel control.
@@ -40,13 +40,13 @@ namespace Presentation {
         protected global::System.Web.UI.UpdatePanel dimensionTreeViewUpdatePanel;
         
         /// <summary>
-        /// dimensionTreeViewPlace control.
+        /// placeOfDimensionTreeView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dimensionTreeViewPlace;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfDimensionTreeView;
         
         /// <summary>
         /// dimensionTreeViewPostBackButton control.
@@ -58,13 +58,22 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.Button dimensionTreeViewPostBackButton;
         
         /// <summary>
-        /// measuresListPlace control.
+        /// listOfMeasuresUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl measuresListPlace;
+        protected global::System.Web.UI.UpdatePanel listOfMeasuresUpdatePanel;
+        
+        /// <summary>
+        /// placeOfListOfMeasures control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfMeasures;
         
         /// <summary>
         /// selectedItemsUpdatePanel control.
@@ -76,21 +85,39 @@ namespace Presentation {
         protected global::System.Web.UI.UpdatePanel selectedItemsUpdatePanel;
         
         /// <summary>
-        /// selectedDimensionsPlace control.
+        /// placeOfListOfSelectedDimensions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl selectedDimensionsPlace;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedDimensions;
         
         /// <summary>
-        /// selectedMeasuresPlace control.
+        /// placeOfListOfSelectedMeasures control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl selectedMeasuresPlace;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedMeasures;
+        
+        /// <summary>
+        /// tableOfResultsUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel tableOfResultsUpdatePanel;
+        
+        /// <summary>
+        /// placeOfTableOfResults control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfTableOfResults;
     }
 }

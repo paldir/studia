@@ -11,42 +11,97 @@ namespace DataAccess
     {        
         const string cubeName="Adventure Works";
         
-        public List<string> GetMeasuresNames()
+        public List<string> GetNamesOfMeasures()
         {
-            List<string> measuresList = new List<string>();
+            List<string> listOfMeasures = new List<string>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Measure measure in connection.Cubes[cubeName].Measures)
-                    measuresList.Add(measure.Name);
+                    listOfMeasures.Add(measure.Name);
             }
 
-            return measuresList;
+            return listOfMeasures;
         }
 
-        public List<string> GetDimensionsNames()
+        public List<string> GetNamesOfDimensions()
         {
-            List<String> dimensionsList = new List<string>();
+            List<String> listOfDimensions = new List<string>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Dimension dimension in connection.Cubes[cubeName].Dimensions)
-                    dimensionsList.Add(dimension.Name);
+                    listOfDimensions.Add(dimension.Name);
             }
 
-            return dimensionsList;
+            return listOfDimensions;
         }
 
-        public Dimension GetDimensionStructure(string dimensionName)
+        public Dimension GetDimensionStructure(string nameOfDimension)
         {
             Dimension dimension;
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
-                dimension = new Dimension(connection.Cubes[cubeName].Dimensions[dimensionName]);
+                dimension = new Dimension(connection.Cubes[cubeName].Dimensions[nameOfDimension]);
             }
 
             return dimension;
+        }
+
+        public string[,] GetArrayFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
+        {
+            string mDXQuery = String.Empty;
+
+            mDXQuery += "SELECT ";
+
+            if (selectedDimensions.Count != 0)
+            {
+                List<string> hierarchiesOfSelectedDimensions = new List<string>();
+                string nameOfHierarchy;
+
+                foreach (string selectedDimension in selectedDimensions)
+                {
+                    if (selectedDimension.Count(d => d == '.') > 1)
+                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.LastIndexOf('.'));
+                    else
+                        nameOfHierarchy = selectedDimension;
+
+                    if (hierarchiesOfSelectedDimensions.FindIndex(h => h == nameOfHierarchy) == -1)
+                        hierarchiesOfSelectedDimensions.Add(nameOfHierarchy);
+                }
+
+                if (hierarchiesOfSelectedDimensions.Count > 1)
+                    mDXQuery += "Crossjoin";
+
+                mDXQuery += "(";
+
+                foreach (string hierarchyOfSelectedDimension in hierarchiesOfSelectedDimensions)
+                {
+                    mDXQuery += "{";
+
+                    foreach (string selectedDimensionBelongingToHierarchy in selectedDimensions.FindAll(d => d.StartsWith(hierarchyOfSelectedDimension)))
+                        mDXQuery += selectedDimensionBelongingToHierarchy + ", ";
+
+                    mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+                    mDXQuery += "}, ";
+                }
+
+                mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+                mDXQuery += ") ON 1, ";
+            }
+
+            mDXQuery += "{";
+
+            foreach (string selectedMeasure in selectedMeasures)
+                mDXQuery += selectedMeasure + ", ";
+
+            mDXQuery = mDXQuery.Remove(mDXQuery.Length - 2, 2);
+            mDXQuery += "}";
+            mDXQuery += " ON 0 ";
+            mDXQuery += "FROM [" + cubeName + "]";
+
+            return ASHelper.ConvertCellSetToArray(ASHelper.ExecuteMDXQuery(mDXQuery));
         }
     }
 }
