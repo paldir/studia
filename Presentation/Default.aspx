@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Presentation.Default" %>
+﻿<%@ Page Title="Przeglądarka kostki" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Presentation.Default" %>
 <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
 </asp:Content>

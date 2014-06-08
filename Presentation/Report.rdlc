@@ -28,8 +28,17 @@
                               <Value>Sales Amount</Value>
                             </TextRun>
                           </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
+                      <Style>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                      </Style>
                     </Textbox>
                   </CellContents>
                 </TablixCell>
@@ -43,8 +52,17 @@
                               <Value>Total Product Cost</Value>
                             </TextRun>
                           </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
+                      <Style>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                      </Style>
                     </Textbox>
                   </CellContents>
                 </TablixCell>
@@ -60,11 +78,20 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>150020900</Value>
+                              <Value>11</Value>
                             </TextRun>
                           </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
+                      <Style>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                      </Style>
                     </Textbox>
                   </CellContents>
                 </TablixCell>
@@ -75,11 +102,20 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>23134</Value>
+                              <Value>3454332</Value>
                             </TextRun>
                           </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
+                      <Style>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                      </Style>
                     </Textbox>
                   </CellContents>
                 </TablixCell>

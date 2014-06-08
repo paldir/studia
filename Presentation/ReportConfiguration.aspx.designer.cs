@@ -22,12 +22,30 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlForm form;
         
         /// <summary>
-        /// listOfDimensions control.
+        /// listOfHierarchies control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox listOfDimensions;
+        protected global::System.Web.UI.WebControls.ListBox listOfHierarchies;
+        
+        /// <summary>
+        /// listOfMeasures control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox listOfMeasures;
+        
+        /// <summary>
+        /// buttonOfViewingOfReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfViewingOfReport;
     }
 }

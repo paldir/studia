@@ -9,14 +9,26 @@ namespace Presentation
 {
     public partial class ReportConfiguration : System.Web.UI.Page
     {
+        List<TableOfResults.Row> rows;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<List<string>> dimensionsCoordinates = (List<List<string>>)Session["dimensionsCoordinates"];
-            List<string> measureCoordinates = (List<string>)Session["measureCoordinates"];
-            List<string> values = (List<string>)Session["values"];
+            rows = (List<TableOfResults.Row>)Session["rows"];
 
-            /*foreach (List<string> dimensionsCoordindate in dimensionsCoordinates)
-                dimensionsCoordindate.*/
+            InitializeListOfHierarchies();
+            InitializeListOfMeasures();
+        }
+
+        void InitializeListOfHierarchies()
+        {
+            foreach (string nameOfHierarchy in TableOfResults.Row.GetNamesOfHierarchies())
+                listOfHierarchies.Items.Add(nameOfHierarchy);
+        }
+
+        void InitializeListOfMeasures()
+        {
+            foreach (string nameOfMeasure in TableOfResults.Row.GetNamesOfMeasures())
+                listOfMeasures.Items.Add(nameOfMeasure);
         }
     }
 }

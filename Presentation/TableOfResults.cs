@@ -8,7 +8,7 @@ using System.Web.UI;
 namespace Presentation
 {
     public class TableOfResults
-    {
+    {   
         public static Table GetTableOfResults(List<string[,]> arraysOfResults)
         {
             string[,] arrayOfResults = arraysOfResults.ElementAt(0);
@@ -39,6 +39,27 @@ namespace Presentation
             }
 
             return table;
+        }
+
+        public class Row
+        {
+            static List<string> namesOfHierarchies = new List<string>();
+            List<string> namesOfHierarchiesMembers;
+            static List<string> namesOfMeasures = new List<string>();
+            List<string> values;
+
+            public Row(List<string> namesOfHierarchiesMembers, List<string> values)
+            {
+                this.namesOfHierarchiesMembers = namesOfHierarchiesMembers;
+                this.values = values;
+            }
+
+            public static List<string> GetNamesOfHierarchies() { return namesOfHierarchies; }
+            public List<string> GetNamesOfHierarchiesMembers() { return namesOfHierarchiesMembers; }
+            public static List<string> GetNamesOfMeasures() { return namesOfMeasures; }
+            public List<string> GetValues() { return values; }
+            //public static void SetNamesOfHierarchies(List<string> namesOfHierarchies) { Row.namesOfHierarchies = namesOfHierarchies; }
+            //public static void SetNamesOfMeasures(List<string> namesOfMeasures) { Row.namesOfMeasures = namesOfMeasures; }
         }
     }
 }

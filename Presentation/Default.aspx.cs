@@ -337,32 +337,39 @@ namespace Presentation
         void buttonOfReportGeneration_Click(object sender, EventArgs e)
         {
             int numberOfHierarchies = 0;
-            List<List<string>> dimensionsCoordinates = new List<List<string>>();
-            List<string> measureCoordinates = new List<string>();
-            List<string> values = new List<string>();
+            List<TableOfResults.Row> rows = new List<TableOfResults.Row>();
 
-            foreach (TableCell cell in tableOfResults.Rows[0].Cells)
-                if (((LiteralControl)cell.Controls[0]).Text == String.Empty)
+            TableOfResults.Row.GetNamesOfHierarchies().Clear();
+            TableOfResults.Row.GetNamesOfMeasures().Clear();
+
+            for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
+                if (descriptionOfTableOfResults[1, i] != "Value")
                     numberOfHierarchies++;
 
+            for (int i = 0; i < numberOfHierarchies; i++)
+                TableOfResults.Row.GetNamesOfHierarchies().Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+
+            for (int i = numberOfHierarchies; i < tableOfResults.Rows[0].Cells.Count; i++)
+                TableOfResults.Row.GetNamesOfMeasures().Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+
             for (int i = 1; i < tableOfResults.Rows.Count; i++)
-                for (int j = numberOfHierarchies; j < tableOfResults.Rows[0].Cells.Count; j++)
-                {
-                    List<string> dimensionsCoordinate = new List<string>();
+            {
+                List<string> namesOfHierarchiesMembers = new List<string>();
+                List<string> values = new List<string>();
 
-                    for (int k = 0; k < numberOfHierarchies; k++)
-                        dimensionsCoordinate.Add(descriptionOfTableOfResults[i, k]);
+                for (int j = 0; j < numberOfHierarchies; j++)
+                    namesOfHierarchiesMembers.Add(((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text);
 
-                    dimensionsCoordinates.Add(dimensionsCoordinate);
-                    measureCoordinates.Add(descriptionOfTableOfResults[0, j]);
+                for (int j = numberOfHierarchies; j < tableOfResults.Rows[i].Cells.Count; j++)
                     values.Add(((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text);
-                }
+
+                rows.Add(new TableOfResults.Row(namesOfHierarchiesMembers, values));
+            }
+
 
             Session.Clear();
-            
-            Session["dimensionsCoordinates"] = dimensionsCoordinates;
-            Session["measureCoordinates"] = measureCoordinates;
-            Session["values"] = values;
+
+            Session["rows"] = rows;
 
             Response.Redirect("ReportConfiguration.aspx");
         }

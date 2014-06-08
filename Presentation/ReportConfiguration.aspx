@@ -9,7 +9,14 @@
 <body>
     <form id="form" runat="server">
     <div>
-        <asp:ListBox ID="listOfDimensions" runat="server"></asp:ListBox>
+        Hierarchie wymiarów:<br />
+        <asp:ListBox ID="listOfHierarchies" runat="server"></asp:ListBox>
+        <br />
+        <br />
+        Miary:<br />
+        <asp:ListBox ID="listOfMeasures" runat="server"></asp:ListBox>
+        <br />
+        <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" runat="server" />
     </div>
     </form>
 </body>
