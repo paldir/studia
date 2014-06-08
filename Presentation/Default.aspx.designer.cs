@@ -49,13 +49,13 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfDimensionTreeView;
         
         /// <summary>
-        /// dimensionTreeViewPostBackButton control.
+        /// postBackButtonOfDimensionTreeView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button dimensionTreeViewPostBackButton;
+        protected global::System.Web.UI.WebControls.Button postBackButtonOfDimensionTreeView;
         
         /// <summary>
         /// listOfMeasuresUpdatePanel control.
@@ -119,5 +119,14 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfTableOfResults;
+        
+        /// <summary>
+        /// buttonOfReportGeneration control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfReportGeneration;
     }
 }

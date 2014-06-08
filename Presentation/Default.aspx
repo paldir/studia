@@ -10,7 +10,7 @@
             <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div id="placeOfDimensionTreeView" runat="server"></div>
-                    <asp:Button ID="dimensionTreeViewPostBackButton" Text="Aktualizuj wymiary" runat="server" />
+                    <asp:Button ID="postBackButtonOfDimensionTreeView" Text="Aktualizuj wymiary" runat="server" />
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
@@ -33,6 +33,7 @@
             <asp:UpdatePanel ID="tableOfResultsUpdatePanel" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div id="placeOfTableOfResults" runat="server"></div>
+                    <asp:Button ID="buttonOfReportGeneration" Enabled="false" Text="Generuj raport" runat="server"></asp:Button>
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>

@@ -49,7 +49,7 @@ namespace DataAccess
             return dimension;
         }
 
-        public string[,] GetArrayFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
+        public List<string[,]> GetArraysFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
         {
             string mDXQuery = String.Empty;
 
@@ -101,7 +101,7 @@ namespace DataAccess
             mDXQuery += " ON 0 ";
             mDXQuery += "FROM [" + cubeName + "]";
 
-            return ASHelper.ConvertCellSetToArray(ASHelper.ExecuteMDXQuery(mDXQuery));
+            return ASHelper.ConvertCellSetToArrays(ASHelper.ExecuteMDXQuery(mDXQuery));
         }
     }
 }
