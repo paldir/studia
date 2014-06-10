@@ -2,8 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <script src="BattleFieldManagement.js"></script>
+    <script src="Drawing.js"></script>
 </head>
 <body>
-    test
+    <canvas id="battleField" width="544" height="544"></canvas>
+
+    <script>
+        var battleFieldManagement = new BattleFieldManagement();
+        battleFieldManagement.FillMatrix();
+        DrawBattleField('battleField', battleFieldManagement.matrixOfBattleField);
+    </script>
 </body>
 </html>
