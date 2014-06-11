@@ -16,9 +16,15 @@
         var battleFieldManagement = new BattleFieldManagement();
         var drawing = new Drawing('battleField');
 
-        //drawing.DrawGrid();
-        drawing.DrawInvaders(battleFieldManagement.invaders);
-        drawing.DrawHero(battleFieldManagement.hero);
+        setInterval(function () { Update(); }, 1000);
+
+        function Update() {
+            drawing.ClearBattleField();
+            //drawing.DrawGrid();
+            drawing.DrawInvaders(battleFieldManagement.invaders);
+            drawing.DrawHero(battleFieldManagement.hero);
+            battleFieldManagement.MoveInvaders('left');
+        }
     </script>
 </body>
 </html>
