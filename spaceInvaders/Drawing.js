@@ -54,4 +54,8 @@
             this.contextOfCanvas.stroke();
         }
     }
+
+    this.ClearBattleField = function () {
+        this.contextOfCanvas.clearRect(0, 0, this.canvasOfBattleField.width, this.canvasOfBattleField.height);
+    }
 }

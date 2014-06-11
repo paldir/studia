@@ -1,3 +1,10 @@
-﻿#battleField {
+﻿body {
+    background-color: black;
+}
+
+#battleField {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
     background-color: black;
 }
