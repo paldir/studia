@@ -1,17 +1,24 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>Space Invaders</title>
+
     <script src="BattleFieldManagement.js"></script>
     <script src="Drawing.js"></script>
+    <script src="ShipsAndMissiles.js"></script>
+
+    <link href="StyleSheet.css" rel="stylesheet" />
 </head>
 <body>
-    <canvas id="battleField" width="544" height="544"></canvas>
+    <canvas id="battleField" width="800" height="800"></canvas>
 
     <script>
         var battleFieldManagement = new BattleFieldManagement();
-        battleFieldManagement.FillMatrix();
-        DrawBattleField('battleField', battleFieldManagement.matrixOfBattleField);
+        var drawing = new Drawing('battleField');
+
+        //drawing.DrawGrid();
+        drawing.DrawInvaders(battleFieldManagement.invaders);
+        drawing.DrawHero(battleFieldManagement.hero);
     </script>
 </body>
 </html>
