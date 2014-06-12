@@ -15,15 +15,24 @@
     <script>
         var battleFieldManagement = new BattleFieldManagement();
         var drawing = new Drawing('battleField');
+        var clock = 0;
+       
+        onkeydown = function (e) { battleFieldManagement.MoveHero(e.keyCode); };
 
-        setInterval(function () { Update(); }, 1000);
+        setInterval(function () { Update(); }, 10);
 
         function Update() {
             drawing.ClearBattleField();
             //drawing.DrawGrid();
             drawing.DrawInvaders(battleFieldManagement.invaders);
             drawing.DrawHero(battleFieldManagement.hero);
-            battleFieldManagement.MoveInvaders('left');
+
+            if (clock % 10 == 0) {
+                battleFieldManagement.MoveInvaders();
+                clock = 0;
+            }
+
+            clock++;
         }
     </script>
 </body>
