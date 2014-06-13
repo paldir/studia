@@ -16,21 +16,27 @@
         var battleFieldManagement = new BattleFieldManagement();
         var drawing = new Drawing('battleField');
         var clock = 0;
+        var pressedKeys = {};
        
-        onkeydown = function (e) { battleFieldManagement.MoveHero(e.keyCode); };
+        onkeydown = function (e) { pressedKeys[e.keyCode] = true; };
+        onkeyup = function (e) { delete pressedKeys[e.keyCode]; };
 
         setInterval(function () { Update(); }, 10);
 
         function Update() {
             drawing.ClearBattleField();
-            //drawing.DrawGrid();
+            drawing.DrawGrid();
             drawing.DrawInvaders(battleFieldManagement.invaders);
             drawing.DrawHero(battleFieldManagement.hero);
+            drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
 
             if (clock % 10 == 0) {
                 battleFieldManagement.MoveInvaders();
                 clock = 0;
             }
+
+            battleFieldManagement.HandleKeys(pressedKeys);
+            battleFieldManagement.MoveMissilesOfHero();
 
             clock++;
         }

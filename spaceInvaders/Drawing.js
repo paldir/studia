@@ -42,6 +42,18 @@
         this.contextOfCanvas.fill();
     }
 
+    this.DrawMissilesOfHero = function (missilesOfHero) {
+        for (var i = 0; i < missilesOfHero.length; i++) {
+            this.contextOfCanvas.beginPath();
+            this.contextOfCanvas.moveTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth);
+            this.contextOfCanvas.lineTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth + this.cellWidth);
+
+            this.contextOfCanvas.strokeStyle = 'yellow';
+
+            this.contextOfCanvas.stroke();
+        }
+    }
+
     this.DrawGrid = function () {
         for (var i = 0; i < 88; i++) {
             this.contextOfCanvas.beginPath();

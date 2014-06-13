@@ -2,6 +2,7 @@
     this.invaders = new Array(55);
     this.directionOfAttack = 'L';
     this.hero = new Hero();
+    this.missilesOfHero = new Array(0);
 
     var numberOfRow = 1;
 
@@ -40,26 +41,34 @@
             var displacementX = -1;
 
         for (var i = 0; i < this.invaders.length; i++) {
-            this.invaders[i].locationX[0] = this.invaders[i].locationX[0] + displacementX;
-            this.invaders[i].locationX[1] = this.invaders[i].locationX[1] + displacementX;
+            this.invaders[i].locationX[0] += displacementX;
+            this.invaders[i].locationX[1] += displacementX;
         }
     }
 
-    this.MoveHero = function (keyCode) {
-        switch (keyCode) {
-            case 37:
-                if (this.hero.locationX[0] > 0) {
-                    this.hero.locationX[0]--;
-                    this.hero.locationX[1]--;
-                }
-                break;
-            case 39:
-                if (this.hero.locationX[1] < 87) {
-                    this.hero.locationX[0]++;
-                    this.hero.locationX[1]++;
-                }
-                break;
-            default:
+    this.MoveMissilesOfHero = function () {
+        for (var i = 0; i < this.missilesOfHero.length; i++) {
+            this.missilesOfHero[i].locationY--;
+
+            if (this.missilesOfHero[i].locationY < 0)
+                this.missilesOfHero.splice(i, 1);
         }
+    }
+
+    this.HandleKeys = function (pressedKeys) {
+        if (pressedKeys[32])
+            this.missilesOfHero[this.missilesOfHero.length] = new MissileOfHero(this.hero);
+
+        if (pressedKeys[37])
+            if (this.hero.locationX[0] > 0) {
+                this.hero.locationX[0]--;
+                this.hero.locationX[1]--;
+            }
+
+        if (pressedKeys[39])
+            if (this.hero.locationX[1] < 87) {
+                this.hero.locationX[0]++;
+                this.hero.locationX[1]++;
+            }
     }
 }
