@@ -55,9 +55,22 @@
         }
     }
 
+    this.DestroyInvaders = function () {
+        for (var i = 0; i < this.missilesOfHero.length; i++)
+            if (this.missilesOfHero[i].locationY <= this.invaders[54].locationY[1])
+                for (var j = 0; j < this.invaders.length; j++)
+                    if (!this.invaders[j].destroyed)
+                        if (this.missilesOfHero[i].locationX == this.invaders[j].locationX[0] || this.missilesOfHero[i].locationX == this.invaders[j].locationX[1])
+                            if (this.missilesOfHero[i].locationY == this.invaders[j].locationY[0] || this.missilesOfHero[i].locationY == this.invaders[j].locationY[1]) {
+                                this.missilesOfHero.splice(i, 1);
+                                this.invaders[j].destroyed = true;
+                            }
+    }
+
     this.HandleKeys = function (pressedKeys) {
         if (pressedKeys[32])
-            this.missilesOfHero[this.missilesOfHero.length] = new MissileOfHero(this.hero);
+            if (this.missilesOfHero.length == 0 || this.hero.locationY[0] - this.missilesOfHero[this.missilesOfHero.length - 1].locationY > 10)
+                this.missilesOfHero[this.missilesOfHero.length] = new MissileOfHero(this.hero);
 
         if (pressedKeys[37])
             if (this.hero.locationX[0] > 0) {

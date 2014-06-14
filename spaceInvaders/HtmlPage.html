@@ -25,7 +25,7 @@
 
         function Update() {
             drawing.ClearBattleField();
-            drawing.DrawGrid();
+            //drawing.DrawGrid();
             drawing.DrawInvaders(battleFieldManagement.invaders);
             drawing.DrawHero(battleFieldManagement.hero);
             drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
@@ -35,8 +35,12 @@
                 clock = 0;
             }
 
+            if (clock % 2 == 0) {
+                battleFieldManagement.MoveMissilesOfHero();
+            }
+
+            battleFieldManagement.DestroyInvaders();
             battleFieldManagement.HandleKeys(pressedKeys);
-            battleFieldManagement.MoveMissilesOfHero();
 
             clock++;
         }
