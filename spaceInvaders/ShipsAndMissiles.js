@@ -13,3 +13,8 @@ function MissileOfHero(hero) {
     this.locationX = hero.locationX[Math.round(Math.random())];
     this.locationY = hero.locationY[0] - 1;
 }
+
+function MissileOfInvader(invader) {
+    this.locationX = invader.locationX[Math.round(Math.random())];
+    this.locationY = invader.locationY[1] + 1;
+}

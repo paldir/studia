@@ -48,7 +48,19 @@
             this.contextOfCanvas.moveTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth);
             this.contextOfCanvas.lineTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth + this.cellWidth);
 
-            this.contextOfCanvas.strokeStyle = 'yellow';
+            this.contextOfCanvas.strokeStyle = 'rgb(128, 192, 0';
+
+            this.contextOfCanvas.stroke();
+        }
+    }
+
+    this.DrawMissilesOfInvaders = function (missilesOfInvaders) {
+        for (var i = 0; i < missilesOfInvaders.length; i++) {
+            this.contextOfCanvas.beginPath();
+            this.contextOfCanvas.moveTo(missilesOfInvaders[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfInvaders[i].locationY * this.cellWidth);
+            this.contextOfCanvas.lineTo(missilesOfInvaders[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfInvaders[i].locationY * this.cellWidth + this.cellWidth);
+
+            this.contextOfCanvas.strokeStyle = 'rgb(255, 128, 0';
 
             this.contextOfCanvas.stroke();
         }

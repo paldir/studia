@@ -21,14 +21,20 @@
         onkeydown = function (e) { pressedKeys[e.keyCode] = true; };
         onkeyup = function (e) { delete pressedKeys[e.keyCode]; };
 
-        setInterval(function () { Update(); }, 10);
+        var interval = setInterval(function () { Update(); }, 10);
 
         function Update() {
             drawing.ClearBattleField();
             //drawing.DrawGrid();
             drawing.DrawInvaders(battleFieldManagement.invaders);
+            drawing.DrawMissilesOfInvaders(battleFieldManagement.missilesOfInvaders);
             drawing.DrawHero(battleFieldManagement.hero);
             drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
+
+            if (battleFieldManagement.DestroyHero()) {
+                clearInterval(interval);
+                var gameOver = true;
+            }
 
             if (clock % 10 == 0) {
                 battleFieldManagement.MoveInvaders();
@@ -37,7 +43,11 @@
 
             if (clock % 2 == 0) {
                 battleFieldManagement.MoveMissilesOfHero();
+                battleFieldManagement.MoveMissilesOfInvaders();
             }
+
+            if (Math.random() < 0.01)
+                battleFieldManagement.LaunchMissileOfInvader();
 
             battleFieldManagement.DestroyInvaders();
             battleFieldManagement.HandleKeys(pressedKeys);
