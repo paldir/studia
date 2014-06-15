@@ -2,6 +2,8 @@
     this.invaders = new Array(55);
     this.directionOfAttack = 'L';
     this.hero = new Hero();
+    this.missilesOfHero = new Array(0);
+    this.missilesOfInvaders = new Array(0);
 
     var numberOfRow = 1;
 
@@ -40,26 +42,80 @@
             var displacementX = -1;
 
         for (var i = 0; i < this.invaders.length; i++) {
-            this.invaders[i].locationX[0] = this.invaders[i].locationX[0] + displacementX;
-            this.invaders[i].locationX[1] = this.invaders[i].locationX[1] + displacementX;
+            this.invaders[i].locationX[0] += displacementX;
+            this.invaders[i].locationX[1] += displacementX;
         }
     }
 
-    this.MoveHero = function (keyCode) {
-        switch (keyCode) {
-            case 37:
-                if (this.hero.locationX[0] > 0) {
-                    this.hero.locationX[0]--;
-                    this.hero.locationX[1]--;
-                }
-                break;
-            case 39:
-                if (this.hero.locationX[1] < 87) {
-                    this.hero.locationX[0]++;
-                    this.hero.locationX[1]++;
-                }
-                break;
-            default:
+    this.MoveMissilesOfHero = function () {
+        for (var i = 0; i < this.missilesOfHero.length; i++) {
+            this.missilesOfHero[i].locationY--;
+
+            if (this.missilesOfHero[i].locationY < 0)
+                this.missilesOfHero.splice(i, 1);
         }
+    }
+
+    this.DestroyInvaders = function () {
+        var numberOfLivingInvaders = 0;
+
+        for (var i = 0; i < this.missilesOfHero.length; i++)
+            for (var j = 0; j < this.invaders.length; j++)
+                if (!this.invaders[j].destroyed)
+                    if (this.missilesOfHero[i].locationX == this.invaders[j].locationX[0] || this.missilesOfHero[i].locationX == this.invaders[j].locationX[1])
+                        if (this.missilesOfHero[i].locationY == this.invaders[j].locationY[0] || this.missilesOfHero[i].locationY == this.invaders[j].locationY[1]) {
+                            this.missilesOfHero.splice(i, 1);
+                            this.invaders[j].destroyed = true;
+                        }
+    }
+
+    this.LaunchMissileOfInvader = function () {
+        var numberOfInvader;
+
+        do {
+            numberOfInvader = Math.round(Math.random() * 54);
+        } while (this.invaders[numberOfInvader].destroyed)
+
+        this.missilesOfInvaders[this.missilesOfInvaders.length] = new MissileOfInvader(this.invaders[numberOfInvader]);
+    }
+
+    this.MoveMissilesOfInvaders = function () {
+        for (var i = 0; i < this.missilesOfInvaders.length; i++) {
+            this.missilesOfInvaders[i].locationY++;
+
+            if (this.missilesOfInvaders[i].locationY > 87)
+                this.missilesOfInvaders.splice(i, 1);
+        }
+    }
+
+    this.DestroyHero = function () {
+        var gameOver = false;
+
+        for (var i = 0; i < this.missilesOfInvaders.length; i++)
+            if (this.missilesOfInvaders[i].locationY >= this.hero.locationY[0])
+                if (this.missilesOfInvaders[i].locationX == this.hero.locationX[0] || this.missilesOfInvaders[i].locationX == this.hero.locationX[1])
+                    if (this.missilesOfInvaders[i].locationY == this.hero.locationY[0] || this.missilesOfInvaders[i].locationY == this.hero.locationY[1])
+                        gameOver = true;
+
+        return gameOver;
+    }
+
+    this.HandleKeys = function (pressedKeys) {
+        if (pressedKeys[32])
+            if (this.missilesOfHero.length == 0 || this.hero.locationY[0] - this.missilesOfHero[this.missilesOfHero.length - 1].locationY > 10) {
+                this.missilesOfHero[this.missilesOfHero.length] = new MissileOfHero(this.hero);
+            }
+
+        if (pressedKeys[37])
+            if (this.hero.locationX[0] > 0) {
+                this.hero.locationX[0]--;
+                this.hero.locationX[1]--;
+            }
+
+        if (pressedKeys[39])
+            if (this.hero.locationX[1] < 87) {
+                this.hero.locationX[0]++;
+                this.hero.locationX[1]++;
+            }
     }
 }
