@@ -31,10 +31,8 @@
             drawing.DrawHero(battleFieldManagement.hero);
             drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
 
-            if (battleFieldManagement.DestroyHero()) {
+            if (battleFieldManagement.DestroyHero())
                 clearInterval(interval);
-                var gameOver = true;
-            }
 
             if (clock % 10 == 0) {
                 battleFieldManagement.MoveInvaders();
