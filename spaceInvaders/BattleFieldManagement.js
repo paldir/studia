@@ -57,8 +57,6 @@
     }
 
     this.DestroyInvaders = function () {
-        var numberOfLivingInvaders = 0;
-
         for (var i = 0; i < this.missilesOfHero.length; i++)
             for (var j = 0; j < this.invaders.length; j++)
                 if (!this.invaders[j].destroyed)
@@ -68,6 +66,15 @@
                             this.invaders[j].destroyed = true;
                         }
     }
+
+    this.DestroyHero = function () {
+        for (var i = 0; i < this.missilesOfInvaders.length; i++)
+            if (this.missilesOfInvaders[i].locationY >= this.hero.locationY[0])
+                if (this.missilesOfInvaders[i].locationX == this.hero.locationX[0] || this.missilesOfInvaders[i].locationX == this.hero.locationX[1])
+                    if (this.missilesOfInvaders[i].locationY == this.hero.locationY[0])
+                        this.hero.lifes--;
+    }
+
 
     this.LaunchMissileOfInvader = function () {
         var numberOfInvader;
@@ -88,16 +95,24 @@
         }
     }
 
-    this.DestroyHero = function () {
-        var gameOver = false;
+    this.CheckState = function () {
+        var heroAlive = true;
+        var invadersAlive = false;
+        var stateOfBattleField = {};
 
-        for (var i = 0; i < this.missilesOfInvaders.length; i++)
-            if (this.missilesOfInvaders[i].locationY >= this.hero.locationY[0])
-                if (this.missilesOfInvaders[i].locationX == this.hero.locationX[0] || this.missilesOfInvaders[i].locationX == this.hero.locationX[1])
-                    if (this.missilesOfInvaders[i].locationY == this.hero.locationY[0] || this.missilesOfInvaders[i].locationY == this.hero.locationY[1])
-                        gameOver = true;
+        if (this.invaders[54].locationY[1] >= this.hero.locationY[0] || this.hero.lifes == 0)
+            heroAlive = false;
 
-        return gameOver;
+        for (var i = 0; i < this.invaders.length; i++)
+            if (!this.invaders[i].destroyed) {
+                invadersAlive = true;
+                break;
+            }
+
+        stateOfBattleField['heroAlive'] = heroAlive;
+        stateOfBattleField['invadersAlive'] = invadersAlive;
+
+        return stateOfBattleField;
     }
 
     this.HandleKeys = function (pressedKeys) {
