@@ -7,6 +7,7 @@
 function Hero() {
     this.locationX = new Array(42, 43);
     this.locationY = new Array(84, 85);
+    this.lifes = 3;
 }
 
 function MissileOfHero(hero) {

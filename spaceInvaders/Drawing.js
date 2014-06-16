@@ -98,6 +98,26 @@
         }
     }
 
+    this.DrawStats = function (level, lifes) {
+        this.contextOfCanvas.fillStyle = 'white';
+        this.contextOfCanvas.font = '20px arial';
+
+        this.contextOfCanvas.fillText('Level: ' + level, 10, 20);
+        this.contextOfCanvas.fillText('Lifes: ' + lifes, 10, 40);
+    }
+
+    this.DrawEndOfGameCommunicate = function (text) {
+        this.contextOfCanvas.fillStyle = 'white';
+        this.contextOfCanvas.textBaseLine = 'middle';
+        this.contextOfCanvas.textAlign = 'center';
+        this.contextOfCanvas.font = '50px arial';
+
+        this.contextOfCanvas.fillText(text, this.canvasOfBattleField.width / 2, this.canvasOfBattleField.height / 2);
+
+        this.contextOfCanvas.font = '20px arial';
+        this.contextOfCanvas.fillText('Press F5 or refresh page to play again. ', this.canvasOfBattleField.width / 2, this.canvasOfBattleField.height - 20);
+    }
+
     this.ClearBattleField = function () {
         this.contextOfCanvas.clearRect(0, 0, this.canvasOfBattleField.width, this.canvasOfBattleField.height);
     }
