@@ -19,6 +19,7 @@
         var pressedKeys = {};
         var stateOfBattleField = {};
         var level = 1;
+        Hero.lifes = 3;
        
         onkeydown = function (e) { pressedKeys[e.keyCode] = true; };
         onkeyup = function (e) { delete pressedKeys[e.keyCode]; };
@@ -32,7 +33,7 @@
             drawing.DrawMissilesOfInvaders(battleFieldManagement.missilesOfInvaders);
             drawing.DrawHero(battleFieldManagement.hero);
             drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
-            drawing.DrawStats(level, battleFieldManagement.hero.lifes);
+            drawing.DrawStats(level, Hero.lifes);
 
             if (clock % (11 - level) == 0) {
                 battleFieldManagement.MoveInvaders();
