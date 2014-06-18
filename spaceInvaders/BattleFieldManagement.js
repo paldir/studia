@@ -44,6 +44,9 @@
         for (var i = 0; i < this.invaders.length; i++) {
             this.invaders[i].locationX[0] += displacementX;
             this.invaders[i].locationX[1] += displacementX;
+
+            if (this.invaders[i].state == 'W')
+                this.invaders[i].state = 'D';
         }
     }
 
@@ -61,7 +64,7 @@
 
         do {
             numberOfInvader = Math.round(Math.random() * 54);
-        } while (this.invaders[numberOfInvader].destroyed)
+        } while (this.invaders[numberOfInvader].state != 'A')
 
         this.missilesOfInvaders[this.missilesOfInvaders.length] = new MissileOfInvader(this.invaders[numberOfInvader]);
     }
@@ -82,6 +85,7 @@
                     if (this.missilesOfInvaders[i].locationY == this.hero.locationY[0]) {
                         this.missilesOfInvaders.splice(i, 1);
                         Hero.lifes--;
+                        this.hero.shield = 30;
                     }
     }
 
@@ -89,11 +93,11 @@
         for (var i = 0; i < this.missilesOfHero.length; i++)
             if (this.missilesOfHero[i].locationY <= this.invaders[54].locationY[1])
                 for (var j = 0; j < this.invaders.length; j++)
-                    if (!this.invaders[j].destroyed)
+                    if (this.invaders[j].state == 'A')
                         if (this.missilesOfHero[i].locationX == this.invaders[j].locationX[0] || this.missilesOfHero[i].locationX == this.invaders[j].locationX[1])
-                            if (this.missilesOfHero[i].locationY == this.invaders[j].locationY[0] || this.missilesOfHero[i].locationY == this.invaders[j].locationY[1]) {
+                            if (this.missilesOfHero[i].locationY == this.invaders[j].locationY[1]) {
                                 this.missilesOfHero.splice(i, 1);
-                                this.invaders[j].destroyed = true;
+                                this.invaders[j].state = 'W';
                             }
     }
 
@@ -106,7 +110,7 @@
             heroAlive = false;
 
         for (var i = 0; i < this.invaders.length; i++)
-            if (!this.invaders[i].destroyed) {
+            if (this.invaders[i].state == 'A') {
                 invadersAlive = true;
                 break;
             }

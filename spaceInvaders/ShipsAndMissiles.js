@@ -1,13 +1,14 @@
 ﻿function Invader(numberOfInvader, numberOfRow) {
     this.locationX = new Array((numberOfInvader - 1) * 4 + 2, (numberOfInvader - 1) * 4 + 3);
     this.locationY = new Array((numberOfRow - 1) * 4 + 2, (numberOfRow - 1) * 4 + 3);
-    this.destroyed = false;
+    this.state = 'A'; ///A - alive, W - wrecked, D - destroyed
 }
 
 function Hero() {
     this.locationX = new Array(42, 43);
     this.locationY = new Array(84, 85);
     //this.lifes = 3;
+    this.shield = 0;
     Hero.lifes;
 }
 
