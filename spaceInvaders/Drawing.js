@@ -5,8 +5,7 @@
 
     this.DrawInvaders = function (invaders) {
         for (var i = 0; i < invaders.length; i++) {
-            if (!invaders[i].destroyed) {
-
+            if (invaders[i].state == 'A') {
                 this.contextOfCanvas.beginPath();
                 this.contextOfCanvas.arc(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[1] * this.cellWidth, 0.5 * this.cellWidth, 2 * Math.PI, false);
                 this.contextOfCanvas.fillStyle = 'red';
@@ -23,23 +22,68 @@
 
                 this.contextOfCanvas.stroke();
             }
+            else if (invaders[i].state == 'W') {
+                this.contextOfCanvas.beginPath();
+                this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[0] * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.5 * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[0] * this.cellWidth, invaders[i].locationY[1] * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[0] * this.cellWidth + 0.5 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth + 0.5 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth + this.cellWidth, invaders[i].locationY[1] * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + 0.5 * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[0] * this.cellWidth + 0.25 * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.25 * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[0] * this.cellWidth + 0.75 * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.75 * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth + 0.75 * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.25 * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth + 0.25 * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.75 * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[0] * this.cellWidth + 0.25 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + 0.75 * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[0] * this.cellWidth + 0.75 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + 0.25 * this.cellWidth);
+                this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth + 0.75 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + 0.75 * this.cellWidth);
+                this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth + 0.25 * this.cellWidth, invaders[i].locationY[1] * this.cellWidth + 0.25 * this.cellWidth);
+
+                this.contextOfCanvas.lineWidth = 3;
+                this.contextOfCanvas.strokeStyle = 'red';
+
+                this.contextOfCanvas.stroke();
+
+                //invaders[i].state = 'D';
+            }
         }
     }
 
     this.DrawHero = function (hero) {
         this.contextOfCanvas.beginPath();
-        this.contextOfCanvas.moveTo(hero.locationX[0] * this.cellWidth, hero.locationY[1] * this.cellWidth + this.cellWidth);
+        this.contextOfCanvas.moveTo(hero.locationX[0] * this.cellWidth, hero.locationY[1] * this.cellWidth);
+        this.contextOfCanvas.lineTo(hero.locationX[0] * this.cellWidth, hero.locationY[1] * this.cellWidth + this.cellWidth);
+        this.contextOfCanvas.moveTo(hero.locationX[1] * this.cellWidth + this.cellWidth, hero.locationY[1] * this.cellWidth);
         this.contextOfCanvas.lineTo(hero.locationX[1] * this.cellWidth + this.cellWidth, hero.locationY[1] * this.cellWidth + this.cellWidth);
-        this.contextOfCanvas.lineTo(hero.locationX[1] * this.cellWidth + this.cellWidth, hero.locationY[1] * this.cellWidth);
-        this.contextOfCanvas.lineTo(hero.locationX[1] * this.cellWidth + 0.5 * this.cellWidth, hero.locationY[1] * this.cellWidth + 0.5 * this.cellWidth);
-        this.contextOfCanvas.lineTo(hero.locationX[1] * this.cellWidth, hero.locationY[0] * this.cellWidth);
+
+        this.contextOfCanvas.lineWidth = 2;
+        this.contextOfCanvas.strokeStyle = 'green';
+
+        this.contextOfCanvas.stroke();
+        this.contextOfCanvas.beginPath();
+        this.contextOfCanvas.moveTo(hero.locationX[1] * this.cellWidth, hero.locationY[0] * this.cellWidth);
         this.contextOfCanvas.lineTo(hero.locationX[0] * this.cellWidth + 0.5 * this.cellWidth, hero.locationY[1] * this.cellWidth + 0.5 * this.cellWidth);
-        this.contextOfCanvas.lineTo(hero.locationX[0] * this.cellWidth, hero.locationY[1] * this.cellWidth);
+        this.contextOfCanvas.lineTo(hero.locationX[1] * this.cellWidth + 0.5 * this.cellWidth, hero.locationY[1] * this.cellWidth + 0.5 * this.cellWidth);
         this.contextOfCanvas.closePath();
+        this.contextOfCanvas.rect(hero.locationX[0] * this.cellWidth, hero.locationY[1] * this.cellWidth + 0.5 * this.cellWidth, 2 * this.cellWidth, 0.5 * this.cellWidth);
 
         this.contextOfCanvas.fillStyle = 'green';
 
         this.contextOfCanvas.fill();
+
+        if (hero.shield > 0) {
+            hero.shield--;
+
+            this.contextOfCanvas.beginPath();
+            this.contextOfCanvas.arc(hero.locationX[1] * this.cellWidth, hero.locationY[1] * this.cellWidth, 2 * this.cellWidth, 2 * Math.PI, false);
+
+            this.contextOfCanvas.strokeStyle = 'green';
+            this.contextOfCanvas.lineWidth = 2;
+
+            this.contextOfCanvas.stroke();
+        }
     }
 
     this.DrawMissilesOfHero = function (missilesOfHero) {
@@ -48,7 +92,7 @@
             this.contextOfCanvas.moveTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth);
             this.contextOfCanvas.lineTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth + this.cellWidth);
 
-            this.contextOfCanvas.strokeStyle = 'rgb(128, 192, 0';
+            this.contextOfCanvas.strokeStyle = 'rgb(128, 192, 128)';
 
             this.contextOfCanvas.stroke();
         }
@@ -60,7 +104,7 @@
             this.contextOfCanvas.moveTo(missilesOfInvaders[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfInvaders[i].locationY * this.cellWidth);
             this.contextOfCanvas.lineTo(missilesOfInvaders[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfInvaders[i].locationY * this.cellWidth + this.cellWidth);
 
-            this.contextOfCanvas.strokeStyle = 'rgb(255, 128, 0';
+            this.contextOfCanvas.strokeStyle = 'rgb(255, 128, 128)';
 
             this.contextOfCanvas.stroke();
         }
