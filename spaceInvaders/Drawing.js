@@ -5,7 +5,7 @@
 
     this.DrawInvaders = function (invaders) {
         for (var i = 0; i < invaders.length; i++) {
-            if (invaders[i].state == 'A') {
+            if (!invaders[i].destroyed) {
                 this.contextOfCanvas.beginPath();
                 this.contextOfCanvas.arc(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[1] * this.cellWidth, 0.5 * this.cellWidth, 2 * Math.PI, false);
                 this.contextOfCanvas.fillStyle = 'red';
@@ -22,7 +22,7 @@
 
                 this.contextOfCanvas.stroke();
             }
-            else if (invaders[i].state == 'W') {
+            else if (invaders[i].wreck > 0) {
                 this.contextOfCanvas.beginPath();
                 this.contextOfCanvas.moveTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[0] * this.cellWidth);
                 this.contextOfCanvas.lineTo(invaders[i].locationX[1] * this.cellWidth, invaders[i].locationY[0] * this.cellWidth + 0.5 * this.cellWidth);
@@ -46,7 +46,7 @@
 
                 this.contextOfCanvas.stroke();
 
-                //invaders[i].state = 'D';
+                invaders[i].wreck--;
             }
         }
     }
@@ -93,6 +93,7 @@
             this.contextOfCanvas.lineTo(missilesOfHero[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfHero[i].locationY * this.cellWidth + this.cellWidth);
 
             this.contextOfCanvas.strokeStyle = 'rgb(128, 192, 128)';
+            this.contextOfCanvas.lineWidth = 2;
 
             this.contextOfCanvas.stroke();
         }
@@ -105,6 +106,7 @@
             this.contextOfCanvas.lineTo(missilesOfInvaders[i].locationX * this.cellWidth + 0.5 * this.cellWidth, missilesOfInvaders[i].locationY * this.cellWidth + this.cellWidth);
 
             this.contextOfCanvas.strokeStyle = 'rgb(255, 128, 128)';
+            this.contextOfCanvas.lineWidth = 2;
 
             this.contextOfCanvas.stroke();
         }

@@ -4,6 +4,10 @@
     this.hero = new Hero();
     this.missilesOfHero = new Array(0);
     this.missilesOfInvaders = new Array(0);
+    this.soundOfMissileOfInvader = document.getElementById('soundOfMissileOfInvader');
+    this.soundOfMissileOfHero = document.getElementById('soundOfMissileOfHero');
+    this.soundOfDestructionOfInvader = document.getElementById('soundOfDestructionOfInvader');
+    this.soundOfHitHero = document.getElementById('soundOfHitHero');
 
     var numberOfRow = 1;
 
@@ -44,9 +48,6 @@
         for (var i = 0; i < this.invaders.length; i++) {
             this.invaders[i].locationX[0] += displacementX;
             this.invaders[i].locationX[1] += displacementX;
-
-            if (this.invaders[i].state == 'W')
-                this.invaders[i].state = 'D';
         }
     }
 
@@ -64,9 +65,13 @@
 
         do {
             numberOfInvader = Math.round(Math.random() * 54);
-        } while (this.invaders[numberOfInvader].state != 'A')
+        } while (this.invaders[numberOfInvader].destroyed)
 
         this.missilesOfInvaders[this.missilesOfInvaders.length] = new MissileOfInvader(this.invaders[numberOfInvader]);
+        this.soundOfMissileOfInvader.currentTime = 0;
+
+        this.soundOfMissileOfInvader.pause();
+        this.soundOfMissileOfInvader.play();
     }
 
     this.MoveMissilesOfInvaders = function () {
@@ -84,8 +89,13 @@
                 if (this.missilesOfInvaders[i].locationX == this.hero.locationX[0] || this.missilesOfInvaders[i].locationX == this.hero.locationX[1])
                     if (this.missilesOfInvaders[i].locationY == this.hero.locationY[0]) {
                         this.missilesOfInvaders.splice(i, 1);
+
                         Hero.lifes--;
                         this.hero.shield = 30;
+                        this.soundOfHitHero.currentTime = 0;
+
+                        this.soundOfHitHero.pause();
+                        this.soundOfHitHero.play();
                     }
     }
 
@@ -93,11 +103,17 @@
         for (var i = 0; i < this.missilesOfHero.length; i++)
             if (this.missilesOfHero[i].locationY <= this.invaders[54].locationY[1])
                 for (var j = 0; j < this.invaders.length; j++)
-                    if (this.invaders[j].state == 'A')
+                    if (!this.invaders[j].destroyed)
                         if (this.missilesOfHero[i].locationX == this.invaders[j].locationX[0] || this.missilesOfHero[i].locationX == this.invaders[j].locationX[1])
                             if (this.missilesOfHero[i].locationY == this.invaders[j].locationY[1]) {
                                 this.missilesOfHero.splice(i, 1);
-                                this.invaders[j].state = 'W';
+
+                                this.invaders[j].wreck = 15;
+                                this.invaders[j].destroyed = true;
+                                this.soundOfDestructionOfInvader.currentTime = 0;
+
+                                this.soundOfDestructionOfInvader.pause();
+                                this.soundOfDestructionOfInvader.play();
                             }
     }
 
@@ -110,7 +126,7 @@
             heroAlive = false;
 
         for (var i = 0; i < this.invaders.length; i++)
-            if (this.invaders[i].state == 'A') {
+            if (!this.invaders[i].destroyed) {
                 invadersAlive = true;
                 break;
             }
@@ -125,6 +141,10 @@
         if (pressedKeys[32])
             if (this.missilesOfHero.length == 0 || this.hero.locationY[0] - this.missilesOfHero[this.missilesOfHero.length - 1].locationY > 10) {
                 this.missilesOfHero[this.missilesOfHero.length] = new MissileOfHero(this.hero);
+                this.soundOfMissileOfHero.currentTime = 0;
+
+                this.soundOfMissileOfHero.pause();
+                this.soundOfMissileOfHero.play();
             }
 
         if (pressedKeys[37])
