@@ -17,6 +17,8 @@ namespace Presentation
 
             InitializeListOfHierarchies();
             InitializeListOfMeasures();
+
+            //DLL: Desinger.Controls
         }
 
         void InitializeListOfHierarchies()
