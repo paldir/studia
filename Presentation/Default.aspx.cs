@@ -327,6 +327,7 @@ namespace Presentation
                 {
                     selectedMeasures.RemoveAt(i);
                     selectedMeasuresValues.RemoveAt(i);
+
                     listOfMeasures.Items.FindByText(listOfSelectedMeasures.Items[i].Text).Selected = false;
                 }
 
@@ -336,42 +337,27 @@ namespace Presentation
 
         void buttonOfReportGeneration_Click(object sender, EventArgs e)
         {
-            int numberOfHierarchies = 0;
-            List<TableOfResults.Row> rows = new List<TableOfResults.Row>();
-
-            TableOfResults.Row.GetNamesOfHierarchies().Clear();
-            TableOfResults.Row.GetNamesOfMeasures().Clear();
+            List<string[]> rows = new List<string[]>();
+            List<string> namesOfMeasures = new List<string>();
+            List<string> namesOfHierarchies = new List<string>();
 
             for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
-                if (descriptionOfTableOfResults[1, i] != "Value")
-                    numberOfHierarchies++;
-
-            for (int i = 0; i < numberOfHierarchies; i++)
-                TableOfResults.Row.GetNamesOfHierarchies().Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
-
-            for (int i = numberOfHierarchies; i < tableOfResults.Rows[0].Cells.Count; i++)
-                TableOfResults.Row.GetNamesOfMeasures().Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+                if (descriptionOfTableOfResults[0, i] != String.Empty)
+                    namesOfMeasures.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+                else
+                    namesOfHierarchies.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
 
             for (int i = 1; i < tableOfResults.Rows.Count; i++)
             {
-                List<string> namesOfHierarchiesMembers = new List<string>();
-                List<string> values = new List<string>();
+                string[] row = new string[tableOfResults.Rows[i].Cells.Count];
 
-                for (int j = 0; j < numberOfHierarchies; j++)
-                    namesOfHierarchiesMembers.Add(((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text);
+                for (int j = 0; j < row.Length; j++)
+                    row[j] = ((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text;
 
-                for (int j = numberOfHierarchies; j < tableOfResults.Rows[i].Cells.Count; j++)
-                    values.Add(((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text);
-
-                rows.Add(new TableOfResults.Row(namesOfHierarchiesMembers, values));
+                rows.Add(row);
             }
 
-
-            Session.Clear();
-
-            Session["rows"] = rows;
-
-            Response.Redirect("ReportConfiguration.aspx");
+            //Response.Redirect("ReportConfiguration.aspx");
         }
         #endregion
     }

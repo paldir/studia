@@ -66,7 +66,7 @@ namespace DataAccess
             for (int i = countOfCaptionsOfRow; i < columnsCount; i++)
             {
                 results[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].Caption;
-                description[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName;
+                description[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/");
             }
 
             if (cellSet.Axes.Count > 1)
@@ -74,7 +74,7 @@ namespace DataAccess
                     for (int j = 0; j < countOfCaptionsOfRow; j++)
                     {
                         results[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].Caption;
-                        description[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName;
+                        description[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/").Replace("&", String.Empty);
                     }
 
 
