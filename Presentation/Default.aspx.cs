@@ -357,7 +357,12 @@ namespace Presentation
                 rows.Add(row);
             }
 
-            //Response.Redirect("ReportConfiguration.aspx");
+            Session.Clear();
+            Session["rows"] = rows;
+            Session["namesOfMeasures"] = namesOfMeasures;
+            Session["namesOfHierarchies"] = namesOfHierarchies;
+            
+            Response.Redirect("ReportConfiguration.aspx");
         }
         #endregion
     }

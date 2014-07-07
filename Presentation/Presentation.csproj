@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="CubeStructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RdlGeneration.cs" />
     <Compile Include="Report.aspx.cs">
       <DependentUpon>Report.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

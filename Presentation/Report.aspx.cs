@@ -11,7 +11,7 @@ namespace Presentation
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            System.Data.DataTable dataTable = new System.Data.DataTable("tablix");
+            System.Data.DataTable dataTable = new System.Data.DataTable("tabhlix");
             System.Data.DataSet dataSet = new System.Data.DataSet("dataSource");
             dataSet.Tables.Add(dataTable);
 
