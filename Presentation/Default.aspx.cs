@@ -357,10 +357,11 @@ namespace Presentation
                 rows.Add(row);
             }
 
-            Session.Clear();
-            Session["rows"] = rows;
-            Session["namesOfMeasures"] = namesOfMeasures;
+            Session.Clear(); 
+
             Session["namesOfHierarchies"] = namesOfHierarchies;
+            Session["namesOfMeasures"] = namesOfMeasures;
+            Session["rows"] = rows;
             
             Response.Redirect("ReportConfiguration.aspx");
         }

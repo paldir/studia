@@ -4,27 +4,29 @@ using System.Linq;
 using System.Web;
 
 using System.Xml;
+using System.Text;
 
 namespace Presentation
 {
     public class RdlGeneration
     {
-        System.Text.StringBuilder result;
+        System.IO.MemoryStream result;
         XmlWriter writer;
 
         public RdlGeneration()
         {
+            Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
-            result = new System.Text.StringBuilder();
+            settings.Encoding = encoding;
+            result = new System.IO.MemoryStream();
             writer = XmlWriter.Create(result, settings);
         }
 
-        public void WriteReport(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
+        public string WriteReport(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
         {
-            writer.WriteStartElement("Report");
-            writer.WriteAttributeString("xmlns", "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition");
-            writer.WriteAttributeString("xmlns:rd", "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
+            writer.WriteStartElement("Report", "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition");
+            writer.WriteAttributeString("xmlns", "rd", null, "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
             writer.WriteStartElement("Width");
             writer.WriteString((rows.ElementAt(0).Length * 5).ToString() + "cm");
             writer.WriteEndElement();
@@ -33,12 +35,21 @@ namespace Presentation
             writer.WriteString(rows.Count.ToString() + "cm");
             writer.WriteEndElement();
             writer.WriteStartElement("ReportItems");
+
+            List<string> tmp = new List<string>();
+            tmp.AddRange(namesOfHierarchies);
+            tmp.AddRange(namesOfMeasures);
+            string[] tmp2 = tmp.ToArray();
+            rows.Insert(0, tmp2);
+
             WriteTablix(rows);
             writer.WriteEndElement();
             writer.WriteEndElement();
             WriteDummyCode();
             writer.WriteEndElement();
             writer.Close();
+
+            return Encoding.Default.GetString(result.ToArray());
         }
         
         void WriteTablix(List<string[]> rows)

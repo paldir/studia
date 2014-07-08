@@ -9,16 +9,16 @@ namespace Presentation
 {
     public partial class ReportConfiguration : System.Web.UI.Page
     {
-        List<string[]> rows;
-        List<string> namesOfMeasures;
         List<string> namesOfHierarchies;
+        List<string> namesOfMeasures;
+        List<string[]> rows;
         int[] countsOfMembersOfEachHierarchy;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            rows = (List<string[]>)Session["rows"];
-            namesOfMeasures = (List<string>)Session["namesOfMeasures"];
             namesOfHierarchies = (List<string>)Session["namesOfHierarchies"];
+            namesOfMeasures = (List<string>)Session["namesOfMeasures"];
+            rows = (List<string[]>)Session["rows"];
             countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
 
             for (int i = 0; i < namesOfHierarchies.Count; i++)
@@ -66,8 +66,13 @@ namespace Presentation
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
-            RdlGeneration rdl = new RdlGeneration();
-            rdl.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
+            RdlGeneration rdlGenerator = new RdlGeneration();
+
+            Session.Clear();
+
+            Session["reportDefinition"] = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
+
+            Response.Redirect("Report.aspx");
         }
     }
 }
