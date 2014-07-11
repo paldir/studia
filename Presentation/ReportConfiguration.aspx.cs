@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using System.Drawing;
+
 namespace Presentation
 {
     public partial class ReportConfiguration : System.Web.UI.Page
@@ -64,9 +66,25 @@ namespace Presentation
             while (n > 1);
         }
 
+        float[] CalculateColumnsWidths()
+        {
+            float[] result = new float[rows.First().Length];
+            Bitmap bitMap = new Bitmap(500, 200);
+            Graphics graphics = Graphics.FromImage(bitMap);
+            Font font = new Font("Arial", 10);
+
+            for (int i = 0; i < namesOfHierarchies.Count; i++)
+                result[i] = graphics.MeasureString(namesOfHierarchies.ElementAt(i), font).Width;
+
+            for (int i = namesOfHierarchies.Count; i < result.Length; i++)
+                result[i] = graphics.MeasureString(namesOfMeasures.ElementAt(i - namesOfHierarchies.Count), font).Width;
+
+            return result;
+        }
+
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
-            RdlGeneration rdlGenerator = new RdlGeneration();
+            RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10);
 
             Session.Clear();
 

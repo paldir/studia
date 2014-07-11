@@ -12,9 +12,10 @@ namespace Presentation
     {
         System.IO.MemoryStream result;
         XmlWriter writer;
-        float rowHeight = 1;
+        float rowHeight;
+        float[] columnsWidths;
 
-        public RdlGeneration()
+        public RdlGeneration(float[] columnsWidths, float fontSize)
         {   
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -22,6 +23,8 @@ namespace Presentation
             settings.Encoding = encoding;
             result = new System.IO.MemoryStream();
             writer = XmlWriter.Create(result, settings);
+            this.rowHeight = fontSize * 2;
+            this.columnsWidths = columnsWidths;
         }
 
         public string WriteReport(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
@@ -29,11 +32,11 @@ namespace Presentation
             writer.WriteStartElement("Report", "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition");
             writer.WriteAttributeString("xmlns", "rd", null, "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
             writer.WriteStartElement("Width");
-            writer.WriteString((rows.ElementAt(0).Length * 5).ToString() + "cm");
+            writer.WriteString(columnsWidths.Sum().ToString().Replace(',', '.') + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("Body");
             writer.WriteStartElement("Height");
-            writer.WriteString((rows.Count * rowHeight).ToString() + "cm");
+            writer.WriteString("10" + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("ReportItems");
             WriteMainTablix(namesOfHierarchies, namesOfMeasures, rows);
@@ -51,7 +54,12 @@ namespace Presentation
             writer.WriteStartElement("Tablix");
             writer.WriteAttributeString("Name", GenerateRandomName());
             writer.WriteStartElement("TablixBody");
-            WriteColumns(rows.ElementAt(0).Length);
+            writer.WriteStartElement("TablixColumns");
+
+            for (int i = 0; i < rows.First().Length; i++)
+                WriteColumn(i);
+
+            writer.WriteEndElement();
             writer.WriteStartElement("TablixRows");
             WriteRow(namesOfHierarchies.Concat(namesOfMeasures).ToArray(), rowHeight);
             WriteMainRow(rows, namesOfHierarchies.Count);
@@ -68,7 +76,7 @@ namespace Presentation
             writer.WriteStartElement("TablixColumnHierarchy");
             writer.WriteStartElement("TablixMembers");
 
-            for (int i = 0; i < rows.ElementAt(0).Length; i++)
+            for (int i = 0; i < rows.First().Length; i++)
             {
                 writer.WriteStartElement("TablixMember");
                 writer.WriteEndElement();
@@ -79,12 +87,14 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteTablix(List<string> rows, float height)
+        void WriteTablix(List<string> rows, float height, int columnNumber)
         {
             writer.WriteStartElement("Tablix");
             writer.WriteAttributeString("Name", GenerateRandomName());
             writer.WriteStartElement("TablixBody");
-            WriteColumns(1);
+            writer.WriteStartElement("TablixColumns");
+            WriteColumn(columnNumber);
+            writer.WriteEndElement();
             writer.WriteStartElement("TablixRows");
 
             foreach (string row in rows)
@@ -112,19 +122,12 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteColumns(int count)
+        void WriteColumn(int columnNumber)
         {
-            writer.WriteStartElement("TablixColumns");
-
-            for (int i = 0; i < count; i++)
-            {
-                writer.WriteStartElement("TablixColumn");
-                writer.WriteStartElement("Width");
-                writer.WriteString("5cm");
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-            }
-
+            writer.WriteStartElement("TablixColumn");
+            writer.WriteStartElement("Width");
+            writer.WriteString(columnsWidths[columnNumber].ToString().Replace(',', '.') + "pt");
+            writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
@@ -132,11 +135,11 @@ namespace Presentation
         {
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
-            writer.WriteString(rows.Count.ToString() + "cm");
+            writer.WriteString((rows.Count * rowHeight).ToString() + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("TablixCells");
 
-            for (int i = 0; i < rows.ElementAt(0).Length; i++)
+            for (int i = 0; i < rows.First().Length; i++)
             {
                 List<string> column = rows.Select(r => r[i]).ToList();
                 List<string> columnWithMergedCells = new List<string>();
@@ -145,7 +148,7 @@ namespace Presentation
                     if (i >= countOfHierarchies || columnWithMergedCells.Count == 0 || field != columnWithMergedCells.Last())
                         columnWithMergedCells.Add(field);
 
-                WriteMainCell(columnWithMergedCells, Convert.ToSingle(column.Count / columnWithMergedCells.Count) * rowHeight);
+                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight, i);
             }
 
             writer.WriteEndElement();
@@ -156,7 +159,7 @@ namespace Presentation
         {
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
-            writer.WriteString(height.ToString() + "cm");
+            writer.WriteString(height.ToString() + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("TablixCells");
 
@@ -167,11 +170,11 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteMainCell(List<string> column, float height)
+        void WriteMainCell(List<string> column, float height, int columnNumber)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTablix(column, height);
+            WriteTablix(column, height, columnNumber);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
