@@ -27,9 +27,9 @@ namespace Presentation
                 countsOfMembersOfEachHierarchy[i] = rows.Select(r => r[i]).Distinct().Count();
 
             SortHierarchiesByCountOfMembers();
-
-            for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
-                rows = rows.OrderBy(r => r[i]).ToList();
+            GroupMembersInEachHierarchy();
+            /*for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
+                rows = rows.OrderBy(r => r[i]).ToList();*/
 
             InitializeLists();
 
@@ -43,6 +43,30 @@ namespace Presentation
 
             foreach (string nameOfMeasure in namesOfMeasures)
                 listOfMeasures.Items.Add(nameOfMeasure);
+        }
+
+        void GroupMembersInEachHierarchy()
+        {
+            for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
+            {
+                List<string> column = rows.Select(r => r[i]).ToList();
+
+                for (int j = 0; j < column.Count - 1; j++)
+                {
+                    List<string[]> membersToMove = new List<string[]>();
+
+                    for (int k = j + 1; k < column.Count; k++)
+                        if (column.ElementAt(k) == column.ElementAt(j))
+                            membersToMove.Add(rows.ElementAt(k));
+
+                    foreach (string[] memberToMove in membersToMove)
+                        rows.Remove(memberToMove);
+
+                    rows.InsertRange(j + 1, membersToMove);
+                    
+                    j += membersToMove.Count;
+                }
+            }
         }
 
         void SortHierarchiesByCountOfMembers()
@@ -78,6 +102,11 @@ namespace Presentation
 
             for (int i = namesOfHierarchies.Count; i < result.Length; i++)
                 result[i] = graphics.MeasureString(namesOfMeasures.ElementAt(i - namesOfHierarchies.Count), font).Width;
+
+            foreach (string[] row in rows)
+                for (int i = 0; i < row.Length; i++)
+                    if (graphics.MeasureString(row[i], font).Width > result[i])
+                        result[i] = graphics.MeasureString(row[i], font).Width;
 
             return result;
         }

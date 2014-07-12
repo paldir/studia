@@ -119,6 +119,15 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteEndElement();
+
+            /*writer.WriteStartElement("Style");
+            writer.WriteStartElement("Border");
+            writer.WriteStartElement("Style");
+            writer.WriteString("Solid");
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndElement();*/
+
             writer.WriteEndElement();
         }
 
@@ -148,7 +157,7 @@ namespace Presentation
                     if (i >= countOfHierarchies || columnWithMergedCells.Count == 0 || field != columnWithMergedCells.Last())
                         columnWithMergedCells.Add(field);
 
-                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight, i);
+                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight + (float)(column.Count - columnWithMergedCells.Count) / columnWithMergedCells.Count, i);
             }
 
             writer.WriteEndElement();
