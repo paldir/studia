@@ -95,5 +95,29 @@ namespace DataAccess
 
             return new List<string[,]> { results, description };
         }
+
+        public static List<string> SortHierarchiesByCountOfMembers(List<string> namesOfHierarchies, List<string> selectedDimensions)
+        {
+            int n = namesOfHierarchies.Count;
+            int[] countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
+
+            for (int i = 0; i < countsOfMembersOfEachHierarchy.Length; i++)
+                countsOfMembersOfEachHierarchy[i] = selectedDimensions.FindAll(d => d.StartsWith(namesOfHierarchies.ElementAt(i))).Count;
+
+            do
+            {
+                for (int i = 0; i < n - 1; i++)
+                    if (countsOfMembersOfEachHierarchy[i] > countsOfMembersOfEachHierarchy[i + 1])
+                    {
+                        Array.Reverse(countsOfMembersOfEachHierarchy, i, 2);
+                        namesOfHierarchies.Reverse(i, 2);
+                    }
+
+                n--;
+            }
+            while (n > 1);
+
+            return namesOfHierarchies;
+        }
     }
 }

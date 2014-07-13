@@ -23,11 +23,11 @@ namespace Presentation
             rows = (List<string[]>)Session["rows"];
             countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
 
-            for (int i = 0; i < namesOfHierarchies.Count; i++)
-                countsOfMembersOfEachHierarchy[i] = rows.Select(r => r[i]).Distinct().Count();
+            /*for (int i = 0; i < namesOfHierarchies.Count; i++)
+                countsOfMembersOfEachHierarchy[i] = rows.Select(r => r[i]).Distinct().Count();*/
 
-            SortHierarchiesByCountOfMembers();
-            GroupMembersInEachHierarchy();
+            //SortHierarchiesByCountOfMembers();
+            //GroupMembersInEachHierarchy();
             /*for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
                 rows = rows.OrderBy(r => r[i]).ToList();*/
 
@@ -113,7 +113,7 @@ namespace Presentation
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
-            RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10);
+            RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
 
             Session.Clear();
 

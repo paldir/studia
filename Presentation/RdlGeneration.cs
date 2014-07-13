@@ -14,9 +14,11 @@ namespace Presentation
         XmlWriter writer;
         float rowHeight;
         float[] columnsWidths;
+        string[] backgroundsOfCaption;
+        int currentBackgroundOfCaption;
 
-        public RdlGeneration(float[] columnsWidths, float fontSize)
-        {   
+        public RdlGeneration(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption)
+        {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -25,6 +27,8 @@ namespace Presentation
             writer = XmlWriter.Create(result, settings);
             this.rowHeight = fontSize * 2;
             this.columnsWidths = columnsWidths;
+            this.backgroundsOfCaption = backgroundsOfCaption;
+            currentBackgroundOfCaption = 0;
         }
 
         public string WriteReport(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
@@ -61,7 +65,7 @@ namespace Presentation
 
             writer.WriteEndElement();
             writer.WriteStartElement("TablixRows");
-            WriteRow(namesOfHierarchies.Concat(namesOfMeasures).ToArray(), rowHeight);
+            WriteRow(namesOfHierarchies.Concat(namesOfMeasures).ToArray(), rowHeight, true);
             WriteMainRow(rows, namesOfHierarchies.Count);
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -87,7 +91,7 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteTablix(List<string> rows, float height, int columnNumber)
+        void WriteTablix(List<string> rows, float height, int columnNumber, bool isCaption)
         {
             writer.WriteStartElement("Tablix");
             writer.WriteAttributeString("Name", GenerateRandomName());
@@ -98,7 +102,7 @@ namespace Presentation
             writer.WriteStartElement("TablixRows");
 
             foreach (string row in rows)
-                WriteRow(new string[] { row }, height);
+                WriteRow(new string[] { row }, height, isCaption);
 
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -150,54 +154,69 @@ namespace Presentation
 
             for (int i = 0; i < rows.First().Length; i++)
             {
+                bool isCaption;
                 List<string> column = rows.Select(r => r[i]).ToList();
                 List<string> columnWithMergedCells = new List<string>();
+
+                if (i < countOfHierarchies)
+                {
+                    isCaption = true;
+
+                    currentBackgroundOfCaption = i % 2;
+                }
+                else
+                    isCaption = false;
 
                 foreach (string field in column)
                     if (i >= countOfHierarchies || columnWithMergedCells.Count == 0 || field != columnWithMergedCells.Last())
                         columnWithMergedCells.Add(field);
 
-                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight + (float)(column.Count - columnWithMergedCells.Count) / columnWithMergedCells.Count, i);
+                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight + (float)(column.Count - columnWithMergedCells.Count) / columnWithMergedCells.Count, i, isCaption);
             }
 
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
         
-        void WriteRow(string[] row, float height)
-        {
+        void WriteRow(string[] row, float height, bool isCaption)
+        {            
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
             writer.WriteString(height.ToString() + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("TablixCells");
 
-            foreach(string field in row)
-                WriteCell(field);
+            for (int i = 0; i < row.Length; i++)
+            {
+                if (row.Length > 1)
+                    currentBackgroundOfCaption = i % 2;
+                
+                WriteCell(row[i], isCaption);
+            }
 
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteMainCell(List<string> column, float height, int columnNumber)
+        void WriteMainCell(List<string> column, float height, int columnNumber, bool isCaption)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTablix(column, height, columnNumber);
+            WriteTablix(column, height, columnNumber, isCaption);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
         
-        void WriteCell(string value)
+        void WriteCell(string value, bool isCaption)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTextBox(value);
+            WriteTextBox(value, isCaption);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteTextBox(string value)
+        void WriteTextBox(string value, bool isCaption)
         {
             writer.WriteStartElement("Textbox");
             writer.WriteAttributeString("Name", GenerateRandomName());
@@ -207,6 +226,19 @@ namespace Presentation
             writer.WriteStartElement("TextRun");
             writer.WriteStartElement("Value");
             writer.WriteString(value);
+            writer.WriteEndElement();
+            writer.WriteStartElement("Style");
+
+            if (isCaption)
+            {
+                writer.WriteStartElement("Color");
+                writer.WriteString("White");
+                writer.WriteEndElement();
+                writer.WriteStartElement("FontWeight");
+                writer.WriteString("Bold");
+                writer.WriteEndElement();
+            }
+
             writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -225,7 +257,18 @@ namespace Presentation
             writer.WriteStartElement("Style");
             writer.WriteString("Solid");
             writer.WriteEndElement();
+            writer.WriteStartElement("Color");
+            writer.WriteString("LightGrey");
             writer.WriteEndElement();
+            writer.WriteEndElement();
+
+            if (isCaption)
+            {
+                writer.WriteStartElement("BackgroundColor");
+                writer.WriteString(backgroundsOfCaption[currentBackgroundOfCaption]);
+                writer.WriteEndElement();
+            }
+
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
