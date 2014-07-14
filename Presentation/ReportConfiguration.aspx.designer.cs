@@ -22,22 +22,85 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlForm form;
         
         /// <summary>
-        /// listOfHierarchies control.
+        /// scriptManager control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox listOfHierarchies;
+        protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
-        /// listOfMeasures control.
+        /// updatePanelOfListOfHierarchies control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox listOfMeasures;
+        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfHierarchies;
+        
+        /// <summary>
+        /// placeOfListOfHierarchies control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfHierarchies;
+        
+        /// <summary>
+        /// buttonOfMovingItemOfListOfHierarchiesUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesUp;
+        
+        /// <summary>
+        /// buttonOfMovingItemOfListOfHierarchiesDown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesDown;
+        
+        /// <summary>
+        /// updatePanelOfListOfMeasures control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfMeasures;
+        
+        /// <summary>
+        /// placeOfListOfMeasures control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfMeasures;
+        
+        /// <summary>
+        /// buttonOfMovingItemOfListOfMeasuresUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresUp;
+        
+        /// <summary>
+        /// buttonOfMovingItemOfListOfMeasuresDown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresDown;
         
         /// <summary>
         /// buttonOfViewingOfReport control.

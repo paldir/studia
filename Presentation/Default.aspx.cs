@@ -188,7 +188,6 @@ namespace Presentation
 
         void CreateSelectedItemsLists()
         {
-
             CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
             listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
             AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
