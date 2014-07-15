@@ -10,7 +10,16 @@
 namespace Presentation {
     
     
-    public partial class Default {
+    public partial class ReportConfiguration {
+        
+        /// <summary>
+        /// form control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form;
         
         /// <summary>
         /// scriptManager control.
@@ -22,49 +31,49 @@ namespace Presentation {
         protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
-        /// placeOfListOfDimensions control.
+        /// updatePanelOfListOfHierarchies control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfDimensions;
+        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfHierarchies;
         
         /// <summary>
-        /// dimensionTreeViewUpdatePanel control.
+        /// placeOfListOfHierarchies control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel dimensionTreeViewUpdatePanel;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfHierarchies;
         
         /// <summary>
-        /// placeOfDimensionTreeView control.
+        /// buttonOfMovingItemOfListOfHierarchiesUp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfDimensionTreeView;
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesUp;
         
         /// <summary>
-        /// postBackButtonOfDimensionTreeView control.
+        /// buttonOfMovingItemOfListOfHierarchiesDown control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button postBackButtonOfDimensionTreeView;
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesDown;
         
         /// <summary>
-        /// listOfMeasuresUpdatePanel control.
+        /// updatePanelOfListOfMeasures control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel listOfMeasuresUpdatePanel;
+        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfMeasures;
         
         /// <summary>
         /// placeOfListOfMeasures control.
@@ -76,57 +85,30 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfMeasures;
         
         /// <summary>
-        /// selectedItemsUpdatePanel control.
+        /// buttonOfMovingItemOfListOfMeasuresUp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel selectedItemsUpdatePanel;
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresUp;
         
         /// <summary>
-        /// placeOfListOfSelectedDimensions control.
+        /// buttonOfMovingItemOfListOfMeasuresDown control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedDimensions;
+        protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresDown;
         
         /// <summary>
-        /// placeOfListOfSelectedMeasures control.
+        /// buttonOfViewingOfReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedMeasures;
-        
-        /// <summary>
-        /// tableOfResultsUpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel tableOfResultsUpdatePanel;
-        
-        /// <summary>
-        /// placeOfTableOfResults control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfTableOfResults;
-        
-        /// <summary>
-        /// buttonOfReportGeneration control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buttonOfReportGeneration;
+        protected global::System.Web.UI.WebControls.Button buttonOfViewingOfReport;
     }
 }

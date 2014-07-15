@@ -34,46 +34,8 @@ namespace DataAccess
             return results;
         }
 
-        public static string[,] ConvertCellSetToArray(CellSet cellSet)
+        public static List<string[,]> ConvertCellSetToArrays(CellSet cellSet)
         {
-            /*int arrayWidth, arrayHeight;
-
-            if (cellSet.Axes.Count == 1)
-            {
-                arrayWidth = cellSet.Cells.Count;
-                arrayHeight = 2;
-            }
-            else
-            {
-                arrayWidth = cellSet.Axes[0].Set.Tuples.Count + cellSet.Axes[1].Set.Tuples[0].Members.Count;
-                arrayHeight = cellSet.Axes[1].Set.Tuples.Count + 1;
-            }
-
-            string[,] results = new string[arrayHeight, arrayWidth];
-
-            if (cellSet.Axes.Count == 1)
-            {
-                for (int i = 0; i < arrayWidth; i++)
-                {
-                    results[0, i] = cellSet.Axes[0].Set.Tuples[i].Members[0].Caption;
-                    results[1, i] = cellSet[i].FormattedValue;
-                }
-            }
-            else
-            {
-                results[0, 0] = String.Empty;
-
-                for (int i = 1; i < arrayWidth; i++)
-                    results[0, i] = cellSet.Axes[0].Set.Tuples[i - 1].Members[0].Caption;
-
-                for (int i = 1; i < arrayHeight; i++)
-                {
-                    results[i, 0] = cellSet.Axes[1].Set.Tuples[i - 1].Members[0].Caption;
-
-                    for (int j = 1; j < arrayWidth; j++)
-                        results[i, j] = cellSet.Cells[j - 1, i - 1].FormattedValue;
-                }
-            }*/
             int rowsCount = 2, columnsCount = 1, countOfCaptionsOfRow = 0;
 
             if (cellSet.Axes.Count > 1)
@@ -87,28 +49,75 @@ namespace DataAccess
             columnsCount = cellSet.Axes[0].Set.Tuples.Count + countOfCaptionsOfRow;
 
             string[,] results = new string[rowsCount, columnsCount];
+            string[,] description = new string[rowsCount, columnsCount];
 
             for (int i = 0; i < countOfCaptionsOfRow; i++)
-                results[0, i] = String.Empty;
+            {
+                string captionOfHierarchy = results[0, i] = cellSet.Axes[1].Set.Tuples[0].Members[i].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/");
+                //results[0, i] = String.Empty;
+                if (captionOfHierarchy.Count(d => d == '/') > 1)
+                    results[0, i] = captionOfHierarchy.Substring(0, captionOfHierarchy.LastIndexOf('/'));
+                else
+                    results[0, i] = captionOfHierarchy;
+
+                description[0, i] = String.Empty;
+            }
 
             for (int i = countOfCaptionsOfRow; i < columnsCount; i++)
+            {
                 results[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].Caption;
+                description[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/");
+            }
 
             if (cellSet.Axes.Count > 1)
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = 0; j < countOfCaptionsOfRow; j++)
+                    {
                         results[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].Caption;
+                        description[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/").Replace("&", String.Empty);
+                    }
+
 
             if (cellSet.Axes.Count == 1)
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = countOfCaptionsOfRow; j < columnsCount; j++)
+                    {
                         results[i, j] = cellSet.Cells[j - countOfCaptionsOfRow].FormattedValue;
+                        description[i, j] = "Value";
+                    }
             else
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = countOfCaptionsOfRow; j < columnsCount; j++)
+                    {
                         results[i, j] = cellSet.Cells[j - countOfCaptionsOfRow, i - 1].FormattedValue;
+                        description[i, j] = "Value";
+                    }
 
-            return results;
+            return new List<string[,]> { results, description };
+        }
+
+        public static List<string> SortHierarchiesByCountOfMembers(List<string> namesOfHierarchies, List<string> selectedDimensions)
+        {
+            int n = namesOfHierarchies.Count;
+            int[] countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
+
+            for (int i = 0; i < countsOfMembersOfEachHierarchy.Length; i++)
+                countsOfMembersOfEachHierarchy[i] = selectedDimensions.FindAll(d => d.StartsWith(namesOfHierarchies.ElementAt(i))).Count;
+
+            do
+            {
+                for (int i = 0; i < n - 1; i++)
+                    if (countsOfMembersOfEachHierarchy[i] > countsOfMembersOfEachHierarchy[i + 1])
+                    {
+                        Array.Reverse(countsOfMembersOfEachHierarchy, i, 2);
+                        namesOfHierarchies.Reverse(i, 2);
+                    }
+
+                n--;
+            }
+            while (n > 1);
+
+            return namesOfHierarchies;
         }
     }
 }

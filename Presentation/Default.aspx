@@ -1,16 +1,16 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Presentation.Default" %>
+﻿<%@ Page Title="Przeglądarka kostki" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Presentation.Default" %>
 <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="contentPlaceHolder" runat="server">
     <asp:ScriptManager ID="scriptManager" runat="server" />
-    <div id="columns">
+    <div class="columns">
         <div id="leftColumn" class="column">
             <div id="placeOfListOfDimensions" runat="server"></div>
             <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div id="placeOfDimensionTreeView" runat="server"></div>
-                    <asp:Button ID="dimensionTreeViewPostBackButton" Text="Aktualizuj wymiary" runat="server" />
+                    <asp:Button ID="postBackButtonOfDimensionTreeView" Text="Aktualizuj wymiary" runat="server" />
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
@@ -33,6 +33,7 @@
             <asp:UpdatePanel ID="tableOfResultsUpdatePanel" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div id="placeOfTableOfResults" runat="server"></div>
+                    <asp:Button ID="buttonOfReportGeneration" Enabled="false" Text="Generuj raport" runat="server"></asp:Button>
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>

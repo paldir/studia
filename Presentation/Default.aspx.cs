@@ -14,76 +14,85 @@ namespace Presentation
         BusinessLogic.CubeHandler cubeHandler;
         DropDownList listOfDimensions;
         CheckBoxList listOfMeasures;
+        Table tableOfResults;
+        string[,] descriptionOfTableOfResults;
 
         List<string> selectedDimensions
         {
             get
             {
-                if (ViewState["selectedDimensions"] == null)
-                    ViewState["selectedDimensions"] = new List<string>();
+                if (Session["selectedDimensions"] == null)
+                    Session["selectedDimensions"] = new List<string>();
 
-                return (List<string>)ViewState["selectedDimensions"]; 
+                return (List<string>)Session["selectedDimensions"];
             }
 
-            set { ViewState["selectedDimensions"] = value; }
+            set { Session["selectedDimensions"] = value; }
         }
 
         List<string> selectedDimensionsValues
         {
-            get 
+            get
             {
-                if (ViewState["selectedDimensionsValues"] == null)
-                    ViewState["selectedDimensionsValues"] = new List<string>();
+                if (Session["selectedDimensionsValues"] == null)
+                    Session["selectedDimensionsValues"] = new List<string>();
 
-                return (List<string>)ViewState["selectedDimensionsValues"]; 
+                return (List<string>)Session["selectedDimensionsValues"];
             }
 
-            set { ViewState["selectedDimensionsValues"] = value; }
+            set { Session["selectedDimensionsValues"] = value; }
         }
 
         List<string> pathsOfSelectedDimensions
         {
             get
             {
-                if (ViewState["pathsOfSelectedDimensions"] == null)
-                    ViewState["pathsOfSelectedDimensions"] = new List<string>();
+                if (Session["pathsOfSelectedDimensions"] == null)
+                    Session["pathsOfSelectedDimensions"] = new List<string>();
 
-                return (List<string>)ViewState["pathsOfSelectedDimensions"]; 
+                return (List<string>)Session["pathsOfSelectedDimensions"];
             }
 
-            set { ViewState["pathsOfSelectedDimensions"] = value; }
+            set { Session["pathsOfSelectedDimensions"] = value; }
         }
 
         List<string> selectedMeasures
         {
             get
             {
-                if (ViewState["selectedMeasures"] == null)
-                    ViewState["selectedMeasures"] = new List<string>();
+                if (Session["selectedMeasures"] == null)
+                    Session["selectedMeasures"] = new List<string>();
 
-                return (List<string>)ViewState["selectedMeasures"];
+                return (List<string>)Session["selectedMeasures"];
             }
 
-            set { ViewState["selectedMeasures"] = value; }
+            set { Session["selectedMeasures"] = value; }
         }
 
         List<string> selectedMeasuresValues
         {
             get
             {
-                if (ViewState["selectedMeasuresValues"] == null)
-                    ViewState["selectedMeasuresValues"] = new List<string>();
+                if (Session["selectedMeasuresValues"] == null)
+                    Session["selectedMeasuresValues"] = new List<string>();
 
-                return (List<string>)ViewState["selectedMeasuresValues"];
+                return (List<string>)Session["selectedMeasuresValues"];
             }
 
-            set { ViewState["selectedMeasuresValues"] = value; }
+            set { Session["selectedMeasuresValues"] = value; }
         }
 
         string selectedValueOfListOfDimensions
         {
-            get { return ViewState["selectedValueOfListOfDimensions"].ToString(); }
-            set { ViewState["selectedValueOfListOfDimensions"] = value; }
+            get
+            {
+                if (Session["selectedValueOfListOfDimensions"] == null)
+                    return String.Empty;
+                else
+                    return Session["selectedValueOfListOfDimensions"].ToString();
+            }
+
+            set { Session["selectedValueOfListOfDimensions"] = value; }
         }
 
         List<TreeNode> treeViewNodes
@@ -100,8 +109,15 @@ namespace Presentation
 
         string treeViewDataSource
         {
-            get { return ViewState["treeViewDataSource"].ToString(); }
-            set { ViewState["treeViewDataSource"] = value; }
+            get
+            {
+                if (Session["treeViewDataSource"] == null)
+                    return String.Empty;
+                else
+                    return Session["treeViewDataSource"].ToString();
+            }
+
+            set { Session["treeViewDataSource"] = value; }
         }
         #endregion
 
@@ -109,7 +125,7 @@ namespace Presentation
         protected void Page_Init(object sender, EventArgs e)
         {
             cubeHandler = new BusinessLogic.CubeHandler();
-
+            
             InitializeLeftColumn();
             InitializeCentralColumn();
             InitializeRightColumn();
@@ -119,8 +135,12 @@ namespace Presentation
         {
             listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetDimensionsNames());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
-            dimensionTreeViewPostBackButton.Click += dimensionTreeViewPostBackButton_Click;
-            selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
+            postBackButtonOfDimensionTreeView.Click += postBackButtonOfDimensionTreeView_Click;
+
+            if (selectedValueOfListOfDimensions == String.Empty)
+                selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
+            else
+                listOfDimensions.SelectedValue = selectedValueOfListOfDimensions;
 
             placeOfListOfDimensions.Controls.Add(listOfDimensions);
 
@@ -145,12 +165,13 @@ namespace Presentation
             triggerOfListOfMeasures.ControlID = "ListOfMeasures";
             triggerOfListOfMeasures.EventName = "SelectedIndexChanged";
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
-            triggerOfDimensionTreeView.ControlID = "dimensionTreeViewPostBackButton";
+            triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
 
             selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
+            buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
         }
 
         protected override void CreateChildControls()
@@ -158,6 +179,7 @@ namespace Presentation
             base.CreateChildControls();
             CreateDimensionTreeView();
             CreateSelectedItemsLists();
+            CreateTableOfResults();
         }
 
         void CreateDimensionTreeView()
@@ -184,7 +206,6 @@ namespace Presentation
 
         void CreateSelectedItemsLists()
         {
-
             CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
             listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
             AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
@@ -208,12 +229,21 @@ namespace Presentation
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
-        void UpdateTableOfResults()
+        void CreateTableOfResults()
         {
             placeOfTableOfResults.Controls.Clear();
 
             if (selectedMeasuresValues.Count > 0)
-                placeOfTableOfResults.Controls.Add(TableOfResults.GetTableOfResults(cubeHandler.GetArrayFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues)));
+            {
+                List<string[,]> results = cubeHandler.GetArraysFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues);
+                tableOfResults = TableOfResults.GetTableOfResults(results);
+                descriptionOfTableOfResults = results.ElementAt(1);
+                buttonOfReportGeneration.Enabled = true;
+
+                placeOfTableOfResults.Controls.Add(tableOfResults);
+            }
+            else
+                buttonOfReportGeneration.Enabled = false;
         }
         #endregion
 
@@ -258,13 +288,13 @@ namespace Presentation
                         }
 
             CreateSelectedItemsLists();
-            UpdateTableOfResults();
+            CreateTableOfResults();
         }
 
-        void dimensionTreeViewPostBackButton_Click(object sender, EventArgs e)
+        void postBackButtonOfDimensionTreeView_Click(object sender, EventArgs e)
         {
             CreateSelectedItemsLists();
-            UpdateTableOfResults();
+            CreateTableOfResults();
         }
 
         void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
@@ -280,7 +310,7 @@ namespace Presentation
                 }
 
             CreateSelectedItemsLists();
-            UpdateTableOfResults();
+            CreateTableOfResults();
         }
 
         void listOfSelectedDimensions_SelectedIndexChanged(object sender, EventArgs e)
@@ -295,14 +325,14 @@ namespace Presentation
                         TreeView dimensionTreeView = (TreeView)placeOfDimensionTreeView.FindControl("DimensionTreeView");
                         dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = false;
                     }
-                    
+
                     selectedDimensions.RemoveAt(i);
                     selectedDimensionsValues.RemoveAt(i);
                     pathsOfSelectedDimensions.RemoveAt(i);
                 }
 
             CreateSelectedItemsLists();
-            UpdateTableOfResults();
+            CreateTableOfResults();
         }
 
         void listOfSelectedMeasures_SelectedIndexChanged(object sender, EventArgs e)
@@ -314,11 +344,43 @@ namespace Presentation
                 {
                     selectedMeasures.RemoveAt(i);
                     selectedMeasuresValues.RemoveAt(i);
+
                     listOfMeasures.Items.FindByText(listOfSelectedMeasures.Items[i].Text).Selected = false;
                 }
 
             CreateSelectedItemsLists();
-            UpdateTableOfResults();
+            CreateTableOfResults();
+        }
+
+        void buttonOfReportGeneration_Click(object sender, EventArgs e)
+        {
+            List<string[]> rows = new List<string[]>();
+            List<string> namesOfMeasures = new List<string>();
+            List<string> namesOfHierarchies = new List<string>();
+
+            for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
+                if (descriptionOfTableOfResults[0, i] != String.Empty)
+                    namesOfMeasures.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+                else
+                    namesOfHierarchies.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+
+            for (int i = 1; i < tableOfResults.Rows.Count; i++)
+            {
+                string[] row = new string[tableOfResults.Rows[i].Cells.Count];
+
+                for (int j = 0; j < row.Length; j++)
+                    row[j] = ((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text;
+
+                rows.Add(row);
+            }
+
+            //Session.Clear(); 
+
+            Session["namesOfHierarchies"] = namesOfHierarchies;
+            Session["namesOfMeasures"] = namesOfMeasures;
+            Session["rows"] = rows;
+            
+            Response.Redirect("ReportConfiguration.aspx");
         }
         #endregion
     }

@@ -8,9 +8,11 @@ using System.Web.UI;
 namespace Presentation
 {
     public class TableOfResults
-    {
-        public static Table GetTableOfResults(string[,] arrayOfResults)
+    {   
+        public static Table GetTableOfResults(List<string[,]> arraysOfResults)
         {
+            string[,] arrayOfResults = arraysOfResults.ElementAt(0);
+            string[,] description = arraysOfResults.ElementAt(1);
             Table table = new Table();
             TableRow tableRow;
             TableCell tableCell;
@@ -26,6 +28,10 @@ namespace Presentation
                 for (int j = 0; j < arrayOfResults.GetLength(1); j++)
                 {
                     tableCell = new TableCell();
+
+                    if (description[i, j] != "Value")
+                        tableCell.Font.Bold = true;
+
                     tableCell.Controls.Add(new LiteralControl(arrayOfResults[i, j]));
                     tableRow.Cells.Add(tableCell);
                 }
