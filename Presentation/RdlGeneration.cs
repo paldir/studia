@@ -123,15 +123,6 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteEndElement();
-
-            /*writer.WriteStartElement("Style");
-            writer.WriteStartElement("Border");
-            writer.WriteStartElement("Style");
-            writer.WriteString("Solid");
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndElement();*/
-
             writer.WriteEndElement();
         }
 

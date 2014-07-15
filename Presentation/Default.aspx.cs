@@ -21,71 +21,78 @@ namespace Presentation
         {
             get
             {
-                if (ViewState["selectedDimensions"] == null)
-                    ViewState["selectedDimensions"] = new List<string>();
+                if (Session["selectedDimensions"] == null)
+                    Session["selectedDimensions"] = new List<string>();
 
-                return (List<string>)ViewState["selectedDimensions"];
+                return (List<string>)Session["selectedDimensions"];
             }
 
-            set { ViewState["selectedDimensions"] = value; }
+            set { Session["selectedDimensions"] = value; }
         }
 
         List<string> selectedDimensionsValues
         {
             get
             {
-                if (ViewState["selectedDimensionsValues"] == null)
-                    ViewState["selectedDimensionsValues"] = new List<string>();
+                if (Session["selectedDimensionsValues"] == null)
+                    Session["selectedDimensionsValues"] = new List<string>();
 
-                return (List<string>)ViewState["selectedDimensionsValues"];
+                return (List<string>)Session["selectedDimensionsValues"];
             }
 
-            set { ViewState["selectedDimensionsValues"] = value; }
+            set { Session["selectedDimensionsValues"] = value; }
         }
 
         List<string> pathsOfSelectedDimensions
         {
             get
             {
-                if (ViewState["pathsOfSelectedDimensions"] == null)
-                    ViewState["pathsOfSelectedDimensions"] = new List<string>();
+                if (Session["pathsOfSelectedDimensions"] == null)
+                    Session["pathsOfSelectedDimensions"] = new List<string>();
 
-                return (List<string>)ViewState["pathsOfSelectedDimensions"];
+                return (List<string>)Session["pathsOfSelectedDimensions"];
             }
 
-            set { ViewState["pathsOfSelectedDimensions"] = value; }
+            set { Session["pathsOfSelectedDimensions"] = value; }
         }
 
         List<string> selectedMeasures
         {
             get
             {
-                if (ViewState["selectedMeasures"] == null)
-                    ViewState["selectedMeasures"] = new List<string>();
+                if (Session["selectedMeasures"] == null)
+                    Session["selectedMeasures"] = new List<string>();
 
-                return (List<string>)ViewState["selectedMeasures"];
+                return (List<string>)Session["selectedMeasures"];
             }
 
-            set { ViewState["selectedMeasures"] = value; }
+            set { Session["selectedMeasures"] = value; }
         }
 
         List<string> selectedMeasuresValues
         {
             get
             {
-                if (ViewState["selectedMeasuresValues"] == null)
-                    ViewState["selectedMeasuresValues"] = new List<string>();
+                if (Session["selectedMeasuresValues"] == null)
+                    Session["selectedMeasuresValues"] = new List<string>();
 
-                return (List<string>)ViewState["selectedMeasuresValues"];
+                return (List<string>)Session["selectedMeasuresValues"];
             }
 
-            set { ViewState["selectedMeasuresValues"] = value; }
+            set { Session["selectedMeasuresValues"] = value; }
         }
 
         string selectedValueOfListOfDimensions
         {
-            get { return ViewState["selectedValueOfListOfDimensions"].ToString(); }
-            set { ViewState["selectedValueOfListOfDimensions"] = value; }
+            get
+            {
+                if (Session["selectedValueOfListOfDimensions"] == null)
+                    return String.Empty;
+                else
+                    return Session["selectedValueOfListOfDimensions"].ToString();
+            }
+
+            set { Session["selectedValueOfListOfDimensions"] = value; }
         }
 
         List<TreeNode> treeViewNodes
@@ -102,8 +109,15 @@ namespace Presentation
 
         string treeViewDataSource
         {
-            get { return ViewState["treeViewDataSource"].ToString(); }
-            set { ViewState["treeViewDataSource"] = value; }
+            get
+            {
+                if (Session["treeViewDataSource"] == null)
+                    return String.Empty;
+                else
+                    return Session["treeViewDataSource"].ToString();
+            }
+
+            set { Session["treeViewDataSource"] = value; }
         }
         #endregion
 
@@ -111,7 +125,7 @@ namespace Presentation
         protected void Page_Init(object sender, EventArgs e)
         {
             cubeHandler = new BusinessLogic.CubeHandler();
-
+            
             InitializeLeftColumn();
             InitializeCentralColumn();
             InitializeRightColumn();
@@ -122,7 +136,11 @@ namespace Presentation
             listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetDimensionsNames());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfDimensionTreeView_Click;
-            selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
+
+            if (selectedValueOfListOfDimensions == String.Empty)
+                selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
+            else
+                listOfDimensions.SelectedValue = selectedValueOfListOfDimensions;
 
             placeOfListOfDimensions.Controls.Add(listOfDimensions);
 
@@ -356,7 +374,7 @@ namespace Presentation
                 rows.Add(row);
             }
 
-            Session.Clear(); 
+            //Session.Clear(); 
 
             Session["namesOfHierarchies"] = namesOfHierarchies;
             Session["namesOfMeasures"] = namesOfMeasures;

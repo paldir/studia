@@ -13,9 +13,17 @@
         Hierarchie wymiarów:<br />
         <asp:UpdatePanel ID="updatePanelOfListOfHierarchies" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div id="placeOfListOfHierarchies" runat="server"></div>
-                <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" runat="server" />
-                <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" runat="server" />
+                <table>
+                    <tr>
+                        <td>
+                            <div id="placeOfListOfHierarchies" runat="server"></div>
+                        </td>
+                        <td>
+                            <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" runat="server" /><br />
+                            <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" runat="server" />
+                        </td>
+                    </tr>
+                </table>
             </ContentTemplate>
         </asp:UpdatePanel>
         <br />
@@ -23,9 +31,17 @@
         Miary:<br />
         <asp:UpdatePanel ID="updatePanelOfListOfMeasures" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div id="placeOfListOfMeasures" runat="server"></div>
-                <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" runat="server" />
-                <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" runat="server" />
+                <table>
+                    <tr>
+                        <td>
+                            <div id="placeOfListOfMeasures" runat="server"></div>
+                        </td>
+                        <td>
+                            <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" runat="server" /><br />
+                            <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" runat="server" />
+                        </td>
+                    </tr>
+                </table>
             </ContentTemplate>
         </asp:UpdatePanel>
         <br />

@@ -23,7 +23,6 @@ namespace Presentation
                 reportViewer.Reset();
 
                 reportViewer.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;
-                //reportViewer.LocalReport.ReportPath = "Report.rdlc";
 
                 byte[] rdlBytes = System.Text.Encoding.UTF8.GetBytes(reportDefinition);
                 System.IO.MemoryStream stream = new System.IO.MemoryStream(rdlBytes);

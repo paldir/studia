@@ -11,6 +11,7 @@ namespace Presentation
 {
     public partial class ReportConfiguration : System.Web.UI.Page
     {
+        #region fields
         int[] countsOfMembersOfEachHierarchy;
 
         List<string> namesOfHierarchies
@@ -63,18 +64,12 @@ namespace Presentation
             get { return Convert.ToInt16(ViewState["selectedIndexOfListOfMeasures"]); }
             set { ViewState["selectedIndexOfListOfMeasures"] = value; }
         }
+        #endregion
 
+        #region methods
         protected void Page_Load(object sender, EventArgs e)
         {
             countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
-
-            /*for (int i = 0; i < namesOfHierarchies.Count; i++)
-                countsOfMembersOfEachHierarchy[i] = rows.Select(r => r[i]).Distinct().Count();*/
-
-            //SortHierarchiesByCountOfMembers();
-            //GroupMembersInEachHierarchy();
-            /*for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
-                rows = rows.OrderBy(r => r[i]).ToList();*/
 
             InitializeButtons();
 
@@ -161,51 +156,6 @@ namespace Presentation
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
         }
 
-        /*void GroupMembersInEachHierarchy()
-        {
-            for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
-            {
-                List<string> column = rows.Select(r => r[i]).ToList();
-
-                for (int j = 0; j < column.Count - 1; j++)
-                {
-                    List<string[]> membersToMove = new List<string[]>();
-
-                    for (int k = j + 1; k < column.Count; k++)
-                        if (column.ElementAt(k) == column.ElementAt(j))
-                            membersToMove.Add(rows.ElementAt(k));
-
-                    foreach (string[] memberToMove in membersToMove)
-                        rows.Remove(memberToMove);
-
-                    rows.InsertRange(j + 1, membersToMove);
-                    
-                    j += membersToMove.Count;
-                }
-            }
-        }
-
-        void SortHierarchiesByCountOfMembers()
-        {
-            int n = namesOfHierarchies.Count;
-
-            do
-            {
-                for (int i = 0; i < n - 1; i++)
-                    if (countsOfMembersOfEachHierarchy[i] > countsOfMembersOfEachHierarchy[i + 1])
-                    {
-                        Array.Reverse(countsOfMembersOfEachHierarchy, i, 2);
-                        namesOfHierarchies.Reverse(i, 2);
-
-                        foreach (string[] row in rows)
-                            Array.Reverse(row, i, 2);
-                    }
-
-                n--;
-            }
-            while (n > 1);
-        }*/
-
         float[] CalculateColumnsWidths()
         {
             float[] result = new float[rows.First().Length];
@@ -230,16 +180,19 @@ namespace Presentation
         void MoveItemOfList(char symbolOfList, int destination)
         {
             int indexOfSelectedItem = -1;
+            int generalIndexOfSelectedItem = -1;
             List<string> list = null;
 
             switch (symbolOfList)
             {
                 case 'h':
                     indexOfSelectedItem = selectedIndexOfListOfHierarchies;
+                    generalIndexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     list = namesOfHierarchies;
                     break;
                 case 'm':
                     indexOfSelectedItem = selectedIndexOfListOfMeasures;
+                    generalIndexOfSelectedItem = selectedIndexOfListOfMeasures + namesOfHierarchies.Count;
                     list = namesOfMeasures;
                     break;
             }
@@ -248,17 +201,27 @@ namespace Presentation
             {
                 case -1:
                     if (indexOfSelectedItem > 0)
+                    {
                         list.Reverse(indexOfSelectedItem - 1, 2);
-                    //TODO ROWS
+
+                        foreach (string[] row in rows)
+                            Array.Reverse(row, generalIndexOfSelectedItem - 1, 2);
+                    }
                     break;
                 case 1:
                     if (indexOfSelectedItem < list.Count - 1)
+                    {
                         list.Reverse(indexOfSelectedItem, 2);
-                    //TODO ROWS
+
+                        foreach (string[] row in rows)
+                            Array.Reverse(row, generalIndexOfSelectedItem, 2);
+                    }
                     break;
             }
         }
+        #endregion
 
+        #region events handlers
         void listOfHierarchies_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedIndexOfListOfHierarchies = ((ListBox)sender).SelectedIndex;
@@ -298,11 +261,12 @@ namespace Presentation
             RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
 
-            Session.Clear();
+            //Session.Clear();
 
             Session["reportDefinition"] = reportDefinition;
 
             Response.Redirect("Report.aspx");
         }
+        #endregion
     }
 }

@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="contentPlaceHolder" runat="server">
     <asp:ScriptManager ID="scriptManager" runat="server" />
-    <div id="columns">
+    <div class="columns">
         <div id="leftColumn" class="column">
             <div id="placeOfListOfDimensions" runat="server"></div>
             <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
