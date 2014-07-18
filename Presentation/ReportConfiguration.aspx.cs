@@ -135,7 +135,10 @@ namespace Presentation
             foreach (string nameOfHierarchy in namesOfHierarchies)
                 listOfHierarchies.Items.Add(nameOfHierarchy);
 
-            placeOfListOfHierarchies.Controls.Clear();
+            if (selectedIndexOfListOfHierarchies != -1)
+                listOfHierarchies.SelectedIndex = selectedIndexOfListOfHierarchies;
+
+                placeOfListOfHierarchies.Controls.Clear();
             placeOfListOfHierarchies.Controls.Add(listOfHierarchies);
         }
 
@@ -151,6 +154,9 @@ namespace Presentation
 
             foreach (string nameOfMeasure in namesOfMeasures)
                 listOfMeasures.Items.Add(nameOfMeasure);
+
+            if (selectedIndexOfListOfMeasures != -1)
+                listOfMeasures.SelectedIndex = selectedIndexOfListOfMeasures;
 
             placeOfListOfMeasures.Controls.Clear();
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
@@ -189,11 +195,17 @@ namespace Presentation
                     indexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     generalIndexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     list = namesOfHierarchies;
+
+                    if (selectedIndexOfListOfHierarchies + destination >= 0 && selectedIndexOfListOfHierarchies + destination < list.Count)
+                        selectedIndexOfListOfHierarchies += destination;
                     break;
                 case 'm':
                     indexOfSelectedItem = selectedIndexOfListOfMeasures;
                     generalIndexOfSelectedItem = selectedIndexOfListOfMeasures + namesOfHierarchies.Count;
                     list = namesOfMeasures;
+
+                    if (selectedIndexOfListOfMeasures + destination >= 0 && selectedIndexOfListOfMeasures + destination < list.Count)
+                        selectedIndexOfListOfMeasures += destination;
                     break;
             }
 
@@ -219,38 +231,51 @@ namespace Presentation
                     break;
             }
         }
+
+        void SortMembersOfHierarchies()
+        {
+            for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
+            {
+                List<string> membersOfHierarchy = rows.Select(r => r[i]).Distinct().ToList();
+                int indexOfTarget = 0;
+
+                foreach (string memberOfHierarchy in membersOfHierarchy)
+                {
+                    List<string[]> rowsToMove = rows.FindAll(r => r[i] == memberOfHierarchy);
+
+                    rows.RemoveAll(r => r[i] == memberOfHierarchy);
+                    rows.InsertRange(indexOfTarget, rowsToMove);
+
+                    indexOfTarget += rowsToMove.Count;
+                }
+            }
+        }
         #endregion
 
         #region events handlers
-        void listOfHierarchies_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfHierarchies_SelectedIndexChanged(object sender, EventArgs e) { selectedIndexOfListOfHierarchies = ((ListBox)sender).SelectedIndex; }
+
+        void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e) { selectedIndexOfListOfMeasures = ((ListBox)sender).SelectedIndex; }
+
+        void buttonOfMovingItemOfListOfHierarchiesUp_Click(object sender, EventArgs e)
         {
-            selectedIndexOfListOfHierarchies = ((ListBox)sender).SelectedIndex;
-        }
-
-        void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
-        { 
-            selectedIndexOfListOfMeasures = ((ListBox)sender).SelectedIndex; 
-        }
-
-        void buttonOfMovingItemOfListOfHierarchiesUp_Click(object sender, EventArgs e) 
-        { 
             MoveItemOfList('h', -1);
             CreateListOfHierarchies();
         }
 
-        void buttonOfMovingItemOfListOfHierarchiesDown_Click(object sender, EventArgs e) 
-        { 
+        void buttonOfMovingItemOfListOfHierarchiesDown_Click(object sender, EventArgs e)
+        {
             MoveItemOfList('h', 1);
             CreateListOfHierarchies();
         }
 
-        void buttonOfMovingItemOfListOfMeasuresUp_Click(object sender, EventArgs e) 
-        { 
+        void buttonOfMovingItemOfListOfMeasuresUp_Click(object sender, EventArgs e)
+        {
             MoveItemOfList('m', -1);
             CreateListOfMeasures();
         }
 
-        void buttonOfMovingItemOfListOfMeasuresDown_Click(object sender, EventArgs e) 
+        void buttonOfMovingItemOfListOfMeasuresDown_Click(object sender, EventArgs e)
         {
             MoveItemOfList('m', 1);
             CreateListOfMeasures();
@@ -258,11 +283,10 @@ namespace Presentation
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
+            SortMembersOfHierarchies();
+
             RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
-
-            //Session.Clear();
-
             Session["reportDefinition"] = reportDefinition;
 
             Response.Redirect("Report.aspx");

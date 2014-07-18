@@ -156,6 +156,9 @@ namespace Presentation
             listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasuresNames());
             listOfMeasures.SelectedIndexChanged += listOfMeasures_SelectedIndexChanged;
 
+            foreach (string selectedMeasureValue in selectedMeasuresValues)
+                listOfMeasures.Items.FindByValue(selectedMeasureValue).Selected = true;
+
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
         }
 
