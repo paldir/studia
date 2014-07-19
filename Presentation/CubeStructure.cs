@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 
+using AjaxControlToolkit;
+
 namespace Presentation
 {
     public class CubeStructure
@@ -99,6 +101,22 @@ namespace Presentation
             listOfSelectedMeasures.ID = "ListOfSelectedMeasures";
 
             return listOfSelectedMeasures;
+        }
+
+        static public Accordion GetAccordionOfDimensions(List<string> namesOfDimensions)
+        {
+            Accordion accordion = new Accordion();
+            accordion.ID = "accordionOfDimensions";
+
+            foreach (string nameOfDimension in namesOfDimensions)
+            {
+                AccordionPane pane = new AccordionPane();
+                pane.HeaderContainer.GroupingText = nameOfDimension;
+
+                accordion.Panes.Add(pane);
+            }
+
+            return accordion;
         }
     }
 }

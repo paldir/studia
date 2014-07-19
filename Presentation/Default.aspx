@@ -3,7 +3,7 @@
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="contentPlaceHolder" runat="server">
-    <asp:ScriptManager ID="scriptManager" runat="server" />
+    <ajaxToolkit:ToolkitScriptManager ID="scriptManager" runat="server"></ajaxToolkit:ToolkitScriptManager>
     <div class="columns">
         <div id="leftColumn" class="column">
             <div id="placeOfListOfDimensions" runat="server"></div>

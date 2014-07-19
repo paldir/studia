@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Presentation
 {
-    public class RdlGeneration
+    public class RdlGenerator
     {
         System.IO.MemoryStream result;
         XmlWriter writer;
@@ -17,7 +17,7 @@ namespace Presentation
         string[] backgroundsOfCaption;
         int currentBackgroundOfCaption;
 
-        public RdlGeneration(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption)
+        public RdlGenerator(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -91,7 +91,7 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteTablix(List<string> rows, float height, int columnNumber, bool isCaption)
+        void WriteTablix(List<string> rows, List<float> rowsHeights, int columnNumber, bool isCaption)
         {
             writer.WriteStartElement("Tablix");
             writer.WriteAttributeString("Name", GenerateRandomName());
@@ -101,8 +101,8 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteStartElement("TablixRows");
 
-            foreach (string row in rows)
-                WriteRow(new string[] { row }, height, isCaption);
+            for (int i = 0; i < rows.Count; i++)
+                WriteRow(new string[] { rows.ElementAt(i) }, rowsHeights.ElementAt(i), isCaption);
 
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -148,11 +148,11 @@ namespace Presentation
                 bool isCaption;
                 List<string> column = rows.Select(r => r[i]).ToList();
                 List<string> columnWithMergedCells = new List<string>();
+                List<float> rowsHeights = new List<float>();
 
                 if (i < countOfHierarchies)
                 {
                     isCaption = true;
-
                     currentBackgroundOfCaption = i % 2;
                 }
                 else
@@ -160,9 +160,14 @@ namespace Presentation
 
                 foreach (string field in column)
                     if (i >= countOfHierarchies || columnWithMergedCells.Count == 0 || field != columnWithMergedCells.Last())
+                    {
                         columnWithMergedCells.Add(field);
+                        rowsHeights.Add(rowHeight);
+                    }
+                    else
+                        rowsHeights[rowsHeights.Count - 1] += rowHeight + 1;
 
-                WriteMainCell(columnWithMergedCells, ((float)column.Count / columnWithMergedCells.Count) * rowHeight + (float)(column.Count - columnWithMergedCells.Count) / columnWithMergedCells.Count, i, isCaption);
+                WriteMainCell(columnWithMergedCells, rowsHeights, i, isCaption);
             }
 
             writer.WriteEndElement();
@@ -189,11 +194,11 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteMainCell(List<string> column, float height, int columnNumber, bool isCaption)
+        void WriteMainCell(List<string> column, List<float> rowsHeights, int columnNumber, bool isCaption)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTablix(column, height, columnNumber, isCaption);
+            WriteTablix(column, rowsHeights, columnNumber, isCaption);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }

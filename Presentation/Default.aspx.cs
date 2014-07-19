@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 
+using AjaxControlToolkit;
+
 namespace Presentation
 {
     public partial class Default : System.Web.UI.Page
@@ -132,8 +134,8 @@ namespace Presentation
         }
 
         void InitializeLeftColumn()
-        {
-            listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetDimensionsNames());
+        {   
+            listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetNamesOfDimensions());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfDimensionTreeView_Click;
 
@@ -153,7 +155,7 @@ namespace Presentation
 
         void InitializeCentralColumn()
         {
-            listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasuresNames());
+            listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetNamesOfMeasures());
             listOfMeasures.SelectedIndexChanged += listOfMeasures_SelectedIndexChanged;
 
             foreach (string selectedMeasureValue in selectedMeasuresValues)
