@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices.AdomdClient;
 
 namespace DataAccess
@@ -11,15 +12,17 @@ namespace DataAccess
     {
         const string cubeName = "Adventure Works";
 
-        public List<string> GetNamesOfMeasures()
+        public List<Measure> GetMeasures()
         {
-            List<string> listOfMeasures = new List<string>();
+            List<Measure> listOfMeasures = new List<Measure>();
 
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
-                foreach (Measure measure in connection.Cubes[cubeName].Measures)
-                    listOfMeasures.Add(measure.Name);
+                foreach (Microsoft.AnalysisServices.AdomdClient.Measure measure in connection.Cubes[cubeName].Measures)
+                    listOfMeasures.Add(new Measure(measure.Name, measure.Properties["MEASUREGROUP_NAME"].Value.ToString()));
             }
+
+            listOfMeasures = listOfMeasures.OrderBy(m => m.GetMeasureGroup()).ToList();
 
             return listOfMeasures;
         }
@@ -85,7 +88,7 @@ namespace DataAccess
 
                     List<string> selectedDimensionsBelongingToHierarchy = selectedDimensions.FindAll(d => d.StartsWith(hierarchyOfSelectedDimension));
 
-                    selectedDimensionsBelongingToHierarchy.Sort();
+                    selectedDimensionsBelongingToHierarchy.OrderBy(d => d.Substring(d.LastIndexOf('.')).Replace("[", String.Empty).Replace("]", String.Empty).Replace("&", String.Empty));
                     
                     foreach (string selectedDimensionBelongingToHierarchy in selectedDimensionsBelongingToHierarchy)
                         mDXQuery += selectedDimensionBelongingToHierarchy + ", ";

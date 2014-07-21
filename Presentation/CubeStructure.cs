@@ -10,14 +10,14 @@ namespace Presentation
 {
     public class CubeStructure
     {
-        static public CheckBoxList GetCheckBoxListOfMeasures(List<string> namesOfMeasures)
+        static public CheckBoxList GetCheckBoxListOfMeasures(List<DataAccess.Measure> measures)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
             checkBoxList.ID = "ListOfMeasures";
             checkBoxList.AutoPostBack = true;
 
-            foreach (string nameOfMeasure in namesOfMeasures)
-                checkBoxList.Items.Add(new ListItem(nameOfMeasure, "[Measures].[" + nameOfMeasure + "]"));
+            foreach (DataAccess.Measure measure in measures)
+                checkBoxList.Items.Add(new ListItem(measure.GetName(), "[Measures].[" + measure.GetName() + "]"));
 
             return checkBoxList;
         }

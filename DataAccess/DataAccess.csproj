@@ -47,6 +47,7 @@
     <Compile Include="CubeASAccess.cs" />
     <Compile Include="ASHelper.cs" />
     <Compile Include="Dimension.cs" />
+    <Compile Include="Measure.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

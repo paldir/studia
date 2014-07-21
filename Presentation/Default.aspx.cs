@@ -151,17 +151,31 @@ namespace Presentation
             trigger.EventName = "SelectedIndexChanged";
 
             dimensionTreeViewUpdatePanel.Triggers.Add(trigger);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
+            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
+
+            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
         }
 
         void InitializeCentralColumn()
         {
-            listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetNamesOfMeasures());
+            listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasures());
             listOfMeasures.SelectedIndexChanged += listOfMeasures_SelectedIndexChanged;
 
             foreach (string selectedMeasureValue in selectedMeasuresValues)
                 listOfMeasures.Items.FindByValue(selectedMeasureValue).Selected = true;
 
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
+            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
+
+            listOfMeasuresUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void InitializeRightColumn()
@@ -169,13 +183,16 @@ namespace Presentation
             AsyncPostBackTrigger triggerOfListOfMeasures = new AsyncPostBackTrigger();
             triggerOfListOfMeasures.ControlID = "ListOfMeasures";
             triggerOfListOfMeasures.EventName = "SelectedIndexChanged";
+
+            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
+
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
             triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
 
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
+
             buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
         }
 
@@ -213,25 +230,15 @@ namespace Presentation
         {
             CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
             listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
-            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
-            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
 
             placeOfListOfSelectedDimensions.Controls.Clear();
             placeOfListOfSelectedDimensions.Controls.Add(listOfSelectedDimensions);
-            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
 
             CheckBoxList listOfSelectedMeasures = CubeStructure.GetCheckBoxListOfSelectedMeasures(selectedMeasures);
             listOfSelectedMeasures.SelectedIndexChanged += listOfSelectedMeasures_SelectedIndexChanged;
-            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
-            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
 
             placeOfListOfSelectedMeasures.Controls.Clear();
             placeOfListOfSelectedMeasures.Controls.Add(listOfSelectedMeasures);
-            listOfMeasuresUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void CreateTableOfResults()

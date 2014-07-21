@@ -11,7 +11,16 @@ namespace Presentation {
     
     
     public partial class Default {
-                
+        
+        /// <summary>
+        /// form control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form;
+        
         /// <summary>
         /// scriptManager control.
         /// </summary>
@@ -19,7 +28,7 @@ namespace Presentation {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ToolkitScriptManager scriptManager;
+        protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
         /// placeOfListOfDimensions control.
