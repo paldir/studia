@@ -12,6 +12,7 @@ namespace Presentation
     public partial class ReportConfiguration : System.Web.UI.Page
     {
         #region fields
+        enum ListToModify { ListOfHierarchies, ListOfMeasures };
         int[] countsOfMembersOfEachHierarchy;
 
         List<string> namesOfHierarchies
@@ -183,15 +184,15 @@ namespace Presentation
             return result;
         }
 
-        void MoveItemOfList(char symbolOfList, int destination)
+        void MoveItemOfList(ListToModify listToModify, int destination)
         {
             int indexOfSelectedItem = -1;
             int generalIndexOfSelectedItem = -1;
             List<string> list = null;
 
-            switch (symbolOfList)
+            switch (listToModify)
             {
-                case 'h':
+                case ListToModify.ListOfHierarchies:
                     indexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     generalIndexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     list = namesOfHierarchies;
@@ -199,7 +200,7 @@ namespace Presentation
                     if (selectedIndexOfListOfHierarchies + destination >= 0 && selectedIndexOfListOfHierarchies + destination < list.Count)
                         selectedIndexOfListOfHierarchies += destination;
                     break;
-                case 'm':
+                case ListToModify.ListOfMeasures:
                     indexOfSelectedItem = selectedIndexOfListOfMeasures;
                     generalIndexOfSelectedItem = selectedIndexOfListOfMeasures + namesOfHierarchies.Count;
                     list = namesOfMeasures;
@@ -259,25 +260,25 @@ namespace Presentation
 
         void buttonOfMovingItemOfListOfHierarchiesUp_Click(object sender, EventArgs e)
         {
-            MoveItemOfList('h', -1);
+            MoveItemOfList(ListToModify.ListOfHierarchies, -1);
             CreateListOfHierarchies();
         }
 
         void buttonOfMovingItemOfListOfHierarchiesDown_Click(object sender, EventArgs e)
         {
-            MoveItemOfList('h', 1);
+            MoveItemOfList(ListToModify.ListOfHierarchies, 1);
             CreateListOfHierarchies();
         }
 
         void buttonOfMovingItemOfListOfMeasuresUp_Click(object sender, EventArgs e)
         {
-            MoveItemOfList('m', -1);
+            MoveItemOfList(ListToModify.ListOfMeasures, -1);
             CreateListOfMeasures();
         }
 
         void buttonOfMovingItemOfListOfMeasuresDown_Click(object sender, EventArgs e)
         {
-            MoveItemOfList('m', 1);
+            MoveItemOfList(ListToModify.ListOfMeasures, 1);
             CreateListOfMeasures();
         }
 

@@ -6,6 +6,21 @@
 <head runat="server">
     <title>Przeglądarka kostki</title>
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        function postBackFromDimensionTreeView() {
+            var o = window.event.srcElement;
+            if (o.tagName == "INPUT" && o.type == "checkbox") {
+                __doPostBack("<%= postBackButtonOfDimensionTreeView.UniqueID %>", "");
+            }
+        }
+
+        function postBackFromMeasuresTreeView() {
+            var o = window.event.srcElement;
+            if (o.tagName == "INPUT" && o.type == "checkbox") {
+                __doPostBack("<%= postBackButtonOfMeasuresTreeView.UniqueID %>", "");
+            }
+        }
+   </script>
 </head>
 <body>
     <form id="form" runat="server">
@@ -17,14 +32,15 @@
                 <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <div id="placeOfDimensionTreeView" runat="server"></div>
-                        <asp:Button ID="postBackButtonOfDimensionTreeView" Text="Aktualizuj wymiary" runat="server" />
+                        <asp:LinkButton ID="postBackButtonOfDimensionTreeView" Text="" runat="server" />
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
             <div id="centralColumn" class="column">
-                <asp:UpdatePanel ID="listOfMeasuresUpdatePanel" runat="server" UpdateMode="Conditional">
+                <asp:UpdatePanel ID="measuresTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
-                        <div id="placeOfListOfMeasures" runat="server"></div>
+                        <div id="placeOfMeasuresTreeView" runat="server"></div>
+                        <asp:LinkButton ID="postBackButtonOfMeasuresTreeView" Text="" runat="server"></asp:LinkButton>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>

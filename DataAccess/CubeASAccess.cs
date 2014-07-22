@@ -19,7 +19,7 @@ namespace DataAccess
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Measure measure in connection.Cubes[cubeName].Measures)
-                    listOfMeasures.Add(new Measure(measure.Name, measure.Properties["MEASUREGROUP_NAME"].Value.ToString()));
+                    listOfMeasures.Add(new Measure(measure.Name, measure.UniqueName, measure.Properties["MEASUREGROUP_NAME"].Value.ToString()));
             }
 
             listOfMeasures = listOfMeasures.OrderBy(m => m.GetMeasureGroup()).ToList();

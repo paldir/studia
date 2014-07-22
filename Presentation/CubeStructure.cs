@@ -22,6 +22,26 @@ namespace Presentation
             return checkBoxList;
         }
 
+        static public TreeView GetMeasuresTreeView(List<DataAccess.Measure> measures)
+        {
+            TreeView measuresTreeView = new TreeView();
+            measuresTreeView.ID = "MeasuresTreeView";
+            measuresTreeView.ImageSet = TreeViewImageSet.Arrows;
+            measuresTreeView.ExpandDepth = 0;
+
+            measuresTreeView.Attributes.Add("onclick", "postBackFromMeasuresTreeView()");
+
+            foreach (string measureGroup in measures.Select(m => m.GetMeasureGroup()).Distinct().ToList())
+            {
+                measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), false));
+
+                foreach (DataAccess.Measure measure in measures.FindAll(m => m.GetMeasureGroup() == measureGroup).ToList())
+                    measuresTreeView.Nodes[measuresTreeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(measure.GetName(), measure.GetUniqueName()), true));
+            }
+
+            return measuresTreeView;
+        }
+
         static public DropDownList GetDropDownListOfDimensions(List<string> namesOfDimensions)
         {
             DropDownList dropDownList = new DropDownList();
@@ -40,14 +60,14 @@ namespace Presentation
 
             foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies())
             {
-                treeViewNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName())));
+                treeViewNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true));
 
                 foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
                 {
-                    treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName())));
+                    treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true));
 
                     foreach (DataAccess.Member child in member.GetChildren())
-                        treeViewNodes[treeViewNodes.Count - 1].ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName())));
+                        treeViewNodes[treeViewNodes.Count - 1].ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true));
                 }
             }
 
@@ -60,13 +80,15 @@ namespace Presentation
             treeView.ImageSet = TreeViewImageSet.Arrows;
             treeView.ExpandDepth = 0;
 
+            treeView.Attributes.Add("onclick", "postBackFromDimensionTreeView()");
+
             return treeView;
         }
 
-        static TreeNode TreeNodeConfig(TreeNode treeNode)
+        static TreeNode TreeNodeConfig(TreeNode treeNode, bool showCheckBox)
         {
             treeNode.SelectAction = TreeNodeSelectAction.None;
-            treeNode.ShowCheckBox = true;
+            treeNode.ShowCheckBox = showCheckBox;
 
             return treeNode;
         }
@@ -93,7 +115,7 @@ namespace Presentation
 
             for (int i = 0; i < namesOfSelectedMeasures.Count; i++)
             {
-                listOfSelectedMeasures.Items.Add(namesOfSelectedMeasures.ElementAt(i));
+                listOfSelectedMeasures.Items.Add(namesOfSelectedMeasures.ElementAt(i).Replace("[", String.Empty).Replace("]", String.Empty).Replace("&", String.Empty).Replace("Measures", String.Empty).Replace(".", String.Empty));
                 listOfSelectedMeasures.Items[i].Selected = true;
             }
 
