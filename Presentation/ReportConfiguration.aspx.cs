@@ -13,6 +13,8 @@ namespace Presentation
     {
         #region fields
         enum ListToModify { ListOfHierarchies, ListOfMeasures };
+        enum SizeOfPaper { A5, A4, A3 };
+        enum Orientation { Vertical, Horizontal };
         int[] countsOfMembersOfEachHierarchy;
 
         List<string> namesOfHierarchies
@@ -139,7 +141,7 @@ namespace Presentation
             if (selectedIndexOfListOfHierarchies != -1)
                 listOfHierarchies.SelectedIndex = selectedIndexOfListOfHierarchies;
 
-                placeOfListOfHierarchies.Controls.Clear();
+            placeOfListOfHierarchies.Controls.Clear();
             placeOfListOfHierarchies.Controls.Add(listOfHierarchies);
         }
 
@@ -286,7 +288,33 @@ namespace Presentation
         {
             SortMembersOfHierarchies();
 
-            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
+            SizeF sizeOfPaper = new SizeF();
+            float marginSize;
+
+            switch ((SizeOfPaper)listOfSizesOfPaper.SelectedIndex)
+            {
+                case SizeOfPaper.A5:
+                    sizeOfPaper = new SizeF(14.8f, 21);
+                    break;
+                case SizeOfPaper.A4:
+                    sizeOfPaper = new SizeF(21, 29.7f);
+                    break;
+                case SizeOfPaper.A3:
+                    sizeOfPaper = new SizeF(29.7f, 42);
+                    break;
+            }
+
+            if ((Orientation)listOfOrientations.SelectedIndex == Orientation.Horizontal)
+            {
+                float tmp = sizeOfPaper.Width;
+                sizeOfPaper.Width = sizeOfPaper.Height;
+                sizeOfPaper.Height = tmp;
+            }
+
+            try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
+            catch { marginSize = 1; }
+
+            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" }, sizeOfPaper, marginSize);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
 

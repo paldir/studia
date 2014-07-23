@@ -175,14 +175,6 @@ namespace Presentation
 
         void InitializeCentralColumn()
         {
-            /*listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasures());
-            listOfMeasures.SelectedIndexChanged += listOfMeasures_SelectedIndexChanged;
-
-            foreach (string selectedMeasureValue in selectedMeasuresValues)
-                listOfMeasures.Items.FindByValue(selectedMeasureValue).Selected = true;
-
-            placeOfListOfMeasures.Controls.Add(listOfMeasures);*/
-
             measuresTreeView = CubeStructure.GetMeasuresTreeView(cubeHandler.GetMeasures());
             measuresTreeView.TreeNodeCheckChanged += measuresTreeView_TreeNodeCheckChanged;
             postBackButtonOfMeasuresTreeView.Click += postBackButtonOfTreeView_Click;
@@ -334,7 +326,7 @@ namespace Presentation
         {
             TreeNode node = e.Node;
 
-            if (node.Checked)
+            if (node.Checked && pathsOfSelectedMeasures.IndexOf(e.Node.ValuePath) == -1)
             {
                 selectedMeasures.Add(node.Text);
                 selectedMeasuresValues.Add(node.Value);

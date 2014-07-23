@@ -5,6 +5,7 @@ using System.Web;
 
 using System.Xml;
 using System.Text;
+using System.Drawing;
 
 namespace Presentation
 {
@@ -16,8 +17,10 @@ namespace Presentation
         float[] columnsWidths;
         string[] backgroundsOfCaption;
         int currentBackgroundOfCaption;
+        SizeF sizeOfPage;
+        float marginSize;
 
-        public RdlGenerator(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption)
+        public RdlGenerator(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption, SizeF sizeOfPage, float marginSize)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -28,6 +31,8 @@ namespace Presentation
             this.rowHeight = fontSize * 2;
             this.columnsWidths = columnsWidths;
             this.backgroundsOfCaption = backgroundsOfCaption;
+            this.sizeOfPage = sizeOfPage;
+            this.marginSize = marginSize;
             currentBackgroundOfCaption = 0;
         }
 
@@ -46,7 +51,7 @@ namespace Presentation
             WriteMainTablix(namesOfHierarchies, namesOfMeasures, rows);
             writer.WriteEndElement();
             writer.WriteEndElement();
-            WriteDummyCode();
+            WriteFinalCode();
             writer.WriteEndElement();
             writer.Close();
 
@@ -173,9 +178,9 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
-        
+
         void WriteRow(string[] row, float height, bool isCaption)
-        {            
+        {
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
             writer.WriteString(height.ToString() + "pt");
@@ -186,7 +191,7 @@ namespace Presentation
             {
                 if (row.Length > 1)
                     currentBackgroundOfCaption = i % 2;
-                
+
                 WriteCell(row[i], isCaption);
             }
 
@@ -202,7 +207,7 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
-        
+
         void WriteCell(string value, bool isCaption)
         {
             writer.WriteStartElement("TablixCell");
@@ -269,12 +274,30 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteDummyCode()
+        void WriteFinalCode()
         {
             writer.WriteStartElement("rd", "ReportTemplate", "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
             writer.WriteString("true");
             writer.WriteEndElement();
             writer.WriteStartElement("Page");
+            writer.WriteStartElement("PageWidth");
+            writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
+            writer.WriteEndElement();
+            writer.WriteStartElement("PageHeight");
+            writer.WriteString(ConvertFloatToString(sizeOfPage.Height) + "cm");
+            writer.WriteEndElement();
+            writer.WriteStartElement("LeftMargin");
+            writer.WriteString(ConvertFloatToString(marginSize) + "cm");
+            writer.WriteEndElement();
+            writer.WriteStartElement("RightMargin");
+            writer.WriteString(ConvertFloatToString(marginSize) + "cm");
+            writer.WriteEndElement();
+            writer.WriteStartElement("TopMargin");
+            writer.WriteString(ConvertFloatToString(marginSize) + "cm");
+            writer.WriteEndElement();
+            writer.WriteStartElement("BottomMargin");
+            writer.WriteString(ConvertFloatToString(marginSize) + "cm");
+            writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteStartElement("DataSets");
             writer.WriteStartElement("DataSet");
@@ -300,7 +323,9 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
-        
+
         string GenerateRandomName() { return "a" + Guid.NewGuid().ToString().Replace("-", String.Empty); }
+
+        string ConvertFloatToString(float number) { return number.ToString().Replace(',', '.'); }
     }
 }

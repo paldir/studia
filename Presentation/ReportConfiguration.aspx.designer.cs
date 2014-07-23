@@ -103,6 +103,33 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresDown;
         
         /// <summary>
+        /// listOfSizesOfPaper control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList listOfSizesOfPaper;
+        
+        /// <summary>
+        /// listOfOrientations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList listOfOrientations;
+        
+        /// <summary>
+        /// textBoxOfMarginSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfMarginSize;
+        
+        /// <summary>
         /// buttonOfViewingOfReport control.
         /// </summary>
         /// <remarks>

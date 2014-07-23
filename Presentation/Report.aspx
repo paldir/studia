@@ -12,7 +12,8 @@
     <form id="form" runat="server">
     <asp:ScriptManager runat="server"></asp:ScriptManager>
     <div>
-        <rsweb:ReportViewer ID="reportViewer" runat="server"></rsweb:ReportViewer>
+        <asp:Button ID="buttonOfExportingToPDF" Text="Pobierz jako PDF" runat="server" />
+        <rsweb:ReportViewer ID="reportViewer" ShowExportControls="False" runat="server" ></rsweb:ReportViewer>
     </div>
     </form>
 </body>
