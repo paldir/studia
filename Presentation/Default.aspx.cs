@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 
+using AjaxControlToolkit;
+
 namespace Presentation
 {
     public partial class Default : System.Web.UI.Page
@@ -13,7 +15,7 @@ namespace Presentation
         #region fields
         BusinessLogic.CubeHandler cubeHandler;
         DropDownList listOfDimensions;
-        CheckBoxList listOfMeasures;
+        TreeView measuresTreeView;
         Table tableOfResults;
         string[,] descriptionOfTableOfResults;
 
@@ -82,6 +84,19 @@ namespace Presentation
             set { Session["selectedMeasuresValues"] = value; }
         }
 
+        List<string> pathsOfSelectedMeasures
+        {
+            get
+            {
+                if (Session["pathsOfSelectedMeasures"] == null)
+                    Session["pathsOfSelectedMeasures"] = new List<string>();
+
+                return (List<string>)Session["pathsOfSelectedMeasures"];
+            }
+
+            set { Session["pathsOfSelectedMeasures"] = value; }
+        }
+
         string selectedValueOfListOfDimensions
         {
             get
@@ -132,10 +147,10 @@ namespace Presentation
         }
 
         void InitializeLeftColumn()
-        {
-            listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetDimensionsNames());
+        {   
+            listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetNamesOfDimensions());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
-            postBackButtonOfDimensionTreeView.Click += postBackButtonOfDimensionTreeView_Click;
+            postBackButtonOfDimensionTreeView.Click += postBackButtonOfTreeView_Click;
 
             if (selectedValueOfListOfDimensions == String.Empty)
                 selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
@@ -149,28 +164,56 @@ namespace Presentation
             trigger.EventName = "SelectedIndexChanged";
 
             dimensionTreeViewUpdatePanel.Triggers.Add(trigger);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
+            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
+
+            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
         }
 
         void InitializeCentralColumn()
         {
-            listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasuresNames());
+            /*listOfMeasures = CubeStructure.GetCheckBoxListOfMeasures(cubeHandler.GetMeasures());
             listOfMeasures.SelectedIndexChanged += listOfMeasures_SelectedIndexChanged;
 
-            placeOfListOfMeasures.Controls.Add(listOfMeasures);
+            foreach (string selectedMeasureValue in selectedMeasuresValues)
+                listOfMeasures.Items.FindByValue(selectedMeasureValue).Selected = true;
+
+            placeOfListOfMeasures.Controls.Add(listOfMeasures);*/
+
+            measuresTreeView = CubeStructure.GetMeasuresTreeView(cubeHandler.GetMeasures());
+            measuresTreeView.TreeNodeCheckChanged += measuresTreeView_TreeNodeCheckChanged;
+            postBackButtonOfMeasuresTreeView.Click += postBackButtonOfTreeView_Click;
+
+            foreach (string pathOfSelectedMeasure in pathsOfSelectedMeasures)
+                measuresTreeView.FindNode(pathOfSelectedMeasure).Checked = true;
+
+            placeOfMeasuresTreeView.Controls.Add(measuresTreeView);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
+            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
+
+            measuresTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void InitializeRightColumn()
         {
             AsyncPostBackTrigger triggerOfListOfMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfMeasures.ControlID = "ListOfMeasures";
-            triggerOfListOfMeasures.EventName = "SelectedIndexChanged";
+            triggerOfListOfMeasures.ControlID = "postBackButtonOfMeasuresTreeView";
+
+            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
+
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
             triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
 
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
+
             buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
         }
 
@@ -208,25 +251,15 @@ namespace Presentation
         {
             CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
             listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
-            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
-            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
 
             placeOfListOfSelectedDimensions.Controls.Clear();
             placeOfListOfSelectedDimensions.Controls.Add(listOfSelectedDimensions);
-            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
 
-            CheckBoxList listOfSelectedMeasures = CubeStructure.GetCheckBoxListOfSelectedMeasures(selectedMeasures);
+            CheckBoxList listOfSelectedMeasures = CubeStructure.GetCheckBoxListOfSelectedMeasures(pathsOfSelectedMeasures);
             listOfSelectedMeasures.SelectedIndexChanged += listOfSelectedMeasures_SelectedIndexChanged;
-            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
-            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
 
             placeOfListOfSelectedMeasures.Controls.Clear();
             placeOfListOfSelectedMeasures.Controls.Add(listOfSelectedMeasures);
-            listOfMeasuresUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void CreateTableOfResults()
@@ -291,23 +324,28 @@ namespace Presentation
             CreateTableOfResults();
         }
 
-        void postBackButtonOfDimensionTreeView_Click(object sender, EventArgs e)
+        void postBackButtonOfTreeView_Click(object sender, EventArgs e)
         {
             CreateSelectedItemsLists();
             CreateTableOfResults();
         }
 
-        void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
+        void measuresTreeView_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
         {
-            selectedMeasures = new List<string>();
-            selectedMeasuresValues = new List<string>();
+            TreeNode node = e.Node;
 
-            foreach (ListItem item in listOfMeasures.Items)
-                if (item.Selected)
-                {
-                    selectedMeasures.Add(item.Text);
-                    selectedMeasuresValues.Add(item.Value);
-                }
+            if (node.Checked)
+            {
+                selectedMeasures.Add(node.Text);
+                selectedMeasuresValues.Add(node.Value);
+                pathsOfSelectedMeasures.Add(node.ValuePath);
+            }
+            else
+            {
+                selectedMeasures.Remove(node.Text);
+                selectedMeasuresValues.Remove(node.Value);
+                pathsOfSelectedMeasures.Remove(node.ValuePath);
+            }
 
             CreateSelectedItemsLists();
             CreateTableOfResults();
@@ -342,10 +380,11 @@ namespace Presentation
             for (int i = 0; i < listOfSelectedMeasures.Items.Count; i++)
                 if (!listOfSelectedMeasures.Items[i].Selected)
                 {
+                    measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(i)).Checked = false;
+
                     selectedMeasures.RemoveAt(i);
                     selectedMeasuresValues.RemoveAt(i);
-
-                    listOfMeasures.Items.FindByText(listOfSelectedMeasures.Items[i].Text).Selected = false;
+                    pathsOfSelectedMeasures.RemoveAt(i);
                 }
 
             CreateSelectedItemsLists();

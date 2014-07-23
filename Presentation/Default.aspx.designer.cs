@@ -13,6 +13,15 @@ namespace Presentation {
     public partial class Default {
         
         /// <summary>
+        /// form control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form;
+        
+        /// <summary>
         /// scriptManager control.
         /// </summary>
         /// <remarks>
@@ -55,25 +64,34 @@ namespace Presentation {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button postBackButtonOfDimensionTreeView;
+        protected global::System.Web.UI.WebControls.LinkButton postBackButtonOfDimensionTreeView;
         
         /// <summary>
-        /// listOfMeasuresUpdatePanel control.
+        /// measuresTreeViewUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel listOfMeasuresUpdatePanel;
+        protected global::System.Web.UI.UpdatePanel measuresTreeViewUpdatePanel;
         
         /// <summary>
-        /// placeOfListOfMeasures control.
+        /// placeOfMeasuresTreeView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfMeasures;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfMeasuresTreeView;
+        
+        /// <summary>
+        /// postBackButtonOfMeasuresTreeView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton postBackButtonOfMeasuresTreeView;
         
         /// <summary>
         /// selectedItemsUpdatePanel control.

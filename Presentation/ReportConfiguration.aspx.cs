@@ -12,6 +12,7 @@ namespace Presentation
     public partial class ReportConfiguration : System.Web.UI.Page
     {
         #region fields
+        enum ListToModify { ListOfHierarchies, ListOfMeasures };
         int[] countsOfMembersOfEachHierarchy;
 
         List<string> namesOfHierarchies
@@ -135,7 +136,10 @@ namespace Presentation
             foreach (string nameOfHierarchy in namesOfHierarchies)
                 listOfHierarchies.Items.Add(nameOfHierarchy);
 
-            placeOfListOfHierarchies.Controls.Clear();
+            if (selectedIndexOfListOfHierarchies != -1)
+                listOfHierarchies.SelectedIndex = selectedIndexOfListOfHierarchies;
+
+                placeOfListOfHierarchies.Controls.Clear();
             placeOfListOfHierarchies.Controls.Add(listOfHierarchies);
         }
 
@@ -151,6 +155,9 @@ namespace Presentation
 
             foreach (string nameOfMeasure in namesOfMeasures)
                 listOfMeasures.Items.Add(nameOfMeasure);
+
+            if (selectedIndexOfListOfMeasures != -1)
+                listOfMeasures.SelectedIndex = selectedIndexOfListOfMeasures;
 
             placeOfListOfMeasures.Controls.Clear();
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
@@ -177,23 +184,29 @@ namespace Presentation
             return result;
         }
 
-        void MoveItemOfList(char symbolOfList, int destination)
+        void MoveItemOfList(ListToModify listToModify, int destination)
         {
             int indexOfSelectedItem = -1;
             int generalIndexOfSelectedItem = -1;
             List<string> list = null;
 
-            switch (symbolOfList)
+            switch (listToModify)
             {
-                case 'h':
+                case ListToModify.ListOfHierarchies:
                     indexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     generalIndexOfSelectedItem = selectedIndexOfListOfHierarchies;
                     list = namesOfHierarchies;
+
+                    if (selectedIndexOfListOfHierarchies + destination >= 0 && selectedIndexOfListOfHierarchies + destination < list.Count)
+                        selectedIndexOfListOfHierarchies += destination;
                     break;
-                case 'm':
+                case ListToModify.ListOfMeasures:
                     indexOfSelectedItem = selectedIndexOfListOfMeasures;
                     generalIndexOfSelectedItem = selectedIndexOfListOfMeasures + namesOfHierarchies.Count;
                     list = namesOfMeasures;
+
+                    if (selectedIndexOfListOfMeasures + destination >= 0 && selectedIndexOfListOfMeasures + destination < list.Count)
+                        selectedIndexOfListOfMeasures += destination;
                     break;
             }
 
@@ -219,50 +232,62 @@ namespace Presentation
                     break;
             }
         }
+
+        void SortMembersOfHierarchies()
+        {
+            for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
+            {
+                List<string> membersOfHierarchy = rows.Select(r => r[i]).Distinct().ToList();
+                int indexOfTarget = 0;
+
+                foreach (string memberOfHierarchy in membersOfHierarchy)
+                {
+                    List<string[]> rowsToMove = rows.FindAll(r => r[i] == memberOfHierarchy);
+
+                    rows.RemoveAll(r => r[i] == memberOfHierarchy);
+                    rows.InsertRange(indexOfTarget, rowsToMove);
+
+                    indexOfTarget += rowsToMove.Count;
+                }
+            }
+        }
         #endregion
 
         #region events handlers
-        void listOfHierarchies_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfHierarchies_SelectedIndexChanged(object sender, EventArgs e) { selectedIndexOfListOfHierarchies = ((ListBox)sender).SelectedIndex; }
+
+        void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e) { selectedIndexOfListOfMeasures = ((ListBox)sender).SelectedIndex; }
+
+        void buttonOfMovingItemOfListOfHierarchiesUp_Click(object sender, EventArgs e)
         {
-            selectedIndexOfListOfHierarchies = ((ListBox)sender).SelectedIndex;
-        }
-
-        void listOfMeasures_SelectedIndexChanged(object sender, EventArgs e)
-        { 
-            selectedIndexOfListOfMeasures = ((ListBox)sender).SelectedIndex; 
-        }
-
-        void buttonOfMovingItemOfListOfHierarchiesUp_Click(object sender, EventArgs e) 
-        { 
-            MoveItemOfList('h', -1);
+            MoveItemOfList(ListToModify.ListOfHierarchies, -1);
             CreateListOfHierarchies();
         }
 
-        void buttonOfMovingItemOfListOfHierarchiesDown_Click(object sender, EventArgs e) 
-        { 
-            MoveItemOfList('h', 1);
+        void buttonOfMovingItemOfListOfHierarchiesDown_Click(object sender, EventArgs e)
+        {
+            MoveItemOfList(ListToModify.ListOfHierarchies, 1);
             CreateListOfHierarchies();
         }
 
-        void buttonOfMovingItemOfListOfMeasuresUp_Click(object sender, EventArgs e) 
-        { 
-            MoveItemOfList('m', -1);
+        void buttonOfMovingItemOfListOfMeasuresUp_Click(object sender, EventArgs e)
+        {
+            MoveItemOfList(ListToModify.ListOfMeasures, -1);
             CreateListOfMeasures();
         }
 
-        void buttonOfMovingItemOfListOfMeasuresDown_Click(object sender, EventArgs e) 
+        void buttonOfMovingItemOfListOfMeasuresDown_Click(object sender, EventArgs e)
         {
-            MoveItemOfList('m', 1);
+            MoveItemOfList(ListToModify.ListOfMeasures, 1);
             CreateListOfMeasures();
         }
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
-            RdlGeneration rdlGenerator = new RdlGeneration(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
+            SortMembersOfHierarchies();
+
+            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" });
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
-
-            //Session.Clear();
-
             Session["reportDefinition"] = reportDefinition;
 
             Response.Redirect("Report.aspx");
