@@ -61,8 +61,15 @@
                     <asp:ListItem Value="horizontal">Pozioma</asp:ListItem>
                 </asp:DropDownList><br />
                 <br />
-                Rozmiar marginesu (cm):<br />
-                <asp:TextBox ID="textBoxOfMarginSize" Text="1" Width="100" runat="server"></asp:TextBox>
+                Rozmiar marginesów (cm):<br />
+                <asp:TextBox ID="textBoxOfMarginSize" Text="1" Width="50" runat="server"></asp:TextBox>
+            </div>
+            <div class="column">
+                Czcionka:
+                <div id="placeOfListOfFonts" runat="server"></div>
+                <br />
+                Rozmiar czcionki:<br />
+                <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" runat="server"></asp:TextBox>
             </div>
         </div>
         <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" runat="server" />

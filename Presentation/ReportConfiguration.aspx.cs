@@ -16,6 +16,8 @@ namespace Presentation
         enum SizeOfPaper { A5, A4, A3 };
         enum Orientation { Vertical, Horizontal };
         int[] countsOfMembersOfEachHierarchy;
+        Font font;
+        DropDownList listOfFonts;
 
         List<string> namesOfHierarchies
         {
@@ -74,8 +76,13 @@ namespace Presentation
         {
             countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
 
+            InitializeListsOfItems();
             InitializeButtons();
+            InitializeListOfFonts();
+        }
 
+        void InitializeListsOfItems()
+        {
             AsyncPostBackTrigger triggerOfListOfHierarchies = new AsyncPostBackTrigger();
             triggerOfListOfHierarchies.ControlID = "listOfHierarchies";
             triggerOfListOfHierarchies.EventName = "SelectedIndexChanged";
@@ -108,7 +115,7 @@ namespace Presentation
             updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresUp);
             updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresDown);
         }
-
+        
         void InitializeButtons()
         {
             buttonOfMovingItemOfListOfHierarchiesUp.Click += buttonOfMovingItemOfListOfHierarchiesUp_Click;
@@ -116,6 +123,20 @@ namespace Presentation
             buttonOfMovingItemOfListOfMeasuresUp.Click += buttonOfMovingItemOfListOfMeasuresUp_Click;
             buttonOfMovingItemOfListOfMeasuresDown.Click += buttonOfMovingItemOfListOfMeasuresDown_Click;
             buttonOfViewingOfReport.Click += buttonOfViewingOfReport_Click;
+        }
+
+        void InitializeListOfFonts()
+        {
+            listOfFonts = new DropDownList();
+
+            FontFamily[] installedFonts = new System.Drawing.Text.InstalledFontCollection().Families;
+
+            foreach (FontFamily font in installedFonts)
+                listOfFonts.Items.Add(new ListItem(font.Name, font.Name));
+
+            listOfFonts.SelectedValue = "Arial";
+
+            placeOfListOfFonts.Controls.Add(listOfFonts);
         }
 
         protected override void CreateChildControls()
@@ -170,7 +191,6 @@ namespace Presentation
             float[] result = new float[rows.First().Length];
             Bitmap bitMap = new Bitmap(500, 200);
             Graphics graphics = Graphics.FromImage(bitMap);
-            Font font = new Font("Arial", 10);
 
             for (int i = 0; i < namesOfHierarchies.Count; i++)
                 result[i] = graphics.MeasureString(namesOfHierarchies.ElementAt(i), font).Width;
@@ -288,9 +308,15 @@ namespace Presentation
         {
             SortMembersOfHierarchies();
 
+            float fontSize;
             SizeF sizeOfPaper = new SizeF();
             float marginSize;
 
+            try { fontSize = Convert.ToSingle(textBoxOfFontSize.Text); }
+            catch { fontSize = 10; }
+
+            font = new Font(listOfFonts.SelectedValue, fontSize);
+            
             switch ((SizeOfPaper)listOfSizesOfPaper.SelectedIndex)
             {
                 case SizeOfPaper.A5:
@@ -314,7 +340,7 @@ namespace Presentation
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), 10, new string[] { "DarkBlue", "CornflowerBlue" }, sizeOfPaper, marginSize);
+            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), font, new string[] { "DarkBlue", "CornflowerBlue" }, sizeOfPaper, marginSize);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
 

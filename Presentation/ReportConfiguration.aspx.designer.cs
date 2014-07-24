@@ -130,6 +130,24 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.TextBox textBoxOfMarginSize;
         
         /// <summary>
+        /// placeOfListOfFonts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfFonts;
+        
+        /// <summary>
+        /// textBoxOfFontSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfFontSize;
+        
+        /// <summary>
         /// buttonOfViewingOfReport control.
         /// </summary>
         /// <remarks>

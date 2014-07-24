@@ -15,12 +15,14 @@ namespace Presentation
         XmlWriter writer;
         float rowHeight;
         float[] columnsWidths;
+        Font font;
         string[] backgroundsOfCaption;
         int currentBackgroundOfCaption;
         SizeF sizeOfPage;
         float marginSize;
+        
 
-        public RdlGenerator(float[] columnsWidths, float fontSize, string[] backgroundsOfCaption, SizeF sizeOfPage, float marginSize)
+        public RdlGenerator(float[] columnsWidths, Font font, string[] backgroundsOfCaption, SizeF sizeOfPage, float marginSize)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -28,8 +30,9 @@ namespace Presentation
             settings.Encoding = encoding;
             result = new System.IO.MemoryStream();
             writer = XmlWriter.Create(result, settings);
-            this.rowHeight = fontSize * 2;
+            rowHeight = font.Size * 2;
             this.columnsWidths = columnsWidths;
+            this.font = font;
             this.backgroundsOfCaption = backgroundsOfCaption;
             this.sizeOfPage = sizeOfPage;
             this.marginSize = marginSize;
@@ -229,6 +232,12 @@ namespace Presentation
             writer.WriteString(value);
             writer.WriteEndElement();
             writer.WriteStartElement("Style");
+            writer.WriteStartElement("FontFamily");
+            writer.WriteString(font.FontFamily.Name);
+            writer.WriteEndElement();
+            writer.WriteStartElement("FontSize");
+            writer.WriteString(ConvertFloatToString(font.SizeInPoints) + "pt");
+            writer.WriteEndElement();
 
             if (isCaption)
             {
