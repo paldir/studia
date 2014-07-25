@@ -71,6 +71,20 @@
                 Rozmiar czcionki:<br />
                 <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" runat="server"></asp:TextBox>
             </div>
+            <div class="column">
+                Kolor tekstu pól z nagłówkami:
+                <div id="placeOfListOfColorsOfCaptionsTexts" runat="server"></div>
+                <br />
+                Kolory teł pól z nagłówkami:
+                <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" runat="server"></div>
+                <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" runat="server"></div>
+                <br />
+                Kolor tekstu pól z wartościami:
+                <div id="placeOfListOfColorsOfValuesTexts" runat="server"></div>
+                <br />
+                Kolor tła pól z wartościami:
+                <div id="placeOfListOfColorsOfBackgroundOfValues" runat="server"></div>
+            </div>
         </div>
         <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" runat="server" />
     </div>

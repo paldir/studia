@@ -18,6 +18,11 @@ namespace Presentation
         int[] countsOfMembersOfEachHierarchy;
         Font font;
         DropDownList listOfFonts;
+        DropDownList listOfColorsOfCaptionsTexts;
+        DropDownList listOfColorsOfValuesTexts;
+        DropDownList listOfColorsOfFirstBackgroundOfCaptions;
+        DropDownList listOfColorsOfSecondBackgroundOfCaptions;
+        DropDownList listOfColorsOfBackgroundOfValues;
 
         List<string> namesOfHierarchies
         {
@@ -79,6 +84,7 @@ namespace Presentation
             InitializeListsOfItems();
             InitializeButtons();
             InitializeListOfFonts();
+            InitializeListsOfColors();
         }
 
         void InitializeListsOfItems()
@@ -115,7 +121,7 @@ namespace Presentation
             updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresUp);
             updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresDown);
         }
-        
+
         void InitializeButtons()
         {
             buttonOfMovingItemOfListOfHierarchiesUp.Click += buttonOfMovingItemOfListOfHierarchiesUp_Click;
@@ -137,6 +143,21 @@ namespace Presentation
             listOfFonts.SelectedValue = "Arial";
 
             placeOfListOfFonts.Controls.Add(listOfFonts);
+        }
+
+        void InitializeListsOfColors()
+        {
+            listOfColorsOfCaptionsTexts = GetListOfColors("White");
+            listOfColorsOfFirstBackgroundOfCaptions = GetListOfColors("DarkBlue");
+            listOfColorsOfSecondBackgroundOfCaptions = GetListOfColors("CornflowerBlue");
+            listOfColorsOfValuesTexts = GetListOfColors("Black");
+            listOfColorsOfBackgroundOfValues = GetListOfColors("White");
+
+            placeOfListOfColorsOfCaptionsTexts.Controls.Add(listOfColorsOfCaptionsTexts);
+            placeOfListOfColorsOfFirstBackgroundOfCaptions.Controls.Add(listOfColorsOfFirstBackgroundOfCaptions);
+            placeOfListOfColorsOfSecondBackgroundOfCaptions.Controls.Add(listOfColorsOfSecondBackgroundOfCaptions);
+            placeOfListOfColorsOfValuesTexts.Controls.Add(listOfColorsOfValuesTexts);
+            placeOfListOfColorsOfBackgroundOfValues.Controls.Add(listOfColorsOfBackgroundOfValues);
         }
 
         protected override void CreateChildControls()
@@ -273,6 +294,19 @@ namespace Presentation
                 }
             }
         }
+
+        DropDownList GetListOfColors(string defaultColor)
+        {
+            DropDownList listOfColors = new DropDownList();
+
+            foreach (string colorName in Enum.GetNames(typeof(KnownColor)))
+                if (!Color.FromName(colorName).IsSystemColor)
+                    listOfColors.Items.Add(new ListItem(colorName, colorName));
+
+            listOfColors.SelectedValue = defaultColor;
+
+            return listOfColors;
+        }
         #endregion
 
         #region events handlers
@@ -316,7 +350,7 @@ namespace Presentation
             catch { fontSize = 10; }
 
             font = new Font(listOfFonts.SelectedValue, fontSize);
-            
+
             switch ((SizeOfPaper)listOfSizesOfPaper.SelectedIndex)
             {
                 case SizeOfPaper.A5:
@@ -340,7 +374,7 @@ namespace Presentation
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), font, new string[] { "DarkBlue", "CornflowerBlue" }, sizeOfPaper, marginSize);
+            RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.SelectedValue, new string[] { listOfColorsOfFirstBackgroundOfCaptions.SelectedValue, listOfColorsOfSecondBackgroundOfCaptions.SelectedValue }, listOfColorsOfValuesTexts.SelectedValue, listOfColorsOfBackgroundOfValues.SelectedValue);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
 

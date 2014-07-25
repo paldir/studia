@@ -15,14 +15,16 @@ namespace Presentation
         XmlWriter writer;
         float rowHeight;
         float[] columnsWidths;
-        Font font;
-        string[] backgroundsOfCaption;
-        int currentBackgroundOfCaption;
         SizeF sizeOfPage;
         float marginSize;
-        
+        Font font;
+        string colorOfCaptions;
+        string[] colorsOfBackgroundsOfCaption;
+        string colorOfValues;
+        string colorOfBackgroundOfValues;
+        int currentBackgroundOfCaption;
 
-        public RdlGenerator(float[] columnsWidths, Font font, string[] backgroundsOfCaption, SizeF sizeOfPage, float marginSize)
+        public RdlGenerator(float[] columnsWidths, SizeF sizeOfPage, float marginSize, Font font, string colorOfCaptions, string[] colorsOfBackgroundsOfCaption, string colorOfValues, string colorOfBackgroundOfValues)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -32,10 +34,13 @@ namespace Presentation
             writer = XmlWriter.Create(result, settings);
             rowHeight = font.Size * 2;
             this.columnsWidths = columnsWidths;
-            this.font = font;
-            this.backgroundsOfCaption = backgroundsOfCaption;
             this.sizeOfPage = sizeOfPage;
             this.marginSize = marginSize;
+            this.font = font;
+            this.colorOfCaptions = colorOfCaptions;
+            this.colorsOfBackgroundsOfCaption = colorsOfBackgroundsOfCaption;
+            this.colorOfValues = colorOfValues;
+            this.colorOfBackgroundOfValues = colorOfBackgroundOfValues;
             currentBackgroundOfCaption = 0;
         }
 
@@ -242,10 +247,16 @@ namespace Presentation
             if (isCaption)
             {
                 writer.WriteStartElement("Color");
-                writer.WriteString("White");
+                writer.WriteString(colorOfCaptions);
                 writer.WriteEndElement();
                 writer.WriteStartElement("FontWeight");
                 writer.WriteString("Bold");
+                writer.WriteEndElement();
+            }
+            else
+            {
+                writer.WriteStartElement("Color");
+                writer.WriteString(colorOfValues);
                 writer.WriteEndElement();
             }
 
@@ -271,14 +282,14 @@ namespace Presentation
             writer.WriteString("LightGrey");
             writer.WriteEndElement();
             writer.WriteEndElement();
+            writer.WriteStartElement("BackgroundColor");
 
             if (isCaption)
-            {
-                writer.WriteStartElement("BackgroundColor");
-                writer.WriteString(backgroundsOfCaption[currentBackgroundOfCaption]);
-                writer.WriteEndElement();
-            }
+                writer.WriteString(colorsOfBackgroundsOfCaption[currentBackgroundOfCaption]);
+            else
+                writer.WriteString(colorOfBackgroundOfValues);
 
+            writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteEndElement();
         }

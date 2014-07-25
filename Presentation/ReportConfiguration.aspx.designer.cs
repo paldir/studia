@@ -148,6 +148,51 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.TextBox textBoxOfFontSize;
         
         /// <summary>
+        /// placeOfListOfColorsOfCaptionsTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfCaptionsTexts;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfFirstBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfFirstBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfSecondBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfSecondBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfValuesTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfValuesTexts;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfBackgroundOfValues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfBackgroundOfValues;
+        
+        /// <summary>
         /// buttonOfViewingOfReport control.
         /// </summary>
         /// <remarks>
