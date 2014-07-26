@@ -12,7 +12,7 @@ namespace Presentation
         protected void Page_Load(object sender, EventArgs e)
         {
             buttonOfExportingToPDF.Click += buttonOfExportingToPDF_Click;
-            
+
             System.Data.DataTable dataTable = new System.Data.DataTable("tablix");
             System.Data.DataSet dataSet = new System.Data.DataSet("dataSource");
 
@@ -20,20 +20,22 @@ namespace Presentation
 
             if (!IsPostBack)
             {
-                string reportDefinition = Session["reportDefinition"].ToString();
                 reportViewer.SizeToReportContent = true;
 
                 reportViewer.Reset();
 
                 reportViewer.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;
 
-                byte[] rdlBytes = System.Text.Encoding.UTF8.GetBytes(reportDefinition);
-                System.IO.MemoryStream stream = new System.IO.MemoryStream(rdlBytes);
-
-                reportViewer.LocalReport.LoadReportDefinition(stream);
+                reportViewer.LocalReport.LoadReportDefinition(GetStreamOfReport(Session["reportDefinition"].ToString()));
                 reportViewer.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource("dataSet", dataSet.Tables[0]));
                 reportViewer.LocalReport.Refresh();
             }
+        }
+
+        System.IO.MemoryStream GetStreamOfReport(string reportDefinition)
+        {
+            byte[] rdlBytes = System.Text.Encoding.UTF8.GetBytes(reportDefinition);
+            return new System.IO.MemoryStream(rdlBytes);
         }
 
         void buttonOfExportingToPDF_Click(object sender, EventArgs e)
@@ -44,7 +46,9 @@ namespace Presentation
             string[] streams;
             Microsoft.Reporting.WebForms.Warning[] warnings;
 
-            byte[] bytes=reportViewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+            reportViewer.LocalReport.LoadReportDefinition(GetStreamOfReport(Session["pDFDefinition"].ToString()));
+
+            byte[] bytes = reportViewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
             HttpContext.Current.Response.Buffer = true;
 

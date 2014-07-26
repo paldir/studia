@@ -307,6 +307,33 @@ namespace Presentation
 
             return listOfColors;
         }
+
+        string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
+        {
+            string pDFDefinition = String.Copy(reportDefinition);
+            int index = reportDefinition.IndexOf("<TablixRow>");
+
+            while (index != -1)
+            {
+                index = reportDefinition.IndexOf("<Height>", index);
+                int end = reportDefinition.IndexOf("pt", index);
+
+                if (index != -1)
+                {
+                    float value = Convert.ToSingle(reportDefinition.Substring(index + "<Height>".Length, end - (index + "<Height>".Length)));
+
+                    if (value % pDFRowHeight != 0)
+                    {
+                        pDFDefinition = pDFDefinition.Remove(index + "<Height>".Length, end - (index + "<Height>".Length));
+                        pDFDefinition = pDFDefinition.Insert(index + "<Height>".Length, (Math.Floor(value / pDFRowHeight) * pDFRowHeight).ToString());
+                    }
+                }
+
+                index = reportDefinition.IndexOf("<TablixRow>", end);
+            }
+
+            return pDFDefinition;
+        }
         #endregion
 
         #region events handlers
@@ -377,6 +404,7 @@ namespace Presentation
             RdlGenerator rdlGenerator = new RdlGenerator(CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.SelectedValue, new string[] { listOfColorsOfFirstBackgroundOfCaptions.SelectedValue, listOfColorsOfSecondBackgroundOfCaptions.SelectedValue }, listOfColorsOfValuesTexts.SelectedValue, listOfColorsOfBackgroundOfValues.SelectedValue);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
+            Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
 
             Response.Redirect("Report.aspx");
         }
