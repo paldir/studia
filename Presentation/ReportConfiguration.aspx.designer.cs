@@ -31,6 +31,15 @@ namespace Presentation {
         protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
+        /// textBoxOfTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfTitle;
+        
+        /// <summary>
         /// updatePanelOfListOfHierarchies control.
         /// </summary>
         /// <remarks>

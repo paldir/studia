@@ -11,9 +11,11 @@ namespace Presentation
 {
     public class RdlGenerator
     {
+        enum TypeOfContent { Caption, Value, Header };
         System.IO.MemoryStream result;
         XmlWriter writer;
         float rowHeight;
+        string titleOfReport;
         float[] columnsWidths;
         SizeF sizeOfPage;
         float marginSize;
@@ -24,7 +26,7 @@ namespace Presentation
         string colorOfBackgroundOfValues;
         int currentBackgroundOfCaption;
 
-        public RdlGenerator(float[] columnsWidths, SizeF sizeOfPage, float marginSize, Font font, string colorOfCaptions, string[] colorsOfBackgroundsOfCaption, string colorOfValues, string colorOfBackgroundOfValues)
+        public RdlGenerator(string titleOfReport, float[] columnsWidths, SizeF sizeOfPage, float marginSize, Font font, string colorOfCaptions, string[] colorsOfBackgroundsOfCaption, string colorOfValues, string colorOfBackgroundOfValues)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -33,6 +35,7 @@ namespace Presentation
             result = new System.IO.MemoryStream();
             writer = XmlWriter.Create(result, settings);
             rowHeight = font.Size * 2;
+            this.titleOfReport = titleOfReport;
             this.columnsWidths = columnsWidths;
             this.sizeOfPage = sizeOfPage;
             this.marginSize = marginSize;
@@ -78,7 +81,7 @@ namespace Presentation
 
             writer.WriteEndElement();
             writer.WriteStartElement("TablixRows");
-            WriteRow(namesOfHierarchies.Concat(namesOfMeasures).ToArray(), rowHeight, true);
+            WriteRow(namesOfHierarchies.Concat(namesOfMeasures).ToArray(), rowHeight, TypeOfContent.Caption);
             WriteMainRow(rows, namesOfHierarchies.Count);
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -104,7 +107,7 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        void WriteTablix(List<string> rows, List<float> rowsHeights, int columnNumber, bool isCaption)
+        void WriteTablix(List<string> rows, List<float> rowsHeights, int columnNumber, TypeOfContent typeOfContent)
         {
             writer.WriteStartElement("Tablix");
             writer.WriteAttributeString("Name", GenerateRandomName());
@@ -115,7 +118,7 @@ namespace Presentation
             writer.WriteStartElement("TablixRows");
 
             for (int i = 0; i < rows.Count; i++)
-                WriteRow(new string[] { rows.ElementAt(i) }, rowsHeights.ElementAt(i), isCaption);
+                WriteRow(new string[] { rows.ElementAt(i) }, rowsHeights.ElementAt(i), typeOfContent);
 
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -158,18 +161,18 @@ namespace Presentation
 
             for (int i = 0; i < rows.First().Length; i++)
             {
-                bool isCaption;
+                TypeOfContent typeOfContent;
                 List<string> column = rows.Select(r => r[i]).ToList();
                 List<string> columnWithMergedCells = new List<string>();
                 List<float> rowsHeights = new List<float>();
 
                 if (i < countOfHierarchies)
                 {
-                    isCaption = true;
+                    typeOfContent = TypeOfContent.Caption;
                     currentBackgroundOfCaption = i % 2;
                 }
                 else
-                    isCaption = false;
+                    typeOfContent = TypeOfContent.Value;
 
                 foreach (string field in column)
                     if (i >= countOfHierarchies || columnWithMergedCells.Count == 0 || field != columnWithMergedCells.Last())
@@ -180,14 +183,14 @@ namespace Presentation
                     else
                         rowsHeights[rowsHeights.Count - 1] += rowHeight + 1;
 
-                WriteMainCell(columnWithMergedCells, rowsHeights, i, isCaption);
+                WriteMainCell(columnWithMergedCells, rowsHeights, i, typeOfContent);
             }
 
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteRow(string[] row, float height, bool isCaption)
+        void WriteRow(string[] row, float height, TypeOfContent typeOfContent)
         {
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
@@ -200,32 +203,32 @@ namespace Presentation
                 if (row.Length > 1)
                     currentBackgroundOfCaption = i % 2;
 
-                WriteCell(row[i], isCaption);
+                WriteCell(row[i], typeOfContent);
             }
 
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteMainCell(List<string> column, List<float> rowsHeights, int columnNumber, bool isCaption)
+        void WriteMainCell(List<string> column, List<float> rowsHeights, int columnNumber, TypeOfContent typeOfContent)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTablix(column, rowsHeights, columnNumber, isCaption);
+            WriteTablix(column, rowsHeights, columnNumber, typeOfContent);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteCell(string value, bool isCaption)
+        void WriteCell(string value, TypeOfContent typeOfContent)
         {
             writer.WriteStartElement("TablixCell");
             writer.WriteStartElement("CellContents");
-            WriteTextBox(value, isCaption);
+            WriteTextBox(value, typeOfContent);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
 
-        void WriteTextBox(string value, bool isCaption)
+        void WriteTextBox(string value, TypeOfContent typeOfContent)
         {
             writer.WriteStartElement("Textbox");
             writer.WriteAttributeString("Name", GenerateRandomName());
@@ -241,23 +244,30 @@ namespace Presentation
             writer.WriteString(font.FontFamily.Name);
             writer.WriteEndElement();
             writer.WriteStartElement("FontSize");
-            writer.WriteString(ConvertFloatToString(font.SizeInPoints) + "pt");
-            writer.WriteEndElement();
 
-            if (isCaption)
+            switch (typeOfContent)
             {
-                writer.WriteStartElement("Color");
-                writer.WriteString(colorOfCaptions);
-                writer.WriteEndElement();
-                writer.WriteStartElement("FontWeight");
-                writer.WriteString("Bold");
-                writer.WriteEndElement();
-            }
-            else
-            {
-                writer.WriteStartElement("Color");
-                writer.WriteString(colorOfValues);
-                writer.WriteEndElement();
+                case TypeOfContent.Caption:
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints) + "pt");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Color");
+                    writer.WriteString(colorOfCaptions);
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("FontWeight");
+                    writer.WriteString("Bold");
+                    writer.WriteEndElement();
+                    break;
+                case TypeOfContent.Header:
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints * 1.5f) + "pt");
+                    writer.WriteEndElement();
+                    break;
+                case TypeOfContent.Value:
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints) + "pt");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Color");
+                    writer.WriteString(colorOfValues);
+                    writer.WriteEndElement();
+                    break;
             }
 
             writer.WriteEndElement();
@@ -274,23 +284,47 @@ namespace Presentation
             writer.WriteStartElement("VerticalAlign");
             writer.WriteString("Middle");
             writer.WriteEndElement();
-            writer.WriteStartElement("Border");
-            writer.WriteStartElement("Style");
-            writer.WriteString("Solid");
-            writer.WriteEndElement();
-            writer.WriteStartElement("Color");
-            writer.WriteString("LightGrey");
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+
+            if (typeOfContent != TypeOfContent.Header)
+            {
+                writer.WriteStartElement("Border");
+                writer.WriteStartElement("Style");
+                writer.WriteString("Solid");
+                writer.WriteEndElement();
+                writer.WriteStartElement("Color");
+                writer.WriteString("LightGrey");
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+            }
+
             writer.WriteStartElement("BackgroundColor");
 
-            if (isCaption)
-                writer.WriteString(colorsOfBackgroundsOfCaption[currentBackgroundOfCaption]);
-            else
-                writer.WriteString(colorOfBackgroundOfValues);
+            switch (typeOfContent)
+            {
+                case TypeOfContent.Caption:
+                    writer.WriteString(colorsOfBackgroundsOfCaption[currentBackgroundOfCaption]);
+                    break;
+                case TypeOfContent.Header:
+                    writer.WriteString("White");
+                    break;
+                case TypeOfContent.Value:
+                    writer.WriteString(colorOfBackgroundOfValues);
+                    break;
+            }
 
             writer.WriteEndElement();
             writer.WriteEndElement();
+
+            if (typeOfContent == TypeOfContent.Header)
+            {
+                writer.WriteStartElement("Height");
+                writer.WriteString(ConvertFloatToString(font.SizeInPoints * 3) + "pt");
+                writer.WriteEndElement();
+                writer.WriteStartElement("Width");
+                writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
+                writer.WriteEndElement();
+            }
+
             writer.WriteEndElement();
         }
 
@@ -300,6 +334,7 @@ namespace Presentation
             writer.WriteString("true");
             writer.WriteEndElement();
             writer.WriteStartElement("Page");
+            WriteHeader(titleOfReport);
             writer.WriteStartElement("PageWidth");
             writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
             writer.WriteEndElement();
@@ -340,6 +375,21 @@ namespace Presentation
             writer.WriteStartElement("DataProvider");
             writer.WriteEndElement();
             writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+        }
+
+        void WriteHeader(string title)
+        {
+            writer.WriteStartElement("PageHeader");
+            writer.WriteStartElement("Height");
+            writer.WriteString(ConvertFloatToString(font.SizeInPoints * 3) + "pt");
+            writer.WriteEndElement();
+            writer.WriteStartElement("PrintOnFirstPage");
+            writer.WriteString("true");
+            writer.WriteEndElement();
+            writer.WriteStartElement("ReportItems");
+            WriteTextBox(title, TypeOfContent.Header);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }

@@ -13,6 +13,9 @@
     <div>
         <div class="columns">
             <div class="column">
+                Tytuł raportu:<br />
+                <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox>
+                <br />
                 Hierarchie wymiarów:<br />
                 <asp:UpdatePanel ID="updatePanelOfListOfHierarchies" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
