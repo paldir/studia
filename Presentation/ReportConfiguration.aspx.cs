@@ -334,6 +334,20 @@ namespace Presentation
 
             return pDFDefinition;
         }
+
+        string ReplacePolishCharacters(string statement)
+        {
+            statement = statement.Replace("ą", "a");
+            statement = statement.Replace("ć", "c");
+            statement = statement.Replace("ę", "e");
+            statement = statement.Replace("ń", "n");
+            statement = statement.Replace("ó", "o");
+            statement = statement.Replace("ś", "s");
+            statement = statement.Replace("ź", "z");
+            statement = statement.Replace("ż", "z");
+
+            return statement;
+        }
         #endregion
 
         #region events handlers
@@ -401,7 +415,7 @@ namespace Presentation
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(textBoxOfTitle.Text, CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.SelectedValue, new string[] { listOfColorsOfFirstBackgroundOfCaptions.SelectedValue, listOfColorsOfSecondBackgroundOfCaptions.SelectedValue }, listOfColorsOfValuesTexts.SelectedValue, listOfColorsOfBackgroundOfValues.SelectedValue);
+            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.SelectedValue, new string[] { listOfColorsOfFirstBackgroundOfCaptions.SelectedValue, listOfColorsOfSecondBackgroundOfCaptions.SelectedValue }, listOfColorsOfValuesTexts.SelectedValue, listOfColorsOfBackgroundOfValues.SelectedValue);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);

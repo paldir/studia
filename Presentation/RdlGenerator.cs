@@ -11,7 +11,7 @@ namespace Presentation
 {
     public class RdlGenerator
     {
-        enum TypeOfContent { Caption, Value, Header };
+        enum TypeOfContent { Caption, Value, Header, Footer };
         System.IO.MemoryStream result;
         XmlWriter writer;
         float rowHeight;
@@ -257,6 +257,10 @@ namespace Presentation
                     writer.WriteString("Bold");
                     writer.WriteEndElement();
                     break;
+                case TypeOfContent.Footer:
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints) + "pt");
+                    writer.WriteEndElement();
+                    break;
                 case TypeOfContent.Header:
                     writer.WriteString(ConvertFloatToString(font.SizeInPoints * 1.5f) + "pt");
                     writer.WriteEndElement();
@@ -275,7 +279,19 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteStartElement("Style");
             writer.WriteStartElement("TextAlign");
-            writer.WriteString("Center");
+
+            switch (typeOfContent)
+            {
+                case TypeOfContent.Caption:
+                case TypeOfContent.Header:
+                case TypeOfContent.Value:
+                    writer.WriteString("Center");
+                    break;
+                case TypeOfContent.Footer:
+                    writer.WriteString("Right");
+                    break;
+            }
+
             writer.WriteEndElement();
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -285,16 +301,19 @@ namespace Presentation
             writer.WriteString("Middle");
             writer.WriteEndElement();
 
-            if (typeOfContent != TypeOfContent.Header)
+            switch (typeOfContent)
             {
-                writer.WriteStartElement("Border");
-                writer.WriteStartElement("Style");
-                writer.WriteString("Solid");
-                writer.WriteEndElement();
-                writer.WriteStartElement("Color");
-                writer.WriteString("LightGrey");
-                writer.WriteEndElement();
-                writer.WriteEndElement();
+                case TypeOfContent.Caption:
+                case TypeOfContent.Value:
+                    writer.WriteStartElement("Border");
+                    writer.WriteStartElement("Style");
+                    writer.WriteString("Solid");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Color");
+                    writer.WriteString("LightGrey");
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                    break;
             }
 
             writer.WriteStartElement("BackgroundColor");
@@ -304,6 +323,7 @@ namespace Presentation
                 case TypeOfContent.Caption:
                     writer.WriteString(colorsOfBackgroundsOfCaption[currentBackgroundOfCaption]);
                     break;
+                case TypeOfContent.Footer:
                 case TypeOfContent.Header:
                     writer.WriteString("White");
                     break;
@@ -315,14 +335,27 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteEndElement();
 
-            if (typeOfContent == TypeOfContent.Header)
+            switch (typeOfContent)
             {
-                writer.WriteStartElement("Height");
-                writer.WriteString(ConvertFloatToString(font.SizeInPoints * 3) + "pt");
-                writer.WriteEndElement();
-                writer.WriteStartElement("Width");
-                writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
-                writer.WriteEndElement();
+                case TypeOfContent.Footer:
+                    writer.WriteStartElement("Height");
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints * 2) + "pt");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Width");
+                    writer.WriteString(ConvertFloatToString(sizeOfPage.Width - marginSize * 2) + "cm");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Left");
+                    writer.WriteString("0cm");
+                    writer.WriteEndElement();
+                    break;
+                case TypeOfContent.Header:
+                    writer.WriteStartElement("Height");
+                    writer.WriteString(ConvertFloatToString(font.SizeInPoints * 3) + "pt");
+                    writer.WriteEndElement();
+                    writer.WriteStartElement("Width");
+                    writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
+                    writer.WriteEndElement();
+                    break;
             }
 
             writer.WriteEndElement();
@@ -335,6 +368,7 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteStartElement("Page");
             WriteHeader(titleOfReport);
+            WriteFooter();
             writer.WriteStartElement("PageWidth");
             writer.WriteString(ConvertFloatToString(sizeOfPage.Width) + "cm");
             writer.WriteEndElement();
@@ -390,6 +424,24 @@ namespace Presentation
             writer.WriteEndElement();
             writer.WriteStartElement("ReportItems");
             WriteTextBox(title, TypeOfContent.Header);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+        }
+
+        void WriteFooter()
+        {
+            writer.WriteStartElement("PageFooter");
+            writer.WriteStartElement("Height");
+            writer.WriteString(ConvertFloatToString(font.SizeInPoints * 2) + "pt");
+            writer.WriteEndElement();
+            writer.WriteStartElement("PrintOnFirstPage");
+            writer.WriteString("true");
+            writer.WriteEndElement();
+            writer.WriteStartElement("PrintOnLastPage");
+            writer.WriteString("true");
+            writer.WriteEndElement();
+            writer.WriteStartElement("ReportItems");
+            WriteTextBox(DateTime.Now.ToShortDateString(), TypeOfContent.Footer);
             writer.WriteEndElement();
             writer.WriteEndElement();
         }

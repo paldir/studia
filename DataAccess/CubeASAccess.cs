@@ -88,8 +88,8 @@ namespace DataAccess
 
                     List<string> selectedDimensionsBelongingToHierarchy = selectedDimensions.FindAll(d => d.StartsWith(hierarchyOfSelectedDimension));
 
-                    selectedDimensionsBelongingToHierarchy.OrderBy(d => d.Substring(d.LastIndexOf('.')).Replace("[", String.Empty).Replace("]", String.Empty).Replace("&", String.Empty));
-                    
+                    selectedDimensionsBelongingToHierarchy = selectedDimensionsBelongingToHierarchy.OrderBy(d => d.Substring(d.LastIndexOf('.')).Replace("[", String.Empty).Replace("]", String.Empty).Replace("&", String.Empty)).ToList();
+
                     foreach (string selectedDimensionBelongingToHierarchy in selectedDimensionsBelongingToHierarchy)
                         mDXQuery += selectedDimensionBelongingToHierarchy + ", ";
 
