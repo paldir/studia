@@ -74,6 +74,19 @@ namespace Presentation
             get { return Convert.ToInt16(ViewState["selectedIndexOfListOfMeasures"]); }
             set { ViewState["selectedIndexOfListOfMeasures"] = value; }
         }
+
+        string selectedValueOfListOfFonts
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfFonts"] == null)
+                    ViewState["selectedValueOfListOfFonts"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfFonts"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfFonts"] = value; }
+        }
         #endregion
 
         #region methods
@@ -134,15 +147,36 @@ namespace Presentation
         void InitializeListOfFonts()
         {
             listOfFonts = new DropDownList();
-
+            listOfFonts.ID = "listOfFonts";
+            listOfFonts.AutoPostBack = true;
+            listOfFonts.SelectedIndexChanged += listOfFonts_SelectedIndexChanged;
             FontFamily[] installedFonts = new System.Drawing.Text.InstalledFontCollection().Families;
 
             foreach (FontFamily font in installedFonts)
-                listOfFonts.Items.Add(new ListItem(font.Name, font.Name));
+                if (font.IsStyleAvailable(FontStyle.Regular))
+                    listOfFonts.Items.Add(new ListItem(font.Name, font.Name));
 
             listOfFonts.SelectedValue = "Arial";
 
+            if (selectedValueOfListOfFonts == String.Empty)
+                selectedValueOfListOfFonts = listOfFonts.SelectedValue;
+            else
+                listOfFonts.SelectedValue = selectedValueOfListOfFonts;
+
             placeOfListOfFonts.Controls.Add(listOfFonts);
+
+            textBoxOfFontSize.TextChanged += textBoxOfFontSize_TextChanged;
+
+            AsyncPostBackTrigger triggerOfListOfFonts = new AsyncPostBackTrigger();
+            triggerOfListOfFonts.ControlID = "listOfFonts";
+            triggerOfListOfFonts.EventName = "SelectedIndexChanged";
+
+            AsyncPostBackTrigger triggerOfTextBoxOfFontSize = new AsyncPostBackTrigger();
+            triggerOfTextBoxOfFontSize.ControlID = "textBoxOfFontSize";
+            triggerOfTextBoxOfFontSize.EventName = "TextChanged";
+
+            updatePanelOfLabelOfTextExample.Triggers.Add(triggerOfListOfFonts);
+            updatePanelOfLabelOfTextExample.Triggers.Add(triggerOfTextBoxOfFontSize);
         }
 
         void InitializeListsOfColors()
@@ -165,6 +199,7 @@ namespace Presentation
             base.CreateChildControls();
             CreateListOfHierarchies();
             CreateListOfMeasures();
+            CreateLabelOfTextExample();
         }
 
         void CreateListOfHierarchies()
@@ -205,6 +240,18 @@ namespace Presentation
 
             placeOfListOfMeasures.Controls.Clear();
             placeOfListOfMeasures.Controls.Add(listOfMeasures);
+        }
+
+        void CreateLabelOfTextExample()
+        {
+            Label labelOfTextExample = new Label();
+            labelOfTextExample.ID = "labelOfTextExample";
+            labelOfTextExample.Text = "tekst";
+            labelOfTextExample.Font.Name = selectedValueOfListOfFonts;
+            labelOfTextExample.Font.Size = new FontUnit(GetFontSizeFromTextBox());
+
+            placeOfLabelOfTextExample.Controls.Clear();
+            placeOfLabelOfTextExample.Controls.Add(labelOfTextExample);
         }
 
         float[] CalculateColumnsWidths()
@@ -348,6 +395,16 @@ namespace Presentation
 
             return statement;
         }
+
+        float GetFontSizeFromTextBox()
+        {
+            float fontSize;
+
+            try { fontSize = Convert.ToSingle(textBoxOfFontSize.Text); }
+            catch { fontSize = 10; }
+
+            return fontSize;
+        }
         #endregion
 
         #region events handlers
@@ -379,18 +436,23 @@ namespace Presentation
             CreateListOfMeasures();
         }
 
+        void listOfFonts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfFonts = listOfFonts.SelectedValue;
+
+            CreateLabelOfTextExample();
+        }
+
+        void textBoxOfFontSize_TextChanged(object sender, EventArgs e) { CreateLabelOfTextExample(); }
+
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {
             SortMembersOfHierarchies();
 
-            float fontSize;
             SizeF sizeOfPaper = new SizeF();
             float marginSize;
 
-            try { fontSize = Convert.ToSingle(textBoxOfFontSize.Text); }
-            catch { fontSize = 10; }
-
-            font = new Font(listOfFonts.SelectedValue, fontSize);
+            font = new Font(listOfFonts.SelectedValue, GetFontSizeFromTextBox());
 
             switch ((SizeOfPaper)listOfSizesOfPaper.SelectedIndex)
             {

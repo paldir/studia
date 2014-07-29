@@ -139,6 +139,15 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.TextBox textBoxOfMarginSize;
         
         /// <summary>
+        /// updatePanelOfLabelOfTextExample control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updatePanelOfLabelOfTextExample;
+        
+        /// <summary>
         /// placeOfListOfFonts control.
         /// </summary>
         /// <remarks>
@@ -155,6 +164,15 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox textBoxOfFontSize;
+        
+        /// <summary>
+        /// placeOfLabelOfTextExample control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfTextExample;
         
         /// <summary>
         /// placeOfListOfColorsOfCaptionsTexts control.

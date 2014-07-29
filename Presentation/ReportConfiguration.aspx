@@ -13,80 +13,94 @@
     <div>
         <div class="columns">
             <div class="column">
-                Tytuł raportu:<br />
-                <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox>
-                <br />
-                Hierarchie wymiarów:<br />
-                <asp:UpdatePanel ID="updatePanelOfListOfHierarchies" runat="server" UpdateMode="Conditional">
-                    <ContentTemplate>
-                        <table>
-                            <tr>
-                                <td>
-                                    <div id="placeOfListOfHierarchies" runat="server"></div>
-                                </td>
-                                <td>
-                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" runat="server" /><br />
-                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" runat="server" />
-                                </td>
-                            </tr>
-                        </table>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <br />
-                Miary:<br />
-                <asp:UpdatePanel ID="updatePanelOfListOfMeasures" runat="server" UpdateMode="Conditional">
-                    <ContentTemplate>
-                        <table>
-                            <tr>
-                                <td>
-                                    <div id="placeOfListOfMeasures" runat="server"></div>
-                                </td>
-                                <td>
-                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" runat="server" /><br />
-                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" runat="server" />
-                                </td>
-                            </tr>
-                        </table>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
+                <asp:Panel GroupingText="Ogólne" runat="server">
+                    Tytuł raportu:<br />
+                    <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox>
+                    <br />
+                    Hierarchie wymiarów:<br />
+                    <asp:UpdatePanel ID="updatePanelOfListOfHierarchies" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div id="placeOfListOfHierarchies" runat="server"></div>
+                                    </td>
+                                    <td>
+                                        <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" runat="server" /><br />
+                                        <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <br />
+                    Miary:<br />
+                    <asp:UpdatePanel ID="updatePanelOfListOfMeasures" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div id="placeOfListOfMeasures" runat="server"></div>
+                                    </td>
+                                    <td>
+                                        <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" runat="server" /><br />
+                                        <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </asp:Panel>
             </div>
             <div class="column">
-                Format:<br />
-                <asp:DropDownList ID="listOfSizesOfPaper" runat="server">
-                    <asp:ListItem>A5</asp:ListItem>
-                    <asp:ListItem Selected="True">A4</asp:ListItem>
-                    <asp:ListItem>A3</asp:ListItem>
-                </asp:DropDownList><br />
-                <br />
-                Orientacja:<br />
-                <asp:DropDownList ID="listOfOrientations" runat="server">
-                    <asp:ListItem Value="vertical" Selected="True">Pionowa</asp:ListItem>
-                    <asp:ListItem Value="horizontal">Pozioma</asp:ListItem>
-                </asp:DropDownList><br />
-                <br />
-                Rozmiar marginesów (cm):<br />
-                <asp:TextBox ID="textBoxOfMarginSize" Text="1" Width="50" runat="server"></asp:TextBox>
+                <asp:Panel GroupingText="Ustawienia wydruku" runat="server">
+                    Format:<br />
+                    <asp:DropDownList ID="listOfSizesOfPaper" runat="server">
+                        <asp:ListItem>A5</asp:ListItem>
+                        <asp:ListItem Selected="True">A4</asp:ListItem>
+                        <asp:ListItem>A3</asp:ListItem>
+                    </asp:DropDownList><br />
+                    <br />
+                    Orientacja:<br />
+                    <asp:DropDownList ID="listOfOrientations" runat="server">
+                        <asp:ListItem Value="vertical" Selected="True">Pionowa</asp:ListItem>
+                        <asp:ListItem Value="horizontal">Pozioma</asp:ListItem>
+                    </asp:DropDownList><br />
+                    <br />
+                    Rozmiar marginesów (cm):<br />
+                    <asp:TextBox ID="textBoxOfMarginSize" Text="1" Width="50" runat="server"></asp:TextBox>
+                </asp:Panel>
             </div>
             <div class="column">
-                Czcionka:
-                <div id="placeOfListOfFonts" runat="server"></div>
-                <br />
-                Rozmiar czcionki:<br />
-                <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" runat="server"></asp:TextBox>
+                <asp:Panel GroupingText="Tekst" runat="server">
+                    <asp:UpdatePanel ID="updatePanelOfLabelOfTextExample" UpdateMode="Conditional" runat="server">
+                        <ContentTemplate>
+                            Czcionka:
+                            <div id="placeOfListOfFonts" runat="server"></div>
+                            <br />
+                            Rozmiar czcionki:<br />
+                            <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" AutoPostBack="true" runat="server"></asp:TextBox><br />
+                            <br />
+                            <div id="placeOfLabelOfTextExample" runat="server"></div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </asp:Panel>
             </div>
             <div class="column">
-                Kolor tekstu pól z nagłówkami:
-                <div id="placeOfListOfColorsOfCaptionsTexts" runat="server"></div>
-                <br />
-                Kolory teł pól z nagłówkami:
-                <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" runat="server"></div>
-                <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" runat="server"></div>
-                <br />
-                Kolor tekstu pól z wartościami:
-                <div id="placeOfListOfColorsOfValuesTexts" runat="server"></div>
-                <br />
-                Kolor tła pól z wartościami:
-                <div id="placeOfListOfColorsOfBackgroundOfValues" runat="server"></div>
+                <asp:Panel GroupingText="Kolory" runat="server">
+                    Kolor tekstu pól z nagłówkami:
+                    <div id="placeOfListOfColorsOfCaptionsTexts" runat="server"></div>
+                    <br />
+                    Kolory teł pól z nagłówkami:
+                    <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" runat="server"></div>
+                    <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" runat="server"></div>
+                    <br />
+                    Kolor tekstu pól z wartościami:
+                    <div id="placeOfListOfColorsOfValuesTexts" runat="server"></div>
+                    <br />
+                    Kolor tła pól z wartościami:
+                    <div id="placeOfListOfColorsOfBackgroundOfValues" runat="server"></div>
+                </asp:Panel>
             </div>
         </div>
         <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" runat="server" />
