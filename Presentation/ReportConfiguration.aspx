@@ -18,7 +18,7 @@
                     <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox>
                     <br />
                     Hierarchie wymiarów:<br />
-                    <asp:UpdatePanel ID="updatePanelOfListOfHierarchies" runat="server" UpdateMode="Conditional">
+                    <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
                         <ContentTemplate>
                             <table>
                                 <tr>
@@ -35,7 +35,7 @@
                     </asp:UpdatePanel>
                     <br />
                     Miary:<br />
-                    <asp:UpdatePanel ID="updatePanelOfListOfMeasures" runat="server" UpdateMode="Conditional">
+                    <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
                         <ContentTemplate>
                             <table>
                                 <tr>
@@ -73,7 +73,7 @@
             </div>
             <div class="column">
                 <asp:Panel GroupingText="Tekst" runat="server">
-                    <asp:UpdatePanel ID="updatePanelOfLabelOfTextExample" UpdateMode="Conditional" runat="server">
+                    <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
                         <ContentTemplate>
                             Czcionka:
                             <div id="placeOfListOfFonts" runat="server"></div>
@@ -88,18 +88,32 @@
             </div>
             <div class="column">
                 <asp:Panel GroupingText="Kolory" runat="server">
-                    Kolor tekstu pól z nagłówkami:
-                    <div id="placeOfListOfColorsOfCaptionsTexts" runat="server"></div>
-                    <br />
-                    Kolory teł pól z nagłówkami:
-                    <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" runat="server"></div>
-                    <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" runat="server"></div>
-                    <br />
-                    Kolor tekstu pól z wartościami:
-                    <div id="placeOfListOfColorsOfValuesTexts" runat="server"></div>
-                    <br />
-                    Kolor tła pól z wartościami:
-                    <div id="placeOfListOfColorsOfBackgroundOfValues" runat="server"></div>
+                    <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
+                        <ContentTemplate>
+                            Kolor tekstu pól z nagłówkami:
+                            <div class="columns">
+                                <div id="placeOfListOfColorsOfCaptionsTexts" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfCaptionsTexts" class="column" runat="server"></div>
+                            </div>
+                            <br />
+                            Kolory teł pól z nagłówkami:
+                            <div class="columns">
+                                <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfFirstBackgroundOfCaptions" class="column" runat="server"></div>
+                            </div>
+                            <div class="columns">
+                                <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfSecondBackgroundOfCaptions" class="column" runat="server"></div>
+                            </div>
+                            <br />
+                            Kolor tekstu pól z wartościami:
+                            <div class="columns">
+                                <div id="placeOfListOfColorsOfValuesTexts" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfValuesTexts" class="column" runat="server"></div>
+                            </div>
+                            <br />
+                            Kolor tła pól z wartościami:
+                            <div class="columns">
+                                <div id="placeOfListOfColorsOfBackgroundOfValues" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfBackgroundOfValues" class="column" runat="server"></div>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </asp:Panel>
             </div>
         </div>

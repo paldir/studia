@@ -87,6 +87,71 @@ namespace Presentation
 
             set { ViewState["selectedValueOfListOfFonts"] = value; }
         }
+
+        string selectedValueOfListOfColorsOfCaptionsTexts
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] == null)
+                    ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfColorsOfCaptionsTexts"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] = value; }
+        }
+
+        string selectedValueOfListOfColorsOfValuesTexts
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfColorsOfValuesTexts"] == null)
+                    ViewState["selectedValueOfListOfColorsOfValuesTexts"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfColorsOfValuesTexts"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfColorsOfValuesTexts"] = value; }
+        }
+
+        string selectedValueOfListOfColorsOfFirstBackgroundOfCaptions
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] == null)
+                    ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = value; }
+        }
+
+        string selectedValueOfListOfColorsOfSecondBackgroundOfCaptions
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] == null)
+                    ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = value; }
+        }
+
+        string selectedValueOfListOfColorsOfBackgroundOfValues
+        {
+            get
+            {
+                if (ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] == null)
+                    ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] = String.Empty;
+
+                return ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"].ToString();
+            }
+
+            set { ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] = value; }
+        }
         #endregion
 
         #region methods
@@ -94,45 +159,9 @@ namespace Presentation
         {
             countsOfMembersOfEachHierarchy = new int[namesOfHierarchies.Count];
 
-            InitializeListsOfItems();
             InitializeButtons();
             InitializeListOfFonts();
             InitializeListsOfColors();
-        }
-
-        void InitializeListsOfItems()
-        {
-            AsyncPostBackTrigger triggerOfListOfHierarchies = new AsyncPostBackTrigger();
-            triggerOfListOfHierarchies.ControlID = "listOfHierarchies";
-            triggerOfListOfHierarchies.EventName = "SelectedIndexChanged";
-
-            AsyncPostBackTrigger triggerOfButtonOfMovingItemOfListOfHierarchiesUp = new AsyncPostBackTrigger();
-            triggerOfButtonOfMovingItemOfListOfHierarchiesUp.ControlID = "buttonOfMovingItemOfListOfHierarchiesUp";
-            triggerOfButtonOfMovingItemOfListOfHierarchiesUp.EventName = "Click";
-
-            AsyncPostBackTrigger triggerOfButtonOfMovingItemOfListOfHierarchiesDown = new AsyncPostBackTrigger();
-            triggerOfButtonOfMovingItemOfListOfHierarchiesDown.ControlID = "buttonOfMovingItemOfListOfHierarchiesDown";
-            triggerOfButtonOfMovingItemOfListOfHierarchiesDown.EventName = "Click";
-
-            AsyncPostBackTrigger triggerOfListOfMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfMeasures.ControlID = "listOfMeasures";
-            triggerOfListOfMeasures.EventName = "SelectedIndexChanged";
-
-            AsyncPostBackTrigger triggerOfButtonOfMovingItemOfListOfMeasuresUp = new AsyncPostBackTrigger();
-            triggerOfButtonOfMovingItemOfListOfMeasuresUp.ControlID = "buttonOfMovingItemOfListOfMeasuresUp";
-            triggerOfButtonOfMovingItemOfListOfMeasuresUp.EventName = "Click";
-
-            AsyncPostBackTrigger triggerOfButtonOfMovingItemOfListOfMeasuresDown = new AsyncPostBackTrigger();
-            triggerOfButtonOfMovingItemOfListOfMeasuresDown.ControlID = "buttonOfMovingItemOfListOfMeasuresDown";
-            triggerOfButtonOfMovingItemOfListOfMeasuresDown.EventName = "Click";
-
-            updatePanelOfListOfHierarchies.Triggers.Add(triggerOfListOfHierarchies);
-            updatePanelOfListOfHierarchies.Triggers.Add(triggerOfButtonOfMovingItemOfListOfHierarchiesUp);
-            updatePanelOfListOfHierarchies.Triggers.Add(triggerOfButtonOfMovingItemOfListOfHierarchiesDown);
-
-            updatePanelOfListOfMeasures.Triggers.Add(triggerOfListOfMeasures);
-            updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresUp);
-            updatePanelOfListOfMeasures.Triggers.Add(triggerOfButtonOfMovingItemOfListOfMeasuresDown);
         }
 
         void InitializeButtons()
@@ -166,26 +195,45 @@ namespace Presentation
             placeOfListOfFonts.Controls.Add(listOfFonts);
 
             textBoxOfFontSize.TextChanged += textBoxOfFontSize_TextChanged;
-
-            AsyncPostBackTrigger triggerOfListOfFonts = new AsyncPostBackTrigger();
-            triggerOfListOfFonts.ControlID = "listOfFonts";
-            triggerOfListOfFonts.EventName = "SelectedIndexChanged";
-
-            AsyncPostBackTrigger triggerOfTextBoxOfFontSize = new AsyncPostBackTrigger();
-            triggerOfTextBoxOfFontSize.ControlID = "textBoxOfFontSize";
-            triggerOfTextBoxOfFontSize.EventName = "TextChanged";
-
-            updatePanelOfLabelOfTextExample.Triggers.Add(triggerOfListOfFonts);
-            updatePanelOfLabelOfTextExample.Triggers.Add(triggerOfTextBoxOfFontSize);
         }
 
         void InitializeListsOfColors()
         {
-            listOfColorsOfCaptionsTexts = GetListOfColors("White");
-            listOfColorsOfFirstBackgroundOfCaptions = GetListOfColors("DarkBlue");
-            listOfColorsOfSecondBackgroundOfCaptions = GetListOfColors("CornflowerBlue");
-            listOfColorsOfValuesTexts = GetListOfColors("Black");
-            listOfColorsOfBackgroundOfValues = GetListOfColors("White");
+            listOfColorsOfCaptionsTexts = GetListOfColors("listOfColorsOfCaptionsTexts", "White");
+            listOfColorsOfCaptionsTexts.SelectedIndexChanged += listOfColorsOfCaptionsTexts_SelectedIndexChanged;
+            listOfColorsOfFirstBackgroundOfCaptions = GetListOfColors("listOfColorsOfFirstBackgroundOfCaptions", "DarkBlue");
+            listOfColorsOfFirstBackgroundOfCaptions.SelectedIndexChanged += listOfColorsOfFirstBackgroundOfCaptions_SelectedIndexChanged;
+            listOfColorsOfSecondBackgroundOfCaptions = GetListOfColors("listOfColorsOfSecondBackgroundOfCaptions", "CornflowerBlue");
+            listOfColorsOfSecondBackgroundOfCaptions.SelectedIndexChanged += listOfColorsOfSecondBackgroundOfCaptions_SelectedIndexChanged;
+            listOfColorsOfValuesTexts = GetListOfColors("listOfColorsOfValuesTexts", "Black");
+            listOfColorsOfValuesTexts.SelectedIndexChanged += listOfColorsOfValuesTexts_SelectedIndexChanged;
+            listOfColorsOfBackgroundOfValues = GetListOfColors("listOfColorsOfBackgroundOfValues", "White");
+            listOfColorsOfBackgroundOfValues.SelectedIndexChanged += listOfColorsOfBackgroundOfValues_SelectedIndexChanged;
+
+            if (selectedValueOfListOfColorsOfCaptionsTexts == String.Empty)
+                selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.SelectedValue;
+            else
+                listOfColorsOfCaptionsTexts.SelectedValue = selectedValueOfListOfColorsOfCaptionsTexts;
+
+            if (selectedValueOfListOfColorsOfFirstBackgroundOfCaptions == String.Empty)
+                selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.SelectedValue;
+            else
+                listOfColorsOfFirstBackgroundOfCaptions.SelectedValue = selectedValueOfListOfColorsOfFirstBackgroundOfCaptions;
+
+            if (selectedValueOfListOfColorsOfSecondBackgroundOfCaptions == String.Empty)
+                selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.SelectedValue;
+            else
+                listOfColorsOfSecondBackgroundOfCaptions.SelectedValue = selectedValueOfListOfColorsOfSecondBackgroundOfCaptions;
+
+            if (selectedValueOfListOfColorsOfValuesTexts == String.Empty)
+                selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.SelectedValue;
+            else
+                listOfColorsOfValuesTexts.SelectedValue = selectedValueOfListOfColorsOfValuesTexts;
+
+            if (selectedValueOfListOfColorsOfBackgroundOfValues == String.Empty)
+                selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfCaptionsTexts.SelectedValue;
+            else
+                listOfColorsOfCaptionsTexts.SelectedValue = selectedValueOfListOfColorsOfBackgroundOfValues;
 
             placeOfListOfColorsOfCaptionsTexts.Controls.Add(listOfColorsOfCaptionsTexts);
             placeOfListOfColorsOfFirstBackgroundOfCaptions.Controls.Add(listOfColorsOfFirstBackgroundOfCaptions);
@@ -200,6 +248,7 @@ namespace Presentation
             CreateListOfHierarchies();
             CreateListOfMeasures();
             CreateLabelOfTextExample();
+            CreateLabelsOfColorsExamples();
         }
 
         void CreateListOfHierarchies()
@@ -254,24 +303,18 @@ namespace Presentation
             placeOfLabelOfTextExample.Controls.Add(labelOfTextExample);
         }
 
-        float[] CalculateColumnsWidths()
+        void CreateLabelsOfColorsExamples()
         {
-            float[] result = new float[rows.First().Length];
-            Bitmap bitMap = new Bitmap(500, 200);
-            Graphics graphics = Graphics.FromImage(bitMap);
-
-            for (int i = 0; i < namesOfHierarchies.Count; i++)
-                result[i] = graphics.MeasureString(namesOfHierarchies.ElementAt(i), font).Width;
-
-            for (int i = namesOfHierarchies.Count; i < result.Length; i++)
-                result[i] = graphics.MeasureString(namesOfMeasures.ElementAt(i - namesOfHierarchies.Count), font).Width;
-
-            foreach (string[] row in rows)
-                for (int i = 0; i < row.Length; i++)
-                    if (graphics.MeasureString(row[i], font).Width > result[i])
-                        result[i] = graphics.MeasureString(row[i], font).Width;
-
-            return result;
+            placeOfLabelOfColorsOfCaptionsTexts.Controls.Clear();
+            placeOfLabelOfColorsOfCaptionsTexts.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfCaptionsTexts));
+            placeOfLabelOfColorsOfFirstBackgroundOfCaptions.Controls.Clear();
+            placeOfLabelOfColorsOfFirstBackgroundOfCaptions.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfFirstBackgroundOfCaptions));
+            placeOfLabelOfColorsOfSecondBackgroundOfCaptions.Controls.Clear();
+            placeOfLabelOfColorsOfSecondBackgroundOfCaptions.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfSecondBackgroundOfCaptions));
+            placeOfLabelOfColorsOfValuesTexts.Controls.Clear();
+            placeOfLabelOfColorsOfValuesTexts.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfValuesTexts));
+            placeOfLabelOfColorsOfBackgroundOfValues.Controls.Clear();
+            placeOfLabelOfColorsOfBackgroundOfValues.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfBackgroundOfValues));
         }
 
         void MoveItemOfList(ListToModify listToModify, int destination)
@@ -323,6 +366,34 @@ namespace Presentation
             }
         }
 
+        DropDownList GetListOfColors(string id, string defaultColor)
+        {
+            DropDownList listOfColors = new DropDownList();
+            listOfColors.ID = id;
+            listOfColors.AutoPostBack = true;
+
+            foreach (string colorName in Enum.GetNames(typeof(KnownColor)))
+                if (!Color.FromName(colorName).IsSystemColor)
+                    listOfColors.Items.Add(new ListItem(colorName, colorName));
+
+            listOfColors.SelectedValue = defaultColor;
+
+            return listOfColors;
+        }
+
+        Label GetLabelOfColorExample(string colorName)
+        {
+            Label labelOfColorExample = new Label();
+            labelOfColorExample.Height = 10;
+            labelOfColorExample.Width = 10;
+            labelOfColorExample.BorderWidth = 1;
+            labelOfColorExample.BorderStyle = BorderStyle.Solid;
+            labelOfColorExample.BorderColor = Color.Black;
+            labelOfColorExample.BackColor = Color.FromName(colorName);
+
+            return labelOfColorExample;
+        }
+
         void SortMembersOfHierarchies()
         {
             for (int i = namesOfHierarchies.Count - 1; i >= 0; i--)
@@ -342,17 +413,41 @@ namespace Presentation
             }
         }
 
-        DropDownList GetListOfColors(string defaultColor)
+        float[] CalculateColumnsWidths()
         {
-            DropDownList listOfColors = new DropDownList();
+            float[] result = new float[rows.First().Length];
+            Bitmap bitMap = new Bitmap(500, 200);
+            Graphics graphics = Graphics.FromImage(bitMap);
 
-            foreach (string colorName in Enum.GetNames(typeof(KnownColor)))
-                if (!Color.FromName(colorName).IsSystemColor)
-                    listOfColors.Items.Add(new ListItem(colorName, colorName));
+            for (int i = 0; i < namesOfHierarchies.Count; i++)
+                result[i] = graphics.MeasureString(namesOfHierarchies.ElementAt(i), font).Width;
 
-            listOfColors.SelectedValue = defaultColor;
+            for (int i = namesOfHierarchies.Count; i < result.Length; i++)
+                result[i] = graphics.MeasureString(namesOfMeasures.ElementAt(i - namesOfHierarchies.Count), font).Width;
 
-            return listOfColors;
+            foreach (string[] row in rows)
+                for (int i = 0; i < row.Length; i++)
+                    if (graphics.MeasureString(row[i], font).Width > result[i])
+                        result[i] = graphics.MeasureString(row[i], font).Width;
+
+            return result;
+        }
+
+        string ReplacePolishCharacters(string statement)
+        {
+            statement = statement.Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
+
+            return statement;
+        }
+        
+        float GetFontSizeFromTextBox()
+        {
+            float fontSize;
+
+            try { fontSize = Convert.ToSingle(textBoxOfFontSize.Text); }
+            catch { fontSize = 10; }
+
+            return fontSize;
         }
 
         string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
@@ -380,30 +475,6 @@ namespace Presentation
             }
 
             return pDFDefinition;
-        }
-
-        string ReplacePolishCharacters(string statement)
-        {
-            statement = statement.Replace("ą", "a");
-            statement = statement.Replace("ć", "c");
-            statement = statement.Replace("ę", "e");
-            statement = statement.Replace("ń", "n");
-            statement = statement.Replace("ó", "o");
-            statement = statement.Replace("ś", "s");
-            statement = statement.Replace("ź", "z");
-            statement = statement.Replace("ż", "z");
-
-            return statement;
-        }
-
-        float GetFontSizeFromTextBox()
-        {
-            float fontSize;
-
-            try { fontSize = Convert.ToSingle(textBoxOfFontSize.Text); }
-            catch { fontSize = 10; }
-
-            return fontSize;
         }
         #endregion
 
@@ -444,6 +515,41 @@ namespace Presentation
         }
 
         void textBoxOfFontSize_TextChanged(object sender, EventArgs e) { CreateLabelOfTextExample(); }
+
+        void listOfColorsOfCaptionsTexts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.SelectedValue;
+
+            CreateLabelsOfColorsExamples();
+        }
+
+        void listOfColorsOfFirstBackgroundOfCaptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.SelectedValue;
+
+            CreateLabelsOfColorsExamples();
+        }
+
+        void listOfColorsOfSecondBackgroundOfCaptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.SelectedValue;
+
+            CreateLabelsOfColorsExamples();
+        }
+
+        void listOfColorsOfValuesTexts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.SelectedValue;
+
+            CreateLabelsOfColorsExamples();
+        }
+
+        void listOfColorsOfBackgroundOfValues_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfBackgroundOfValues.SelectedValue;
+
+            CreateLabelsOfColorsExamples();
+        }
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
         {

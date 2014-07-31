@@ -40,15 +40,6 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.TextBox textBoxOfTitle;
         
         /// <summary>
-        /// updatePanelOfListOfHierarchies control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfHierarchies;
-        
-        /// <summary>
         /// placeOfListOfHierarchies control.
         /// </summary>
         /// <remarks>
@@ -74,15 +65,6 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesDown;
-        
-        /// <summary>
-        /// updatePanelOfListOfMeasures control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfMeasures;
         
         /// <summary>
         /// placeOfListOfMeasures control.
@@ -139,15 +121,6 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.TextBox textBoxOfMarginSize;
         
         /// <summary>
-        /// updatePanelOfLabelOfTextExample control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updatePanelOfLabelOfTextExample;
-        
-        /// <summary>
         /// placeOfListOfFonts control.
         /// </summary>
         /// <remarks>
@@ -184,6 +157,15 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfCaptionsTexts;
         
         /// <summary>
+        /// placeOfLabelOfColorsOfCaptionsTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfCaptionsTexts;
+        
+        /// <summary>
         /// placeOfListOfColorsOfFirstBackgroundOfCaptions control.
         /// </summary>
         /// <remarks>
@@ -191,6 +173,15 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfFirstBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfFirstBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfFirstBackgroundOfCaptions;
         
         /// <summary>
         /// placeOfListOfColorsOfSecondBackgroundOfCaptions control.
@@ -202,6 +193,15 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfSecondBackgroundOfCaptions;
         
         /// <summary>
+        /// placeOfLabelOfColorsOfSecondBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfSecondBackgroundOfCaptions;
+        
+        /// <summary>
         /// placeOfListOfColorsOfValuesTexts control.
         /// </summary>
         /// <remarks>
@@ -211,6 +211,15 @@ namespace Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfValuesTexts;
         
         /// <summary>
+        /// placeOfLabelOfColorsOfValuesTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfValuesTexts;
+        
+        /// <summary>
         /// placeOfListOfColorsOfBackgroundOfValues control.
         /// </summary>
         /// <remarks>
@@ -218,6 +227,15 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfBackgroundOfValues;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfBackgroundOfValues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfBackgroundOfValues;
         
         /// <summary>
         /// buttonOfViewingOfReport control.
