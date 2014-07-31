@@ -31,13 +31,13 @@ namespace Presentation {
         protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
-        /// updatePanelOfListOfHierarchies control.
+        /// textBoxOfTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfHierarchies;
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfTitle;
         
         /// <summary>
         /// placeOfListOfHierarchies control.
@@ -67,15 +67,6 @@ namespace Presentation {
         protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfHierarchiesDown;
         
         /// <summary>
-        /// updatePanelOfListOfMeasures control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updatePanelOfListOfMeasures;
-        
-        /// <summary>
         /// placeOfListOfMeasures control.
         /// </summary>
         /// <remarks>
@@ -101,6 +92,150 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button buttonOfMovingItemOfListOfMeasuresDown;
+        
+        /// <summary>
+        /// listOfSizesOfPaper control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList listOfSizesOfPaper;
+        
+        /// <summary>
+        /// listOfOrientations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList listOfOrientations;
+        
+        /// <summary>
+        /// textBoxOfMarginSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfMarginSize;
+        
+        /// <summary>
+        /// placeOfListOfFonts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfFonts;
+        
+        /// <summary>
+        /// textBoxOfFontSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxOfFontSize;
+        
+        /// <summary>
+        /// placeOfLabelOfTextExample control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfTextExample;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfCaptionsTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfCaptionsTexts;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfCaptionsTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfCaptionsTexts;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfFirstBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfFirstBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfFirstBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfFirstBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfSecondBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfSecondBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfSecondBackgroundOfCaptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfSecondBackgroundOfCaptions;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfValuesTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfValuesTexts;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfValuesTexts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfValuesTexts;
+        
+        /// <summary>
+        /// placeOfListOfColorsOfBackgroundOfValues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfBackgroundOfValues;
+        
+        /// <summary>
+        /// placeOfLabelOfColorsOfBackgroundOfValues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfBackgroundOfValues;
         
         /// <summary>
         /// buttonOfViewingOfReport control.
