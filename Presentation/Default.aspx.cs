@@ -6,8 +6,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 
-using AjaxControlToolkit;
-
 namespace Presentation
 {
     public partial class Default : System.Web.UI.Page

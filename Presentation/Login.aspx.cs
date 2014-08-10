@@ -11,6 +11,12 @@ namespace Presentation
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Session.Clear();
+            InitializeLogin();
+        }
+
+        void InitializeLogin()
+        {
             login.TitleText = "Logowanie";
             login.UserNameLabelText = "Użytkownik: ";
             login.PasswordLabelText = "Hasło: ";
