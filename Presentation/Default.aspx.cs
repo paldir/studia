@@ -207,6 +207,9 @@ namespace Presentation
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
 
             buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
+
+            if (Array.IndexOf(System.Web.Security.Roles.GetRolesForUser(), "Zaawansowany") == -1)
+                buttonOfReportGeneration.Visible = false;
         }
 
         protected override void CreateChildControls()
