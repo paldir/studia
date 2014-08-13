@@ -11,18 +11,22 @@ namespace Presentation
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            System.Web.Security.FormsAuthentication.SignOut();
+            System.Web.Security.Roles.DeleteCookie();
             Session.Clear();
+
             InitializeLogin();
         }
 
         void InitializeLogin()
         {
-            login.TitleText = "Logowanie";
+            /*login.TitleText = "Logowanie";
             login.UserNameLabelText = "Użytkownik: ";
             login.PasswordLabelText = "Hasło: ";
             login.LoginButtonText = "Zaloguj";
-            login.DisplayRememberMe = false;
-            login.DestinationPageUrl = "~/Default.aspx";
+            login.DisplayRememberMe = false;*/
+            login.FailureText = "Podaj poprawne hasło";
+            login.DestinationPageUrl = "~/BasicAccess/Browser.aspx";
         }
     }
 }

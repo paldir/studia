@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 using System.Drawing;
 
-namespace Presentation
+namespace Presentation.AdvancedAccess
 {
     public partial class ReportConfiguration : System.Web.UI.Page
     {
@@ -439,7 +439,7 @@ namespace Presentation
 
             return statement;
         }
-        
+
         float GetFontSizeFromTextBox()
         {
             float fontSize;
@@ -588,7 +588,7 @@ namespace Presentation
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
 
-            Response.Redirect("Report.aspx");
+            Response.Redirect("~/AdvancedAccess/Report.aspx");
         }
         #endregion
     }
