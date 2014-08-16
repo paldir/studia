@@ -1,0 +1,23 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Presentation.Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="~/StyleSheet.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form" runat="server">
+    <div>
+        <asp:ScriptManager ID="scriptManager" runat="server"></asp:ScriptManager>
+        <div style="text-align: right">Poziom dostępu: <asp:LoginName runat="server" /> <asp:LoginStatus  runat="server" /></div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
+            
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

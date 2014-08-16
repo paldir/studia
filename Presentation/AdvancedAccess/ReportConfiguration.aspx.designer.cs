@@ -7,28 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Presentation {
+namespace Presentation.AdvancedAccess {
     
     
     public partial class ReportConfiguration {
-        
-        /// <summary>
-        /// form control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form;
-        
-        /// <summary>
-        /// scriptManager control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager scriptManager;
         
         /// <summary>
         /// textBoxOfTitle control.
@@ -146,6 +128,15 @@ namespace Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfTextExample;
+        
+        /// <summary>
+        /// Panel4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel4;
         
         /// <summary>
         /// placeOfListOfColorsOfCaptionsTexts control.

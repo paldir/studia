@@ -4,13 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
 using System.Text;
 
-using AjaxControlToolkit;
-
-namespace Presentation
+namespace Presentation.BasicAccess
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Browser : System.Web.UI.Page
     {
         #region fields
         BusinessLogic.CubeHandler cubeHandler;
@@ -165,12 +164,12 @@ namespace Presentation
 
             dimensionTreeViewUpdatePanel.Triggers.Add(trigger);
 
-            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
+            /*AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
             triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
             triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
 
             dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);*/
         }
 
         void InitializeCentralColumn()
@@ -184,12 +183,12 @@ namespace Presentation
 
             placeOfMeasuresTreeView.Controls.Add(measuresTreeView);
 
-            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
+            /*AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
             triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
             triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
 
             measuresTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);*/
         }
 
         void InitializeRightColumn()
@@ -207,6 +206,9 @@ namespace Presentation
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
 
             buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
+
+            if (Array.IndexOf(System.Web.Security.Roles.GetRolesForUser(), "Zaawansowany") == -1)
+                buttonOfReportGeneration.Visible = false;
         }
 
         protected override void CreateChildControls()
@@ -252,6 +254,20 @@ namespace Presentation
 
             placeOfListOfSelectedMeasures.Controls.Clear();
             placeOfListOfSelectedMeasures.Controls.Add(listOfSelectedMeasures);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
+            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
+
+            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
+
+            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
+            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
+            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
+
+            measuresTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
+            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void CreateTableOfResults()
@@ -411,7 +427,7 @@ namespace Presentation
             Session["namesOfMeasures"] = namesOfMeasures;
             Session["rows"] = rows;
             
-            Response.Redirect("ReportConfiguration.aspx");
+            Response.Redirect("~/AdvancedAccess/ReportConfiguration.aspx");
         }
         #endregion
     }
