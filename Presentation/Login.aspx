@@ -8,21 +8,39 @@
 </head>
 <body>
     <form id="form" runat="server">
-    <div>
+    <div style="width: 250px; margin: auto">
         <asp:Login ID="login" runat="server">
             <LayoutTemplate>
-                Poziom dostępu: <asp:DropDownList ID="UserName" runat="server">
-                    <asp:ListItem>Podstawowy</asp:ListItem>
-                    <asp:ListItem>Zaawansowany</asp:ListItem>
-                </asp:DropDownList><br />
-                Hasło: <asp:TextBox ID="Password" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ControlToValidate="Password" Text="*" runat="server"></asp:RequiredFieldValidator>
-                <asp:Literal ID="FailureText" runat="server"></asp:Literal>
-                <br />
-                <asp:Button ID="Login" CommandName="Login" Text="Zaloguj" runat="server" />
+                <table>
+                    <tr>
+                        <td>
+                             Poziom dostępu:
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="UserName" Width="120" runat="server">
+                                <asp:ListItem>Podstawowy</asp:ListItem>
+                                <asp:ListItem>Zaawansowany</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">
+                            Hasło:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="Password" TextMode="Password" Width="120" runat="server"></asp:TextBox>
+                            <asp:RequiredFieldValidator ControlToValidate="Password" Text="*" runat="server"></asp:RequiredFieldValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">                                                                            
+                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" runat="server" /></p>
+                            <p style="text-align: center"><asp:Literal ID="FailureText" runat="server"></asp:Literal></p>
+                        </td>
+                    </tr>
+                </table>
             </LayoutTemplate>
         </asp:Login>
-        <asp:LoginName runat="server" />
     </div>
     </form>
 </body>

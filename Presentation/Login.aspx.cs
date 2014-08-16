@@ -25,7 +25,7 @@ namespace Presentation
             login.PasswordLabelText = "Hasło: ";
             login.LoginButtonText = "Zaloguj";
             login.DisplayRememberMe = false;*/
-            login.FailureText = "Podaj poprawne hasło";
+            login.FailureText = "Podaj poprawne hasło!";
             login.DestinationPageUrl = "~/BasicAccess/Browser.aspx";
         }
     }
