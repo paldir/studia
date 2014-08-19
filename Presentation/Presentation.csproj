@@ -74,7 +74,11 @@
     <Content Include="AdvancedAccess\Report.aspx" />
     <Content Include="AdvancedAccess\ReportConfiguration.aspx" />
     <Content Include="BasicAccess\Browser.aspx" />
-    <Content Include="load.gif" />
+    <Content Include="Images\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\hoveredButton.png" />
+    <Content Include="Images\load.gif" />
     <Content Include="Login.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
