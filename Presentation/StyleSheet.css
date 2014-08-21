@@ -26,3 +26,14 @@
 .tableOfResults td:hover .buttonInsideTableOfResults {
     background-image: url('/Images/hoveredButton.png');
 }
+
+#placeOfUpdateProgress {
+    height: 150px;
+    width: 150px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -75px;
+    margin-left: -75px;
+    pointer-events: none;
+}

@@ -14,6 +14,7 @@ namespace Presentation.BasicAccess
         #region fields
         BusinessLogic.CubeHandler cubeHandler;
         DropDownList listOfDimensions;
+        TreeView dimensionTreeView;
         TreeView measuresTreeView;
         Table tableOfResults;
         string[,] descriptionOfTableOfResults;
@@ -227,12 +228,12 @@ namespace Presentation.BasicAccess
                 treeViewDataSource = selectedValueOfListOfDimensions;
             }
 
-            TreeView dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
+            /*TreeView*/dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
             dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
 
             foreach (TreeNode treeNode in treeViewNodes)
                 dimensionTreeView.Nodes.Add(treeNode);
-
+            
             for (int i = 0; i < selectedDimensions.Count; i++)
                 if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
                     dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
@@ -280,8 +281,32 @@ namespace Presentation.BasicAccess
                 tableOfResults = TableOfResults.GetTableOfResults(results);
                 descriptionOfTableOfResults = results.ElementAt(1);
                 buttonOfReportGeneration.Enabled = true;
+                List<Button> buttonsInTableOfResults = new List<Button>();
+
+                for (int i = 0; i < tableOfResults.Rows.Count; i++ )
+                    for (int j=0; j<tableOfResults.Rows[i].Cells.Count; j++)
+                        if (tableOfResults.Rows[i].Cells[j].Controls.Count == 2)
+                            buttonsInTableOfResults.Add((Button)tableOfResults.Rows[i].Cells[j].Controls[1]);
 
                 placeOfTableOfResults.Controls.Add(tableOfResults);
+
+                foreach (Button buttonInTableOfResults in buttonsInTableOfResults)
+                {
+                    buttonInTableOfResults.Click += buttonInTableOfResults_Click;
+
+                    AsyncPostBackTrigger triggerOfButtonInTableOfResults = new AsyncPostBackTrigger();
+                    triggerOfButtonInTableOfResults.ControlID = buttonInTableOfResults.ID;
+                    triggerOfButtonInTableOfResults.EventName = "Click";
+
+                    int columnOfButton = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
+
+                    if (columnOfButton < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
+                        dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+                    else
+                        measuresTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+
+                    tableOfResultsUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+                }
             }
             else
                 buttonOfReportGeneration.Enabled = false;
@@ -396,6 +421,62 @@ namespace Presentation.BasicAccess
                 }
 
             CreateSelectedItemsLists();
+            CreateTableOfResults();
+        }
+
+        void buttonInTableOfResults_Click(object sender, EventArgs e)
+        {
+            Button buttonInTableOfResults = (Button)sender;
+
+            int rowOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(0, buttonInTableOfResults.ID.IndexOf(';')));
+            int columnOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
+            string clickedText = ((LiteralControl)tableOfResults.Rows[rowOfTableOfResults].Cells[columnOfTableOfResults].Controls[0]).Text;
+
+            if (columnOfTableOfResults < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
+            {
+                List<int> indexesOfDimensionsDoomedForRemoval = new List<int>();
+
+                if (rowOfTableOfResults == 0)
+                {
+                    for (int i = 0; i < selectedDimensions.Count; i++)
+                        if (selectedDimensions.ElementAt(i).StartsWith(clickedText))
+                            indexesOfDimensionsDoomedForRemoval.Add(i);
+                }
+                else
+                {
+                    for (int i = 0; i < selectedDimensions.Count; i++)
+                        if (selectedDimensions.ElementAt(i).StartsWith(((LiteralControl)tableOfResults.Rows[0].Cells[columnOfTableOfResults].Controls[0]).Text))
+                            if (selectedDimensions.ElementAt(i).EndsWith(clickedText) || selectedDimensions.ElementAt(i).EndsWith(((LiteralControl)tableOfResults.Rows[0].Cells[columnOfTableOfResults].Controls[0]).Text))
+                                indexesOfDimensionsDoomedForRemoval.Add(i);
+                }
+
+                indexesOfDimensionsDoomedForRemoval.Reverse();
+
+                foreach (int i in indexesOfDimensionsDoomedForRemoval)
+                {
+                    TreeNode treeNodeDoomedForUnchecking = dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i));
+
+                    if (treeNodeDoomedForUnchecking != null)
+                        treeNodeDoomedForUnchecking.Checked = false;
+
+                    selectedDimensions.RemoveAt(i);
+                    selectedDimensionsValues.RemoveAt(i);
+                    pathsOfSelectedDimensions.RemoveAt(i);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < selectedMeasures.Count; i++)
+                    if (selectedMeasures.ElementAt(i) == clickedText)
+                    {
+                        measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(i)).Checked = false;
+
+                        selectedMeasures.RemoveAt(i);
+                        selectedMeasuresValues.RemoveAt(i);
+                        pathsOfSelectedMeasures.RemoveAt(i);
+                    }
+            }
+
             CreateTableOfResults();
         }
 

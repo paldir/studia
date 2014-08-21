@@ -10,7 +10,7 @@ using System.Drawing;
 namespace Presentation
 {
     public class TableOfResults
-    {   
+    {
         public static Table GetTableOfResults(List<string[,]> arraysOfResults)
         {
             string[,] arrayOfResults = arraysOfResults.ElementAt(0);
@@ -34,18 +34,23 @@ namespace Presentation
                 {
                     tableCell = new TableCell();
 
-                    if (description[i, j] != "Value")
-                        tableCell.Font.Bold = true;
+                    tableCell.Controls.Add(new Control());
                     
-                    Button button = new Button();
-                    button.Width = 15;
-                    button.Height = 15;
-                    button.CssClass = "buttonInsideTableOfResults";
-                    tableCell.Width = new Unit(graphics.MeasureString(arrayOfResults[i, j], new System.Drawing.Font("Arial", 10)).Width + 30);
+                    if (description[i, j] != "Value")
+                    {
+                        tableCell.Font.Bold = true;
+                        Button button = new Button();
+                        button.Width = 15;
+                        button.Height = 15;
+                        button.CssClass = "buttonInsideTableOfResults";
+                        button.ID = i.ToString() + "; " + j.ToString();
+                        tableCell.Width = new Unit(graphics.MeasureString(arrayOfResults[i, j], new System.Drawing.Font("Arial", 11)).Width + 30);
 
-                    tableCell.Controls.Add(new LiteralControl(arrayOfResults[i, j]));
-                    tableCell.Controls.Add(button);
+                        tableCell.Controls.Add(button);
+                    }
 
+                    tableCell.Controls.RemoveAt(0);
+                    tableCell.Controls.AddAt(0, new LiteralControl(arrayOfResults[i, j]));
                     tableRow.Cells.Add(tableCell);
                 }
 
