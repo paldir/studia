@@ -5,3 +5,35 @@
 .column {
     display: table-cell;
 }
+
+.tableOfResults td {
+    vertical-align: middle;
+    position: relative;
+}
+
+.tableOfResults td:hover {
+    background-color: lightgray;
+}
+
+.buttonInsideTableOfResults {
+    background-image: url('/Images/button.png');
+    border-width: 0px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+.tableOfResults td:hover .buttonInsideTableOfResults {
+    background-image: url('/Images/hoveredButton.png');
+}
+
+#placeOfUpdateProgress {
+    height: 150px;
+    width: 150px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -75px;
+    margin-left: -75px;
+    pointer-events: none;
+}

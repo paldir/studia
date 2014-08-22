@@ -17,10 +17,10 @@
         <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
             
         </asp:ContentPlaceHolder>
-        <div style="height: 150px; width: 150px; position: absolute; left: 50%; top: 50%; margin-top: -75px; margin-left: -75px">
-            <asp:UpdateProgress runat="server">
+        <div id="placeOfUpdateProgress">
+            <asp:UpdateProgress ID="updateProgress" runat="server">
                 <ProgressTemplate>
-                    <img src="../load.gif" />
+                    <img src="../Images/load.gif" />
                 </ProgressTemplate>
             </asp:UpdateProgress>
         </div>
