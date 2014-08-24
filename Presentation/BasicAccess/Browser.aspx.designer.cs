@@ -76,33 +76,6 @@ namespace Presentation.BasicAccess {
         protected global::System.Web.UI.WebControls.LinkButton postBackButtonOfMeasuresTreeView;
         
         /// <summary>
-        /// selectedItemsUpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel selectedItemsUpdatePanel;
-        
-        /// <summary>
-        /// placeOfListOfSelectedDimensions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedDimensions;
-        
-        /// <summary>
-        /// placeOfListOfSelectedMeasures control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfSelectedMeasures;
-        
-        /// <summary>
         /// tableOfResultsUpdatePanel control.
         /// </summary>
         /// <remarks>

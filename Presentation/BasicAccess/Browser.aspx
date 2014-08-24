@@ -36,14 +36,6 @@
         </asp:UpdatePanel>
     </div>
     <div id="rightColumn" class="column">
-        <asp:UpdatePanel ID="selectedItemsUpdatePanel" runat="server" UpdateMode="Conditional">
-            <ContentTemplate>
-                <b>Wymiary:</b><br />
-                <div id="placeOfListOfSelectedDimensions" runat="server"></div>
-                <b>Miary:</b><br />
-                <div id="placeOfListOfSelectedMeasures" runat="server"></div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
         <asp:UpdatePanel ID="tableOfResultsUpdatePanel" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <div id="placeOfTableOfResults" runat="server"></div>
