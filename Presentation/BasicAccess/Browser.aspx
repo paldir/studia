@@ -19,7 +19,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder" runat="server">
 <div class="columns">
     <div id="leftColumn" class="column">
-        <div id="placeOfListOfDimensions" runat="server"></div>
+        <asp:UpdatePanel runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
+            <ContentTemplate>
+                <div id="placeOfListOfDimensions" runat="server"></div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+    </div>
+    <div class="column">
         <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <div id="placeOfDimensionTreeView" runat="server"></div>

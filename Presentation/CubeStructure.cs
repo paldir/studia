@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 
+using System.Drawing;
+
 namespace Presentation
 {
     public class CubeStructure
@@ -53,16 +55,32 @@ namespace Presentation
         }
 
         static public RadioButtonList GetCheckBoxListOfDimensions(List<string> namesOfDimensions)
-        { 
+        {
+            Bitmap bitMap = new Bitmap(500, 200);
+            Graphics graphics = Graphics.FromImage(bitMap);
             RadioButtonList radioButtonList = new RadioButtonList();
             radioButtonList.ID = "ListOfDimensions";
             radioButtonList.AutoPostBack = true;
             radioButtonList.RepeatLayout = RepeatLayout.Flow;
+            float widthOfItems=0;
 
             foreach (string nameOfDimension in namesOfDimensions)
-                radioButtonList.Items.Add(nameOfDimension);
+            {
+                radioButtonList.Items.Add(new ListItem(nameOfDimension, nameOfDimension));
 
-            radioButtonList.SelectedIndex = 0;
+                float widthOfCurrentItem = graphics.MeasureString(nameOfDimension, new Font("Arial", 10)).Width;
+
+                if (widthOfCurrentItem > widthOfItems)
+                    widthOfItems = widthOfCurrentItem;
+            }
+
+            //radioButtonList.SelectedIndex = 0;
+
+            foreach (ListItem item in radioButtonList.Items)
+            {
+                item.Attributes.CssStyle.Add("background-color", "white");
+                item.Attributes.CssStyle.Add("width", Convert.ToInt16(widthOfItems).ToString() + "px");
+            }
 
             return radioButtonList;
         }
