@@ -74,7 +74,7 @@ namespace Presentation
                     widthOfItems = widthOfCurrentItem;
             }
 
-            //radioButtonList.SelectedIndex = 0;
+            radioButtonList.SelectedIndex = 0;
 
             foreach (ListItem item in radioButtonList.Items)
             {

@@ -155,10 +155,7 @@ namespace Presentation.BasicAccess
             if (selectedValueOfListOfDimensions == String.Empty)
                 selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
             else
-            {
                 listOfDimensions.SelectedValue = selectedValueOfListOfDimensions;
-                listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
-            }
 
             placeOfListOfDimensions.Controls.Add(listOfDimensions);
 
