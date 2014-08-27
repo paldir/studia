@@ -291,11 +291,11 @@ namespace Presentation.BasicAccess
         #region events handlers
         void listOfDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (selectedValueOfListOfDimensions != String.Empty)
-                listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
+            //if (selectedValueOfListOfDimensions != String.Empty)
+              //  listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
 
             selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
-            listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
+            //listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
 
             CreateDimensionTreeView();
         }

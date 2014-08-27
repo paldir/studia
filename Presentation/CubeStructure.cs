@@ -78,7 +78,7 @@ namespace Presentation
 
             foreach (ListItem item in radioButtonList.Items)
             {
-                item.Attributes.CssStyle.Add("background-color", "white");
+                //item.Attributes.CssStyle.Add("background-color", "white");
                 item.Attributes.CssStyle.Add("width", Convert.ToInt16(widthOfItems).ToString() + "px");
             }
 
