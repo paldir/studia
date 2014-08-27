@@ -13,7 +13,7 @@ namespace Presentation.BasicAccess
     {
         #region fields
         BusinessLogic.CubeHandler cubeHandler;
-        DropDownList listOfDimensions;
+        RadioButtonList listOfDimensions;
         TreeView dimensionTreeView;
         TreeView measuresTreeView;
         Table tableOfResults;
@@ -140,15 +140,15 @@ namespace Presentation.BasicAccess
         protected void Page_Init(object sender, EventArgs e)
         {
             cubeHandler = new BusinessLogic.CubeHandler();
-            
+
             InitializeLeftColumn();
             InitializeCentralColumn();
             InitializeRightColumn();
         }
 
         void InitializeLeftColumn()
-        {   
-            listOfDimensions = CubeStructure.GetDropDownListOfDimensions(cubeHandler.GetNamesOfDimensions());
+        {
+            listOfDimensions = CubeStructure.GetCheckBoxListOfDimensions(cubeHandler.GetNamesOfDimensions());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfTreeView_Click;
 
@@ -197,13 +197,11 @@ namespace Presentation.BasicAccess
             AsyncPostBackTrigger triggerOfListOfMeasures = new AsyncPostBackTrigger();
             triggerOfListOfMeasures.ControlID = "postBackButtonOfMeasuresTreeView";
 
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
 
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
             triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
 
-            selectedItemsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
 
             buttonOfReportGeneration.Click += buttonOfReportGeneration_Click;
@@ -216,59 +214,33 @@ namespace Presentation.BasicAccess
         {
             base.CreateChildControls();
             CreateDimensionTreeView();
-            CreateSelectedItemsLists();
             CreateTableOfResults();
         }
 
         void CreateDimensionTreeView()
         {
-            if (treeViewNodes.Count == 0 || treeViewDataSource != selectedValueOfListOfDimensions)
+            if (selectedValueOfListOfDimensions != String.Empty)
             {
-                treeViewNodes = CubeStructure.GetDimensionTreeViewNodes(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
-                treeViewDataSource = selectedValueOfListOfDimensions;
+                if (treeViewNodes.Count == 0 || treeViewDataSource != selectedValueOfListOfDimensions)
+                {
+                    treeViewNodes = CubeStructure.GetDimensionTreeViewNodes(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
+                    treeViewDataSource = selectedValueOfListOfDimensions;
+                }
+
+                /*TreeView*/
+                dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
+                dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
+
+                foreach (TreeNode treeNode in treeViewNodes)
+                    dimensionTreeView.Nodes.Add(treeNode);
+
+                for (int i = 0; i < selectedDimensions.Count; i++)
+                    if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
+                        dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
+
+                placeOfDimensionTreeView.Controls.Clear();
+                placeOfDimensionTreeView.Controls.Add(dimensionTreeView);
             }
-
-            /*TreeView*/dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
-            dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
-
-            foreach (TreeNode treeNode in treeViewNodes)
-                dimensionTreeView.Nodes.Add(treeNode);
-            
-            for (int i = 0; i < selectedDimensions.Count; i++)
-                if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
-                    dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
-
-            placeOfDimensionTreeView.Controls.Clear();
-            placeOfDimensionTreeView.Controls.Add(dimensionTreeView);
-        }
-
-        void CreateSelectedItemsLists()
-        {
-            CheckBoxList listOfSelectedDimensions = CubeStructure.GetCheckBoxListOfSelectedDimensions(selectedDimensions);
-            listOfSelectedDimensions.SelectedIndexChanged += listOfSelectedDimensions_SelectedIndexChanged;
-
-            placeOfListOfSelectedDimensions.Controls.Clear();
-            placeOfListOfSelectedDimensions.Controls.Add(listOfSelectedDimensions);
-
-            CheckBoxList listOfSelectedMeasures = CubeStructure.GetCheckBoxListOfSelectedMeasures(pathsOfSelectedMeasures);
-            listOfSelectedMeasures.SelectedIndexChanged += listOfSelectedMeasures_SelectedIndexChanged;
-
-            placeOfListOfSelectedMeasures.Controls.Clear();
-            placeOfListOfSelectedMeasures.Controls.Add(listOfSelectedMeasures);
-
-            AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
-            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
-
-            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-
-            AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
-            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
-
-            measuresTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
         }
 
         void CreateTableOfResults()
@@ -316,7 +288,11 @@ namespace Presentation.BasicAccess
         #region events handlers
         void listOfDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //if (selectedValueOfListOfDimensions != String.Empty)
+              //  listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
+
             selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
+            //listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
 
             CreateDimensionTreeView();
         }
@@ -353,13 +329,11 @@ namespace Presentation.BasicAccess
                             pathsOfSelectedDimensions.RemoveAt(i);
                         }
 
-            CreateSelectedItemsLists();
             CreateTableOfResults();
         }
 
         void postBackButtonOfTreeView_Click(object sender, EventArgs e)
         {
-            CreateSelectedItemsLists();
             CreateTableOfResults();
         }
 
@@ -380,47 +354,6 @@ namespace Presentation.BasicAccess
                 pathsOfSelectedMeasures.Remove(node.ValuePath);
             }
 
-            CreateSelectedItemsLists();
-            CreateTableOfResults();
-        }
-
-        void listOfSelectedDimensions_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CheckBoxList listOfSelectedDimensions = (CheckBoxList)sender;
-
-            for (int i = 0; i < listOfSelectedDimensions.Items.Count; i++)
-                if (!listOfSelectedDimensions.Items[i].Selected)
-                {
-                    if (listOfSelectedDimensions.Items[i].Text.Substring(0, listOfSelectedDimensions.Items[i].Text.IndexOf('/')) == treeViewDataSource)
-                    {
-                        TreeView dimensionTreeView = (TreeView)placeOfDimensionTreeView.FindControl("DimensionTreeView");
-                        dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = false;
-                    }
-
-                    selectedDimensions.RemoveAt(i);
-                    selectedDimensionsValues.RemoveAt(i);
-                    pathsOfSelectedDimensions.RemoveAt(i);
-                }
-
-            CreateSelectedItemsLists();
-            CreateTableOfResults();
-        }
-
-        void listOfSelectedMeasures_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CheckBoxList listOfSelectedMeasures = (CheckBoxList)sender;
-
-            for (int i = 0; i < listOfSelectedMeasures.Items.Count; i++)
-                if (!listOfSelectedMeasures.Items[i].Selected)
-                {
-                    measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(i)).Checked = false;
-
-                    selectedMeasures.RemoveAt(i);
-                    selectedMeasuresValues.RemoveAt(i);
-                    pathsOfSelectedMeasures.RemoveAt(i);
-                }
-
-            CreateSelectedItemsLists();
             CreateTableOfResults();
         }
 

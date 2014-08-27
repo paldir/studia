@@ -19,7 +19,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder" runat="server">
 <div class="columns">
     <div id="leftColumn" class="column">
-        <div id="placeOfListOfDimensions" runat="server"></div>
+        <asp:UpdatePanel runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
+            <ContentTemplate>
+                <div id="placeOfListOfDimensions" runat="server"></div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+    </div>
+    <div class="column">
         <asp:UpdatePanel ID="dimensionTreeViewUpdatePanel" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <div id="placeOfDimensionTreeView" runat="server"></div>
@@ -36,14 +42,6 @@
         </asp:UpdatePanel>
     </div>
     <div id="rightColumn" class="column">
-        <asp:UpdatePanel ID="selectedItemsUpdatePanel" runat="server" UpdateMode="Conditional">
-            <ContentTemplate>
-                <b>Wymiary:</b><br />
-                <div id="placeOfListOfSelectedDimensions" runat="server"></div>
-                <b>Miary:</b><br />
-                <div id="placeOfListOfSelectedMeasures" runat="server"></div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
         <asp:UpdatePanel ID="tableOfResultsUpdatePanel" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <div id="placeOfTableOfResults" runat="server"></div>

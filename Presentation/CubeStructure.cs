@@ -4,11 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 
+using System.Drawing;
+
 namespace Presentation
 {
     public class CubeStructure
     {
-        static public CheckBoxList GetCheckBoxListOfMeasures(List<DataAccess.Measure> measures)
+        /*static public CheckBoxList GetCheckBoxListOfMeasures(List<DataAccess.Measure> measures)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
             checkBoxList.ID = "ListOfMeasures";
@@ -18,7 +20,7 @@ namespace Presentation
                 checkBoxList.Items.Add(new ListItem(measure.GetName(), "[Measures].[" + measure.GetName() + "]"));
 
             return checkBoxList;
-        }
+        }*/
 
         static public TreeView GetMeasuresTreeView(List<DataAccess.Measure> measures)
         {
@@ -50,6 +52,37 @@ namespace Presentation
                 dropDownList.Items.Add(nameOfDimension);
 
             return dropDownList;
+        }
+
+        static public RadioButtonList GetCheckBoxListOfDimensions(List<string> namesOfDimensions)
+        {
+            Bitmap bitMap = new Bitmap(500, 200);
+            Graphics graphics = Graphics.FromImage(bitMap);
+            RadioButtonList radioButtonList = new RadioButtonList();
+            radioButtonList.ID = "ListOfDimensions";
+            radioButtonList.AutoPostBack = true;
+            radioButtonList.RepeatLayout = RepeatLayout.Flow;
+            float widthOfItems=0;
+
+            foreach (string nameOfDimension in namesOfDimensions)
+            {
+                radioButtonList.Items.Add(new ListItem(nameOfDimension, nameOfDimension));
+
+                float widthOfCurrentItem = graphics.MeasureString(nameOfDimension, new Font("Arial", 10)).Width;
+
+                if (widthOfCurrentItem > widthOfItems)
+                    widthOfItems = widthOfCurrentItem;
+            }
+
+            radioButtonList.SelectedIndex = 0;
+
+            foreach (ListItem item in radioButtonList.Items)
+            {
+                //item.Attributes.CssStyle.Add("background-color", "white");
+                item.Attributes.CssStyle.Add("width", Convert.ToInt16(widthOfItems).ToString() + "px");
+            }
+
+            return radioButtonList;
         }
 
         static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
@@ -91,7 +124,7 @@ namespace Presentation
             return treeNode;
         }
 
-        static public CheckBoxList GetCheckBoxListOfSelectedDimensions(List<string> namesOfSelectedDimensions)
+        /*static public CheckBoxList GetCheckBoxListOfSelectedDimensions(List<string> namesOfSelectedDimensions)
         {
             CheckBoxList listOfSelectedDimensions = new CheckBoxList();
 
@@ -121,6 +154,6 @@ namespace Presentation
             listOfSelectedMeasures.ID = "ListOfSelectedMeasures";
 
             return listOfSelectedMeasures;
-        }
+        }*/
     }
 }
