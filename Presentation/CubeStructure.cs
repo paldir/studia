@@ -22,6 +22,45 @@ namespace Presentation
             return checkBoxList;
         }*/
 
+        static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
+        {
+            List<TreeNode> treeViewNodes = new List<TreeNode>();
+
+            List<string> displayFolders = dimension.GetAttributeHierarchies().Select(h => h.GetDisplayFolder()).Distinct().ToList();
+
+            displayFolders.Sort();
+
+            foreach (string displayFolder in displayFolders)
+            {
+                treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), false));
+
+                foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies().ToList().FindAll(h => h.GetDisplayFolder() == displayFolder))
+                {
+                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true));
+
+                    foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
+                    {
+                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count-1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true));
+
+                        foreach (DataAccess.Member child in member.GetChildren())
+                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true));
+                    }
+                }
+            }
+
+            TreeNode treeNodeToMove = treeViewNodes.Find(n => n.Value == "");
+
+            if (treeNodeToMove != null)
+            {
+                foreach (TreeNode treeNode in treeNodeToMove.ChildNodes)
+                    treeViewNodes.Add(treeNode);
+
+                treeViewNodes.Remove(treeNodeToMove);
+            }
+
+            return treeViewNodes;
+        }
+
         static public TreeView GetMeasuresTreeView(List<DataAccess.Measure> measures)
         {
             TreeView measuresTreeView = new TreeView();
@@ -83,26 +122,6 @@ namespace Presentation
             }
 
             return radioButtonList;
-        }
-
-        static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
-        {
-            List<TreeNode> treeViewNodes = new List<TreeNode>();
-
-            foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies())
-            {
-                treeViewNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true));
-
-                foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
-                {
-                    treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true));
-
-                    foreach (DataAccess.Member child in member.GetChildren())
-                        treeViewNodes[treeViewNodes.Count - 1].ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true));
-                }
-            }
-
-            return treeViewNodes;
         }
 
         static public TreeView TreeViewConfig(TreeView treeView)
