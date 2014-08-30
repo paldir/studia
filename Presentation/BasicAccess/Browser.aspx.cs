@@ -196,11 +196,13 @@ namespace Presentation.BasicAccess
         {
             AsyncPostBackTrigger triggerOfListOfMeasures = new AsyncPostBackTrigger();
             triggerOfListOfMeasures.ControlID = "postBackButtonOfMeasuresTreeView";
+            triggerOfListOfMeasures.EventName = "Click";
 
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfMeasures);
 
             AsyncPostBackTrigger triggerOfDimensionTreeView = new AsyncPostBackTrigger();
             triggerOfDimensionTreeView.ControlID = "postBackButtonOfDimensionTreeView";
+            triggerOfDimensionTreeView.EventName = "Click";
 
             tableOfResultsUpdatePanel.Triggers.Add(triggerOfDimensionTreeView);
 
@@ -302,7 +304,7 @@ namespace Presentation.BasicAccess
             TreeNode checkedNode = e.Node;
             TreeView dimensionTreeView = (TreeView)sender;
 
-            if (checkedNode.Checked)
+            if (checkedNode.Checked && selectedDimensionsValues.IndexOf(checkedNode.Value) == -1)
             {
                 string nodeTextPath = "/" + checkedNode.Text;
                 StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
@@ -310,7 +312,10 @@ namespace Presentation.BasicAccess
                 for (int i = 0; i < checkedNode.Depth; i++)
                 {
                     nodeValuePath = new StringBuilder(nodeValuePath.ToString().Substring(0, nodeValuePath.ToString().LastIndexOf("/")));
-                    nodeTextPath = String.Concat("/", dimensionTreeView.FindNode(nodeValuePath.ToString()).Text, nodeTextPath);
+                    TreeNode parentNode = dimensionTreeView.FindNode(nodeValuePath.ToString());
+
+                    if (parentNode != null && (parentNode.Value[0] == '[' || parentNode.Value[0] == '&'))
+                        nodeTextPath = String.Concat("/", parentNode.Text, nodeTextPath);
                 }
 
                 nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
@@ -320,16 +325,15 @@ namespace Presentation.BasicAccess
                 pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
             }
             else
-                for (int i = 0; i < selectedDimensions.Count; i++)
-                    if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedValue)
-                        if (pathsOfSelectedDimensions.ElementAt(i) == checkedNode.ValuePath)
-                        {
-                            selectedDimensions.RemoveAt(i);
-                            selectedDimensionsValues.RemoveAt(i);
-                            pathsOfSelectedDimensions.RemoveAt(i);
-                        }
-
-            CreateTableOfResults();
+                if (!checkedNode.Checked)
+                    for (int i = 0; i < selectedDimensions.Count; i++)
+                        if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedValue)
+                            if (pathsOfSelectedDimensions.ElementAt(i) == checkedNode.ValuePath)
+                            {
+                                selectedDimensions.RemoveAt(i);
+                                selectedDimensionsValues.RemoveAt(i);
+                                pathsOfSelectedDimensions.RemoveAt(i);
+                            }
         }
 
         void postBackButtonOfTreeView_Click(object sender, EventArgs e)
@@ -348,13 +352,12 @@ namespace Presentation.BasicAccess
                 pathsOfSelectedMeasures.Add(node.ValuePath);
             }
             else
-            {
-                selectedMeasures.Remove(node.Text);
-                selectedMeasuresValues.Remove(node.Value);
-                pathsOfSelectedMeasures.Remove(node.ValuePath);
-            }
-
-            CreateTableOfResults();
+                if (!node.Checked)
+                {
+                    selectedMeasures.Remove(node.Text);
+                    selectedMeasuresValues.Remove(node.Value);
+                    pathsOfSelectedMeasures.Remove(node.ValuePath);
+                }
         }
 
         void buttonInTableOfResults_Click(object sender, EventArgs e)
