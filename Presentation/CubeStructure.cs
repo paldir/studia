@@ -25,25 +25,24 @@ namespace Presentation
         static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
         {
             List<TreeNode> treeViewNodes = new List<TreeNode>();
-
             List<string> displayFolders = dimension.GetAttributeHierarchies().Select(h => h.GetDisplayFolder()).Distinct().ToList();
 
             displayFolders.Sort();
 
             foreach (string displayFolder in displayFolders)
             {
-                treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), false));
+                treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), false, "~/Images/folder.png"));
 
                 foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies().ToList().FindAll(h => h.GetDisplayFolder() == displayFolder))
                 {
-                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true));
+                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true, "~/Images/attributeHierarchy.png"));
 
                     foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
                     {
-                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count-1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true));
+                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true, "~/Images/member.png"));
 
                         foreach (DataAccess.Member child in member.GetChildren())
-                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true));
+                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true, "~/Images/member.png"));
                     }
                 }
             }
@@ -67,15 +66,16 @@ namespace Presentation
             measuresTreeView.ID = "MeasuresTreeView";
             measuresTreeView.ImageSet = TreeViewImageSet.Arrows;
             measuresTreeView.ExpandDepth = 0;
+            measuresTreeView.CssClass = "treeView";
 
             measuresTreeView.Attributes.Add("onclick", "postBackFromMeasuresTreeView()");
 
             foreach (string measureGroup in measures.Select(m => m.GetMeasureGroup()).Distinct().ToList())
             {
-                measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), false));
+                measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), false, "~/Images/folder.png"));
 
                 foreach (DataAccess.Measure measure in measures.FindAll(m => m.GetMeasureGroup() == measureGroup).ToList())
-                    measuresTreeView.Nodes[measuresTreeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(measure.GetName(), measure.GetUniqueName()), true));
+                    measuresTreeView.Nodes[measuresTreeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(measure.GetName(), measure.GetUniqueName()), true, "~/Images/measure.png"));
             }
 
             return measuresTreeView;
@@ -129,16 +129,18 @@ namespace Presentation
             treeView.ID = "DimensionTreeView";
             treeView.ImageSet = TreeViewImageSet.Arrows;
             treeView.ExpandDepth = 0;
+            treeView.CssClass = "treeView";
 
             treeView.Attributes.Add("onclick", "postBackFromDimensionTreeView()");
 
             return treeView;
         }
 
-        static TreeNode TreeNodeConfig(TreeNode treeNode, bool showCheckBox)
+        static TreeNode TreeNodeConfig(TreeNode treeNode, bool showCheckBox, string imageUrl)
         {
-            treeNode.SelectAction = TreeNodeSelectAction.None;
+            treeNode.SelectAction = TreeNodeSelectAction.Expand;
             treeNode.ShowCheckBox = showCheckBox;
+            treeNode.ImageUrl = imageUrl;
 
             return treeNode;
         }

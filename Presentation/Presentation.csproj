@@ -74,11 +74,19 @@
     <Content Include="AdvancedAccess\Report.aspx" />
     <Content Include="AdvancedAccess\ReportConfiguration.aspx" />
     <Content Include="BasicAccess\Browser.aspx" />
+    <Content Include="Images\attributeHierarchy.png" />
     <Content Include="Images\button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\cube.png" />
+    <Content Include="Images\dimension.png" />
+    <Content Include="Images\dimensionChecked.png" />
+    <Content Include="Images\dimensionHover.png" />
+    <Content Include="Images\folder.png" />
     <Content Include="Images\hoveredButton.png" />
     <Content Include="Images\load.gif" />
+    <Content Include="Images\measure.png" />
+    <Content Include="Images\member.png" />
     <Content Include="Login.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
