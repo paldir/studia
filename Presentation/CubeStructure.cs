@@ -66,6 +66,7 @@ namespace Presentation
             measuresTreeView.ID = "MeasuresTreeView";
             measuresTreeView.ImageSet = TreeViewImageSet.Arrows;
             measuresTreeView.ExpandDepth = 0;
+            measuresTreeView.CssClass = "treeView";
 
             measuresTreeView.Attributes.Add("onclick", "postBackFromMeasuresTreeView()");
 
@@ -128,6 +129,7 @@ namespace Presentation
             treeView.ID = "DimensionTreeView";
             treeView.ImageSet = TreeViewImageSet.Arrows;
             treeView.ExpandDepth = 0;
+            treeView.CssClass = "treeView";
 
             treeView.Attributes.Add("onclick", "postBackFromDimensionTreeView()");
 
@@ -136,7 +138,7 @@ namespace Presentation
 
         static TreeNode TreeNodeConfig(TreeNode treeNode, bool showCheckBox, string imageUrl)
         {
-            treeNode.SelectAction = TreeNodeSelectAction.None;
+            treeNode.SelectAction = TreeNodeSelectAction.Expand;
             treeNode.ShowCheckBox = showCheckBox;
             treeNode.ImageUrl = imageUrl;
 
