@@ -107,7 +107,7 @@ namespace Presentation
             {
                 radioButtonList.Items.Add(new ListItem(nameOfDimension, nameOfDimension));
 
-                float widthOfCurrentItem = graphics.MeasureString(nameOfDimension, new Font("Arial", 10)).Width;
+                float widthOfCurrentItem = graphics.MeasureString(nameOfDimension, new Font("Arial", 11)).Width;
 
                 if (widthOfCurrentItem > widthOfItems)
                     widthOfItems = widthOfCurrentItem;
