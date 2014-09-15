@@ -13,7 +13,16 @@
     <form id="form" runat="server">
     <div>
         <asp:ScriptManager ID="scriptManager" runat="server"></asp:ScriptManager>
-        <div style="text-align: right">Poziom dostępu: <asp:LoginName runat="server" /> <asp:LoginStatus  runat="server" /></div>
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <asp:Button Text="Wybór kostki" PostBackUrl="/BasicAccess/Cubes.aspx" runat="server" />
+                </td>
+                <td style="text-align: right">
+                    Poziom dostępu: <asp:LoginName runat="server" /> <asp:LoginStatus  runat="server" />
+                </td>
+            </tr>
+        </table>
         <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
             
         </asp:ContentPlaceHolder>

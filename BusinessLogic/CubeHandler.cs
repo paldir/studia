@@ -12,6 +12,10 @@ namespace BusinessLogic
 
         public CubeHandler() { cubeAccess = new DataAccess.CubeASAccess(); }
 
+        public CubeHandler(string cubeName) { cubeAccess = new DataAccess.CubeASAccess(cubeName); }
+
+        public List<string> GetCubes() { return cubeAccess.GetCubes(); }
+
         public List<DataAccess.Measure> GetMeasures() { return cubeAccess.GetMeasures(); }
 
         public List<string> GetNamesOfDimensions() { return cubeAccess.GetNamesOfDimensions(); }

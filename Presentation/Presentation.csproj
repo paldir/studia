@@ -74,14 +74,13 @@
     <Content Include="AdvancedAccess\Report.aspx" />
     <Content Include="AdvancedAccess\ReportConfiguration.aspx" />
     <Content Include="BasicAccess\Browser.aspx" />
+    <Content Include="BasicAccess\Cubes.aspx" />
     <Content Include="Images\attributeHierarchy.png" />
     <Content Include="Images\button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\cube.png" />
     <Content Include="Images\dimension.png" />
-    <Content Include="Images\dimensionChecked.png" />
-    <Content Include="Images\dimensionHover.png" />
     <Content Include="Images\folder.png" />
     <Content Include="Images\hoveredButton.png" />
     <Content Include="Images\load.gif" />
@@ -114,6 +113,13 @@
     </Compile>
     <Compile Include="BasicAccess\Browser.aspx.designer.cs">
       <DependentUpon>Browser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BasicAccess\Cubes.aspx.cs">
+      <DependentUpon>Cubes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BasicAccess\Cubes.aspx.designer.cs">
+      <DependentUpon>Cubes.aspx</DependentUpon>
     </Compile>
     <Compile Include="CubeStructure.cs" />
     <Compile Include="Login.aspx.cs">

@@ -10,8 +10,26 @@ namespace DataAccess
 {
     public class CubeASAccess
     {
-        const string cubeName = "Adventure Works";
+        string cubeName;
 
+        public CubeASAccess() { }
+
+        public CubeASAccess(string cubeName) { this.cubeName = cubeName; }
+
+        public List<string> GetCubes()
+        {
+            List<string> cubes = new List<string>();
+
+            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            {
+                foreach (CubeDef cube in connection.Cubes)
+                    if (cube.Type == CubeType.Cube)
+                        cubes.Add(cube.Name);
+            }
+
+            return cubes;
+        }
+        
         public List<Measure> GetMeasures()
         {
             List<Measure> listOfMeasures = new List<Measure>();
