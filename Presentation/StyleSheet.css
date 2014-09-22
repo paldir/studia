@@ -18,20 +18,25 @@ label {
     padding-left: 15px;
     text-align: center;
     background-color: white;
-    background-image: url('/Images/dimension.png');
     background-repeat: no-repeat;
     background-position-y: center;
 }
 
 input[type="radio"]:checked + label {
     background-color: indianred;
-    background-image: url('/Images/dimensionChecked.png');
 }
 
 label:hover {
     background-color: lightgray;
     cursor: pointer;
-    background-image: url('/Images/dimensionHover.png');
+}
+
+.listOfCubes label {
+    background-image: url('/Images/cube.png');
+}
+
+.listOfDimensions label {
+    background-image: url('/Images/dimension.png');
 }
 
 .treeView a {

@@ -13,9 +13,7 @@
             <LayoutTemplate>
                 <table>
                     <tr>
-                        <td>
-                             Poziom dostępu:
-                        </td>
+                        <td>Poziom dostępu:</td>
                         <td>
                             <asp:DropDownList ID="UserName" Width="120" runat="server">
                                 <asp:ListItem>Podstawowy</asp:ListItem>
@@ -24,12 +22,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: right">
-                            Hasło:
-                        </td>
+                        <td style="text-align: right">Hasło:</td>
                         <td>
                             <asp:TextBox ID="Password" TextMode="Password" Width="120" runat="server"></asp:TextBox>
-                            <asp:RequiredFieldValidator ControlToValidate="Password" Text="*" runat="server"></asp:RequiredFieldValidator>
                         </td>
                     </tr>
                     <tr>

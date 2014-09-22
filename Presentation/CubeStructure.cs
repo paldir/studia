@@ -10,6 +10,8 @@ namespace Presentation
 {
     public class CubeStructure
     {
+        public enum RadioButtonListType { Cubes, Dimensions };
+        
         /*static public CheckBoxList GetCheckBoxListOfMeasures(List<DataAccess.Measure> measures)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
@@ -21,6 +23,48 @@ namespace Presentation
 
             return checkBoxList;
         }*/
+
+        static public RadioButtonList GetRadioButtonListOfCubesOrDimensions(List<string> items, RadioButtonListType type)
+        {
+            Bitmap bitMap = new Bitmap(500, 200);
+            Graphics graphics = Graphics.FromImage(bitMap);
+            RadioButtonList radioButtonList = new RadioButtonList();
+            radioButtonList.RepeatLayout = RepeatLayout.Flow;
+            float widthOfItems = 0;
+
+            foreach (string item in items)
+            {
+                radioButtonList.Items.Add(new ListItem(item, item));
+
+                float widthOfCurrentItem = graphics.MeasureString(item, new Font("Arial", 11)).Width;
+
+                if (widthOfCurrentItem > widthOfItems)
+                    widthOfItems = widthOfCurrentItem;
+            }
+
+            radioButtonList.SelectedIndex = 0;
+
+            foreach (ListItem item in radioButtonList.Items)
+            {
+                //item.Attributes.CssStyle.Add("background-color", "white");
+                item.Attributes.CssStyle.Add("width", Convert.ToInt16(widthOfItems).ToString() + "px");
+            }
+
+            switch (type)
+            {
+                case RadioButtonListType.Cubes:
+                    radioButtonList.ID = "ListOfCubes";
+                    radioButtonList.CssClass = "listOfCubes";
+                    break;
+                case RadioButtonListType.Dimensions:
+                    radioButtonList.ID = "ListOfDimensions";
+                    radioButtonList.CssClass = "listOfDimensions";
+                    radioButtonList.AutoPostBack = true;
+                    break;
+            }
+
+            return radioButtonList;
+        }
 
         static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
         {
@@ -91,37 +135,6 @@ namespace Presentation
                 dropDownList.Items.Add(nameOfDimension);
 
             return dropDownList;
-        }
-
-        static public RadioButtonList GetCheckBoxListOfDimensions(List<string> namesOfDimensions)
-        {
-            Bitmap bitMap = new Bitmap(500, 200);
-            Graphics graphics = Graphics.FromImage(bitMap);
-            RadioButtonList radioButtonList = new RadioButtonList();
-            radioButtonList.ID = "ListOfDimensions";
-            radioButtonList.AutoPostBack = true;
-            radioButtonList.RepeatLayout = RepeatLayout.Flow;
-            float widthOfItems=0;
-
-            foreach (string nameOfDimension in namesOfDimensions)
-            {
-                radioButtonList.Items.Add(new ListItem(nameOfDimension, nameOfDimension));
-
-                float widthOfCurrentItem = graphics.MeasureString(nameOfDimension, new Font("Arial", 10)).Width;
-
-                if (widthOfCurrentItem > widthOfItems)
-                    widthOfItems = widthOfCurrentItem;
-            }
-
-            radioButtonList.SelectedIndex = 0;
-
-            foreach (ListItem item in radioButtonList.Items)
-            {
-                //item.Attributes.CssStyle.Add("background-color", "white");
-                item.Attributes.CssStyle.Add("width", Convert.ToInt16(widthOfItems).ToString() + "px");
-            }
-
-            return radioButtonList;
         }
 
         static public TreeView TreeViewConfig(TreeView treeView)

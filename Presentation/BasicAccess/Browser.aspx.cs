@@ -139,7 +139,7 @@ namespace Presentation.BasicAccess
         #region methods
         protected void Page_Init(object sender, EventArgs e)
         {
-            cubeHandler = new BusinessLogic.CubeHandler();
+            cubeHandler = new BusinessLogic.CubeHandler(Session["cube"].ToString());
 
             InitializeLeftColumn();
             InitializeCentralColumn();
@@ -148,7 +148,7 @@ namespace Presentation.BasicAccess
 
         void InitializeLeftColumn()
         {
-            listOfDimensions = CubeStructure.GetCheckBoxListOfDimensions(cubeHandler.GetNamesOfDimensions());
+            listOfDimensions = CubeStructure.GetRadioButtonListOfCubesOrDimensions(cubeHandler.GetNamesOfDimensions(), CubeStructure.RadioButtonListType.Dimensions);
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfTreeView_Click;
 
