@@ -148,49 +148,31 @@ namespace Presentation.AdvancedAccess {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfCaptionsTexts;
         
         /// <summary>
-        /// placeOfLabelOfColorsOfCaptionsTexts control.
+        /// listOfColorsOfCaptionsTexts control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfCaptionsTexts;
+        protected global::System.Web.UI.WebControls.TextBox listOfColorsOfCaptionsTexts;
         
         /// <summary>
-        /// placeOfListOfColorsOfFirstBackgroundOfCaptions control.
+        /// listOfColorsOfFirstBackgroundOfCaptions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfFirstBackgroundOfCaptions;
+        protected global::System.Web.UI.WebControls.TextBox listOfColorsOfFirstBackgroundOfCaptions;
         
         /// <summary>
-        /// placeOfLabelOfColorsOfFirstBackgroundOfCaptions control.
+        /// listOfColorsOfSecondBackgroundOfCaptions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfFirstBackgroundOfCaptions;
-        
-        /// <summary>
-        /// placeOfListOfColorsOfSecondBackgroundOfCaptions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfSecondBackgroundOfCaptions;
-        
-        /// <summary>
-        /// placeOfLabelOfColorsOfSecondBackgroundOfCaptions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfSecondBackgroundOfCaptions;
+        protected global::System.Web.UI.WebControls.TextBox listOfColorsOfSecondBackgroundOfCaptions;
         
         /// <summary>
         /// placeOfListOfColorsOfValuesTexts control.
@@ -202,13 +184,13 @@ namespace Presentation.AdvancedAccess {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfValuesTexts;
         
         /// <summary>
-        /// placeOfLabelOfColorsOfValuesTexts control.
+        /// listOfColorsOfValuesTexts control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfValuesTexts;
+        protected global::System.Web.UI.WebControls.TextBox listOfColorsOfValuesTexts;
         
         /// <summary>
         /// placeOfListOfColorsOfBackgroundOfValues control.
@@ -220,13 +202,13 @@ namespace Presentation.AdvancedAccess {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfListOfColorsOfBackgroundOfValues;
         
         /// <summary>
-        /// placeOfLabelOfColorsOfBackgroundOfValues control.
+        /// listOfColorsOfBackgroundOfValues control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl placeOfLabelOfColorsOfBackgroundOfValues;
+        protected global::System.Web.UI.WebControls.TextBox listOfColorsOfBackgroundOfValues;
         
         /// <summary>
         /// buttonOfViewingOfReport control.

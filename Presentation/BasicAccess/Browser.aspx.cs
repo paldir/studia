@@ -146,6 +146,22 @@ namespace Presentation.BasicAccess
             InitializeRightColumn();
         }
 
+        public static List<string> SessionKeys()
+        {
+            return new List<string>()
+            {
+                "selectedDimensions",
+                "selectedDimensionsValues",
+                "pathsOfSelectedDimensions",
+                "selectedMeasures",
+                "selectedMeasuresValues",
+                "pathsOfSelectedMeasures",
+                "selectedValueOfListOfDimensions",
+                "treeViewNodes",
+                "treeViewDataSource"
+            };
+        }
+
         void InitializeLeftColumn()
         {
             listOfDimensions = CubeStructure.GetRadioButtonListOfCubesOrDimensions(cubeHandler.GetNamesOfDimensions(), CubeStructure.RadioButtonListType.Dimensions);
