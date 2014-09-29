@@ -12,13 +12,16 @@ namespace Presentation.BasicAccess
         RadioButtonList listOfCubes;
         
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {   
             BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler();
             listOfCubes = CubeStructure.GetRadioButtonListOfCubesOrDimensions(handler.GetCubes(), CubeStructure.RadioButtonListType.Cubes);
 
             placeOfListOfCubes.Controls.Add(listOfCubes);
 
             buttonOfBrowsing.Click += buttonOfBrowsing_Click;
+
+            foreach (string key in Browser.SessionKeys())
+                Session[key] = null;
         }
 
         void buttonOfBrowsing_Click(object sender, EventArgs e)

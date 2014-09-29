@@ -16,7 +16,7 @@
         <table style="width: 100%;">
             <tr>
                 <td>
-                    <asp:Button Text="Wybór kostki" PostBackUrl="/BasicAccess/Cubes.aspx" runat="server" />
+                    <asp:SiteMapPath runat="server"></asp:SiteMapPath>
                 </td>
                 <td style="text-align: right">
                     Poziom dostępu: <asp:LoginName runat="server" /> <asp:LoginStatus  runat="server" />

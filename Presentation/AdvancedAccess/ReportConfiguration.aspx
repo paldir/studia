@@ -6,7 +6,7 @@
         <div class="column">
             <asp:Panel  GroupingText="Ogólne" runat="server">
                 Tytuł raportu:<br />
-                <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textBoxOfTitle" Text="" runat="server"></asp:TextBox><br />
                 <br />
                 Hierarchie wymiarów:<br />
                 <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
@@ -47,14 +47,14 @@
             <asp:Panel GroupingText="Ustawienia wydruku" runat="server">
                 Format:<br />
                 <asp:DropDownList ID="listOfSizesOfPaper" runat="server">
-                    <asp:ListItem>A5</asp:ListItem>
-                    <asp:ListItem Selected="True">A4</asp:ListItem>
-                    <asp:ListItem>A3</asp:ListItem>
+                    <asp:ListItem Value="A5">A5</asp:ListItem>
+                    <asp:ListItem Value="A4" Selected="True">A4</asp:ListItem>
+                    <asp:ListItem Value="A3">A3</asp:ListItem>
                 </asp:DropDownList><br />
                 <br />
                 Orientacja:<br />
                 <asp:DropDownList ID="listOfOrientations" runat="server">
-                    <asp:ListItem Value="vertical" Selected="True">Pionowa</asp:ListItem>
+                    <asp:ListItem Value="vertical">Pionowa</asp:ListItem>
                     <asp:ListItem Value="horizontal">Pozioma</asp:ListItem>
                 </asp:DropDownList><br />
                 <br />
@@ -70,7 +70,7 @@
                         <div id="placeOfListOfFonts" runat="server"></div>
                         <br />
                         Rozmiar czcionki:<br />
-                        <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" AutoPostBack="true" runat="server"></asp:TextBox><br />
+                        <asp:TextBox ID="textBoxOfFontSize" Width="50" AutoPostBack="true" runat="server"></asp:TextBox><br />
                         <br />
                         <div id="placeOfLabelOfTextExample" runat="server"></div>
                     </ContentTemplate>
@@ -83,25 +83,29 @@
                     <ContentTemplate>
                         Kolor tekstu pól z nagłówkami:
                         <div class="columns">
-                            <div id="placeOfListOfColorsOfCaptionsTexts" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfCaptionsTexts" class="column" runat="server"></div>
+                            <div id="placeOfListOfColorsOfCaptionsTexts" class="column" runat="server">
+                                <asp:TextBox ID="listOfColorsOfCaptionsTexts" Text="#FFFFFF" TextMode="Color" runat="server"></asp:TextBox>
+                            </div>
                         </div>
                         <br />
                         Kolory teł pól z nagłówkami:
                         <div class="columns">
-                            <div id="placeOfListOfColorsOfFirstBackgroundOfCaptions" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfFirstBackgroundOfCaptions" class="column" runat="server"></div>
-                        </div>
-                        <div class="columns">
-                            <div id="placeOfListOfColorsOfSecondBackgroundOfCaptions" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfSecondBackgroundOfCaptions" class="column" runat="server"></div>
+                            <asp:TextBox ID="listOfColorsOfFirstBackgroundOfCaptions" Text="#00008B" TextMode="Color" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="listOfColorsOfSecondBackgroundOfCaptions" Text="#6495ED" TextMode="Color" runat="server"></asp:TextBox>
                         </div>
                         <br />
                         Kolor tekstu pól z wartościami:
                         <div class="columns">
-                            <div id="placeOfListOfColorsOfValuesTexts" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfValuesTexts" class="column" runat="server"></div>
+                            <div id="placeOfListOfColorsOfValuesTexts" class="column" runat="server">
+                                <asp:TextBox ID="listOfColorsOfValuesTexts" Text="#000000" TextMode="Color" runat="server"></asp:TextBox>
+                            </div>
                         </div>
                         <br />
                         Kolor tła pól z wartościami:
                         <div class="columns">
-                            <div id="placeOfListOfColorsOfBackgroundOfValues" class="column" runat="server"></div><div id="placeOfLabelOfColorsOfBackgroundOfValues" class="column" runat="server"></div>
+                            <div id="placeOfListOfColorsOfBackgroundOfValues" class="column" runat="server">
+                                <asp:TextBox ID="listOfColorsOfBackgroundOfValues" Text="#FFFFFF" TextMode="Color" runat="server"></asp:TextBox>
+                            </div>
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>

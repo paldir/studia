@@ -18,11 +18,11 @@ namespace Presentation.AdvancedAccess
         int[] countsOfMembersOfEachHierarchy;
         Font font;
         DropDownList listOfFonts;
-        DropDownList listOfColorsOfCaptionsTexts;
+        /*DropDownList listOfColorsOfCaptionsTexts;
         DropDownList listOfColorsOfValuesTexts;
         DropDownList listOfColorsOfFirstBackgroundOfCaptions;
         DropDownList listOfColorsOfSecondBackgroundOfCaptions;
-        DropDownList listOfColorsOfBackgroundOfValues;
+        DropDownList listOfColorsOfBackgroundOfValues;*/
 
         List<string> namesOfHierarchies
         {
@@ -75,82 +75,142 @@ namespace Presentation.AdvancedAccess
             set { ViewState["selectedIndexOfListOfMeasures"] = value; }
         }
 
+        string selectedValueOfTitle
+        {
+            get
+            {
+                if (Session["title"] == null)
+                    Session["title"] = String.Empty;
+
+                return Session["title"].ToString();
+            }
+            set { Session["title"] = value; }
+        }
+
+        string selectedValueOfListOfFormats
+        {
+            get
+            {
+                if (Session["listOfFormats"] == null)
+                    Session["listOfFormats"] = String.Empty;
+
+                return Session["listOfFormats"].ToString();
+            }
+            set { Session["listOfFormats"] = value; }
+        }
+
+        string selectedValueOfListOfOrientations
+        {
+            get
+            {
+                if (Session["listOfOrientations"] == null)
+                    Session["listOfOrientations"] = String.Empty;
+
+                return Session["listOfOrientations"].ToString();
+            }
+            set { Session["listOfOrientations"] = value; }
+        }
+
+        string selectedValueOfTextBoxOfMarginSize
+        {
+            get
+            {
+                if (Session["textBoxOfMarginSize"] == null)
+                    Session["textBoxOfMarginSize"] = String.Empty;
+
+                return Session["textBoxOfMarginSize"].ToString();
+            }
+            set { Session["textBoxOfMarginSize"] = value; }
+        }
+
         string selectedValueOfListOfFonts
         {
             get
             {
-                if (ViewState["selectedValueOfListOfFonts"] == null)
-                    ViewState["selectedValueOfListOfFonts"] = String.Empty;
+                if (Session["listOfFonts"] == null)
+                    Session["listOfFonts"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfFonts"].ToString();
+                return Session["listOfFonts"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfFonts"] = value; }
+            set { Session["listOfFonts"] = value; }
+        }
+
+        string selectedValueOfTextBoxOfFontSize
+        {
+            get
+            {
+                if (Session["textBoxOfFontSize"] == null)
+                    Session["textBoxOfFontSize"] = String.Empty;
+
+                return Session["textBoxOfFontSize"].ToString();
+            }
+            set { Session["textBoxOfFontSize"] = value; }
         }
 
         string selectedValueOfListOfColorsOfCaptionsTexts
         {
             get
             {
-                if (ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] == null)
-                    ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] = String.Empty;
+                if (Session["selectedValueOfListOfColorsOfCaptionsTexts"] == null)
+                    Session["selectedValueOfListOfColorsOfCaptionsTexts"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfColorsOfCaptionsTexts"].ToString();
+                return Session["selectedValueOfListOfColorsOfCaptionsTexts"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfColorsOfCaptionsTexts"] = value; }
+            set { Session["selectedValueOfListOfColorsOfCaptionsTexts"] = value; }
         }
 
         string selectedValueOfListOfColorsOfValuesTexts
         {
             get
             {
-                if (ViewState["selectedValueOfListOfColorsOfValuesTexts"] == null)
-                    ViewState["selectedValueOfListOfColorsOfValuesTexts"] = String.Empty;
+                if (Session["selectedValueOfListOfColorsOfValuesTexts"] == null)
+                    Session["selectedValueOfListOfColorsOfValuesTexts"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfColorsOfValuesTexts"].ToString();
+                return Session["selectedValueOfListOfColorsOfValuesTexts"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfColorsOfValuesTexts"] = value; }
+            set { Session["selectedValueOfListOfColorsOfValuesTexts"] = value; }
         }
 
         string selectedValueOfListOfColorsOfFirstBackgroundOfCaptions
         {
             get
             {
-                if (ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] == null)
-                    ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = String.Empty;
+                if (Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] == null)
+                    Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"].ToString();
+                return Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = value; }
+            set { Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = value; }
         }
 
         string selectedValueOfListOfColorsOfSecondBackgroundOfCaptions
         {
             get
             {
-                if (ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] == null)
-                    ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = String.Empty;
+                if (Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] == null)
+                    Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"].ToString();
+                return Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = value; }
+            set { Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = value; }
         }
 
         string selectedValueOfListOfColorsOfBackgroundOfValues
         {
             get
             {
-                if (ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] == null)
-                    ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] = String.Empty;
+                if (Session["selectedValueOfListOfColorsOfBackgroundOfValues"] == null)
+                    Session["selectedValueOfListOfColorsOfBackgroundOfValues"] = String.Empty;
 
-                return ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"].ToString();
+                return Session["selectedValueOfListOfColorsOfBackgroundOfValues"].ToString();
             }
 
-            set { ViewState["selectedValueOfListOfColorsOfBackgroundOfValues"] = value; }
+            set { Session["selectedValueOfListOfColorsOfBackgroundOfValues"] = value; }
         }
         #endregion
 
@@ -161,7 +221,26 @@ namespace Presentation.AdvancedAccess
 
             InitializeButtons();
             InitializeListOfFonts();
-            InitializeListsOfColors();
+            InitializeValues();
+        }
+
+        public static List<string> SessionKeys()
+        {
+            return new List<string>()
+            {
+                "title",
+                "listOfFormats",
+                "listOfOrientations",
+                "textBoxOfMarginSize",
+                "listOfFonts",
+                "textBoxOfFontSize",
+                "selectedValueOfListOfColorsOfCaptionsTexts",
+                "selectedValueOfListOfColorsOfValuesTexts",
+                "selectedValueOfListOfColorsOfFirstBackgroundOfCaptions",
+                "selectedValueOfListOfColorsOfSecondBackgroundOfCaptions",
+                "selectedValueOfListOfColorsOfBackgroundOfValues",
+                "selectedValueOfListOfColorsOfBackgroundOfValues"
+            };
         }
 
         void InitializeButtons()
@@ -197,49 +276,52 @@ namespace Presentation.AdvancedAccess
             textBoxOfFontSize.TextChanged += textBoxOfFontSize_TextChanged;
         }
 
-        void InitializeListsOfColors()
+        void InitializeValues()
         {
-            listOfColorsOfCaptionsTexts = GetListOfColors("listOfColorsOfCaptionsTexts", "White");
-            listOfColorsOfCaptionsTexts.SelectedIndexChanged += listOfColorsOfCaptionsTexts_SelectedIndexChanged;
-            listOfColorsOfFirstBackgroundOfCaptions = GetListOfColors("listOfColorsOfFirstBackgroundOfCaptions", "DarkBlue");
-            listOfColorsOfFirstBackgroundOfCaptions.SelectedIndexChanged += listOfColorsOfFirstBackgroundOfCaptions_SelectedIndexChanged;
-            listOfColorsOfSecondBackgroundOfCaptions = GetListOfColors("listOfColorsOfSecondBackgroundOfCaptions", "CornflowerBlue");
-            listOfColorsOfSecondBackgroundOfCaptions.SelectedIndexChanged += listOfColorsOfSecondBackgroundOfCaptions_SelectedIndexChanged;
-            listOfColorsOfValuesTexts = GetListOfColors("listOfColorsOfValuesTexts", "Black");
-            listOfColorsOfValuesTexts.SelectedIndexChanged += listOfColorsOfValuesTexts_SelectedIndexChanged;
-            listOfColorsOfBackgroundOfValues = GetListOfColors("listOfColorsOfBackgroundOfValues", "White");
-            listOfColorsOfBackgroundOfValues.SelectedIndexChanged += listOfColorsOfBackgroundOfValues_SelectedIndexChanged;
+            if (selectedValueOfTitle != String.Empty)
+                textBoxOfTitle.Text = selectedValueOfTitle;
 
-            if (selectedValueOfListOfColorsOfCaptionsTexts == String.Empty)
-                selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.SelectedValue;
-            else
-                listOfColorsOfCaptionsTexts.SelectedValue = selectedValueOfListOfColorsOfCaptionsTexts;
+            if (selectedValueOfListOfFormats != String.Empty)
+                listOfSizesOfPaper.SelectedValue = selectedValueOfListOfFormats;
 
-            if (selectedValueOfListOfColorsOfFirstBackgroundOfCaptions == String.Empty)
-                selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.SelectedValue;
-            else
-                listOfColorsOfFirstBackgroundOfCaptions.SelectedValue = selectedValueOfListOfColorsOfFirstBackgroundOfCaptions;
+            if (selectedValueOfListOfOrientations != String.Empty)
+                listOfOrientations.SelectedValue = selectedValueOfListOfOrientations;
 
-            if (selectedValueOfListOfColorsOfSecondBackgroundOfCaptions == String.Empty)
-                selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.SelectedValue;
-            else
-                listOfColorsOfSecondBackgroundOfCaptions.SelectedValue = selectedValueOfListOfColorsOfSecondBackgroundOfCaptions;
+            if (selectedValueOfTextBoxOfMarginSize != String.Empty)
+                textBoxOfMarginSize.Text = selectedValueOfTextBoxOfMarginSize;
 
-            if (selectedValueOfListOfColorsOfValuesTexts == String.Empty)
-                selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.SelectedValue;
-            else
-                listOfColorsOfValuesTexts.SelectedValue = selectedValueOfListOfColorsOfValuesTexts;
+            //listOfFonts.SelectedValue = selectedValueOfListOfFonts;
 
-            if (selectedValueOfListOfColorsOfBackgroundOfValues == String.Empty)
-                selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfCaptionsTexts.SelectedValue;
-            else
-                listOfColorsOfCaptionsTexts.SelectedValue = selectedValueOfListOfColorsOfBackgroundOfValues;
+            if (selectedValueOfTextBoxOfFontSize != String.Empty)
+                textBoxOfFontSize.Text = selectedValueOfTextBoxOfFontSize;
 
-            placeOfListOfColorsOfCaptionsTexts.Controls.Add(listOfColorsOfCaptionsTexts);
-            placeOfListOfColorsOfFirstBackgroundOfCaptions.Controls.Add(listOfColorsOfFirstBackgroundOfCaptions);
-            placeOfListOfColorsOfSecondBackgroundOfCaptions.Controls.Add(listOfColorsOfSecondBackgroundOfCaptions);
-            placeOfListOfColorsOfValuesTexts.Controls.Add(listOfColorsOfValuesTexts);
-            placeOfListOfColorsOfBackgroundOfValues.Controls.Add(listOfColorsOfBackgroundOfValues);
+            if (selectedValueOfListOfColorsOfCaptionsTexts != String.Empty)
+                listOfColorsOfCaptionsTexts.Text = selectedValueOfListOfColorsOfCaptionsTexts;
+
+            if (selectedValueOfListOfColorsOfFirstBackgroundOfCaptions != String.Empty)
+                listOfColorsOfFirstBackgroundOfCaptions.Text = selectedValueOfListOfColorsOfFirstBackgroundOfCaptions;
+
+            if (selectedValueOfListOfColorsOfSecondBackgroundOfCaptions != String.Empty)
+                listOfColorsOfSecondBackgroundOfCaptions.Text = selectedValueOfListOfColorsOfSecondBackgroundOfCaptions;
+
+            if (selectedValueOfListOfColorsOfValuesTexts != String.Empty)
+                listOfColorsOfValuesTexts.Text = selectedValueOfListOfColorsOfValuesTexts;
+
+            if (selectedValueOfListOfColorsOfBackgroundOfValues != String.Empty)
+                listOfColorsOfBackgroundOfValues.Text = selectedValueOfListOfColorsOfBackgroundOfValues;
+
+            foreach (string key in SessionKeys())
+                Session[key] = null;
+
+            /*textBoxOfTitle.TextChanged += textBoxOfTitle_TextChanged;
+            listOfSizesOfPaper.SelectedIndexChanged += listOfSizesOfPaper_SelectedIndexChanged;
+            listOfOrientations.SelectedIndexChanged += listOfOrientations_SelectedIndexChanged;
+            textBoxOfMarginSize.TextChanged += textBoxOfMarginSize_TextChanged;
+            listOfColorsOfCaptionsTexts.TextChanged += listOfColorsOfCaptionsTexts_TextChanged;
+            listOfColorsOfFirstBackgroundOfCaptions.TextChanged += listOfColorsOfFirstBackgroundOfCaptions_TextChanged;
+            listOfColorsOfSecondBackgroundOfCaptions.TextChanged += listOfColorsOfSecondBackgroundOfCaptions_TextChanged;
+            listOfColorsOfValuesTexts.TextChanged += listOfColorsOfValuesTexts_TextChanged;
+            listOfColorsOfBackgroundOfValues.TextChanged += listOfColorsOfBackgroundOfValues_TextChanged;*/
         }
 
         protected override void CreateChildControls()
@@ -248,7 +330,6 @@ namespace Presentation.AdvancedAccess
             CreateListOfHierarchies();
             CreateListOfMeasures();
             CreateLabelOfTextExample();
-            CreateLabelsOfColorsExamples();
         }
 
         void CreateListOfHierarchies()
@@ -303,20 +384,6 @@ namespace Presentation.AdvancedAccess
             placeOfLabelOfTextExample.Controls.Add(labelOfTextExample);
         }
 
-        void CreateLabelsOfColorsExamples()
-        {
-            placeOfLabelOfColorsOfCaptionsTexts.Controls.Clear();
-            placeOfLabelOfColorsOfCaptionsTexts.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfCaptionsTexts));
-            placeOfLabelOfColorsOfFirstBackgroundOfCaptions.Controls.Clear();
-            placeOfLabelOfColorsOfFirstBackgroundOfCaptions.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfFirstBackgroundOfCaptions));
-            placeOfLabelOfColorsOfSecondBackgroundOfCaptions.Controls.Clear();
-            placeOfLabelOfColorsOfSecondBackgroundOfCaptions.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfSecondBackgroundOfCaptions));
-            placeOfLabelOfColorsOfValuesTexts.Controls.Clear();
-            placeOfLabelOfColorsOfValuesTexts.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfValuesTexts));
-            placeOfLabelOfColorsOfBackgroundOfValues.Controls.Clear();
-            placeOfLabelOfColorsOfBackgroundOfValues.Controls.Add(GetLabelOfColorExample(selectedValueOfListOfColorsOfBackgroundOfValues));
-        }
-
         void MoveItemOfList(ListToModify listToModify, int destination)
         {
             int indexOfSelectedItem = -1;
@@ -364,34 +431,6 @@ namespace Presentation.AdvancedAccess
                     }
                     break;
             }
-        }
-
-        DropDownList GetListOfColors(string id, string defaultColor)
-        {
-            DropDownList listOfColors = new DropDownList();
-            listOfColors.ID = id;
-            listOfColors.AutoPostBack = true;
-
-            foreach (string colorName in Enum.GetNames(typeof(KnownColor)))
-                if (!Color.FromName(colorName).IsSystemColor)
-                    listOfColors.Items.Add(new ListItem(colorName, colorName));
-
-            listOfColors.SelectedValue = defaultColor;
-
-            return listOfColors;
-        }
-
-        Label GetLabelOfColorExample(string colorName)
-        {
-            Label labelOfColorExample = new Label();
-            labelOfColorExample.Height = 10;
-            labelOfColorExample.Width = 10;
-            labelOfColorExample.BorderWidth = 1;
-            labelOfColorExample.BorderStyle = BorderStyle.Solid;
-            labelOfColorExample.BorderColor = Color.Black;
-            labelOfColorExample.BackColor = Color.FromName(colorName);
-
-            return labelOfColorExample;
         }
 
         void SortMembersOfHierarchies()
@@ -507,6 +546,26 @@ namespace Presentation.AdvancedAccess
             CreateListOfMeasures();
         }
 
+        void textBoxOfTitle_TextChanged(object sender, EventArgs e)
+        {
+            selectedValueOfTitle = textBoxOfTitle.Text;
+        }
+
+        void listOfSizesOfPaper_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfFormats = listOfSizesOfPaper.SelectedValue;
+        }
+
+        void listOfOrientations_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfOrientations = listOfOrientations.SelectedValue;
+        }
+
+        void textBoxOfMarginSize_TextChanged(object sender, EventArgs e)
+        {
+            selectedValueOfTextBoxOfMarginSize = textBoxOfMarginSize.Text;
+        }
+
         void listOfFonts_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedValueOfListOfFonts = listOfFonts.SelectedValue;
@@ -514,41 +573,36 @@ namespace Presentation.AdvancedAccess
             CreateLabelOfTextExample();
         }
 
-        void textBoxOfFontSize_TextChanged(object sender, EventArgs e) { CreateLabelOfTextExample(); }
-
-        void listOfColorsOfCaptionsTexts_SelectedIndexChanged(object sender, EventArgs e)
+        void textBoxOfFontSize_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.SelectedValue;
+            //selectedValueOfTextBoxOfFontSize = textBoxOfFontSize.Text;
 
-            CreateLabelsOfColorsExamples();
+            CreateLabelOfTextExample();
         }
 
-        void listOfColorsOfFirstBackgroundOfCaptions_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfColorsOfCaptionsTexts_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.SelectedValue;
-
-            CreateLabelsOfColorsExamples();
+            selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.Text;
         }
 
-        void listOfColorsOfSecondBackgroundOfCaptions_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfColorsOfFirstBackgroundOfCaptions_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.SelectedValue;
-
-            CreateLabelsOfColorsExamples();
+            selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.Text;
         }
 
-        void listOfColorsOfValuesTexts_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfColorsOfSecondBackgroundOfCaptions_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.SelectedValue;
-
-            CreateLabelsOfColorsExamples();
+            selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.Text;
         }
 
-        void listOfColorsOfBackgroundOfValues_SelectedIndexChanged(object sender, EventArgs e)
+        void listOfColorsOfValuesTexts_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfBackgroundOfValues.SelectedValue;
+            selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.Text;
+        }
 
-            CreateLabelsOfColorsExamples();
+        void listOfColorsOfBackgroundOfValues_TextChanged(object sender, EventArgs e)
+        {
+            selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfBackgroundOfValues.Text;
         }
 
         void buttonOfViewingOfReport_Click(object sender, EventArgs e)
@@ -583,10 +637,22 @@ namespace Presentation.AdvancedAccess
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.SelectedValue, new string[] { listOfColorsOfFirstBackgroundOfCaptions.SelectedValue, listOfColorsOfSecondBackgroundOfCaptions.SelectedValue }, listOfColorsOfValuesTexts.SelectedValue, listOfColorsOfBackgroundOfValues.SelectedValue);
+            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.Text, new string[] { listOfColorsOfFirstBackgroundOfCaptions.Text, listOfColorsOfSecondBackgroundOfCaptions.Text }, listOfColorsOfValuesTexts.Text, listOfColorsOfBackgroundOfValues.Text);
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
+            
+            selectedValueOfTitle = textBoxOfTitle.Text;
+            selectedValueOfListOfFormats = listOfSizesOfPaper.SelectedValue;
+            selectedValueOfListOfOrientations = listOfOrientations.SelectedValue;
+            selectedValueOfTextBoxOfMarginSize = textBoxOfMarginSize.Text;
+            selectedValueOfListOfFonts = listOfFonts.SelectedValue;
+            selectedValueOfTextBoxOfFontSize = textBoxOfFontSize.Text;
+            selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.Text;
+            selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.Text;
+            selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.Text;
+            selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.Text;
+            selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfBackgroundOfValues.Text;
 
             Response.Redirect("~/AdvancedAccess/Report.aspx");
         }
