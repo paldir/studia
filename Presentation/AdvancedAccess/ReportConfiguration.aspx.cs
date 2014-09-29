@@ -575,7 +575,7 @@ namespace Presentation.AdvancedAccess
 
         void textBoxOfFontSize_TextChanged(object sender, EventArgs e)
         {
-            selectedValueOfTextBoxOfFontSize = textBoxOfFontSize.Text;
+            //selectedValueOfTextBoxOfFontSize = textBoxOfFontSize.Text;
 
             CreateLabelOfTextExample();
         }
@@ -641,18 +641,18 @@ namespace Presentation.AdvancedAccess
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
-
-            /*Session["textBoxOfTitle"] = textBoxOfTitle.Text;
-            Session["listOfSizesOfPaper"] = listOfSizesOfPaper.SelectedValue;
-            Session["listOfOrientations"] = listOfOrientations.SelectedValue;
-            Session["textBoxOfMarginSize"] = textBoxOfMarginSize.Text;
-            Session["listOfFonts"] = listOfFonts.SelectedValue;
-            Session["textBoxOfFontSize"] = textBoxOfFontSize.Text;
-            Session["listOfColorsOfCaptionsTexts"] = listOfColorsOfCaptionsTexts.Text;
-            Session["listOfColorsOfFirstBackgroundOfCaptions"] = listOfColorsOfFirstBackgroundOfCaptions.Text;
-            Session["listOfColorsOfSecondBackgroundOfCaptions"] = listOfColorsOfSecondBackgroundOfCaptions.Text;
-            Session["listOfColorsOfValuesTexts"] = listOfColorsOfValuesTexts.Text;
-            Session["listOfColorsOfBackgroundOfValues"] = listOfColorsOfBackgroundOfValues.Text;*/
+            
+            selectedValueOfTitle = textBoxOfTitle.Text;
+            selectedValueOfListOfFormats = listOfSizesOfPaper.SelectedValue;
+            selectedValueOfListOfOrientations = listOfOrientations.SelectedValue;
+            selectedValueOfTextBoxOfMarginSize = textBoxOfMarginSize.Text;
+            selectedValueOfListOfFonts = listOfFonts.SelectedValue;
+            selectedValueOfTextBoxOfFontSize = textBoxOfFontSize.Text;
+            selectedValueOfListOfColorsOfCaptionsTexts = listOfColorsOfCaptionsTexts.Text;
+            selectedValueOfListOfColorsOfFirstBackgroundOfCaptions = listOfColorsOfFirstBackgroundOfCaptions.Text;
+            selectedValueOfListOfColorsOfSecondBackgroundOfCaptions = listOfColorsOfSecondBackgroundOfCaptions.Text;
+            selectedValueOfListOfColorsOfValuesTexts = listOfColorsOfValuesTexts.Text;
+            selectedValueOfListOfColorsOfBackgroundOfValues = listOfColorsOfBackgroundOfValues.Text;
 
             Response.Redirect("~/AdvancedAccess/Report.aspx");
         }

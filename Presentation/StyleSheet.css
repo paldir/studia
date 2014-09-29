@@ -59,6 +59,7 @@ label:hover {
 
 .buttonInsideTableOfResults {
     background-image: url('/Images/button.png');
+    background-color: white;
     border-width: 0px;
     position: absolute;
     top: 3px;
@@ -68,6 +69,7 @@ label:hover {
 
 .tableOfResults td:hover .buttonInsideTableOfResults {
     background-image: url('/Images/hoveredButton.png');
+    background-color: lightgray;
 }
 
 #placeOfUpdateProgress {

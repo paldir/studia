@@ -144,6 +144,9 @@ namespace Presentation.BasicAccess
             InitializeLeftColumn();
             InitializeCentralColumn();
             InitializeRightColumn();
+
+            foreach (string key in AdvancedAccess.ReportConfiguration.SessionKeys())
+                Session[key] = null;
         }
 
         public static List<string> SessionKeys()
@@ -159,7 +162,7 @@ namespace Presentation.BasicAccess
                 "selectedValueOfListOfDimensions",
                 "treeViewNodes",
                 "treeViewDataSource"
-            };
+            }.Concat(AdvancedAccess.ReportConfiguration.SessionKeys()).ToList();
         }
 
         void InitializeLeftColumn()

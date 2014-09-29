@@ -70,7 +70,7 @@
                         <div id="placeOfListOfFonts" runat="server"></div>
                         <br />
                         Rozmiar czcionki:<br />
-                        <asp:TextBox ID="textBoxOfFontSize" Text="10" Width="50" AutoPostBack="true" runat="server"></asp:TextBox><br />
+                        <asp:TextBox ID="textBoxOfFontSize" Width="50" AutoPostBack="true" runat="server"></asp:TextBox><br />
                         <br />
                         <div id="placeOfLabelOfTextExample" runat="server"></div>
                     </ContentTemplate>

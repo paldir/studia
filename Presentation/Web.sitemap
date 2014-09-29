@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="BasicAccess/Cubes.aspx" title="Wybór kostki">
+        <siteMapNode url="BasicAccess/Browser.aspx" title="Przeglądarka kostki">
+          <siteMapNode url="AdvancedAccess/ReportConfiguration.aspx" title="Konfiguracja raportu">
+            <siteMapNode url="AdvancedAccess/Report.aspx" title="Raport" />
+          </siteMapNode>
+        </siteMapNode>
+    </siteMapNode>
+</siteMap>
