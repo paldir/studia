@@ -3,6 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder" runat="server">
-    <br /><asp:Button ID="buttonOfExportingToPDF" Text="Pobierz jako PDF" runat="server" />
+    <br /><asp:Button ID="buttonOfExportingToPDF" Text="Pobierz jako PDF" CssClass="simpleButton" runat="server" />
     <rsweb:ReportViewer ID="reportViewer" ShowExportControls="False" runat="server" ></rsweb:ReportViewer>
 </asp:Content>
