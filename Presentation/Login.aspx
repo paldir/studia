@@ -5,10 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Logowanie</title>
+    <link href="~/StyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form" runat="server">
-    <div style="width: 250px; margin: auto">
+    <div class="placeOfLogin">
         <asp:Login ID="login" runat="server">
             <LayoutTemplate>
                 <table>
@@ -29,7 +30,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">                                                                            
-                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" runat="server" /></p>
+                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" CssClass="simpleButton" runat="server" /></p>
                             <p style="text-align: center"><asp:Literal ID="FailureText" runat="server"></asp:Literal></p>
                         </td>
                     </tr>

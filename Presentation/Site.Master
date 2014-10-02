@@ -11,29 +11,24 @@
 </head>
 <body>
     <form id="form" runat="server">
-    <div>
-        <asp:ScriptManager ID="scriptManager" runat="server"></asp:ScriptManager>
-        <table style="width: 100%;">
-            <tr>
-                <td>
-                    <asp:SiteMapPath runat="server"></asp:SiteMapPath>
-                </td>
-                <td style="text-align: right">
-                    Poziom dostępu: <asp:LoginName runat="server" /> <asp:LoginStatus  runat="server" />
-                </td>
-            </tr>
-        </table>
-        <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
-            
-        </asp:ContentPlaceHolder>
-        <div id="placeOfUpdateProgress">
-            <asp:UpdateProgress ID="updateProgress" runat="server">
-                <ProgressTemplate>
-                    <img src="../Images/load.gif" />
-                </ProgressTemplate>
-            </asp:UpdateProgress>
+        <div>
+            <asp:ScriptManager ID="scriptManager" runat="server"></asp:ScriptManager>
+            <div class="placeOfSiteMapPath">
+                <asp:SiteMapPath ID="siteMapPath" RootNodeStyle-CssClass="rootOfSiteMapPath" runat="server"></asp:SiteMapPath>
+                <div class="placeOfLogOut">
+                    Poziom dostępu: <asp:LoginName ID="LoginName" runat="server" /> <asp:LoginStatus ID="LoginStatus" runat="server" />
+                </div>
+            </div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
+            </asp:ContentPlaceHolder>
+            <div id="placeOfUpdateProgress">
+                <asp:UpdateProgress ID="updateProgress" runat="server">
+                    <ProgressTemplate>
+                        <img src="../Images/load.gif" />
+                    </ProgressTemplate>
+                </asp:UpdateProgress>
+            </div>
         </div>
-    </div>
     </form>
 </body>
 </html>

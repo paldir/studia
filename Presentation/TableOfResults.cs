@@ -44,7 +44,7 @@ namespace Presentation
                         button.Height = 15;
                         button.CssClass = "buttonInsideTableOfResults";
                         button.ID = i.ToString() + "; " + j.ToString();
-                        tableCell.Width = new Unit(graphics.MeasureString(arrayOfResults[i, j], new System.Drawing.Font("Arial", 11)).Width + 30);
+                        tableCell.Width = new Unit(graphics.MeasureString(arrayOfResults[i, j], new System.Drawing.Font("Arial", 9)).Width + 30);
 
                         tableCell.Controls.Add(button);
                     }

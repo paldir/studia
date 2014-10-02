@@ -75,18 +75,36 @@ namespace Presentation
 
             foreach (string displayFolder in displayFolders)
             {
-                treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), false, "~/Images/folder.png"));
+                List<DataAccess.AttributeHierarchy> firstLevelChildren = dimension.GetAttributeHierarchies().ToList().FindAll(h => h.GetDisplayFolder() == displayFolder);
+                TreeNodeSelectAction treeNodeSelectAction = TreeNodeSelectAction.None;
 
-                foreach (DataAccess.AttributeHierarchy attributeHierarchy in dimension.GetAttributeHierarchies().ToList().FindAll(h => h.GetDisplayFolder() == displayFolder))
+                if (firstLevelChildren.Count > 0)
+                    treeNodeSelectAction = TreeNodeSelectAction.Expand;
+
+                treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), treeNodeSelectAction, false, "~/Images/folder.png"));
+
+                foreach (DataAccess.AttributeHierarchy attributeHierarchy in firstLevelChildren)
                 {
-                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), true, "~/Images/attributeHierarchy.png"));
+                    DataAccess.Member[] secondLevelChildren = attributeHierarchy.GetMembers();
+                    treeNodeSelectAction = TreeNodeSelectAction.None;
 
-                    foreach (DataAccess.Member member in attributeHierarchy.GetMembers())
+                    if (secondLevelChildren.Length > 0)
+                        treeNodeSelectAction = TreeNodeSelectAction.Expand;
+
+                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.GetName(), attributeHierarchy.GetUniqueName()), treeNodeSelectAction, true, "~/Images/attributeHierarchy.png"));
+
+                    foreach (DataAccess.Member member in secondLevelChildren)
                     {
-                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), true, "~/Images/member.png"));
+                        secondLevelChildren = member.GetChildren();
+                        treeNodeSelectAction = TreeNodeSelectAction.None;
 
-                        foreach (DataAccess.Member child in member.GetChildren())
-                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), true, "~/Images/member.png"));
+                        if (secondLevelChildren.Length > 0)
+                            treeNodeSelectAction = TreeNodeSelectAction.Expand;
+
+                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.GetName(), member.GetUniqueName()), treeNodeSelectAction, true, "~/Images/member.png"));
+
+                        foreach (DataAccess.Member child in secondLevelChildren)
+                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.GetName(), child.GetUniqueName()), TreeNodeSelectAction.None, true, "~/Images/member.png"));
                     }
                 }
             }
@@ -116,10 +134,16 @@ namespace Presentation
 
             foreach (string measureGroup in measures.Select(m => m.GetMeasureGroup()).Distinct().ToList())
             {
-                measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), false, "~/Images/folder.png"));
+                List<DataAccess.Measure> children = measures.FindAll(m => m.GetMeasureGroup() == measureGroup).ToList();
+                TreeNodeSelectAction treeNodeSelectAction = TreeNodeSelectAction.None;
 
-                foreach (DataAccess.Measure measure in measures.FindAll(m => m.GetMeasureGroup() == measureGroup).ToList())
-                    measuresTreeView.Nodes[measuresTreeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(measure.GetName(), measure.GetUniqueName()), true, "~/Images/measure.png"));
+                if (children.Count > 0)
+                    treeNodeSelectAction = TreeNodeSelectAction.Expand;
+                
+                measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), treeNodeSelectAction, false, "~/Images/folder.png"));
+
+                foreach (DataAccess.Measure measure in children)
+                    measuresTreeView.Nodes[measuresTreeView.Nodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(measure.GetName(), measure.GetUniqueName()), TreeNodeSelectAction.None, true, "~/Images/measure.png"));
             }
 
             return measuresTreeView;
@@ -149,9 +173,9 @@ namespace Presentation
             return treeView;
         }
 
-        static TreeNode TreeNodeConfig(TreeNode treeNode, bool showCheckBox, string imageUrl)
+        static TreeNode TreeNodeConfig(TreeNode treeNode, TreeNodeSelectAction treeNodeSelectAction, bool showCheckBox, string imageUrl)
         {
-            treeNode.SelectAction = TreeNodeSelectAction.Expand;
+            treeNode.SelectAction = treeNodeSelectAction;
             treeNode.ShowCheckBox = showCheckBox;
             treeNode.ImageUrl = imageUrl;
 

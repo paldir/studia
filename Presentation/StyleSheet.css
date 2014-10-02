@@ -1,29 +1,77 @@
-﻿.columns {
-    display: table-row;
+﻿/*#region ogólne*/
+body, input, select, button {
+    color: #606060;
+    font-size: small;
+    font-family: 'Times New Roman';
 }
 
-.column {
-    display: table-cell;
+a {
+    color: dodgerblue;
 }
+
+    a:hover {
+        color: black;
+    }
+
+.simpleButton {
+    background-color: lightsteelblue;
+    background: linear-gradient(lightsteelblue, aliceblue);
+    color: black;
+    border: solid 1px dodgerblue;
+    border-radius: 3px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 5px;
+}
+
+    .simpleButton:hover {
+        background-color: dodgerblue;
+        background: linear-gradient(dodgerblue, dodgerblue);
+        color: white;
+        cursor: pointer;
+    }
+
+    .simpleButton:disabled {
+        background-color: lightgray;
+        background: linear-gradient(lightgray, lightgray);
+        color: gray;
+        border-color: gray;
+        cursor: auto;
+        box-shadow: none;
+    }
+
+input, select {
+    border: solid 1px dodgerblue;
+}
+
+    input:focus, select:focus {
+        border-color: mediumblue;
+        background-color: aliceblue;
+    }
 
 input[type=radio] {
     display: none;
 }
 
 label {
-    border: solid 1px;
+    border-style: solid;
+    border-color: lightgray;
+    border-width: 1px 2px 1px 2px;
     width: inherit;
     display: inline-block;
-    padding: 1px;
-    padding-left: 15px;
+    padding: 5px 1px 5px 15px;
     text-align: center;
     background-color: white;
     background-repeat: no-repeat;
     background-position-y: center;
+    background-position-x: 5px;
 }
 
 input[type="radio"]:checked + label {
-    background-color: indianred;
+    background-color: gray;
+    color: white;
 }
 
 label:hover {
@@ -31,6 +79,74 @@ label:hover {
     cursor: pointer;
 }
 
+.columns {
+    display: table-row;
+}
+
+.column {
+    display: table-cell;
+}
+
+fieldset {
+    border-color: mediumblue;
+}
+
+legend {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+/*#endregion*/
+
+/*#region login, logout, sitemap*/
+.placeOfLogin {
+    width: 250px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -190px;
+    margin-left: -125px;
+    border-width: 3px;
+    border-style: solid;
+    border-bottom-color: dodgerblue;
+    border-left-color: dodgerblue;
+    border-top-color: mediumblue;
+    border-right-color: mediumblue;
+    padding: 20px;
+}
+
+.placeOfSiteMapPath {
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-bottom-color: dodgerblue;
+    border-left-color: dodgerblue;
+    border-top-color: mediumblue;
+    border-right-color: mediumblue;
+    padding: 5px;
+    height: 15px;
+    margin-bottom: 20px;
+}
+
+#siteMapPath {
+    background-image: url(/Images/root.png);
+    background-repeat: no-repeat;
+}
+
+.rootOfSiteMapPath {
+    width: 15px;
+    display: inline-block;
+}
+
+.placeOfLogOut {
+    padding: 5px;
+    position: absolute;
+    right: 3px;
+    top: 0px;
+    text-align: right;
+}
+/*#endregion*/
+
+/*#region treeView, radioButtonList*/
 .listOfCubes label {
     background-image: url('/Images/cube.png');
 }
@@ -41,16 +157,43 @@ label:hover {
 
 .treeView a {
     text-decoration: none;
-    color: black;
+    color: #606060;
 }
 
 .treeView a:hover {
-    color: indianred;
+    color: black;
+}
+/*#endregion*/
+
+/*#region przeglądarka*/
+.mainTable {
+    border-collapse: collapse;
+}
+
+    .mainTable th {
+        border: 1px dashed lightgray;
+        letter-spacing: 1px;
+        padding: 5px;
+    }
+
+    .mainTable tbody {
+        vertical-align: top;
+    }
+
+    .mainTd {
+        padding: 10px;
+    }
+/*#endregion*/
+
+/*#region tabela wyników*/
+.tableOfResults {
+    border: 2px solid lightgray;
 }
 
 .tableOfResults td {
     vertical-align: middle;
     position: relative;
+    border: 1px solid lightgray;
 }
 
 .tableOfResults td:hover {
@@ -60,9 +203,9 @@ label:hover {
 .buttonInsideTableOfResults {
     background-image: url('/Images/button.png');
     background-color: white;
+    background: linear-gradient(white, white);
     border-width: 0px;
     position: absolute;
-    top: 3px;
     right: 3px;
     cursor: pointer;
 }
@@ -71,7 +214,9 @@ label:hover {
     background-image: url('/Images/hoveredButton.png');
     background-color: lightgray;
 }
+/*#endregion*/
 
+/*#region updateProgress*/
 #placeOfUpdateProgress {
     height: 150px;
     width: 150px;
@@ -82,3 +227,4 @@ label:hover {
     margin-left: -75px;
     pointer-events: none;
 }
+/*#endregion*/

@@ -17,8 +17,8 @@
                                     <div id="placeOfListOfHierarchies" runat="server"></div>
                                 </td>
                                 <td>
-                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" runat="server" /><br />
-                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" runat="server" />
+                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesUp" Text="W górę" CssClass="simpleButton" runat="server" /><br />
+                                    <asp:Button ID="buttonOfMovingItemOfListOfHierarchiesDown" Text="W dół" CssClass="simpleButton" runat="server" />
                                 </td>
                             </tr>
                         </table>
@@ -34,8 +34,8 @@
                                     <div id="placeOfListOfMeasures" runat="server"></div>
                                 </td>
                                 <td>
-                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" runat="server" /><br />
-                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" runat="server" />
+                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresUp" Text="W górę" CssClass="simpleButton" runat="server" /><br />
+                                    <asp:Button ID="buttonOfMovingItemOfListOfMeasuresDown" Text="W dół" CssClass="simpleButton" runat="server" />
                                 </td>
                             </tr>
                         </table>
@@ -112,5 +112,5 @@
             </asp:Panel>
         </div>
     </div>
-    <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" runat="server" />
+    <asp:Button ID="buttonOfViewingOfReport" Text="Zobacz raport" CssClass="simpleButton" runat="server" />
 </asp:Content>

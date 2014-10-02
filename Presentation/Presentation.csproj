@@ -86,6 +86,7 @@
     <Content Include="Images\load.gif" />
     <Content Include="Images\measure.png" />
     <Content Include="Images\member.png" />
+    <Content Include="Images\root.png" />
     <Content Include="Login.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
@@ -148,7 +149,9 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="Web.sitemap" />
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">
