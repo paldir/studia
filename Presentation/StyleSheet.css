@@ -1,6 +1,6 @@
 ﻿/*#region ogólne*/
 body, input, select, button {
-    color: #383838;
+    color: #606060;
     font-size: small;
     font-family: 'Times New Roman';
 }
@@ -23,6 +23,7 @@ a {
     padding-bottom: 2px;
     padding-left: 4px;
     padding-right: 4px;
+    margin: 5px;
 }
 
     .simpleButton:hover {
@@ -156,11 +157,11 @@ legend {
 
 .treeView a {
     text-decoration: none;
-    color: black;
+    color: #606060;
 }
 
 .treeView a:hover {
-    color: dodgerblue;
+    color: black;
 }
 /*#endregion*/
 
@@ -171,6 +172,7 @@ legend {
 
     .mainTable th {
         border: 1px dashed lightgray;
+        letter-spacing: 1px;
         padding: 5px;
     }
 
@@ -185,7 +187,6 @@ legend {
 
 /*#region tabela wyników*/
 .tableOfResults {
-    //border-collapse: collapse;
     border: 2px solid lightgray;
 }
 
