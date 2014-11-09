@@ -9,29 +9,25 @@ namespace DataAccess
     public class Member
     {
         string name;
+        public string Name { get { return name; } }
+
         string uniqueName;
-        string description;
-        Member[] children;
+        public string UniqueName { get { return uniqueName; } }
+
+        List<Member> children;
 
         public Member(Microsoft.AnalysisServices.AdomdClient.Member member)
         {
             name = member.Name;
             uniqueName = member.UniqueName;
-            description = member.Description;
+            children = new List<Member>();
             Microsoft.AnalysisServices.AdomdClient.MemberCollection aSChildren = member.GetChildren();
 
-            if (aSChildren.Count < 100)
-                children = new Member[aSChildren.Count];
-            else
-                children = new Member[0];
-
-            for (int i = 0; i < children.Length; i++)
-                children[i] = new Member(aSChildren[i]);
+            if (aSChildren.Count < 20)
+                foreach (Microsoft.AnalysisServices.AdomdClient.Member child in aSChildren)
+                    children.Add(new Member(child));
         }
 
-        public string GetName() { return name; }
-        public string GetUniqueName() { return uniqueName; }
-        public string GetDescription() { return description; }
-        public Member[] GetChildren() { return children; }
+        public List<Member> GetChildren() { return children; }
     }
 }

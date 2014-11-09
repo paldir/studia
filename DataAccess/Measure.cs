@@ -9,18 +9,19 @@ namespace DataAccess
     public class Measure
     {
         string name;
+        public string Name { get { return name; } }
+
         string uniqueName;
+        public string UniqueName { get { return uniqueName; } }
+
         string measureGroup;
+        public string MeasureGroup { get { return measureGroup; } }
 
-        public Measure(string name, string uniqueName, string measureGroup = "")
+        public Measure(Microsoft.AnalysisServices.AdomdClient.Measure measure)
         {
-            this.name = name;
-            this.uniqueName = uniqueName;
-            this.measureGroup = measureGroup;
+            name = measure.Name;
+            uniqueName = measure.UniqueName;
+            measureGroup = measure.Properties["MEASUREGROUP_NAME"].Value.ToString();
         }
-
-        public string GetName() { return name; }
-        public string GetUniqueName() { return uniqueName; }
-        public string GetMeasureGroup() { return measureGroup; }
     }
 }

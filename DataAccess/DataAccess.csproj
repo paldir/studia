@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeHierarchy.cs" />
+    <Compile Include="Hierarchy.cs" />
     <Compile Include="CubeASAccess.cs" />
     <Compile Include="ASHelper.cs" />
     <Compile Include="Dimension.cs" />
