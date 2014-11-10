@@ -53,20 +53,26 @@ namespace DataAccess
 
             for (int i = 0; i < countOfCaptionsOfRow; i++)
             {
-                string captionOfHierarchy = results[0, i] = cellSet.Axes[1].Set.Tuples[0].Members[i].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/");
-                //results[0, i] = String.Empty;
+                string hierarchyName = cellSet.Axes[1].Set.Tuples[0].Members[i].Name;
+                string captionOfHierarchy;
+
+                if (hierarchyName.Count(n => n == '.') > 1)
+                    hierarchyName = hierarchyName.Substring(0, hierarchyName.IndexOf('.', hierarchyName.IndexOf('.') + 1));
+
+                captionOfHierarchy = results[0, i] = hierarchyName.Replace("[", String.Empty).Replace("]", String.Empty).Replace('.', '/');
+
                 if (captionOfHierarchy.Count(d => d == '/') > 1)
                     results[0, i] = captionOfHierarchy.Substring(0, captionOfHierarchy.LastIndexOf('/'));
                 else
                     results[0, i] = captionOfHierarchy;
 
-                description[0, i] = String.Empty;
+                description[0, i] = hierarchyName;
             }
 
             for (int i = countOfCaptionsOfRow; i < columnsCount; i++)
             {
                 results[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].Caption;
-                description[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/");
+                description[0, i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName;
             }
 
             if (cellSet.Axes.Count > 1)
@@ -74,7 +80,7 @@ namespace DataAccess
                     for (int j = 0; j < countOfCaptionsOfRow; j++)
                     {
                         results[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].Caption;
-                        description[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName.Replace("[", String.Empty).Replace("]", String.Empty).Replace(".", "/").Replace("&", String.Empty);
+                        description[i, j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName;
                     }
 
 

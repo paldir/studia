@@ -88,7 +88,7 @@ namespace DataAccess
                 foreach (string selectedDimension in selectedDimensions)
                 {
                     if (selectedDimension.Count(d => d == '.') > 1)
-                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.LastIndexOf('.'));
+                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.IndexOf('.', selectedDimension.IndexOf('.') + 1));
                     else
                         nameOfHierarchy = selectedDimension;
 

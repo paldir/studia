@@ -382,46 +382,33 @@ namespace Presentation.BasicAccess
         void buttonInTableOfResults_Click(object sender, EventArgs e)
         {
             Button buttonInTableOfResults = (Button)sender;
-
             int rowOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(0, buttonInTableOfResults.ID.IndexOf(';')));
             int columnOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
             string clickedText = ((LiteralControl)tableOfResults.Rows[rowOfTableOfResults].Cells[columnOfTableOfResults].Controls[0]).Text;
 
             if (columnOfTableOfResults < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
             {
-                List<int> indexesOfDimensionsDoomedForRemoval = new List<int>();
+                List<string> valuesOfDimensionsDoomedForRemoval = selectedDimensionsValues.FindAll(v => v.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults]));
 
-                if (rowOfTableOfResults == 0)
-                {
-                    for (int i = 0; i < selectedDimensions.Count; i++)
-                        if (selectedDimensions.ElementAt(i).StartsWith(clickedText))
-                            indexesOfDimensionsDoomedForRemoval.Add(i);
-                }
-                else
-                {
-                    for (int i = 0; i < selectedDimensions.Count; i++)
-                        if (selectedDimensions.ElementAt(i).StartsWith(((LiteralControl)tableOfResults.Rows[0].Cells[columnOfTableOfResults].Controls[0]).Text))
-                            if (selectedDimensions.ElementAt(i).EndsWith(clickedText) || selectedDimensions.ElementAt(i).EndsWith(((LiteralControl)tableOfResults.Rows[0].Cells[columnOfTableOfResults].Controls[0]).Text))
-                                indexesOfDimensionsDoomedForRemoval.Add(i);
-                }
+                if (valuesOfDimensionsDoomedForRemoval.Count == 0)
+                    throw new NotImplementedException("Brak obsługi członków hierarchii typu \"All Accounts\"");
 
-                indexesOfDimensionsDoomedForRemoval.Reverse();
-
-                foreach (int i in indexesOfDimensionsDoomedForRemoval)
+                foreach (string valueOfDimensionDoomedForRemoval in valuesOfDimensionsDoomedForRemoval)
                 {
-                    TreeNode treeNodeDoomedForUnchecking = dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i));
+                    int index = selectedDimensionsValues.IndexOf(valueOfDimensionDoomedForRemoval);
+                    TreeNode treeNodeDoomedForUnchecking = dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(index));
 
                     if (treeNodeDoomedForUnchecking != null)
                         treeNodeDoomedForUnchecking.Checked = false;
 
-                    selectedDimensions.RemoveAt(i);
-                    selectedDimensionsValues.RemoveAt(i);
-                    pathsOfSelectedDimensions.RemoveAt(i);
+                    selectedDimensions.RemoveAt(index);
+                    selectedDimensionsValues.RemoveAt(index);
+                    pathsOfSelectedDimensions.RemoveAt(index);
                 }
             }
             else
             {
-                for (int i = 0; i < selectedMeasures.Count; i++)
+                /*for (int i = 0; i < selectedMeasures.Count; i++)
                     if (selectedMeasures.ElementAt(i) == clickedText)
                     {
                         measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(i)).Checked = false;
@@ -429,7 +416,14 @@ namespace Presentation.BasicAccess
                         selectedMeasures.RemoveAt(i);
                         selectedMeasuresValues.RemoveAt(i);
                         pathsOfSelectedMeasures.RemoveAt(i);
-                    }
+                    }*/
+
+                int index = selectedMeasuresValues.IndexOf(selectedMeasuresValues.Find(m => m.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults])));
+                measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(index)).Checked = false;
+
+                selectedMeasures.RemoveAt(index);
+                selectedMeasuresValues.RemoveAt(index);
+                pathsOfSelectedMeasures.RemoveAt(index);
             }
 
             CreateTableOfResults();
