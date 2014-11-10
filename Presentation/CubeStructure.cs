@@ -11,7 +11,7 @@ namespace Presentation
     public class CubeStructure
     {
         public enum RadioButtonListType { Cubes, Dimensions };
-        
+
         /*static public CheckBoxList GetCheckBoxListOfMeasures(List<DataAccess.Measure> measures)
         {
             CheckBoxList checkBoxList = new CheckBoxList();
@@ -69,13 +69,14 @@ namespace Presentation
         static public List<TreeNode> GetDimensionTreeViewNodes(DataAccess.Dimension dimension)
         {
             List<TreeNode> treeViewNodes = new List<TreeNode>();
-            List<string> displayFolders = dimension.AttributeHierarchies.Select(h => h.DisplayFolder).Distinct().ToList();
+            List<DataAccess.Hierarchy> hierarchies = dimension.AttributeHierarchies.Concat(dimension.Hierarchies).ToList();
+            List<string> displayFolders = hierarchies.Select(h => h.DisplayFolder).Distinct().ToList();
 
             displayFolders.Sort();
 
             foreach (string displayFolder in displayFolders)
             {
-                List<DataAccess.Hierarchy> firstLevelChildren = dimension.AttributeHierarchies.FindAll(h => h.DisplayFolder == displayFolder);
+                List<DataAccess.Hierarchy> firstLevelChildren = hierarchies.FindAll(h => h.DisplayFolder == displayFolder);
                 TreeNodeSelectAction treeNodeSelectAction = TreeNodeSelectAction.None;
 
                 if (firstLevelChildren.Count > 0)
@@ -83,29 +84,29 @@ namespace Presentation
 
                 treeViewNodes.Add(TreeNodeConfig(new TreeNode(displayFolder, displayFolder), treeNodeSelectAction, false, "~/Images/folder.png"));
 
-                foreach (DataAccess.Hierarchy attributeHierarchy in firstLevelChildren)
+                foreach (DataAccess.Hierarchy hierarchy in firstLevelChildren)
                 {
-                    List<DataAccess.Member> secondLevelChildren = attributeHierarchy.GetMembers();
+                    List<DataAccess.Member> secondLevelChildren = hierarchy.GetMembers();
                     treeNodeSelectAction = TreeNodeSelectAction.None;
+                    string imageUrl = null;
 
                     if (secondLevelChildren.Count > 0)
                         treeNodeSelectAction = TreeNodeSelectAction.Expand;
 
-                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(attributeHierarchy.Name, attributeHierarchy.UniqueName), treeNodeSelectAction, true, "~/Images/attributeHierarchy.png"));
+                    switch (hierarchy.HierarchyType)
+                    {
+                        case DataAccess.HierarchyType.AttributeHierarchy:
+                            imageUrl = "~/Images/attributeHierarchy.png";
+                            break;
+                        case DataAccess.HierarchyType.Hierarchy:
+                            imageUrl = "~/Images/hierarchy.png";
+                            break;
+                    }
+
+                    treeViewNodes.Last().ChildNodes.Add(TreeNodeConfig(new TreeNode(hierarchy.Name, hierarchy.UniqueName), treeNodeSelectAction, true, imageUrl));
 
                     foreach (DataAccess.Member member in secondLevelChildren)
-                    {
-                        secondLevelChildren = member.GetChildren();
-                        treeNodeSelectAction = TreeNodeSelectAction.None;
-
-                        if (secondLevelChildren.Count > 0)
-                            treeNodeSelectAction = TreeNodeSelectAction.Expand;
-
-                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(member.Name, member.UniqueName), treeNodeSelectAction, true, "~/Images/member.png"));
-
-                        foreach (DataAccess.Member child in secondLevelChildren)
-                            treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes[treeViewNodes.Last().ChildNodes[treeViewNodes[treeViewNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Count - 1].ChildNodes.Add(TreeNodeConfig(new TreeNode(child.Name, child.UniqueName), TreeNodeSelectAction.None, true, "~/Images/member.png"));
-                    }
+                        treeViewNodes.Last().ChildNodes[treeViewNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(AddTreeNodeOfMember(member));
                 }
             }
 
@@ -122,6 +123,25 @@ namespace Presentation
             return treeViewNodes;
         }
 
+        static TreeNode AddTreeNodeOfMember(DataAccess.Member member)
+        {
+            TreeNode treeNode;
+            List<DataAccess.Member> children = member.GetChildren();
+            TreeNodeSelectAction treeNodeSelectAction;
+
+            if (children.Count > 0)
+                treeNodeSelectAction = TreeNodeSelectAction.Expand;
+            else
+                treeNodeSelectAction = TreeNodeSelectAction.None;
+
+            treeNode = TreeNodeConfig(new TreeNode(member.Name, member.UniqueName), treeNodeSelectAction, true, "~/Images/member.png");
+
+            foreach (DataAccess.Member newMember in children)
+                treeNode.ChildNodes.Add(AddTreeNodeOfMember(newMember));
+
+            return treeNode;
+        }
+
         static public TreeView GetMeasuresTreeView(List<DataAccess.Measure> measures)
         {
             TreeView measuresTreeView = new TreeView();
@@ -129,17 +149,19 @@ namespace Presentation
             measuresTreeView.ImageSet = TreeViewImageSet.Arrows;
             measuresTreeView.ExpandDepth = 0;
             measuresTreeView.CssClass = "treeView";
+            List<string> groupsOfMeasures = measures.Select(m => m.MeasureGroup).Distinct().ToList();
 
             measuresTreeView.Attributes.Add("onclick", "postBackFromMeasuresTreeView()");
+            groupsOfMeasures.Sort();
 
-            foreach (string measureGroup in measures.Select(m => m.MeasureGroup).Distinct().ToList())
+            foreach (string measureGroup in groupsOfMeasures)
             {
-                List<DataAccess.Measure> children = measures.FindAll(m => m.MeasureGroup == measureGroup).ToList();
+                List<DataAccess.Measure> children = measures.FindAll(m => m.MeasureGroup == measureGroup).OrderBy(m => m.Name).ToList();
                 TreeNodeSelectAction treeNodeSelectAction = TreeNodeSelectAction.None;
 
                 if (children.Count > 0)
                     treeNodeSelectAction = TreeNodeSelectAction.Expand;
-                
+
                 measuresTreeView.Nodes.Add(TreeNodeConfig(new TreeNode(measureGroup, measureGroup), treeNodeSelectAction, false, "~/Images/folder.png"));
 
                 foreach (DataAccess.Measure measure in children)
@@ -149,7 +171,7 @@ namespace Presentation
             return measuresTreeView;
         }
 
-        static public DropDownList GetDropDownListOfDimensions(List<string> namesOfDimensions)
+        /*static public DropDownList GetDropDownListOfDimensions(List<string> namesOfDimensions)
         {
             DropDownList dropDownList = new DropDownList();
             dropDownList.ID = "ListOfDimensions";
@@ -159,7 +181,7 @@ namespace Presentation
                 dropDownList.Items.Add(nameOfDimension);
 
             return dropDownList;
-        }
+        }*/
 
         static public TreeView TreeViewConfig(TreeView treeView)
         {

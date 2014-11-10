@@ -82,6 +82,7 @@
     <Content Include="Images\cube.png" />
     <Content Include="Images\dimension.png" />
     <Content Include="Images\folder.png" />
+    <Content Include="Images\hierarchy.png" />
     <Content Include="Images\hoveredButton.png" />
     <Content Include="Images\load.gif" />
     <Content Include="Images\measure.png" />

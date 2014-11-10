@@ -23,8 +23,12 @@ namespace DataAccess
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (CubeDef cube in connection.Cubes)
-                    if (cube.Type == CubeType.Cube)
-                        cubes.Add(cube.Name);
+                    switch (cube.Type)
+                    {
+                        case CubeType.Cube:
+                            cubes.Add(cube.Name);
+                            break;
+                    }
             }
 
             return cubes;

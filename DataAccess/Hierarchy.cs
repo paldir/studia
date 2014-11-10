@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+    public enum HierarchyType { AttributeHierarchy, Hierarchy };
+
     public class Hierarchy
     {
+
         string name;
         public string Name { get { return name; } }
 
@@ -16,6 +19,9 @@ namespace DataAccess
 
         string displayFolder;
         public string DisplayFolder { get { return displayFolder; } }
+
+        HierarchyType hierarchyType;
+        public HierarchyType HierarchyType { get { return hierarchyType; } }
 
         List<Member> members;
 
@@ -26,6 +32,16 @@ namespace DataAccess
             displayFolder = hierarchy.DisplayFolder;
             members = new List<Member>();
             Microsoft.AnalysisServices.AdomdClient.MemberCollection ASMembers = hierarchy.Levels[0].GetMembers();
+
+            switch (hierarchy.HierarchyOrigin)
+            {
+                case Microsoft.AnalysisServices.AdomdClient.HierarchyOrigin.AttributeHierarchy:
+                    hierarchyType = HierarchyType.AttributeHierarchy;
+                    break;
+                default:
+                    hierarchyType = HierarchyType.Hierarchy;
+                    break;
+            }
 
             foreach (Microsoft.AnalysisServices.AdomdClient.Member member in ASMembers)
                 members.Add(new Member(member));
