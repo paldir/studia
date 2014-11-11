@@ -391,7 +391,7 @@ namespace Presentation.BasicAccess
                 List<string> valuesOfDimensionsDoomedForRemoval = selectedDimensionsValues.FindAll(v => v.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults]));
 
                 if (valuesOfDimensionsDoomedForRemoval.Count == 0)
-                    throw new NotImplementedException("Brak obsługi członków hierarchii typu \"All Accounts\"");
+                    valuesOfDimensionsDoomedForRemoval = selectedDimensionsValues.FindAll(v => v.StartsWith(descriptionOfTableOfResults[0, columnOfTableOfResults]) && v.IndexOf('&') == -1);
 
                 foreach (string valueOfDimensionDoomedForRemoval in valuesOfDimensionsDoomedForRemoval)
                 {
