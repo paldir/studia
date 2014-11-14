@@ -58,6 +58,19 @@ namespace Presentation.BasicAccess
             set { Session["pathsOfSelectedDimensions"] = value; }
         }
 
+        List<string> namesOfTypicalHierarchies
+        {
+            get
+            {
+                if (Session["namesOfTypicalHierarchies"] == null)
+                    Session["namesOfTypicalHierarchies"] = new List<string>();
+
+                return (List<string>)Session["namesOfTypicalHierarchies"];
+            }
+
+            set { Session["namesOfTypicalHierarchies"] = value; }
+        }
+
         List<string> selectedMeasures
         {
             get
@@ -156,6 +169,7 @@ namespace Presentation.BasicAccess
                 "selectedDimensions",
                 "selectedDimensionsValues",
                 "pathsOfSelectedDimensions",
+                "namesOfTypicalHierarchies",
                 "selectedMeasures",
                 "selectedMeasuresValues",
                 "pathsOfSelectedMeasures",
@@ -271,34 +285,46 @@ namespace Presentation.BasicAccess
             if (selectedMeasuresValues.Count > 0)
             {
                 List<string[,]> results = cubeHandler.GetArraysFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues);
-                tableOfResults = TableOfResults.GetTableOfResults(results);
+                tableOfResults = TableOfResults.GetTableOfResults(results, namesOfTypicalHierarchies);
                 descriptionOfTableOfResults = results.ElementAt(1);
                 buttonOfReportGeneration.Enabled = true;
                 List<Button> buttonsInTableOfResults = new List<Button>();
+                List<Button> drillthroughButtonsInTableOfResults = new List<Button>();
 
-                for (int i = 0; i < tableOfResults.Rows.Count; i++ )
-                    for (int j=0; j<tableOfResults.Rows[i].Cells.Count; j++)
-                        if (tableOfResults.Rows[i].Cells[j].Controls.Count == 2)
-                            buttonsInTableOfResults.Add((Button)tableOfResults.Rows[i].Cells[j].Controls[1]);
+                for (int i = 0; i < tableOfResults.Rows.Count; i++)
+                    for (int j = 0; j < tableOfResults.Rows[i].Cells.Count; j++)
+                    {
+                        ControlCollection cellControls = tableOfResults.Rows[i].Cells[j].Controls;
+
+                        if (cellControls.Count >= 2)
+                            buttonsInTableOfResults.Add((Button)cellControls[cellControls.Count - 1]);
+
+                        if (cellControls.Count == 3)
+                           buttonsInTableOfResults.Add((Button)cellControls[0]);
+                    }
 
                 placeOfTableOfResults.Controls.Add(tableOfResults);
 
                 foreach (Button buttonInTableOfResults in buttonsInTableOfResults)
                 {
-                    buttonInTableOfResults.Click += buttonInTableOfResults_Click;
-
                     AsyncPostBackTrigger triggerOfButtonInTableOfResults = new AsyncPostBackTrigger();
                     triggerOfButtonInTableOfResults.ControlID = buttonInTableOfResults.ID;
                     triggerOfButtonInTableOfResults.EventName = "Click";
 
-                    int columnOfButton = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
-
-                    if (columnOfButton < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
-                        dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
-                    else
-                        measuresTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
-
                     tableOfResultsUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+
+                    if (buttonInTableOfResults.ID.IndexOf("drill") == -1)
+                    {
+                        buttonInTableOfResults.Click += buttonInTableOfResults_Click;
+                        int columnOfButton = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
+
+                        if (columnOfButton < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
+                            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+                        else
+                            measuresTreeViewUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
+                    }
+                    else
+                        buttonInTableOfResults.Click += drillthroughButtonInTableOfResults_Click;
                 }
             }
             else
@@ -310,7 +336,7 @@ namespace Presentation.BasicAccess
         void listOfDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
             //if (selectedValueOfListOfDimensions != String.Empty)
-              //  listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
+            //  listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
 
             selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
             //listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
@@ -327,6 +353,7 @@ namespace Presentation.BasicAccess
             {
                 string nodeTextPath = "/" + checkedNode.Text;
                 StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
+                string hierarchyName;
 
                 for (int i = 0; i < checkedNode.Depth; i++)
                 {
@@ -339,9 +366,15 @@ namespace Presentation.BasicAccess
 
                 nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
 
+                if (CubeStructure.GetRootNode(checkedNode).ImageUrl.IndexOf("attribute") == -1)
+                    hierarchyName = nodeTextPath.Count(p => p == '/') >= 2 ? nodeTextPath.Substring(0, nodeTextPath.IndexOf('/', nodeTextPath.IndexOf('/') + 1)) : nodeTextPath;
+                else
+                    hierarchyName = String.Empty;
+
                 selectedDimensions.Add(nodeTextPath);
                 selectedDimensionsValues.Add(checkedNode.Value);
                 pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
+                namesOfTypicalHierarchies.Add(hierarchyName);
             }
             else
                 if (!checkedNode.Checked)
@@ -352,6 +385,7 @@ namespace Presentation.BasicAccess
                                 selectedDimensions.RemoveAt(i);
                                 selectedDimensionsValues.RemoveAt(i);
                                 pathsOfSelectedDimensions.RemoveAt(i);
+                                namesOfTypicalHierarchies.RemoveAt(i);
                             }
         }
 
@@ -384,7 +418,8 @@ namespace Presentation.BasicAccess
             Button buttonInTableOfResults = (Button)sender;
             int rowOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(0, buttonInTableOfResults.ID.IndexOf(';')));
             int columnOfTableOfResults = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
-            string clickedText = ((LiteralControl)tableOfResults.Rows[rowOfTableOfResults].Cells[columnOfTableOfResults].Controls[0]).Text;
+            ControlCollection cellControls = tableOfResults.Rows[rowOfTableOfResults].Cells[columnOfTableOfResults].Controls;
+            string clickedText = ((LiteralControl)cellControls[cellControls.Count - 2]).Text;
 
             if (columnOfTableOfResults < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
             {
@@ -404,6 +439,7 @@ namespace Presentation.BasicAccess
                     selectedDimensions.RemoveAt(index);
                     selectedDimensionsValues.RemoveAt(index);
                     pathsOfSelectedDimensions.RemoveAt(index);
+                    namesOfTypicalHierarchies.RemoveAt(index);
                 }
             }
             else
@@ -429,34 +465,53 @@ namespace Presentation.BasicAccess
             CreateTableOfResults();
         }
 
+        void drillthroughButtonInTableOfResults_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         void buttonOfReportGeneration_Click(object sender, EventArgs e)
         {
             List<string[]> rows = new List<string[]>();
             List<string> namesOfMeasures = new List<string>();
-            List<string> namesOfHierarchies = new List<string>();
+            List<string> namesOfTypicalHierarchies = new List<string>();
 
             for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
-                if (descriptionOfTableOfResults[0, i] != String.Empty)
-                    namesOfMeasures.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+            {
+                ControlCollection cellControls = tableOfResults.Rows[0].Cells[i].Controls;
+
+                if (descriptionOfTableOfResults[0, i].IndexOf("[Measures]") == -1)
+                    namesOfTypicalHierarchies.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
                 else
-                    namesOfHierarchies.Add(((LiteralControl)tableOfResults.Rows[0].Cells[i].Controls[0]).Text);
+                    namesOfMeasures.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
+            }
 
             for (int i = 1; i < tableOfResults.Rows.Count; i++)
             {
                 string[] row = new string[tableOfResults.Rows[i].Cells.Count];
 
                 for (int j = 0; j < row.Length; j++)
-                    row[j] = ((LiteralControl)tableOfResults.Rows[i].Cells[j].Controls[0]).Text;
+                {
+                    ControlCollection cellControls = tableOfResults.Rows[i].Cells[j].Controls;
+                    int index;
+
+                    if (cellControls.Count >= 2)
+                        index = cellControls.Count - 2;
+                    else
+                        index = 0;
+
+                    row[j] = ((LiteralControl)cellControls[index]).Text;
+                }
 
                 rows.Add(row);
             }
 
             //Session.Clear(); 
 
-            Session["namesOfHierarchies"] = namesOfHierarchies;
+            Session["namesOfHierarchies"] = namesOfTypicalHierarchies;
             Session["namesOfMeasures"] = namesOfMeasures;
             Session["rows"] = rows;
-            
+
             Response.Redirect("~/AdvancedAccess/ReportConfiguration.aspx");
         }
         #endregion

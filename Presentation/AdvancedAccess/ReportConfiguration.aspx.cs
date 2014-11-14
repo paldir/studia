@@ -641,7 +641,7 @@ namespace Presentation.AdvancedAccess
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
-            
+
             selectedValueOfTitle = textBoxOfTitle.Text;
             selectedValueOfListOfFormats = listOfSizesOfPaper.SelectedValue;
             selectedValueOfListOfOrientations = listOfOrientations.SelectedValue;

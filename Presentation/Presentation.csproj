@@ -81,6 +81,7 @@
     </Content>
     <Content Include="Images\cube.png" />
     <Content Include="Images\dimension.png" />
+    <Content Include="Images\drillthroughButton.png" />
     <Content Include="Images\folder.png" />
     <Content Include="Images\hierarchy.png" />
     <Content Include="Images\hoveredButton.png" />

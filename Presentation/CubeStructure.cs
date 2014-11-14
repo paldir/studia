@@ -89,6 +89,7 @@ namespace Presentation
                     List<DataAccess.Member> secondLevelChildren = hierarchy.GetMembers();
                     treeNodeSelectAction = TreeNodeSelectAction.None;
                     string imageUrl = null;
+                    //DataAccess.HierarchyType hierarchy
 
                     if (secondLevelChildren.Count > 0)
                         treeNodeSelectAction = TreeNodeSelectAction.Expand;
@@ -110,7 +111,7 @@ namespace Presentation
                 }
             }
 
-            TreeNode treeNodeToMove = treeViewNodes.Find(n => n.Value == "");
+            TreeNode treeNodeToMove = treeViewNodes.Find(n => n.Value == String.Empty);
 
             if (treeNodeToMove != null)
             {
@@ -202,6 +203,14 @@ namespace Presentation
             treeNode.ImageUrl = imageUrl;
 
             return treeNode;
+        }
+
+        public static TreeNode GetRootNode(TreeNode treeNode)
+        {
+            if (treeNode.Parent == null)
+                return treeNode;
+            else
+                return GetRootNode(treeNode.Parent);
         }
 
         /*static public CheckBoxList GetCheckBoxListOfSelectedDimensions(List<string> namesOfSelectedDimensions)
