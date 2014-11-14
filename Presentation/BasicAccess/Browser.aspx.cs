@@ -474,14 +474,14 @@ namespace Presentation.BasicAccess
         {
             List<string[]> rows = new List<string[]>();
             List<string> namesOfMeasures = new List<string>();
-            List<string> namesOfTypicalHierarchies = new List<string>();
+            List<string> namesOfHierarchies = new List<string>();
 
             for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
             {
                 ControlCollection cellControls = tableOfResults.Rows[0].Cells[i].Controls;
 
                 if (descriptionOfTableOfResults[0, i].IndexOf("[Measures]") == -1)
-                    namesOfTypicalHierarchies.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
+                    namesOfHierarchies.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
                 else
                     namesOfMeasures.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
             }
@@ -508,7 +508,7 @@ namespace Presentation.BasicAccess
 
             //Session.Clear(); 
 
-            Session["namesOfHierarchies"] = namesOfTypicalHierarchies;
+            Session["namesOfHierarchies"] = namesOfHierarchies;
             Session["namesOfMeasures"] = namesOfMeasures;
             Session["rows"] = rows;
 
