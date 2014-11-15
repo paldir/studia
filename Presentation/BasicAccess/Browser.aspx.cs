@@ -58,17 +58,17 @@ namespace Presentation.BasicAccess
             set { Session["pathsOfSelectedDimensions"] = value; }
         }
 
-        List<string> namesOfTypicalHierarchies
+        List<Tree> treeOfSelectedDimensions
         {
             get
             {
-                if (Session["namesOfTypicalHierarchies"] == null)
-                    Session["namesOfTypicalHierarchies"] = new List<string>();
+                if (Session["treeOfSelectedDimensions"] == null)
+                    Session["treeOfSelectedDimensions"] = new List<Tree>();
 
-                return (List<string>)Session["namesOfTypicalHierarchies"];
+                return (List<Tree>)Session["treeOfSelectedDimensions"];
             }
 
-            set { Session["namesOfTypicalHierarchies"] = value; }
+            set { Session["treeOfSelectedDimensions"] = value; }
         }
 
         List<string> selectedMeasures
@@ -169,7 +169,7 @@ namespace Presentation.BasicAccess
                 "selectedDimensions",
                 "selectedDimensionsValues",
                 "pathsOfSelectedDimensions",
-                "namesOfTypicalHierarchies",
+                "treeOfSelectedDimensions",
                 "selectedMeasures",
                 "selectedMeasuresValues",
                 "pathsOfSelectedMeasures",
@@ -270,7 +270,7 @@ namespace Presentation.BasicAccess
                     dimensionTreeView.Nodes.Add(treeNode);
 
                 for (int i = 0; i < selectedDimensions.Count; i++)
-                    if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
+                    if (selectedDimensions.ElementAt(i) != String.Empty && selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedItem.Text)
                         dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(i)).Checked = true;
 
                 placeOfDimensionTreeView.Controls.Clear();
@@ -285,7 +285,7 @@ namespace Presentation.BasicAccess
             if (selectedMeasuresValues.Count > 0)
             {
                 List<string[,]> results = cubeHandler.GetArraysFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues);
-                tableOfResults = TableOfResults.GetTableOfResults(results, namesOfTypicalHierarchies);
+                tableOfResults = TableOfResults.GetTableOfResults(results, treeOfSelectedDimensions);
                 descriptionOfTableOfResults = results.ElementAt(1);
                 buttonOfReportGeneration.Enabled = true;
                 List<Button> buttonsInTableOfResults = new List<Button>();
@@ -300,7 +300,7 @@ namespace Presentation.BasicAccess
                             buttonsInTableOfResults.Add((Button)cellControls[cellControls.Count - 1]);
 
                         if (cellControls.Count == 3)
-                           buttonsInTableOfResults.Add((Button)cellControls[0]);
+                            buttonsInTableOfResults.Add((Button)cellControls[0]);
                     }
 
                 placeOfTableOfResults.Controls.Add(tableOfResults);
@@ -313,7 +313,7 @@ namespace Presentation.BasicAccess
 
                     tableOfResultsUpdatePanel.Triggers.Add(triggerOfButtonInTableOfResults);
 
-                    if (buttonInTableOfResults.ID.IndexOf("drill") == -1)
+                    if (buttonInTableOfResults.ID.ToLower().IndexOf("drill") == -1)
                     {
                         buttonInTableOfResults.Click += buttonInTableOfResults_Click;
                         int columnOfButton = Convert.ToInt16(buttonInTableOfResults.ID.Substring(buttonInTableOfResults.ID.IndexOf(';') + 1));
@@ -353,7 +353,7 @@ namespace Presentation.BasicAccess
             {
                 string nodeTextPath = "/" + checkedNode.Text;
                 StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
-                string hierarchyName;
+                Tree hierarchyTree;
 
                 for (int i = 0; i < checkedNode.Depth; i++)
                 {
@@ -367,25 +367,25 @@ namespace Presentation.BasicAccess
                 nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
 
                 if (CubeStructure.GetRootNode(checkedNode).ImageUrl.IndexOf("attribute") == -1)
-                    hierarchyName = nodeTextPath.Count(p => p == '/') >= 2 ? nodeTextPath.Substring(0, nodeTextPath.IndexOf('/', nodeTextPath.IndexOf('/') + 1)) : nodeTextPath;
+                    hierarchyTree = new Tree(checkedNode);
                 else
-                    hierarchyName = String.Empty;
+                    hierarchyTree = null;
 
                 selectedDimensions.Add(nodeTextPath);
                 selectedDimensionsValues.Add(checkedNode.Value);
                 pathsOfSelectedDimensions.Add(checkedNode.ValuePath);
-                namesOfTypicalHierarchies.Add(hierarchyName);
+                treeOfSelectedDimensions.Add(hierarchyTree);
             }
             else
                 if (!checkedNode.Checked)
                     for (int i = 0; i < selectedDimensions.Count; i++)
-                        if (selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedValue)
+                        if (selectedDimensions.ElementAt(i) != String.Empty && selectedDimensions.ElementAt(i).Substring(0, selectedDimensions.ElementAt(i).IndexOf('/')) == listOfDimensions.SelectedValue)
                             if (pathsOfSelectedDimensions.ElementAt(i) == checkedNode.ValuePath)
                             {
                                 selectedDimensions.RemoveAt(i);
                                 selectedDimensionsValues.RemoveAt(i);
                                 pathsOfSelectedDimensions.RemoveAt(i);
-                                namesOfTypicalHierarchies.RemoveAt(i);
+                                treeOfSelectedDimensions.RemoveAt(i);
                             }
         }
 
@@ -439,21 +439,11 @@ namespace Presentation.BasicAccess
                     selectedDimensions.RemoveAt(index);
                     selectedDimensionsValues.RemoveAt(index);
                     pathsOfSelectedDimensions.RemoveAt(index);
-                    namesOfTypicalHierarchies.RemoveAt(index);
+                    treeOfSelectedDimensions.RemoveAt(index);
                 }
             }
             else
             {
-                /*for (int i = 0; i < selectedMeasures.Count; i++)
-                    if (selectedMeasures.ElementAt(i) == clickedText)
-                    {
-                        measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(i)).Checked = false;
-
-                        selectedMeasures.RemoveAt(i);
-                        selectedMeasuresValues.RemoveAt(i);
-                        pathsOfSelectedMeasures.RemoveAt(i);
-                    }*/
-
                 int index = selectedMeasuresValues.IndexOf(selectedMeasuresValues.Find(m => m.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults])));
                 measuresTreeView.FindNode(pathsOfSelectedMeasures.ElementAt(index)).Checked = false;
 
@@ -467,7 +457,37 @@ namespace Presentation.BasicAccess
 
         void drillthroughButtonInTableOfResults_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
+            string buttonId = ((Button)sender).ID.Replace("drill", String.Empty);
+            int rowOfTableOfResults = Convert.ToInt16(buttonId.Substring(0, buttonId.IndexOf(';')));
+            int columnOfTableOfResults = Convert.ToInt16(buttonId.Substring(buttonId.IndexOf(';') + 1));
+            Tree drilledTree = treeOfSelectedDimensions.Where(t => t != null).Select(t => t.FindNodeByValue(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults])).FirstOrDefault(t => t != null);
+
+            if (drilledTree.Expanded)
+                foreach (Tree tree in drilledTree.ChildNodes)
+                {
+                    int index = selectedDimensionsValues.IndexOf(tree.Value);
+
+                    if (index != -1)
+                    {
+                        selectedDimensions.RemoveAt(index);
+                        selectedDimensionsValues.RemoveAt(index);
+                        pathsOfSelectedDimensions.RemoveAt(index);
+                        treeOfSelectedDimensions.RemoveAt(index);
+                    }
+                }
+            else
+                foreach (Tree tree in drilledTree.ChildNodes)
+                {
+                    selectedDimensions.Add(String.Empty);
+                    selectedDimensionsValues.Add(tree.Value);
+                    pathsOfSelectedDimensions.Add(String.Empty);
+                    treeOfSelectedDimensions.Add(null);
+                }
+
+            drilledTree.Expanded = !drilledTree.Expanded;
+
+            CreateTableOfResults();
         }
 
         void buttonOfReportGeneration_Click(object sender, EventArgs e)
@@ -479,11 +499,12 @@ namespace Presentation.BasicAccess
             for (int i = 0; i < descriptionOfTableOfResults.GetLength(1); i++)
             {
                 ControlCollection cellControls = tableOfResults.Rows[0].Cells[i].Controls;
+                string cellText = ((LiteralControl)cellControls[cellControls.Count - 2]).Text;
 
                 if (descriptionOfTableOfResults[0, i].IndexOf("[Measures]") == -1)
-                    namesOfHierarchies.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
+                    namesOfHierarchies.Add(cellText);
                 else
-                    namesOfMeasures.Add(((LiteralControl)cellControls[cellControls.Count - 2]).Text);
+                    namesOfMeasures.Add(cellText);
             }
 
             for (int i = 1; i < tableOfResults.Rows.Count; i++)

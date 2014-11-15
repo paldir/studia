@@ -79,6 +79,7 @@
     <Content Include="Images\button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\closeDrillthroughButton.png" />
     <Content Include="Images\cube.png" />
     <Content Include="Images\dimension.png" />
     <Content Include="Images\drillthroughButton.png" />
@@ -142,6 +143,7 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="TableOfResults.cs" />
+    <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Site.Master" />

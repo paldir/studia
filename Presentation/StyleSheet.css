@@ -217,6 +217,10 @@ legend {
     background-image: url('/Images/drillthroughButton.png');
 }
 
+.closeDrillthroughButtonInsideTableOfResults {
+    background-image: url('/Images/closeDrillthroughButton.png');
+}
+
 .tableOfResults td:hover .buttonInsideTableOfResults {
     background-color: lightgray;
 }
