@@ -38,7 +38,9 @@ namespace Presentation
         {
             get
             {
-                List<Tree> nodes = childNodes;
+                List<Tree> nodes = new List<Tree>();
+
+                nodes.AddRange(childNodes);
 
                 foreach (Tree tree in childNodes)
                     nodes.AddRange(tree.AllChildNodes);

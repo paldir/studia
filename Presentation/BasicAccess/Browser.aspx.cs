@@ -464,7 +464,7 @@ namespace Presentation.BasicAccess
             Tree drilledTree = treeOfSelectedDimensions.Where(t => t != null).Select(t => t.FindNodeByValue(descriptionOfTableOfResults[rowOfTableOfResults, columnOfTableOfResults])).FirstOrDefault(t => t != null);
 
             if (drilledTree.Expanded)
-                foreach (Tree tree in drilledTree.ChildNodes)
+                foreach (Tree tree in drilledTree.AllChildNodes)
                 {
                     int index = selectedDimensionsValues.IndexOf(tree.Value);
 
