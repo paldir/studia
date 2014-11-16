@@ -201,18 +201,32 @@ legend {
 }
 
 .buttonInsideTableOfResults {
-    background-image: url('/Images/button.png');
     background-color: white;
     background: linear-gradient(white, white);
     border-width: 0px;
-    position: absolute;
-    right: 3px;
     cursor: pointer;
 }
 
+.removalButtonInsideTableOfResults {
+    position: absolute;
+    right: 3px;
+    background-image: url('/Images/button.png');
+}
+
+.drillthroughButtonInsideTableOfResults {
+    background-image: url('/Images/drillthroughButton.png');
+}
+
+.closeDrillthroughButtonInsideTableOfResults {
+    background-image: url('/Images/closeDrillthroughButton.png');
+}
+
 .tableOfResults td:hover .buttonInsideTableOfResults {
-    background-image: url('/Images/hoveredButton.png');
     background-color: lightgray;
+}
+
+.tableOfResults td:hover .removalButtonInsideTableOfResults {
+    background-image: url('/Images/hoveredButton.png');
 }
 /*#endregion*/
 

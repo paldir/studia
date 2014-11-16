@@ -3,29 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AnalysisServices.AdomdClient;
 
 namespace DataAccess
 {
     public class Dimension
     {
         string name;
-        string description;
-        AttributeHierarchy[] attributeHierarchies;
+        public string Name { get { return name; } }
+
+        List<Hierarchy> attributeHierarchies;
+        public List<Hierarchy> AttributeHierarchies { get { return attributeHierarchies; } }
+
+        List<Hierarchy> hierarchies;
+        public List<Hierarchy> Hierarchies { get { return hierarchies; } }
 
         public Dimension(Microsoft.AnalysisServices.AdomdClient.Dimension dimension)
         {
             name = dimension.Name;
-            description = dimension.Description;
+            attributeHierarchies = new List<Hierarchy>();
+            hierarchies = new List<Hierarchy>();
 
-            attributeHierarchies = new AttributeHierarchy[dimension.AttributeHierarchies.Count];
+            foreach (Microsoft.AnalysisServices.AdomdClient.Hierarchy hierarchy in dimension.Hierarchies)
+            {
+                Hierarchy newHierarchy = new Hierarchy(hierarchy);
 
-            for (int i = 0; i < attributeHierarchies.Length; i++)
-                attributeHierarchies[i] = new AttributeHierarchy(dimension.AttributeHierarchies[i]);
+                switch (hierarchy.HierarchyOrigin)
+                {
+                    case Microsoft.AnalysisServices.AdomdClient.HierarchyOrigin.AttributeHierarchy:
+                        attributeHierarchies.Add(newHierarchy);
+                        break;
+                    default:
+                        hierarchies.Add(newHierarchy);
+                        break;
+                }
+            }
         }
-
-        public string GetName() { return name; }
-        public string GetDescription() { return description; }
-        public AttributeHierarchy[] GetAttributeHierarchies() { return attributeHierarchies; }
     }
 }

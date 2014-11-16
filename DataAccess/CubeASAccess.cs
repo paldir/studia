@@ -23,8 +23,12 @@ namespace DataAccess
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (CubeDef cube in connection.Cubes)
-                    if (cube.Type == CubeType.Cube)
-                        cubes.Add(cube.Name);
+                    switch (cube.Type)
+                    {
+                        case CubeType.Cube:
+                            cubes.Add(cube.Name);
+                            break;
+                    }
             }
 
             return cubes;
@@ -37,10 +41,10 @@ namespace DataAccess
             using (AdomdConnection connection = ASHelper.EstablishConnection())
             {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Measure measure in connection.Cubes[cubeName].Measures)
-                    listOfMeasures.Add(new Measure(measure.Name, measure.UniqueName, measure.Properties["MEASUREGROUP_NAME"].Value.ToString()));
+                    listOfMeasures.Add(new Measure(measure));
             }
 
-            listOfMeasures = listOfMeasures.OrderBy(m => m.GetMeasureGroup()).ToList();
+            listOfMeasures = listOfMeasures.OrderBy(m => m.MeasureGroup).ToList();
 
             return listOfMeasures;
         }
@@ -84,7 +88,7 @@ namespace DataAccess
                 foreach (string selectedDimension in selectedDimensions)
                 {
                     if (selectedDimension.Count(d => d == '.') > 1)
-                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.LastIndexOf('.'));
+                        nameOfHierarchy = selectedDimension.Substring(0, selectedDimension.IndexOf('.', selectedDimension.IndexOf('.') + 1));
                     else
                         nameOfHierarchy = selectedDimension;
 
