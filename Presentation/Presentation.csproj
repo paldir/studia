@@ -76,9 +76,7 @@
     <Content Include="BasicAccess\Browser.aspx" />
     <Content Include="BasicAccess\Cubes.aspx" />
     <Content Include="Images\attributeHierarchy.png" />
-    <Content Include="Images\button.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Images\button.png" />
     <Content Include="Images\closeDrillthroughButton.png" />
     <Content Include="Images\cube.png" />
     <Content Include="Images\dimension.png" />
