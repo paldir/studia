@@ -11,10 +11,10 @@ namespace Presentation
 {
     public class TableOfResults
     {
-        public static Table GetTableOfResults(List<string[,]> arraysOfResults, List<Tree> treesOfHierarchies)
+        public static Table GetTableOfResults(List<string[][]> arraysOfResults, List<Tree> treesOfHierarchies)
         {
-            string[,] arrayOfResults = arraysOfResults.ElementAt(0);
-            string[,] description = arraysOfResults.ElementAt(1);
+            string[][] arrayOfResults = arraysOfResults.ElementAt(0);
+            string[][] description = arraysOfResults.ElementAt(1);
             Table table = new Table(); ;
             Bitmap bitMap = new Bitmap(500, 200);
             Graphics graphics = Graphics.FromImage(bitMap);
@@ -23,32 +23,26 @@ namespace Presentation
             table.BorderWidth = 1;
             table.GridLines = (GridLines)3;
             List<Tree> necessaryTreesOfHierarchies = treesOfHierarchies.Where(t => t != null).ToList();
+            /*string[][] arrayOfResults =*/ SortArrayRowsBecauseOfHierarchies(arraysOfResults.ElementAt(0), description, necessaryTreesOfHierarchies);
 
-            for (int i = 0; i < arrayOfResults.GetLength(0); i++)
+            for (int i = 0; i < arrayOfResults.Length; i++)
             {
                 TableRow tableRow = new TableRow();
 
-                for (int j = 0; j < arrayOfResults.GetLength(1); j++)
+                for (int j = 0; j < arrayOfResults[i].Length; j++)
                 {
                     TableCell tableCell = new TableCell();
-                    float widthOfTableCell = graphics.MeasureString(arrayOfResults[i, j], new System.Drawing.Font("Arial", 9)).Width;
+                    float widthOfTableCell = graphics.MeasureString(arrayOfResults[i][j], new System.Drawing.Font("Arial", 9)).Width;
 
-                    tableCell.Controls.Add(new LiteralControl(arrayOfResults[i, j]));
+                    tableCell.Controls.Add(new LiteralControl(arrayOfResults[i][j]));
 
-                    if (description[i, j] != "Value")
+                    if (description[i][j] != "Value")
                     {
                         tableCell.Font.Bold = true;
-                        Button removalButton = new Button();
-                        removalButton.Width = 15;
-                        removalButton.Height = 15;
-                        removalButton.CssClass = "buttonInsideTableOfResults removalButtonInsideTableOfResults";
-                        removalButton.ID = i.ToString() + "; " + j.ToString();
-                        widthOfTableCell += 20;
+                        Tree tree = necessaryTreesOfHierarchies.Select(t => t.FindNodeByValue(description[i][j])).FirstOrDefault(t => t != null);
 
                         if (i >= 1)
                         {
-                            Tree tree = necessaryTreesOfHierarchies.Select(t => t.FindNodeByValue(description[i, j])).FirstOrDefault(t => t != null);
-
                             if (tree != null && tree.ChildNodes.Count > 0)
                             {
                                 Button drillthroughButton = new Button();
@@ -66,9 +60,19 @@ namespace Presentation
                             }
                         }
 
-                        tableCell.Width = new Unit(widthOfTableCell);
+                        if (tree == null || tree.Parent == null)
+                        {
+                            Button removalButton = new Button();
+                            removalButton.Width = 15;
+                            removalButton.Height = 15;
+                            removalButton.CssClass = "buttonInsideTableOfResults removalButtonInsideTableOfResults";
+                            removalButton.ID = i.ToString() + "; " + j.ToString();
+                            widthOfTableCell += 20;
 
-                        tableCell.Controls.Add(removalButton);
+                            tableCell.Controls.Add(removalButton);
+                        }
+
+                        tableCell.Width = new Unit(widthOfTableCell);
                     }
 
                     tableRow.Cells.Add(tableCell);
@@ -80,18 +84,30 @@ namespace Presentation
             return table;
         }
 
-        /*public static Tree FindNodeByValue(Tree treeNode, string value)
+        static void SortArrayRowsBecauseOfHierarchies(string[][] array, string[][] description, List<Tree> treesOfHierarchies)
         {
-            if (treeNode.Value == value)
-                return treeNode;
+            /*List<string[]> buffer = new List<string[]>();
+            int columnsCount = array.GetLength(1);
 
-            Tree result = null;
-            List<Tree> children = treeNode.ChildNodes;
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                string[] row = new string[columnsCount];
 
-            for (int i = 0; result == null && i < children.Count; i++)
-                result = FindNodeByValue(children[i], value);
+                for (int j = 0; j < columnsCount; j++)
+                    row[j] = array[i, j];
 
-            return result;
-        }*/
+                buffer.Add(row);
+            }
+
+            foreach (Tree tree in treesOfHierarchies)
+            {
+                
+            }
+
+            return buffer.ToArray();
+        }
+
+            return new string[5][];*/
+        }
     }
 }
