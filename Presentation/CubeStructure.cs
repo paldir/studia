@@ -45,7 +45,7 @@ namespace Presentation
             switch (type)
             {
                 case RadioButtonListType.Dimensions:
-                    radioButtonList.SelectedValue = "Sales Territory";
+                    radioButtonList.SelectedValue = "Date";
                     break;
 
                 default:

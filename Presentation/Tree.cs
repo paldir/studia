@@ -37,6 +37,9 @@ namespace Presentation
         Tree parent;
         public Tree Parent { get { return parent; } }
 
+        int level;
+        public int Level { get { return level; } }
+
         public List<Tree> AllChildNodes
         {
             get
@@ -53,23 +56,7 @@ namespace Presentation
         }
 
         public List<Tree> AllExpandedNodes
-        {
-            get
-            {
-                List<Tree> nodes = new List<Tree>();
-
-                //nodes.AddRange(childNodes.Where(n => n.Expanded));
-
-                foreach (Tree tree in childNodes)
-                    if (tree.Expanded)
-                    {
-                        nodes.Add(tree);
-                        nodes.AddRange(tree.AllExpandedNodes);
-                    }
-
-                return nodes;
-            }
-        }
+        { get { return AllChildNodes.Where(n => n.Expanded).ToList(); } }
 
         public Tree(TreeNode nodeOfTreeView, Tree parent = null)
         {
@@ -77,6 +64,11 @@ namespace Presentation
             expanded = false;
             childNodes = new List<Tree>();
             this.parent = parent;
+
+            if (parent == null)
+                level = 0;
+            else
+                level = parent.level + 1;
 
             foreach (TreeNode treeNode in nodeOfTreeView.ChildNodes)
                 childNodes.Add(new Tree(treeNode, this));

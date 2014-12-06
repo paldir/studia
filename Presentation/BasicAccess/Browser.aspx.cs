@@ -285,8 +285,8 @@ namespace Presentation.BasicAccess
             if (selectedMeasuresValues.Count > 0)
             {
                 List<string[][]> results = cubeHandler.GetArraysFromSelectedItems(selectedDimensionsValues, selectedMeasuresValues);
-                tableOfResults = TableOfResults.GetTableOfResults(results, treeOfSelectedDimensions);
                 descriptionOfTableOfResults = results.ElementAt(1);
+                tableOfResults = TableOfResults.GetTableOfResults(results.ElementAt(0), ref descriptionOfTableOfResults, treeOfSelectedDimensions);
                 buttonOfReportGeneration.Enabled = true;
                 List<Button> buttonsInTableOfResults = new List<Button>();
 

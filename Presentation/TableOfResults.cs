@@ -11,10 +11,8 @@ namespace Presentation
 {
     public class TableOfResults
     {
-        public static Table GetTableOfResults(List<string[][]> arraysOfResults, List<Tree> treesOfHierarchies)
+        public static Table GetTableOfResults(string[][] arrayOfResults, ref string[][] descriptionOfResults, List<Tree> treesOfHierarchies)
         {
-            string[][] arrayOfResults = arraysOfResults.ElementAt(0);
-            string[][] description = arraysOfResults.ElementAt(1);
             Table table = new Table(); ;
             Bitmap bitMap = new Bitmap(500, 200);
             Graphics graphics = Graphics.FromImage(bitMap);
@@ -23,7 +21,15 @@ namespace Presentation
             table.BorderWidth = 1;
             table.GridLines = (GridLines)3;
             List<Tree> necessaryTreesOfHierarchies = treesOfHierarchies.Where(t => t != null).ToList();
-            /*string[][] arrayOfResults =*/ SortArrayRowsBecauseOfHierarchies(arraysOfResults.ElementAt(0), description, necessaryTreesOfHierarchies);
+
+            if (necessaryTreesOfHierarchies.Count > 0)
+            {
+                List<string[][]> arrays = SortArrayRowsBecauseOfHierarchies(arrayOfResults, descriptionOfResults, necessaryTreesOfHierarchies);
+                arrayOfResults = arrays.ElementAt(0);
+                descriptionOfResults = arrays.ElementAt(1);
+            }
+
+            string[][] description = descriptionOfResults;
 
             for (int i = 0; i < arrayOfResults.Length; i++)
             {
@@ -84,30 +90,53 @@ namespace Presentation
             return table;
         }
 
-        static void SortArrayRowsBecauseOfHierarchies(string[][] array, string[][] description, List<Tree> treesOfHierarchies)
+        static List<string[][]> SortArrayRowsBecauseOfHierarchies(string[][] array, string[][] description, List<Tree> treesOfHierarchies)
         {
-            /*List<string[]> buffer = new List<string[]>();
-            int columnsCount = array.GetLength(1);
-
-            for (int i = 0; i < array.GetLength(0); i++)
+            List<string[]> arrayList = array.ToList();
+            List<string[]> descriptionList = description.ToList();
+            List<Tree> visibleNodes = new List<Tree>();
+            
+            for (int i = 0; i < array.Length; i++)
             {
-                string[] row = new string[columnsCount];
+                Tree node = treesOfHierarchies[0].FindNodeByValue(description[i][0]);
 
-                for (int j = 0; j < columnsCount; j++)
-                    row[j] = array[i, j];
-
-                buffer.Add(row);
+                if (node != null)
+                    visibleNodes.Add(node);
             }
 
-            foreach (Tree tree in treesOfHierarchies)
+            visibleNodes = visibleNodes.OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToList();
+
+            foreach (Tree node in visibleNodes)
             {
-                
+                if (node.Parent != null)
+                {
+                    int index = descriptionList.FindIndex(r => r[0] == node.Value);
+
+                    if (index != -1)
+                    {
+                        string[] rowToMove = arrayList.ElementAt(index);
+                        string[] descriptionToMove = descriptionList.ElementAt(index);
+
+                        arrayList.RemoveAt(index);
+                        descriptionList.RemoveAt(index);
+
+                        int parentIndex = descriptionList.FindIndex(b => b[0] == node.Parent.Value);
+
+                        if (parentIndex == -1)
+                        {
+                            arrayList.Insert(index, rowToMove);
+                            descriptionList.Insert(index, descriptionToMove);
+                        }
+                        else
+                        {
+                            arrayList.Insert(parentIndex + 1, rowToMove);
+                            descriptionList.Insert(parentIndex + 1, descriptionToMove);
+                        }
+                    }
+                }
             }
 
-            return buffer.ToArray();
-        }
-
-            return new string[5][];*/
+            return new List<string[][]>() { arrayList.ToArray(), descriptionList.ToArray() };
         }
     }
 }
