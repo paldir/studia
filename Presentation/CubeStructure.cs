@@ -42,7 +42,17 @@ namespace Presentation
                     widthOfItems = widthOfCurrentItem;
             }
 
-            radioButtonList.SelectedIndex = 0;
+            switch (type)
+            {
+                case RadioButtonListType.Dimensions:
+                    radioButtonList.SelectedValue = "Date";
+                    break;
+
+                default:
+                    radioButtonList.SelectedIndex = 0;
+
+                    break;
+            }
 
             foreach (ListItem item in radioButtonList.Items)
             {

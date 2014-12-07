@@ -34,6 +34,12 @@ namespace Presentation
         List<Tree> childNodes;
         public List<Tree> ChildNodes { get { return childNodes; } }
 
+        Tree parent;
+        public Tree Parent { get { return parent; } }
+
+        int level;
+        public int Level { get { return level; } }
+
         public List<Tree> AllChildNodes
         {
             get
@@ -49,14 +55,23 @@ namespace Presentation
             }
         }
 
-        public Tree(TreeNode nodeOfTreeView)
+        public List<Tree> AllExpandedNodes
+        { get { return AllChildNodes.Where(n => n.Expanded).ToList(); } }
+
+        public Tree(TreeNode nodeOfTreeView, Tree parent = null)
         {
             value = nodeOfTreeView.Value;
             expanded = false;
             childNodes = new List<Tree>();
+            this.parent = parent;
+
+            if (parent == null)
+                level = 0;
+            else
+                level = parent.level + 1;
 
             foreach (TreeNode treeNode in nodeOfTreeView.ChildNodes)
-                childNodes.Add(new Tree(treeNode));
+                childNodes.Add(new Tree(treeNode, this));
         }
 
         public Tree FindNodeByValue(string value)
