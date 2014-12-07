@@ -441,15 +441,19 @@ namespace Presentation.BasicAccess
                 foreach (string valueOfDimensionDoomedForRemoval in valuesOfDimensionsDoomedForRemoval)
                 {
                     int index = selectedDimensionsValues.IndexOf(valueOfDimensionDoomedForRemoval);
-                    TreeNode treeNodeDoomedForUnchecking = dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(index));
 
-                    if (treeNodeDoomedForUnchecking != null)
-                        treeNodeDoomedForUnchecking.Checked = false;
+                    if (index != -1)
+                    {
+                        TreeNode treeNodeDoomedForUnchecking = dimensionTreeView.FindNode(pathsOfSelectedDimensions.ElementAt(index));
 
-                    selectedDimensions.RemoveAt(index);
-                    selectedDimensionsValues.RemoveAt(index);
-                    pathsOfSelectedDimensions.RemoveAt(index);
-                    treeOfSelectedDimensions.RemoveAt(index);
+                        if (treeNodeDoomedForUnchecking != null)
+                            treeNodeDoomedForUnchecking.Checked = false;
+
+                        selectedDimensions.RemoveAt(index);
+                        selectedDimensionsValues.RemoveAt(index);
+                        pathsOfSelectedDimensions.RemoveAt(index);
+                        treeOfSelectedDimensions.RemoveAt(index);
+                    }
                 }
             }
             else

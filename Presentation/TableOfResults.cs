@@ -94,47 +94,62 @@ namespace Presentation
         {
             List<string[]> arrayList = array.ToList();
             List<string[]> descriptionList = description.ToList();
-            List<Tree> visibleNodes = new List<Tree>();
-            
-            for (int i = 0; i < array.Length; i++)
-            {
-                Tree node = treesOfHierarchies[0].FindNodeByValue(description[i][0]);
+            int counterOfColumnsWithDimensions = descriptionList.ElementAt(0).Count(d => !d.Contains("[Measures]"));
+            List<Tree[]> visibleNodes = new List<Tree[]>();
 
-                if (node != null)
-                    visibleNodes.Add(node);
+            for (int j = 0; j < counterOfColumnsWithDimensions; j++)
+            {
+                Tree hierarchy = treesOfHierarchies.Find(t => t.FindNodeByValue(description[1][j]) != null);
+                Tree[] visibleNodesOfHierarchy;
+
+                if (hierarchy == null)
+                    visibleNodesOfHierarchy = new Tree[0];
+                else
+                {
+                    visibleNodesOfHierarchy = new Tree[arrayList.Count - 1];
+
+                    for (int i = 0; i < visibleNodesOfHierarchy.Length; i++)
+                        visibleNodesOfHierarchy[i] = hierarchy.FindNodeByValue(description[i + 1][j]);
+                }
+
+                visibleNodes.Add(visibleNodesOfHierarchy);
             }
 
-            visibleNodes = visibleNodes.OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToList();
+            for (int i = 0; i < visibleNodes.Count; i++)
+                visibleNodes[i] = visibleNodes[i].OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToArray();
 
-            foreach (Tree node in visibleNodes)
-            {
-                if (node.Parent != null)
+            for (int i = visibleNodes.Count - 1; i >= 0; i--)
+                for (int j = 0; j < visibleNodes[i].Length; j++)
                 {
-                    int index = descriptionList.FindIndex(r => r[0] == node.Value);
+                    Tree node = visibleNodes[i][j];
 
-                    if (index != -1)
+                    if (node != null && node.Parent != null)
                     {
-                        string[] rowToMove = arrayList.ElementAt(index);
-                        string[] descriptionToMove = descriptionList.ElementAt(index);
+                        int index = descriptionList.FindIndex(r => r[i] == node.Value);
 
-                        arrayList.RemoveAt(index);
-                        descriptionList.RemoveAt(index);
-
-                        int parentIndex = descriptionList.FindIndex(b => b[0] == node.Parent.Value);
-
-                        if (parentIndex == -1)
+                        if (index != -1)
                         {
-                            arrayList.Insert(index, rowToMove);
-                            descriptionList.Insert(index, descriptionToMove);
-                        }
-                        else
-                        {
-                            arrayList.Insert(parentIndex + 1, rowToMove);
-                            descriptionList.Insert(parentIndex + 1, descriptionToMove);
+                            string[] rowToMove = arrayList.ElementAt(index);
+                            string[] descriptionToMove = descriptionList.ElementAt(index);
+
+                            arrayList.RemoveAt(index);
+                            descriptionList.RemoveAt(index);
+
+                            int parentIndex = descriptionList.FindIndex(b => b[i] == node.Parent.Value);
+
+                            if (parentIndex == -1)
+                            {
+                                arrayList.Insert(index, rowToMove);
+                                descriptionList.Insert(index, descriptionToMove);
+                            }
+                            else
+                            {
+                                arrayList.Insert(parentIndex + 1, rowToMove);
+                                descriptionList.Insert(parentIndex + 1, descriptionToMove);
+                            }
                         }
                     }
                 }
-            }
 
             return new List<string[][]>() { arrayList.ToArray(), descriptionList.ToArray() };
         }
