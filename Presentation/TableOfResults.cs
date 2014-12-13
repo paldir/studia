@@ -49,20 +49,32 @@ namespace Presentation
 
                         if (i >= 1)
                         {
-                            if (tree != null && tree.ChildNodes.Count > 0)
+                            if (tree != null)
                             {
-                                Button drillthroughButton = new Button();
-                                drillthroughButton.Width = 15;
-                                drillthroughButton.Height = 15;
-                                drillthroughButton.ID = "drill" + i.ToString() + "; " + j.ToString();
-                                widthOfTableCell += 20;
+                                int additionalPadding = 0;
 
-                                if (tree.Expanded)
-                                    drillthroughButton.CssClass = "buttonInsideTableOfResults closeDrillthroughButtonInsideTableOfResults";
+                                if (tree.ChildNodes.Count > 0)
+                                {
+                                    Button drillthroughButton = new Button();
+                                    drillthroughButton.Width = 15;
+                                    drillthroughButton.Height = 15;
+                                    drillthroughButton.ID = "drill" + i.ToString() + "; " + j.ToString();
+                                    widthOfTableCell += 20;
+                                    //LiteralControl indent = new LiteralControl(tree.Level.ToString() + " ");
+
+                                    if (tree.Expanded)
+                                    {
+                                        drillthroughButton.CssClass = "buttonInsideTableOfResults closeDrillthroughButtonInsideTableOfResults";
+                                    }
+                                    else
+                                        drillthroughButton.CssClass = "buttonInsideTableOfResults drillthroughButtonInsideTableOfResults";
+
+                                    tableCell.Controls.AddAt(0, drillthroughButton);
+                                }
                                 else
-                                    drillthroughButton.CssClass = "buttonInsideTableOfResults drillthroughButtonInsideTableOfResults";
+                                    additionalPadding = 15;
 
-                                tableCell.Controls.AddAt(0, drillthroughButton);
+                                tableCell.Style.Add("padding-left", (tree.Level * 5 + additionalPadding).ToString() + "px");
                             }
                         }
 
@@ -119,13 +131,27 @@ namespace Presentation
                 visibleNodes[i] = visibleNodes[i].OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToArray();
 
             for (int i = visibleNodes.Count - 1; i >= 0; i--)
+            {
+                List<bool> sorted = new List<bool>();
+
+                for (int j = 0; j <descriptionList.Count; j++)
+                    sorted.Add(false);
+
                 for (int j = 0; j < visibleNodes[i].Length; j++)
                 {
                     Tree node = visibleNodes[i][j];
 
                     if (node != null && node.Parent != null)
                     {
-                        int index = descriptionList.FindIndex(r => r[i] == node.Value);
+                        int index = -1;// = descriptionList.FindIndex(r => r[i] == node.Value);
+
+                        for (int k = 1; k < descriptionList.Count; k++)
+                            if (descriptionList[k][i] == node.Value && !sorted[k])
+                            {
+                                index = k;
+
+                                break;
+                            }
 
                         if (index != -1)
                         {
@@ -134,6 +160,7 @@ namespace Presentation
 
                             arrayList.RemoveAt(index);
                             descriptionList.RemoveAt(index);
+                            sorted.RemoveAt(index);
 
                             int parentIndex = descriptionList.FindIndex(b => b[i] == node.Parent.Value);
 
@@ -141,15 +168,19 @@ namespace Presentation
                             {
                                 arrayList.Insert(index, rowToMove);
                                 descriptionList.Insert(index, descriptionToMove);
+                                sorted.Insert(index, true);
                             }
                             else
                             {
                                 arrayList.Insert(parentIndex + 1, rowToMove);
                                 descriptionList.Insert(parentIndex + 1, descriptionToMove);
+                                sorted.Insert(parentIndex + 1, true);
                             }
                         }
+
                     }
                 }
+            }
 
             return new List<string[][]>() { arrayList.ToArray(), descriptionList.ToArray() };
         }

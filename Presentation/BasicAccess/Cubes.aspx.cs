@@ -21,7 +21,7 @@ namespace Presentation.BasicAccess
             buttonOfBrowsing.Click += buttonOfBrowsing_Click;
 
             foreach (string key in Browser.SessionKeys())
-                Session[key] = null;
+                Session.Remove(key);
         }
 
         void buttonOfBrowsing_Click(object sender, EventArgs e)

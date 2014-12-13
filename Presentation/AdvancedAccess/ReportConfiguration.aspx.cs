@@ -311,17 +311,7 @@ namespace Presentation.AdvancedAccess
                 listOfColorsOfBackgroundOfValues.Text = selectedValueOfListOfColorsOfBackgroundOfValues;
 
             foreach (string key in SessionKeys())
-                Session[key] = null;
-
-            /*textBoxOfTitle.TextChanged += textBoxOfTitle_TextChanged;
-            listOfSizesOfPaper.SelectedIndexChanged += listOfSizesOfPaper_SelectedIndexChanged;
-            listOfOrientations.SelectedIndexChanged += listOfOrientations_SelectedIndexChanged;
-            textBoxOfMarginSize.TextChanged += textBoxOfMarginSize_TextChanged;
-            listOfColorsOfCaptionsTexts.TextChanged += listOfColorsOfCaptionsTexts_TextChanged;
-            listOfColorsOfFirstBackgroundOfCaptions.TextChanged += listOfColorsOfFirstBackgroundOfCaptions_TextChanged;
-            listOfColorsOfSecondBackgroundOfCaptions.TextChanged += listOfColorsOfSecondBackgroundOfCaptions_TextChanged;
-            listOfColorsOfValuesTexts.TextChanged += listOfColorsOfValuesTexts_TextChanged;
-            listOfColorsOfBackgroundOfValues.TextChanged += listOfColorsOfBackgroundOfValues_TextChanged;*/
+                Session.Remove(key);
         }
 
         protected override void CreateChildControls()

@@ -133,6 +133,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RdlGenerator.cs" />
+    <Compile Include="SelectedDimension.cs" />
+    <Compile Include="SelectedItem.cs" />
+    <Compile Include="SelectedMeasure.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

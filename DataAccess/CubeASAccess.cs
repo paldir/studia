@@ -92,7 +92,7 @@ namespace DataAccess
                     else
                         nameOfHierarchy = selectedDimension;
 
-                    if (hierarchiesOfSelectedDimensions.FindIndex(h => h == nameOfHierarchy) == -1)
+                    if (hierarchiesOfSelectedDimensions.Find(h => h == nameOfHierarchy) == null)
                         hierarchiesOfSelectedDimensions.Add(nameOfHierarchy);
                 }
 

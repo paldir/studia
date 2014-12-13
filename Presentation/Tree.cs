@@ -13,7 +13,7 @@ namespace Presentation
         public string Value
         {
             get { return value; }
-            set { this.value = value; }
+            private set { this.value = value; }
         }
 
         bool expanded;
