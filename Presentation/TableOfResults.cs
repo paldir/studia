@@ -110,32 +110,30 @@ namespace Presentation
 
             for (int j = 0; j < counterOfColumnsWithDimensions; j++)
             {
-                Tree hierarchy = treesOfHierarchies.Find(t => t.FindNodeByValue(description[1][j]) != null);
-                Tree[] visibleNodesOfHierarchy;
+                Tree[] visibleNodesOfHierarchy = new Tree[arrayList.Count - 1];
 
-                throw new NotImplementedException("TODO");
-                
-                if (hierarchy == null)
-                    visibleNodesOfHierarchy = new Tree[0];
-                else
+                for (int i = 1; i < arrayList.Count; i++)
                 {
-                    visibleNodesOfHierarchy = new Tree[arrayList.Count - 1];
+                    Tree hierarchy = treesOfHierarchies.Select(t => t.FindNodeByValue(description[i][j])).FirstOrDefault(h => h != null);
 
-                    for (int i = 0; i < visibleNodesOfHierarchy.Length; i++)
-                        visibleNodesOfHierarchy[i] = hierarchy.FindNodeByValue(description[i + 1][j]);
+                    if (hierarchy == null)
+                        break;
+                    else
+                        visibleNodesOfHierarchy[i - 1] = hierarchy;
                 }
 
                 visibleNodes.Add(visibleNodesOfHierarchy);
             }
 
             for (int i = 0; i < visibleNodes.Count; i++)
-                visibleNodes[i] = visibleNodes[i].OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToArray();
+                if (!visibleNodes[i].Contains(null))
+                    visibleNodes[i] = visibleNodes[i].OrderBy(n => n.Level).ThenByDescending(n => n.Value).ToArray();
 
             for (int i = visibleNodes.Count - 1; i >= 0; i--)
             {
                 List<bool> sorted = new List<bool>();
 
-                for (int j = 0; j <descriptionList.Count; j++)
+                for (int j = 0; j < descriptionList.Count; j++)
                     sorted.Add(false);
 
                 for (int j = 0; j < visibleNodes[i].Length; j++)
