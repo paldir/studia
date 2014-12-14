@@ -60,7 +60,6 @@ namespace Presentation
                                     drillthroughButton.Height = 15;
                                     drillthroughButton.ID = "drill" + i.ToString() + "; " + j.ToString();
                                     widthOfTableCell += 20;
-                                    //LiteralControl indent = new LiteralControl(tree.Level.ToString() + " ");
 
                                     if (tree.Expanded)
                                     {
@@ -114,6 +113,8 @@ namespace Presentation
                 Tree hierarchy = treesOfHierarchies.Find(t => t.FindNodeByValue(description[1][j]) != null);
                 Tree[] visibleNodesOfHierarchy;
 
+                throw new NotImplementedException("TODO");
+                
                 if (hierarchy == null)
                     visibleNodesOfHierarchy = new Tree[0];
                 else
@@ -145,7 +146,7 @@ namespace Presentation
                     {
                         int index = -1;// = descriptionList.FindIndex(r => r[i] == node.Value);
 
-                        for (int k = 1; k < descriptionList.Count; k++)
+                        for (int k = 0; k < descriptionList.Count; k++)
                             if (descriptionList[k][i] == node.Value && !sorted[k])
                             {
                                 index = k;
@@ -162,7 +163,24 @@ namespace Presentation
                             descriptionList.RemoveAt(index);
                             sorted.RemoveAt(index);
 
-                            int parentIndex = descriptionList.FindIndex(b => b[i] == node.Parent.Value);
+                            int parentIndex = -1;// = descriptionList.FindIndex(b => b[i] == node.Parent.Value);
+
+                            for (int k = 1; k < descriptionList.Count; k++)
+                                if (descriptionList[k][i] == node.Parent.Value)
+                                {
+                                    List<string> currentRow = descriptionList[index - 1].ToList();
+                                    List<string> possibleParentRow = descriptionList[k].ToList();
+
+                                    currentRow.RemoveAt(i);
+                                    possibleParentRow.RemoveAt(i);
+
+                                    if (currentRow.SequenceEqual(possibleParentRow))
+                                    {
+                                        parentIndex = k;
+
+                                        break;
+                                    }
+                                }
 
                             if (parentIndex == -1)
                             {

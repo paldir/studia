@@ -217,7 +217,7 @@ namespace Presentation
 
         public static TreeNode GetRootNode(TreeNode treeNode)
         {
-            if (treeNode.Parent == null)
+            if (treeNode.Parent == null || treeNode.Parent.ImageUrl.Contains("folder"))
                 return treeNode;
             else
                 return GetRootNode(treeNode.Parent);
