@@ -13,11 +13,11 @@ namespace Presentation.BasicAccess
     {
         #region fields
         BusinessLogic.CubeHandler cubeHandler;
-        RadioButtonList listOfDimensions;
-        TreeView dimensionTreeView;
-        TreeView measuresTreeView;
-        Table tableOfResults;
-        string[][] descriptionOfTableOfResults;
+        RadioButtonListOfDimensions listOfDimensions;
+        DimensionTreeView dimensionTreeView;
+        MeasureTreeView measuresTreeView;
+        TableOfResults tableOfResults;
+        string[][] mdxDescriptionOfTableOfResults;
 
         List<SelectedDimension> selectedDimensions
         {
@@ -58,14 +58,14 @@ namespace Presentation.BasicAccess
             set { Session["selectedValueOfListOfDimensions"] = value; }
         }
 
-        List<TreeNode> treeViewNodes
+        List<MyTreeNode> treeViewNodes
         {
             get
             {
                 if (Session["treeViewNodes"] == null)
-                    Session["treeViewNodes"] = new List<TreeNode>();
+                    Session["treeViewNodes"] = new List<MyTreeNode>();
 
-                return (List<TreeNode>)Session["treeViewNodes"];
+                return (List<MyTreeNode>)Session["treeViewNodes"];
             }
             set { Session["treeViewNodes"] = value; }
         }
@@ -116,7 +116,7 @@ namespace Presentation.BasicAccess
 
         void InitializeLeftColumn()
         {
-            listOfDimensions = CubeStructure.GetRadioButtonListOfCubesOrDimensions(cubeHandler.GetNamesOfDimensions(), CubeStructure.RadioButtonListType.Dimensions);
+            listOfDimensions = new RadioButtonListOfDimensions(cubeHandler.GetNamesOfDimensions());
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfTreeView_Click;
 
@@ -143,7 +143,7 @@ namespace Presentation.BasicAccess
 
         void InitializeCentralColumn()
         {
-            measuresTreeView = CubeStructure.GetMeasuresTreeView(cubeHandler.GetMeasures());
+            measuresTreeView = new MeasureTreeView(cubeHandler.GetMeasures());
             measuresTreeView.TreeNodeCheckChanged += measuresTreeView_TreeNodeCheckChanged;
             postBackButtonOfMeasuresTreeView.Click += postBackButtonOfTreeView_Click;
 
@@ -193,16 +193,14 @@ namespace Presentation.BasicAccess
             {
                 if (treeViewNodes.Count == 0 || treeViewDataSource != selectedValueOfListOfDimensions)
                 {
-                    treeViewNodes = CubeStructure.GetDimensionTreeViewNodes(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
+                    dimensionTreeView = new DimensionTreeView(cubeHandler.GetDimensionStructure(selectedValueOfListOfDimensions));
+                    treeViewNodes = dimensionTreeView.ListOfNodes;
                     treeViewDataSource = selectedValueOfListOfDimensions;
                 }
+                else
+                    dimensionTreeView = new DimensionTreeView(treeViewNodes);
 
-                /*TreeView*/
-                dimensionTreeView = CubeStructure.TreeViewConfig(new TreeView());
                 dimensionTreeView.TreeNodeCheckChanged += dimensionTreeView_TreeNodeCheckChanged;
-
-                foreach (TreeNode treeNode in treeViewNodes)
-                    dimensionTreeView.Nodes.Add(treeNode);
 
                 for (int i = 0; i < selectedDimensions.Count; i++)
                 {
@@ -224,8 +222,9 @@ namespace Presentation.BasicAccess
             if (selectedMeasures.Count > 0)
             {
                 List<string[][]> results = cubeHandler.GetArraysFromSelectedItems(selectedDimensions.Select(d => d.Value).ToList(), selectedMeasures.Select(m => m.Value).ToList());
-                descriptionOfTableOfResults = results.ElementAt(1);
-                tableOfResults = TableOfResults.GetTableOfResults(results.ElementAt(0), ref descriptionOfTableOfResults, selectedDimensions.Select(d => d.Tree).ToList());
+                //descriptionOfTableOfResults = results.ElementAt(1);
+                tableOfResults = new TableOfResults(results.ElementAt(0), results.ElementAt(1), selectedDimensions.Select(d => d.Tree).ToList());
+                mdxDescriptionOfTableOfResults = tableOfResults.MdxDescription;
                 buttonOfReportGeneration.Enabled = true;
                 List<Button> buttonsInTableOfResults = new List<Button>();
 
@@ -281,7 +280,7 @@ namespace Presentation.BasicAccess
             TreeNode checkedNode = e.Node;
             TreeView dimensionTreeView = (TreeView)sender;
 
-            if (checkedNode.Checked && !selectedDimensions.Exists(d => d.Value==checkedNode.Value))
+            if (checkedNode.Checked && !selectedDimensions.Exists(d => d.Value == checkedNode.Value))
             {
                 string nodeTextPath = "/" + checkedNode.Text;
                 StringBuilder nodeValuePath = new StringBuilder(checkedNode.ValuePath);
@@ -298,7 +297,7 @@ namespace Presentation.BasicAccess
 
                 nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
 
-                if (!CubeStructure.GetRootNode(checkedNode).ImageUrl.Contains("attribute"))
+                if (!((MyTreeNode)checkedNode).RootNode.ImageUrl.Contains("attribute"))
                     hierarchyTree = new Tree(checkedNode);
                 else
                     hierarchyTree = null;
@@ -355,11 +354,11 @@ namespace Presentation.BasicAccess
 
             if (columnOfTableOfResults < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
             {
-                List<string> valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).Select(d => d.Value).ToList();
-                List<Tree> treeDoomedForRemoval = selectedDimensions.FindAll(d => d.Tree != null && d.Tree.FindNodeByValue(descriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]) != null).Select(d => d.Tree).ToList();
+                List<string> valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(mdxDescriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).Select(d => d.Value).ToList();
+                List<Tree> treeDoomedForRemoval = selectedDimensions.FindAll(d => d.Tree != null && d.Tree.FindNodeByValue(mdxDescriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]) != null).Select(d => d.Tree).ToList();
 
                 if (valuesOfDimensionsDoomedForRemoval.Count == 0)
-                    valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(descriptionOfTableOfResults[0][columnOfTableOfResults]) && !d.Value.Contains('&')).Select(d => d.Value).ToList();
+                    valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(mdxDescriptionOfTableOfResults[0][columnOfTableOfResults]) && !d.Value.Contains('&')).Select(d => d.Value).ToList();
 
                 foreach (List<Tree> nodes in treeDoomedForRemoval.Select(t => t.AllChildNodes))
                     valuesOfDimensionsDoomedForRemoval.AddRange(nodes.Where(n => selectedDimensions.Exists(d => d.Value == n.Value)).Select(n => n.Value));
@@ -381,7 +380,7 @@ namespace Presentation.BasicAccess
             }
             else
             {
-                SelectedMeasure selectedMeasure = selectedMeasures.Find(m => m.Value.StartsWith(descriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]));
+                SelectedMeasure selectedMeasure = selectedMeasures.Find(m => m.Value.StartsWith(mdxDescriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]));
                 measuresTreeView.FindNode(selectedMeasure.Path).Checked = false;
 
                 selectedMeasures.Remove(selectedMeasure);
@@ -396,7 +395,7 @@ namespace Presentation.BasicAccess
             string buttonId = ((Button)sender).ID.Replace("drill", String.Empty);
             int rowOfTableOfResults = Convert.ToInt16(buttonId.Substring(0, buttonId.IndexOf(';')));
             int columnOfTableOfResults = Convert.ToInt16(buttonId.Substring(buttonId.IndexOf(';') + 1));
-            Tree drilledTree = selectedDimensions.Where(d => d.Tree != null).Select(d => d.Tree.FindNodeByValue(descriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).FirstOrDefault(t => t != null);
+            Tree drilledTree = selectedDimensions.Where(d => d.Tree != null).Select(d => d.Tree.FindNodeByValue(mdxDescriptionOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).FirstOrDefault(t => t != null);
 
             if (drilledTree.Expanded)
                 foreach (Tree tree in drilledTree.AllChildNodes)
@@ -421,12 +420,12 @@ namespace Presentation.BasicAccess
             List<string> namesOfMeasures = new List<string>();
             List<string> namesOfHierarchies = new List<string>();
 
-            for (int i = 0; i < descriptionOfTableOfResults[0].Length; i++)
+            for (int i = 0; i < mdxDescriptionOfTableOfResults[0].Length; i++)
             {
                 ControlCollection cellControls = tableOfResults.Rows[0].Cells[i].Controls;
                 string cellText = ((LiteralControl)cellControls[cellControls.Count - 2]).Text;
 
-                if (!descriptionOfTableOfResults[0][i].Contains("[Measures]"))
+                if (!mdxDescriptionOfTableOfResults[0][i].Contains("[Measures]"))
                     namesOfHierarchies.Add(cellText);
                 else
                     namesOfMeasures.Add(cellText);

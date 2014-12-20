@@ -9,12 +9,12 @@ namespace Presentation.BasicAccess
 {
     public partial class Cubes : System.Web.UI.Page
     {
-        RadioButtonList listOfCubes;
-        
+        RadioButtonListOfCubes listOfCubes;
+
         protected void Page_Load(object sender, EventArgs e)
-        {   
+        {
             BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler();
-            listOfCubes = CubeStructure.GetRadioButtonListOfCubesOrDimensions(handler.GetCubes(), CubeStructure.RadioButtonListType.Cubes);
+            listOfCubes = new RadioButtonListOfCubes(handler.GetCubes());
 
             placeOfListOfCubes.Controls.Add(listOfCubes);
 

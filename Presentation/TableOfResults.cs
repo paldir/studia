@@ -9,43 +9,44 @@ using System.Drawing;
 
 namespace Presentation
 {
-    public class TableOfResults
+    public class TableOfResults : Table
     {
-        public static Table GetTableOfResults(string[][] arrayOfResults, ref string[][] descriptionOfResults, List<Tree> treesOfHierarchies)
+        string[][] array;
+        List<Tree> necessaryTreeOfHierarchies;
+        public string[][] MdxDescription { get; set; }
+
+        public TableOfResults(string[][] arrayOfResults, string[][] mdxDescriptionOfResults, List<Tree> treeOfHierarchies)
         {
-            Table table = new Table(); ;
+            array = arrayOfResults;
+            MdxDescription = mdxDescriptionOfResults;
+            necessaryTreeOfHierarchies = treeOfHierarchies.Where(t => t != null).ToList();
             Bitmap bitMap = new Bitmap(500, 200);
             Graphics graphics = Graphics.FromImage(bitMap);
-            table.ID = "TableOfResults";
-            table.CssClass = "tableOfResults";
-            table.BorderWidth = 1;
-            table.GridLines = (GridLines)3;
-            List<Tree> necessaryTreesOfHierarchies = treesOfHierarchies.Where(t => t != null).ToList();
+            ID = "TableOfResults";
+            CssClass = "tableOfResults";
+            BorderWidth = 1;
+            GridLines = (GridLines)3;
 
-            if (necessaryTreesOfHierarchies.Count > 0)
-            {
-                List<string[][]> arrays = SortArrayRowsBecauseOfHierarchies(arrayOfResults, descriptionOfResults, necessaryTreesOfHierarchies);
-                arrayOfResults = arrays.ElementAt(0);
-                descriptionOfResults = arrays.ElementAt(1);
-            }
+            if (necessaryTreeOfHierarchies.Count > 0)
+                SortArrayRowsBecauseOfHierarchies();
 
-            string[][] description = descriptionOfResults;
+            //descriptionOfResults = description;
 
-            for (int i = 0; i < arrayOfResults.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 TableRow tableRow = new TableRow();
 
-                for (int j = 0; j < arrayOfResults[i].Length; j++)
+                for (int j = 0; j < array[i].Length; j++)
                 {
                     TableCell tableCell = new TableCell();
-                    float widthOfTableCell = graphics.MeasureString(arrayOfResults[i][j], new System.Drawing.Font("Arial", 9)).Width;
+                    float widthOfTableCell = graphics.MeasureString(array[i][j], new System.Drawing.Font("Arial", 9)).Width;
 
-                    tableCell.Controls.Add(new LiteralControl(arrayOfResults[i][j]));
+                    tableCell.Controls.Add(new LiteralControl(array[i][j]));
 
-                    if (description[i][j] != "Value")
+                    if (MdxDescription[i][j] != "Value")
                     {
                         tableCell.Font.Bold = true;
-                        Tree tree = necessaryTreesOfHierarchies.Select(t => t.FindNodeByValue(description[i][j])).FirstOrDefault(t => t != null);
+                        Tree tree = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(MdxDescription[i][j])).FirstOrDefault(t => t != null);
 
                         if (i >= 1)
                         {
@@ -95,16 +96,14 @@ namespace Presentation
                     tableRow.Cells.Add(tableCell);
                 }
 
-                table.Rows.Add(tableRow);
+                Rows.Add(tableRow);
             }
-
-            return table;
         }
 
-        static List<string[][]> SortArrayRowsBecauseOfHierarchies(string[][] array, string[][] description, List<Tree> treesOfHierarchies)
+        void SortArrayRowsBecauseOfHierarchies()
         {
             List<string[]> arrayList = array.ToList();
-            List<string[]> descriptionList = description.ToList();
+            List<string[]> descriptionList = MdxDescription.ToList();
             int counterOfColumnsWithDimensions = descriptionList.ElementAt(0).Count(d => !d.Contains("[Measures]"));
             List<Tree[]> visibleNodes = new List<Tree[]>();
 
@@ -114,7 +113,7 @@ namespace Presentation
 
                 for (int i = 1; i < arrayList.Count; i++)
                 {
-                    Tree hierarchy = treesOfHierarchies.Select(t => t.FindNodeByValue(description[i][j])).FirstOrDefault(h => h != null);
+                    Tree hierarchy = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(MdxDescription[i][j])).FirstOrDefault(h => h != null);
 
                     if (hierarchy == null)
                         break;
@@ -166,7 +165,8 @@ namespace Presentation
                             for (int k = 1; k < descriptionList.Count; k++)
                                 if (descriptionList[k][i] == node.Parent.Value)
                                 {
-                                    List<string> currentRow = descriptionList[index - 1].ToList();
+                                    //List<string> currentRow = descriptionList[index - 1].ToList();
+                                    List<string> currentRow = descriptionToMove.ToList();
                                     List<string> possibleParentRow = descriptionList[k].ToList();
 
                                     currentRow.RemoveAt(i);
@@ -198,7 +198,8 @@ namespace Presentation
                 }
             }
 
-            return new List<string[][]>() { arrayList.ToArray(), descriptionList.ToArray() };
+            array = arrayList.ToArray();
+            MdxDescription = descriptionList.ToArray();
         }
     }
 }

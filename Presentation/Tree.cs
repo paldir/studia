@@ -9,12 +9,10 @@ namespace Presentation
 {
     public class Tree
     {
-        string value;
-        public string Value
-        {
-            get { return value; }
-            private set { this.value = value; }
-        }
+        public string Value { get; private set; }
+        public List<Tree> ChildNodes { get; private set; }
+        public Tree Parent { get; private set; }
+        public int Level { get; private set; }
 
         bool expanded;
         public bool Expanded
@@ -26,19 +24,10 @@ namespace Presentation
                 expanded = value;
 
                 if (!expanded)
-                    foreach (Tree node in childNodes)
+                    foreach (Tree node in ChildNodes)
                         node.Expanded = false;
             }
         }
-
-        List<Tree> childNodes;
-        public List<Tree> ChildNodes { get { return childNodes; } }
-
-        Tree parent;
-        public Tree Parent { get { return parent; } }
-
-        int level;
-        public int Level { get { return level; } }
 
         public List<Tree> AllChildNodes
         {
@@ -46,9 +35,9 @@ namespace Presentation
             {
                 List<Tree> nodes = new List<Tree>();
 
-                nodes.AddRange(childNodes);
+                nodes.AddRange(ChildNodes);
 
-                foreach (Tree tree in childNodes)
+                foreach (Tree tree in ChildNodes)
                     nodes.AddRange(tree.AllChildNodes);
 
                 return nodes;
@@ -60,18 +49,18 @@ namespace Presentation
 
         public Tree(TreeNode nodeOfTreeView, Tree parent = null)
         {
-            value = nodeOfTreeView.Value;
-            expanded = false;
-            childNodes = new List<Tree>();
-            this.parent = parent;
+            Value = nodeOfTreeView.Value;
+            ChildNodes = new List<Tree>();
+            Expanded = false;
+            Parent = parent;
 
-            if (parent == null)
-                level = 0;
+            if (Parent == null)
+                Level = 0;
             else
-                level = parent.level + 1;
+                Level = Parent.Level + 1;
 
             foreach (TreeNode treeNode in nodeOfTreeView.ChildNodes)
-                childNodes.Add(new Tree(treeNode, this));
+                ChildNodes.Add(new Tree(treeNode, this));
         }
 
         public Tree FindNodeByValue(string value)
