@@ -193,7 +193,6 @@ namespace Presentation
                                 sorted.Insert(parentIndex + 1, true);
                             }
                         }
-
                     }
                 }
             }

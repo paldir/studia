@@ -9,12 +9,12 @@ namespace Presentation
 {
     public class DimensionTreeView : MyTreeView
     {
-        public List<MyTreeNode> ListOfNodes { get; set; }
+        public List<TreeNode> ListOfNodes { get; set; }
 
         public DimensionTreeView(DataAccess.Dimension dimension)
             : this()
         {
-            ListOfNodes = new List<MyTreeNode>();
+            ListOfNodes = new List<TreeNode>();
             List<DataAccess.Hierarchy> hierarchies = dimension.AttributeHierarchies.Concat(dimension.Hierarchies).ToList();
             List<string> displayFolders = hierarchies.Select(h => h.DisplayFolder).Distinct().ToList();
 
@@ -57,11 +57,11 @@ namespace Presentation
                 }
             }
 
-            MyTreeNode treeNodeToMove = ListOfNodes.Find(n => n.Value == String.Empty);
+            TreeNode treeNodeToMove = ListOfNodes.Find(n => n.Value == String.Empty);
 
             if (treeNodeToMove != null)
             {
-                foreach (MyTreeNode treeNode in treeNodeToMove.ChildNodes)
+                foreach (TreeNode treeNode in treeNodeToMove.ChildNodes)
                     ListOfNodes.Add(treeNode);
 
                 ListOfNodes.Remove(treeNodeToMove);
@@ -70,7 +70,7 @@ namespace Presentation
             AddNodesToTreeView();
         }
 
-        public DimensionTreeView(List<MyTreeNode> treeNodes)
+        public DimensionTreeView(List<TreeNode> treeNodes)
             : this()
         {
             ListOfNodes = treeNodes;
@@ -87,7 +87,7 @@ namespace Presentation
 
         void AddNodesToTreeView()
         {
-            foreach (MyTreeNode treeNode in ListOfNodes)
+            foreach (TreeNode treeNode in ListOfNodes)
                 Nodes.Add(treeNode);
         }
 

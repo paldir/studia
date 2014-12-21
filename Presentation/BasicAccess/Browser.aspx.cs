@@ -58,14 +58,14 @@ namespace Presentation.BasicAccess
             set { Session["selectedValueOfListOfDimensions"] = value; }
         }
 
-        List<MyTreeNode> treeViewNodes
+        List<TreeNode> treeViewNodes
         {
             get
             {
                 if (Session["treeViewNodes"] == null)
-                    Session["treeViewNodes"] = new List<MyTreeNode>();
+                    Session["treeViewNodes"] = new List<TreeNode>();
 
-                return (List<MyTreeNode>)Session["treeViewNodes"];
+                return (List<TreeNode>)Session["treeViewNodes"];
             }
             set { Session["treeViewNodes"] = value; }
         }
@@ -277,7 +277,7 @@ namespace Presentation.BasicAccess
 
         void dimensionTreeView_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
         {
-            TreeNode checkedNode = e.Node;
+            MyTreeNode checkedNode = (MyTreeNode)e.Node;
             TreeView dimensionTreeView = (TreeView)sender;
 
             if (checkedNode.Checked && !selectedDimensions.Exists(d => d.Value == checkedNode.Value))
@@ -297,7 +297,7 @@ namespace Presentation.BasicAccess
 
                 nodeTextPath = String.Concat(listOfDimensions.SelectedItem.Text, nodeTextPath);
 
-                if (!((MyTreeNode)checkedNode).RootNode.ImageUrl.Contains("attribute"))
+                if (!checkedNode.RootNode.ImageUrl.Contains("attribute"))
                     hierarchyTree = new Tree(checkedNode);
                 else
                     hierarchyTree = null;
