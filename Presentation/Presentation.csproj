@@ -142,6 +142,7 @@
     <Compile Include="SelectedDimension.cs" />
     <Compile Include="SelectedItem.cs" />
     <Compile Include="SelectedMeasure.cs" />
+    <Compile Include="SessionKeys.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

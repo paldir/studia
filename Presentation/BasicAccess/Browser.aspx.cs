@@ -23,64 +23,74 @@ namespace Presentation.BasicAccess
         {
             get
             {
-                if (Session["selectedDimensions"] == null)
-                    Session["selectedDimensions"] = new List<SelectedDimension>();
+                string key = SessionKeys.Browser.SelectedDimensions;
 
-                return (List<SelectedDimension>)Session["selectedDimensions"];
+                if (Session[key] == null)
+                    Session[key] = new List<SelectedDimension>();
+
+                return (List<SelectedDimension>)Session[key];
             }
 
-            set { Session["selectedDimensions"] = value; }
+            set { Session[SessionKeys.Browser.SelectedDimensions] = value; }
         }
 
         List<SelectedMeasure> selectedMeasures
         {
             get
             {
-                if (Session["selectedMeasures"] == null)
-                    Session["selectedMeasures"] = new List<SelectedMeasure>();
+                string key = SessionKeys.Browser.SelectedMeasures;
 
-                return (List<SelectedMeasure>)Session["selectedMeasures"];
+                if (Session[key] == null)
+                    Session[key] = new List<SelectedMeasure>();
+
+                return (List<SelectedMeasure>)Session[key];
             }
 
-            set { Session["selectedMeasures"] = value; }
+            set { Session[SessionKeys.Browser.SelectedMeasures] = value; }
         }
 
         string selectedValueOfListOfDimensions
         {
             get
             {
-                if (Session["selectedValueOfListOfDimensions"] == null)
+                string key = SessionKeys.Browser.SelectedValueOfListOfDimensions;
+
+                if (Session[key] == null)
                     return String.Empty;
                 else
-                    return Session["selectedValueOfListOfDimensions"].ToString();
+                    return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfDimensions"] = value; }
+            set { Session[SessionKeys.Browser.SelectedValueOfListOfDimensions] = value; }
         }
 
         List<TreeNode> treeViewNodes
         {
             get
             {
-                if (Session["treeViewNodes"] == null)
-                    Session["treeViewNodes"] = new List<TreeNode>();
+                string key = SessionKeys.Browser.TreeViewNodes;
 
-                return (List<TreeNode>)Session["treeViewNodes"];
+                if (Session[key] == null)
+                    Session[key] = new List<TreeNode>();
+
+                return (List<TreeNode>)Session[key];
             }
-            set { Session["treeViewNodes"] = value; }
+            set { Session[SessionKeys.Browser.TreeViewNodes] = value; }
         }
 
         string treeViewDataSource
         {
             get
             {
-                if (Session["treeViewDataSource"] == null)
+                string key = SessionKeys.Browser.TreeViewDataSource;
+
+                if (Session[key] == null)
                     return String.Empty;
                 else
-                    return Session["treeViewDataSource"].ToString();
+                    return Session[key].ToString();
             }
 
-            set { Session["treeViewDataSource"] = value; }
+            set { Session[SessionKeys.Browser.TreeViewDataSource] = value; }
         }
         #endregion
 
@@ -93,25 +103,8 @@ namespace Presentation.BasicAccess
             InitializeCentralColumn();
             InitializeRightColumn();
 
-            foreach (string key in AdvancedAccess.ReportConfiguration.SessionKeys())
+            foreach (string key in SessionKeys.ReportConfiguration.All)
                 Session.Remove(key);
-        }
-
-        public static List<string> SessionKeys()
-        {
-            return new List<string>()
-            {
-                "selectedDimensions",
-                /*"selectedDimensionsValues",
-                "pathsOfSelectedDimensions",
-                "treeOfSelectedDimensions",*/
-                "selectedMeasures",
-                "selectedMeasuresValues",
-                "pathsOfSelectedMeasures",
-                "selectedValueOfListOfDimensions",
-                "treeViewNodes",
-                "treeViewDataSource"
-            }.Concat(AdvancedAccess.ReportConfiguration.SessionKeys()).ToList();
         }
 
         void InitializeLeftColumn()
@@ -456,9 +449,9 @@ namespace Presentation.BasicAccess
 
             //Session.Clear(); 
 
-            Session["namesOfHierarchies"] = namesOfHierarchies;
-            Session["namesOfMeasures"] = namesOfMeasures;
-            Session["rows"] = rows;
+            Session[SessionKeys.ReportConfiguration.NamesOfHierarchies] = namesOfHierarchies;
+            Session[SessionKeys.ReportConfiguration.NamesOfMeasures] = namesOfMeasures;
+            Session[SessionKeys.ReportConfiguration.Rows] = rows;
 
             Response.Redirect("~/AdvancedAccess/ReportConfiguration.aspx");
         }

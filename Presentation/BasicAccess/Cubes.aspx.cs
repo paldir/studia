@@ -20,7 +20,7 @@ namespace Presentation.BasicAccess
 
             buttonOfBrowsing.Click += buttonOfBrowsing_Click;
 
-            foreach (string key in Browser.SessionKeys())
+            foreach (string key in SessionKeys.Browser.All.Concat(SessionKeys.ReportConfiguration.All))
                 Session.Remove(key);
         }
 
