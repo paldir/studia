@@ -11,14 +11,16 @@ namespace Presentation
 {
     public class TableOfResults : Table
     {
-        string[][] array;
+        string[][] results;
         List<Tree> necessaryTreeOfHierarchies;
-        public string[][] MdxDescription { get; set; }
 
-        public TableOfResults(string[][] arrayOfResults, string[][] mdxDescriptionOfResults, List<Tree> treeOfHierarchies)
-        {
-            array = arrayOfResults;
-            MdxDescription = mdxDescriptionOfResults;
+        string[][] correspondingMDX;
+        public string[][] GetCorrespondingMdx() { return correspondingMDX; }
+
+        public TableOfResults(DataAccess.QueryResults queryResult, List<Tree> treeOfHierarchies)
+        {   
+            results = queryResult.GetResults();
+            correspondingMDX = queryResult.GetCorrespondingMdx();
             necessaryTreeOfHierarchies = treeOfHierarchies.Where(t => t != null).ToList();
             Bitmap bitMap = new Bitmap(500, 200);
             Graphics graphics = Graphics.FromImage(bitMap);
@@ -32,21 +34,21 @@ namespace Presentation
 
             //descriptionOfResults = description;
 
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < results.Length; i++)
             {
                 TableRow tableRow = new TableRow();
 
-                for (int j = 0; j < array[i].Length; j++)
+                for (int j = 0; j < results[i].Length; j++)
                 {
                     TableCell tableCell = new TableCell();
-                    float widthOfTableCell = graphics.MeasureString(array[i][j], new System.Drawing.Font("Arial", 9)).Width;
+                    float widthOfTableCell = graphics.MeasureString(results[i][j], new System.Drawing.Font("Arial", 9)).Width;
 
-                    tableCell.Controls.Add(new LiteralControl(array[i][j]));
+                    tableCell.Controls.Add(new LiteralControl(results[i][j]));
 
-                    if (MdxDescription[i][j] != "Value")
+                    if (correspondingMDX[i][j] != "Value")
                     {
                         tableCell.Font.Bold = true;
-                        Tree tree = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(MdxDescription[i][j])).FirstOrDefault(t => t != null);
+                        Tree tree = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(correspondingMDX[i][j])).FirstOrDefault(t => t != null);
 
                         if (i >= 1)
                         {
@@ -54,7 +56,7 @@ namespace Presentation
                             {
                                 int additionalPadding = 0;
 
-                                if (tree.ChildNodes.Count > 0)
+                                if (tree.GetChildNodes().Count > 0)
                                 {
                                     Button drillthroughButton = new Button();
                                     drillthroughButton.Width = 15;
@@ -102,8 +104,8 @@ namespace Presentation
 
         void SortArrayRowsBecauseOfHierarchies()
         {
-            List<string[]> arrayList = array.ToList();
-            List<string[]> descriptionList = MdxDescription.ToList();
+            List<string[]> arrayList = results.ToList();
+            List<string[]> descriptionList = correspondingMDX.ToList();
             int counterOfColumnsWithDimensions = descriptionList.ElementAt(0).Count(d => !d.Contains("[Measures]"));
             List<Tree[]> visibleNodes = new List<Tree[]>();
 
@@ -113,7 +115,7 @@ namespace Presentation
 
                 for (int i = 1; i < arrayList.Count; i++)
                 {
-                    Tree hierarchy = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(MdxDescription[i][j])).FirstOrDefault(h => h != null);
+                    Tree hierarchy = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(correspondingMDX[i][j])).FirstOrDefault(h => h != null);
 
                     if (hierarchy == null)
                         break;
@@ -197,8 +199,8 @@ namespace Presentation
                 }
             }
 
-            array = arrayList.ToArray();
-            MdxDescription = descriptionList.ToArray();
+            results = arrayList.ToArray();
+            correspondingMDX = descriptionList.ToArray();
         }
     }
 }

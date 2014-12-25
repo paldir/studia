@@ -10,9 +10,11 @@ namespace Presentation
     public class Tree
     {
         public string Value { get; private set; }
-        public List<Tree> ChildNodes { get; private set; }
         public Tree Parent { get; private set; }
         public int Level { get; private set; }
+
+        List<Tree> childNodes;
+        public List<Tree> GetChildNodes() { return childNodes; }
 
         bool expanded;
         public bool Expanded
@@ -24,7 +26,7 @@ namespace Presentation
                 expanded = value;
 
                 if (!expanded)
-                    foreach (Tree node in ChildNodes)
+                    foreach (Tree node in childNodes)
                         node.Expanded = false;
             }
         }
@@ -35,9 +37,9 @@ namespace Presentation
             {
                 List<Tree> nodes = new List<Tree>();
 
-                nodes.AddRange(ChildNodes);
+                nodes.AddRange(childNodes);
 
-                foreach (Tree tree in ChildNodes)
+                foreach (Tree tree in childNodes)
                     nodes.AddRange(tree.AllChildNodes);
 
                 return nodes;
@@ -50,7 +52,7 @@ namespace Presentation
         public Tree(TreeNode nodeOfTreeView, Tree parent = null)
         {
             Value = nodeOfTreeView.Value;
-            ChildNodes = new List<Tree>();
+            childNodes = new List<Tree>();
             Expanded = false;
             Parent = parent;
 
@@ -60,7 +62,7 @@ namespace Presentation
                 Level = Parent.Level + 1;
 
             foreach (TreeNode treeNode in nodeOfTreeView.ChildNodes)
-                ChildNodes.Add(new Tree(treeNode, this));
+                childNodes.Add(new Tree(treeNode, this));
         }
 
         public Tree FindNodeByValue(string value)
@@ -69,7 +71,7 @@ namespace Presentation
                 return this;
 
             Tree result = null;
-            List<Tree> children = ChildNodes;
+            List<Tree> children = childNodes;
 
             for (int i = 0; result == null && i < children.Count; i++)
                 result = children[i].FindNodeByValue(value);

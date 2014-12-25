@@ -22,6 +22,6 @@ namespace BusinessLogic
 
         public DataAccess.Dimension GetDimensionStructure(string nameOfDimension) { return cubeAccess.GetDimensionStructure(nameOfDimension); }
 
-        public List<string[][]> GetArraysFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures) { return cubeAccess.GetArraysFromSelectedItems(selectedDimensions, selectedMeasures); }
+        public DataAccess.QueryResults GetArraysFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures) { return cubeAccess.GetArraysFromSelectedItems(selectedDimensions, selectedMeasures); }
     }
 }

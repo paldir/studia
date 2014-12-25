@@ -8,20 +8,20 @@ namespace DataAccess
 {
     public class Measure
     {
-        string name;
-        public string Name { get { return name; } }
+        //string name;
+        public string Name { get; private set; }
 
-        string uniqueName;
-        public string UniqueName { get { return uniqueName; } }
+        //string uniqueName;
+        public string UniqueName { get; private set; }
 
-        string measureGroup;
-        public string MeasureGroup { get { return measureGroup; } }
+        //string measureGroup;
+        public string MeasureGroup { get; private set; }
 
         public Measure(Microsoft.AnalysisServices.AdomdClient.Measure measure)
         {
-            name = measure.Name;
-            uniqueName = measure.UniqueName;
-            measureGroup = measure.Properties["MEASUREGROUP_NAME"].Value.ToString();
+            Name = measure.Name;
+            UniqueName = measure.UniqueName;
+            MeasureGroup = measure.Properties["MEASUREGROUP_NAME"].Value.ToString();
         }
     }
 }

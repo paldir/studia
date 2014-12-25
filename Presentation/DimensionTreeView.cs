@@ -9,13 +9,14 @@ namespace Presentation
 {
     public class DimensionTreeView : MyTreeView
     {
-        public List<TreeNode> ListOfNodes { get; set; }
+        List<TreeNode> listOfNodes;
+        public List<TreeNode> GetListOfNodes() { return listOfNodes; }
 
         public DimensionTreeView(DataAccess.Dimension dimension)
             : this()
         {
-            ListOfNodes = new List<TreeNode>();
-            List<DataAccess.Hierarchy> hierarchies = dimension.AttributeHierarchies.Concat(dimension.Hierarchies).ToList();
+            listOfNodes = new List<TreeNode>();
+            List<DataAccess.Hierarchy> hierarchies = dimension.GetAttributeHierarchies().Concat(dimension.GetHierarchies()).ToList();
             List<string> displayFolders = hierarchies.Select(h => h.DisplayFolder).Distinct().ToList();
 
             displayFolders.Sort();
@@ -28,7 +29,7 @@ namespace Presentation
                 if (firstLevelChildren.Count > 0)
                     treeNodeSelectAction = TreeNodeSelectAction.Expand;
 
-                ListOfNodes.Add(new MyTreeNode(displayFolder, displayFolder, treeNodeSelectAction, false, "~/Images/folder.png"));
+                listOfNodes.Add(new MyTreeNode(displayFolder, displayFolder, treeNodeSelectAction, false, "~/Images/folder.png"));
 
                 foreach (DataAccess.Hierarchy hierarchy in firstLevelChildren)
                 {
@@ -50,21 +51,21 @@ namespace Presentation
                             break;
                     }
 
-                    ListOfNodes.Last().ChildNodes.Add(new MyTreeNode(hierarchy.Name, hierarchy.UniqueName, treeNodeSelectAction, true, imageUrl));
+                    listOfNodes.Last().ChildNodes.Add(new MyTreeNode(hierarchy.Name, hierarchy.UniqueName, treeNodeSelectAction, true, imageUrl));
 
                     foreach (DataAccess.Member member in secondLevelChildren)
-                        ListOfNodes.Last().ChildNodes[ListOfNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(AddTreeNodeOfMember(member));
+                        listOfNodes.Last().ChildNodes[listOfNodes.Last().ChildNodes.Count - 1].ChildNodes.Add(AddTreeNodeOfMember(member));
                 }
             }
 
-            TreeNode treeNodeToMove = ListOfNodes.Find(n => n.Value == String.Empty);
+            TreeNode treeNodeToMove = listOfNodes.Find(n => n.Value == String.Empty);
 
             if (treeNodeToMove != null)
             {
                 foreach (TreeNode treeNode in treeNodeToMove.ChildNodes)
-                    ListOfNodes.Add(treeNode);
+                    listOfNodes.Add(treeNode);
 
-                ListOfNodes.Remove(treeNodeToMove);
+                listOfNodes.Remove(treeNodeToMove);
             }
 
             AddNodesToTreeView();
@@ -73,7 +74,7 @@ namespace Presentation
         public DimensionTreeView(List<TreeNode> treeNodes)
             : this()
         {
-            ListOfNodes = treeNodes;
+            listOfNodes = treeNodes;
 
             AddNodesToTreeView();
         }
@@ -87,7 +88,7 @@ namespace Presentation
 
         void AddNodesToTreeView()
         {
-            foreach (TreeNode treeNode in ListOfNodes)
+            foreach (TreeNode treeNode in listOfNodes)
                 Nodes.Add(treeNode);
         }
 

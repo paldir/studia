@@ -74,7 +74,7 @@ namespace DataAccess
             return dimension;
         }
 
-        public List<string[][]> GetArraysFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
+        public QueryResults GetArraysFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
         {
             string mDXQuery = String.Empty;
 

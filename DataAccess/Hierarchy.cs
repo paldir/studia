@@ -11,42 +11,41 @@ namespace DataAccess
     public class Hierarchy
     {
 
-        string name;
-        public string Name { get { return name; } }
+        //string name;
+        public string Name { get; private set; }
 
-        string uniqueName;
-        public string UniqueName { get { return uniqueName; } }
+        //string uniqueName;
+        public string UniqueName { get; private set; }
 
-        string displayFolder;
-        public string DisplayFolder { get { return displayFolder; } }
+        //string displayFolder;
+        public string DisplayFolder { get; private set; }
 
-        HierarchyType hierarchyType;
-        public HierarchyType HierarchyType { get { return hierarchyType; } }
+        //HierarchyType hierarchyType;
+        public HierarchyType HierarchyType { get; private set; }
 
         List<Member> members;
+        public List<Member> GetMembers() { return members; }
 
         public Hierarchy(Microsoft.AnalysisServices.AdomdClient.Hierarchy hierarchy)
         {
-            name = hierarchy.Name;
-            uniqueName = hierarchy.UniqueName;
-            displayFolder = hierarchy.DisplayFolder;
+            Name = hierarchy.Name;
+            UniqueName = hierarchy.UniqueName;
+            DisplayFolder = hierarchy.DisplayFolder;
             members = new List<Member>();
             Microsoft.AnalysisServices.AdomdClient.MemberCollection ASMembers = hierarchy.Levels[0].GetMembers();
 
             switch (hierarchy.HierarchyOrigin)
             {
                 case Microsoft.AnalysisServices.AdomdClient.HierarchyOrigin.AttributeHierarchy:
-                    hierarchyType = HierarchyType.AttributeHierarchy;
+                    HierarchyType = HierarchyType.AttributeHierarchy;
                     break;
                 default:
-                    hierarchyType = HierarchyType.Hierarchy;
+                    HierarchyType = HierarchyType.Hierarchy;
                     break;
             }
 
             foreach (Microsoft.AnalysisServices.AdomdClient.Member member in ASMembers)
                 members.Add(new Member(member));
         }
-
-        public List<Member> GetMembers() { return members; }
     }
 }

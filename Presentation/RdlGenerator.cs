@@ -446,8 +446,8 @@ namespace Presentation
             writer.WriteEndElement();
         }
 
-        string GenerateRandomName() { return "a" + Guid.NewGuid().ToString().Replace("-", String.Empty); }
+        static string GenerateRandomName() { return "a" + Guid.NewGuid().ToString().Replace("-", String.Empty); }
 
-        string ConvertFloatToString(float number) { return number.ToString().Replace(',', '.'); }
+        static string ConvertFloatToString(float number) { return number.ToString().Replace(',', '.'); }
     }
 }

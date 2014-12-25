@@ -32,7 +32,7 @@ namespace Presentation.AdvancedAccess
             }
         }
 
-        System.IO.MemoryStream GetStreamOfReport(string reportDefinition)
+        static System.IO.MemoryStream GetStreamOfReport(string reportDefinition)
         {
             byte[] rdlBytes = System.Text.Encoding.UTF8.GetBytes(reportDefinition);
             return new System.IO.MemoryStream(rdlBytes);

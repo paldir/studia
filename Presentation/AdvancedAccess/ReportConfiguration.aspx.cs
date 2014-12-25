@@ -464,13 +464,6 @@ namespace Presentation.AdvancedAccess
             return result;
         }
 
-        string ReplacePolishCharacters(string statement)
-        {
-            statement = statement.Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
-
-            return statement;
-        }
-
         float GetFontSizeFromTextBox()
         {
             float fontSize;
@@ -481,7 +474,14 @@ namespace Presentation.AdvancedAccess
             return fontSize;
         }
 
-        string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
+        static string ReplacePolishCharacters(string statement)
+        {
+            statement = statement.Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
+
+            return statement;
+        }
+
+        static string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
         {
             string pDFDefinition = String.Copy(reportDefinition);
             int index = reportDefinition.IndexOf("<TablixRow>");

@@ -7,7 +7,7 @@ using Microsoft.AnalysisServices.AdomdClient;
 
 namespace DataAccess
 {
-    class ASHelper
+    static class ASHelper
     {
         const string connectionString = "Data Source=localhost;";
 
@@ -34,7 +34,7 @@ namespace DataAccess
             return results;
         }
 
-        public static List<string[][]> ConvertCellSetToArrays(CellSet cellSet)
+        public static QueryResults ConvertCellSetToArrays(CellSet cellSet)
         {
             int rowsCount = 2, columnsCount = 1, countOfCaptionsOfRow = 0;
 
@@ -48,65 +48,45 @@ namespace DataAccess
 
             columnsCount = cellSet.Axes[0].Set.Tuples.Count + countOfCaptionsOfRow;
 
-            string[][] results = new string[rowsCount][];
-            string[][] description = new string[rowsCount][];
-
-            for(int i=0; i<rowsCount; i++)
-                for (int j = 0; j < columnsCount; j++)
-                {
-                    results[i] = new string[columnsCount];
-                    description[i] = new string[columnsCount];
-                }
+            QueryResults queryResult = new QueryResults(rowsCount, columnsCount);
 
             for (int i = 0; i < countOfCaptionsOfRow; i++)
             {
                 string hierarchyName = cellSet.Axes[1].Set.Tuples[0].Members[i].Name;
                 string captionOfHierarchy;
+                string resultCell;
 
                 if (hierarchyName.Count(n => n == '.') > 1)
                     hierarchyName = hierarchyName.Substring(0, hierarchyName.IndexOf('.', hierarchyName.IndexOf('.') + 1));
 
-                captionOfHierarchy = results[0][i] = hierarchyName.Replace("[", String.Empty).Replace("]", String.Empty).Replace('.', '/');
+                captionOfHierarchy = hierarchyName.Replace("[", String.Empty).Replace("]", String.Empty).Replace('.', '/');
 
                 if (captionOfHierarchy.Count(d => d == '/') > 1)
-                    results[0][i] = captionOfHierarchy.Substring(0, captionOfHierarchy.LastIndexOf('/'));
+                    resultCell = captionOfHierarchy.Substring(0, captionOfHierarchy.LastIndexOf('/'));
                 else
-                    results[0][i] = captionOfHierarchy;
+                    resultCell = captionOfHierarchy;
 
-                description[0][i] = hierarchyName;
+                queryResult[0, i] = new CellOfQueryResults(resultCell, hierarchyName);
             }
 
             for (int i = countOfCaptionsOfRow; i < columnsCount; i++)
-            {
-                results[0][i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].Caption;
-                description[0][i] = cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName;
-            }
+                queryResult[0, i] = new CellOfQueryResults(cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].Caption, cellSet.Axes[0].Set.Tuples[i - countOfCaptionsOfRow].Members[0].UniqueName);
 
             if (cellSet.Axes.Count > 1)
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = 0; j < countOfCaptionsOfRow; j++)
-                    {
-                        results[i][j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].Caption;
-                        description[i][j] = cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName;
-                    }
-
+                        queryResult[i, j] = new CellOfQueryResults(cellSet.Axes[1].Set.Tuples[i - 1].Members[j].Caption, cellSet.Axes[1].Set.Tuples[i - 1].Members[j].UniqueName);
 
             if (cellSet.Axes.Count == 1)
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = countOfCaptionsOfRow; j < columnsCount; j++)
-                    {
-                        results[i][j] = cellSet.Cells[j - countOfCaptionsOfRow].FormattedValue;
-                        description[i][j] = "Value";
-                    }
+                        queryResult[i, j] = new CellOfQueryResults(cellSet.Cells[j - countOfCaptionsOfRow].FormattedValue, "Value");
             else
                 for (int i = 1; i < rowsCount; i++)
                     for (int j = countOfCaptionsOfRow; j < columnsCount; j++)
-                    {
-                        results[i][j] = cellSet.Cells[j - countOfCaptionsOfRow, i - 1].FormattedValue;
-                        description[i][j] = "Value";
-                    }
+                        queryResult[i, j] = new CellOfQueryResults(cellSet.Cells[j - countOfCaptionsOfRow, i - 1].FormattedValue, "Value");
 
-            return new List<string[][]> { results, description };
+            return queryResult;
         }
 
         public static List<string> SortHierarchiesByCountOfMembers(List<string> namesOfHierarchies, List<string> selectedDimensions)

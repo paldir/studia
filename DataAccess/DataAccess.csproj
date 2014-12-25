@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CellOfQueryResults.cs" />
     <Compile Include="Hierarchy.cs" />
     <Compile Include="CubeASAccess.cs" />
     <Compile Include="ASHelper.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Measure.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Microsoft.AnalysisServices.AdomdClient.dll" />
