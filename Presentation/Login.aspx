@@ -9,14 +9,14 @@
 </head>
 <body>
     <form id="form" runat="server">
-    <div class="placeOfLogin">
+    <div id="placeOfLogin" class="placeOfLogin" runat="server">
         <asp:Login ID="login" runat="server">
             <LayoutTemplate>
                 <table>
                     <tr>
-                        <td>Poziom dostępu:</td>
+                        <td style="text-align: right">Poziom dostępu:</td>
                         <td>
-                            <asp:DropDownList ID="UserName" Width="120" runat="server">
+                            <asp:DropDownList ID="UserName" Width="200" runat="server">
                                 <asp:ListItem>Podstawowy</asp:ListItem>
                                 <asp:ListItem>Zaawansowany</asp:ListItem>
                             </asp:DropDownList>
@@ -25,12 +25,18 @@
                     <tr>
                         <td style="text-align: right">Hasło:</td>
                         <td>
-                            <asp:TextBox ID="Password" TextMode="Password" Width="120" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="Password" TextMode="Password" Width="200" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Nazwa bazy danych:</td>
+                        <td>
+                            <asp:TextBox ID="DataBase" Text="AdventureWorksDW2012Multidimensional-EE" Width="200" runat="server"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">                                                                            
-                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" CssClass="simpleButton" runat="server" /></p>
+                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" CssClass="simpleButton" OnClick="Login_Click" runat="server" /></p>
                             <p style="text-align: center"><asp:Literal ID="FailureText" runat="server"></asp:Literal></p>
                         </td>
                     </tr>

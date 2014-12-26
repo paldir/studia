@@ -8,11 +8,13 @@ namespace BusinessLogic
 {
     public class CubeHandler
     {
-        DataAccess.CubeASAccess cubeAccess = null;
+        DataAccess.CubeAsAccess cubeAccess = null;
 
-        public CubeHandler() { cubeAccess = new DataAccess.CubeASAccess(); }
+        public CubeHandler() { cubeAccess = new DataAccess.CubeAsAccess(); }
 
-        public CubeHandler(string cubeName) { cubeAccess = new DataAccess.CubeASAccess(cubeName); }
+        public CubeHandler(string cubeName) { cubeAccess = new DataAccess.CubeAsAccess(cubeName); }
+
+        public DataAccess.EstablishingConnectionResult SetDataBase(string name) { return cubeAccess.SetDataBase(name); }
 
         public List<string> GetCubes() { return cubeAccess.GetCubes(); }
 

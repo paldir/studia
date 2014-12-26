@@ -8,41 +8,59 @@ using Microsoft.AnalysisServices.AdomdClient;
 
 namespace DataAccess
 {
-    public class CubeASAccess
+    public enum EstablishingConnectionResult { Success, ServerNotRunning, DataBaseNonExistent };
+    
+    public class CubeAsAccess
     {
         string cubeName;
 
-        public CubeASAccess() { }
+        public CubeAsAccess() { }
 
-        public CubeASAccess(string cubeName) { this.cubeName = cubeName; }
+        public CubeAsAccess(string cubeName) { this.cubeName = cubeName; }
 
         public List<string> GetCubes()
-        {
+        {   
             List<string> cubes = new List<string>();
 
-            using (AdomdConnection connection = ASHelper.EstablishConnection())
+            using (AdomdConnection connection = AsHelper.EstablishConnection())
             {
                 foreach (CubeDef cube in connection.Cubes)
                     switch (cube.Type)
                     {
                         case CubeType.Cube:
                             cubes.Add(cube.Name);
+
                             break;
                     }
             }
 
             return cubes;
         }
-        
+
+        public EstablishingConnectionResult SetDataBase(string name)
+        {
+            AsHelper.DataBase = name;
+
+            try
+            {
+                string dataBase;
+
+                using (AdomdConnection connection = AsHelper.EstablishConnection())
+                    dataBase = connection.Database;
+
+                return EstablishingConnectionResult.Success;
+            }
+            catch (AdomdConnectionException) { return EstablishingConnectionResult.ServerNotRunning; }
+            catch (AdomdErrorResponseException) { return EstablishingConnectionResult.DataBaseNonExistent; }
+        }
+
         public List<Measure> GetMeasures()
         {
             List<Measure> listOfMeasures = new List<Measure>();
 
-            using (AdomdConnection connection = ASHelper.EstablishConnection())
-            {
+            using (AdomdConnection connection = AsHelper.EstablishConnection())
                 foreach (Microsoft.AnalysisServices.AdomdClient.Measure measure in connection.Cubes[cubeName].Measures)
                     listOfMeasures.Add(new Measure(measure));
-            }
 
             listOfMeasures = listOfMeasures.OrderBy(m => m.MeasureGroup).ToList();
 
@@ -53,11 +71,9 @@ namespace DataAccess
         {
             List<String> listOfDimensions = new List<string>();
 
-            using (AdomdConnection connection = ASHelper.EstablishConnection())
-            {
+            using (AdomdConnection connection = AsHelper.EstablishConnection())
                 foreach (Microsoft.AnalysisServices.AdomdClient.Dimension dimension in connection.Cubes[cubeName].Dimensions)
                     listOfDimensions.Add(dimension.Name);
-            }
 
             return listOfDimensions;
         }
@@ -66,10 +82,8 @@ namespace DataAccess
         {
             Dimension dimension;
 
-            using (AdomdConnection connection = ASHelper.EstablishConnection())
-            {
+            using (AdomdConnection connection = AsHelper.EstablishConnection())
                 dimension = new Dimension(connection.Cubes[cubeName].Dimensions[nameOfDimension]);
-            }
 
             return dimension;
         }
@@ -99,7 +113,7 @@ namespace DataAccess
                 if (hierarchiesOfSelectedDimensions.Count > 1)
                 {
                     mDXQuery += "Crossjoin";
-                    hierarchiesOfSelectedDimensions = ASHelper.SortHierarchiesByCountOfMembers(hierarchiesOfSelectedDimensions, selectedDimensions);
+                    hierarchiesOfSelectedDimensions = AsHelper.SortHierarchiesByCountOfMembers(hierarchiesOfSelectedDimensions, selectedDimensions);
                 }
 
                 mDXQuery += "(";
@@ -133,7 +147,7 @@ namespace DataAccess
             mDXQuery += " ON 0 ";
             mDXQuery += "FROM [" + cubeName + "]";
 
-            return ASHelper.ConvertCellSetToArrays(ASHelper.ExecuteMDXQuery(mDXQuery));
+            return AsHelper.ConvertCellSetToArrays(AsHelper.ExecuteMDXQuery(mDXQuery));
         }
     }
 }

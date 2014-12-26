@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices.AdomdClient;
 
 namespace DataAccess
 {
-    static class ASHelper
+    static class AsHelper
     {
         const string connectionString = "Data Source=localhost;";
+        public static string DataBase { get; set; }
 
         public static AdomdConnection EstablishConnection()
         {
-            AdomdConnection connection = new AdomdConnection(connectionString);
+            string newConnectionString = connectionString;
+
+            if (!String.IsNullOrEmpty(DataBase))
+                newConnectionString += "Catalog=" + DataBase;
+
+            AdomdConnection connection = new AdomdConnection(newConnectionString);
+
             connection.Open();
 
             return connection;
@@ -27,7 +35,6 @@ namespace DataAccess
             {
                 AdomdCommand command = connection.CreateCommand();
                 command.CommandText = mDXQuery;
-
                 results = command.ExecuteCellSet();
             }
 

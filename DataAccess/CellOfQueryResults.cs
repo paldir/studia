@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    internal class CellOfQueryResults
+    public class CellOfQueryResults
     {
         public string Result { get; private set; }
         public string Mdx { get; private set; }

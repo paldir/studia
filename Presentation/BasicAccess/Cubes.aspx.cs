@@ -14,11 +14,42 @@ namespace Presentation.BasicAccess
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler();
-            listOfCubes = new RadioButtonListOfCubes(handler.GetCubes());
+            string dataBase = Session["dataBase"].ToString();
+            DataAccess.EstablishingConnectionResult establishingConnectionResult = handler.SetDataBase(dataBase);
 
-            placeOfListOfCubes.Controls.Add(listOfCubes);
+            switch (establishingConnectionResult)
+            {
+                case DataAccess.EstablishingConnectionResult.Success:
+                    listOfCubes = new RadioButtonListOfCubes(handler.GetCubes());
 
-            buttonOfBrowsing.Click += buttonOfBrowsing_Click;
+                    placeOfListOfCubes.Controls.Add(listOfCubes);
+
+                    buttonOfBrowsing.Click += buttonOfBrowsing_Click;
+
+                    break;
+
+                case DataAccess.EstablishingConnectionResult.ServerNotRunning:
+                case DataAccess.EstablishingConnectionResult.DataBaseNonExistent:
+                    buttonOfBrowsing.Enabled = false;
+                    string message = null;
+
+                    switch (establishingConnectionResult)
+                    {
+                        case DataAccess.EstablishingConnectionResult.ServerNotRunning:
+                            message = "Nie można połączyć się z serwerem. Upewnij się, że serwer jest uruchomiony. ";
+
+                            break;
+
+                        case DataAccess.EstablishingConnectionResult.DataBaseNonExistent:
+                            message = "Użytkownik nie ma dostępu do bazy danych " + dataBase + " lub baza danych nie istnieje. ";
+
+                            break;
+                    }
+
+                    placeOfListOfCubes.Controls.Add(new LiteralControl(message));
+
+                    break;
+            }
 
             foreach (string key in SessionKeys.Browser.All.Concat(SessionKeys.ReportConfiguration.All))
                 Session.Remove(key);

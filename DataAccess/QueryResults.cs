@@ -14,7 +14,7 @@ namespace DataAccess
         string[][] correspondingMDX;
         public string[][] GetCorrespondingMdx() { return correspondingMDX; }
 
-        internal QueryResults(int rows, int columns)
+        public QueryResults(int rows, int columns)
         {
             results = new string[rows][];
             correspondingMDX = new string[rows][];
@@ -26,11 +26,11 @@ namespace DataAccess
             }
         }
 
-        internal CellOfQueryResults this[int row, int column]
+        public CellOfQueryResults this[int row, int column]
         {
             get { return new CellOfQueryResults(results[row][column], correspondingMDX[row][column]); }
 
-            set
+            internal set
             {
                 results[row][column] = value.Result;
                 correspondingMDX[row][column] = value.Mdx;
