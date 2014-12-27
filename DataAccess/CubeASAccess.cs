@@ -106,7 +106,7 @@ namespace DataAccess
                     else
                         nameOfHierarchy = selectedDimension;
 
-                    if (hierarchiesOfSelectedDimensions.Find(h => h == nameOfHierarchy) == null)
+                    if (!hierarchiesOfSelectedDimensions.Contains(nameOfHierarchy))
                         hierarchiesOfSelectedDimensions.Add(nameOfHierarchy);
                 }
 

@@ -58,7 +58,7 @@ namespace Presentation
                 }
             }
 
-            TreeNode treeNodeToMove = listOfNodes.Find(n => n.Value == String.Empty);
+            TreeNode treeNodeToMove = listOfNodes.Find(n => String.IsNullOrEmpty(n.Value));
 
             if (treeNodeToMove != null)
             {

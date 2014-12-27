@@ -10,17 +10,23 @@ namespace DataAccess
 {
     static class AsHelper
     {
-        const string connectionString = "Data Source=localhost;";
         public static string DataBase { get; set; }
+
+        static string server = "localhost";
+        public static string Server
+        {
+            get { return server; }
+            set { server = value; }
+        }
 
         public static AdomdConnection EstablishConnection()
         {
-            string newConnectionString = connectionString;
+            string connectionString = "Data Source=" + Server + ";";
 
             if (!String.IsNullOrEmpty(DataBase))
-                newConnectionString += "Catalog=" + DataBase;
+                connectionString += "Catalog=" + DataBase + ";";
 
-            AdomdConnection connection = new AdomdConnection(newConnectionString);
+            AdomdConnection connection = new AdomdConnection(connectionString);
 
             connection.Open();
 

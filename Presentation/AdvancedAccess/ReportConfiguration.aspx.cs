@@ -270,7 +270,7 @@ namespace Presentation.AdvancedAccess
 
             listOfFonts.SelectedValue = "Arial";
 
-            if (selectedValueOfListOfFonts == String.Empty)
+            if (String.IsNullOrEmpty(selectedValueOfListOfFonts))
                 selectedValueOfListOfFonts = listOfFonts.SelectedValue;
             else
                 listOfFonts.SelectedValue = selectedValueOfListOfFonts;

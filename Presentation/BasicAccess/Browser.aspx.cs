@@ -113,7 +113,7 @@ namespace Presentation.BasicAccess
             listOfDimensions.SelectedIndexChanged += listOfDimensions_SelectedIndexChanged;
             postBackButtonOfDimensionTreeView.Click += postBackButtonOfTreeView_Click;
 
-            if (selectedValueOfListOfDimensions == String.Empty)
+            if (String.IsNullOrEmpty(selectedValueOfListOfDimensions))
                 selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
             else
                 listOfDimensions.SelectedValue = selectedValueOfListOfDimensions;

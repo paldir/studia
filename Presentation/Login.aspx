@@ -31,7 +31,7 @@
                     <tr>
                         <td style="text-align: right">Nazwa bazy danych:</td>
                         <td>
-                            <asp:TextBox ID="DataBase" Text="AdventureWorksDW2012Multidimensional-EE" Width="200" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="DataBase" Width="200" runat="server"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>

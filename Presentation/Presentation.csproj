@@ -88,7 +88,9 @@
     <Content Include="Images\measure.png" />
     <Content Include="Images\member.png" />
     <Content Include="Images\root.png" />
-    <Content Include="Login.aspx" />
+    <Content Include="Login.aspx">
+      <BrowseToURL>~/Login.aspx</BrowseToURL>
+    </Content>
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -189,7 +191,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>4715</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:10502/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

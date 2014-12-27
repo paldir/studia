@@ -11,9 +11,17 @@ namespace Presentation
 {
     public partial class Login : System.Web.UI.Page
     {
+        TextBox textBoxOfDataBase;
+        static string dataBase;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
+            textBoxOfDataBase = (TextBox)login.FindControl("dataBase");
             XmlDocument xmlDocument = new XmlDocument();
+            string dataBaseValue = Request.Params["catalog"];
+
+            if (!String.IsNullOrEmpty(dataBaseValue))
+                dataBase = dataBaseValue;
 
             xmlDocument.Load(Server.MapPath("~/Web.config"));
 
@@ -35,7 +43,14 @@ namespace Presentation
                     InitializeLogin();
                 }
                 else
-                    Response.Redirect("Login.aspx");
+                {
+                    string redirect = "Login.aspx";
+
+                    if (!String.IsNullOrEmpty(dataBase))
+                        redirect += "?catalog=" + dataBase;
+
+                    Response.Redirect(redirect);
+                }
             }
             catch (System.Data.SqlClient.SqlException)
             {
@@ -47,15 +62,16 @@ namespace Presentation
         void InitializeLogin()
         {
             login.FailureText = "Podaj poprawne hasło!";
-            login.DestinationPageUrl = "~/BasicAccess/Cubes.aspx";            
+            login.DestinationPageUrl = "~/BasicAccess/Cubes.aspx";
+
+            if (!String.IsNullOrEmpty(dataBase))
+                textBoxOfDataBase.Text = dataBase;
         }
 
         protected void Login_Click(object sender, EventArgs e)
         {
-            TextBox dataBase = (TextBox)login.FindControl("dataBase");
-
-            if (dataBase != null)
-                Session["dataBase"] = dataBase.Text;
+            if (textBoxOfDataBase != null)
+                Session["dataBase"] = textBoxOfDataBase.Text;
         }
     }
 }
