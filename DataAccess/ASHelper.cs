@@ -41,6 +41,9 @@ namespace DataAccess
             {
                 AdomdCommand command = connection.CreateCommand();
                 command.CommandText = mDXQuery;
+
+                throw new Exception("Brak obsługi miar jako wymiarów. ");
+
                 results = command.ExecuteCellSet();
             }
 

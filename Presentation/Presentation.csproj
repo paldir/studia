@@ -88,6 +88,7 @@
     <Content Include="Images\measure.png" />
     <Content Include="Images\member.png" />
     <Content Include="Images\root.png" />
+    <Content Include="Images\wrapper.png" />
     <Content Include="Login.aspx">
       <BrowseToURL>~/Login.aspx</BrowseToURL>
     </Content>

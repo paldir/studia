@@ -26,7 +26,6 @@ namespace Presentation
             xmlDocument.Load(Server.MapPath("~/Web.config"));
 
             string connectionString = xmlDocument.SelectSingleNode("//connectionStrings/add").Attributes["connectionString"].Value;
-
             System.Data.SqlClient.SqlConnection sqlConnection = new System.Data.SqlClient.SqlConnection(connectionString);
 
             try
