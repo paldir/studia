@@ -46,7 +46,7 @@
     <Compile Include="CellOfQueryResults.cs" />
     <Compile Include="Hierarchy.cs" />
     <Compile Include="CubeAsAccess.cs" />
-    <Compile Include="AsHelper.cs" />
+    <Compile Include="AsConfiguration.cs" />
     <Compile Include="Dimension.cs" />
     <Compile Include="Measure.cs" />
     <Compile Include="Member.cs" />

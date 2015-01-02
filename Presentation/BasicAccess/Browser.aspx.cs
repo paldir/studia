@@ -97,7 +97,7 @@ namespace Presentation.BasicAccess
         #region methods
         protected void Page_Init(object sender, EventArgs e)
         {
-            cubeHandler = new BusinessLogic.CubeHandler(Session["cube"].ToString());
+            cubeHandler = new BusinessLogic.CubeHandler((DataAccess.AsConfiguration)Session["configuration"], Session["cube"].ToString());
 
             InitializeLeftColumn();
             InitializeCentralColumn();
@@ -214,8 +214,7 @@ namespace Presentation.BasicAccess
 
             if (selectedMeasures.Count > 0)
             {
-                DataAccess.QueryResults results = cubeHandler.GetArraysFromSelectedItems(selectedDimensions.Select(d => d.Value).ToList(), selectedMeasures.Select(m => m.Value).ToList());
-                //descriptionOfTableOfResults = results.ElementAt(1);
+                DataAccess.QueryResults results = cubeHandler.GetResultsFromSelectedItems(selectedDimensions.Select(d => d.Value).ToList(), selectedMeasures.Select(m => m.Value).ToList());
                 tableOfResults = new TableOfResults(results, selectedDimensions.Select(d => d.Tree).ToList());
                 correspondingMdxOfTableOfResults = tableOfResults.GetCorrespondingMdx();
                 buttonOfReportGeneration.Enabled = true;
@@ -347,8 +346,19 @@ namespace Presentation.BasicAccess
 
             if (columnOfTableOfResults < tableOfResults.Rows[0].Cells.Count - selectedMeasures.Count)
             {
-                List<string> valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(correspondingMdxOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).Select(d => d.Value).ToList();
-                List<Tree> treeDoomedForRemoval = selectedDimensions.FindAll(d => d.Tree != null && d.Tree.FindNodeByValue(correspondingMdxOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]) != null).Select(d => d.Tree).ToList();
+                List<string> valuesOfDimensionsDoomedForRemoval;
+                List<Tree> treeDoomedForRemoval;
+
+                if (correspondingMdxOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults] == DataAccess.AsConfiguration.ErrorValue)
+                {
+                    valuesOfDimensionsDoomedForRemoval = selectedDimensions.Select(d => d.Value).ToList();
+                    treeDoomedForRemoval = selectedDimensions.Select(d => d.Tree).ToList();
+                }
+                else
+                {
+                    valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(correspondingMdxOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults])).Select(d => d.Value).ToList();
+                    treeDoomedForRemoval = selectedDimensions.FindAll(d => d.Tree != null && d.Tree.FindNodeByValue(correspondingMdxOfTableOfResults[rowOfTableOfResults][columnOfTableOfResults]) != null).Select(d => d.Tree).ToList();
+                }
 
                 if (valuesOfDimensionsDoomedForRemoval.Count == 0)
                     valuesOfDimensionsDoomedForRemoval = selectedDimensions.FindAll(d => d.Value.StartsWith(correspondingMdxOfTableOfResults[0][columnOfTableOfResults]) && !d.Value.Contains('&')).Select(d => d.Value).ToList();

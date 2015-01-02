@@ -45,7 +45,7 @@ namespace Presentation
 
                     tableCell.Controls.Add(new LiteralControl(results[i][j]));
 
-                    if (correspondingMDX[i][j] != "Value")
+                    if (correspondingMDX[i][j] != DataAccess.AsConfiguration.UsefulResultValue)
                     {
                         tableCell.Font.Bold = true;
                         Tree tree = necessaryTreeOfHierarchies.Select(t => t.FindNodeByValue(correspondingMDX[i][j])).FirstOrDefault(t => t != null);

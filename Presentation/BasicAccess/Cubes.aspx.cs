@@ -13,13 +13,16 @@ namespace Presentation.BasicAccess
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler();
             string dataBase = Session["dataBase"].ToString();
-            DataAccess.EstablishingConnectionResult establishingConnectionResult = handler.SetDataBase(dataBase);
+            DataAccess.AsConfiguration configuration = new DataAccess.AsConfiguration();
+            configuration.DataBase = dataBase;
+            Session["configuration"] = configuration;
+            BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler(configuration);
+            DataAccess.AsConfiguration.EstablishingConnectionResult establishingConnectionResult = configuration.TestConnection();
 
             switch (establishingConnectionResult)
             {
-                case DataAccess.EstablishingConnectionResult.Success:
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.Success:
                     listOfCubes = new RadioButtonListOfCubes(handler.GetCubes());
 
                     placeOfListOfCubes.Controls.Add(listOfCubes);
@@ -28,19 +31,19 @@ namespace Presentation.BasicAccess
 
                     break;
 
-                case DataAccess.EstablishingConnectionResult.ServerNotRunning:
-                case DataAccess.EstablishingConnectionResult.DataBaseNonExistent:
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.ServerNotRunning:
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.DataBaseNonExistent:
                     buttonOfBrowsing.Enabled = false;
                     string message = null;
 
                     switch (establishingConnectionResult)
                     {
-                        case DataAccess.EstablishingConnectionResult.ServerNotRunning:
+                        case DataAccess.AsConfiguration.EstablishingConnectionResult.ServerNotRunning:
                             message = "Nie można połączyć się z serwerem. Upewnij się, że serwer jest uruchomiony. ";
 
                             break;
 
-                        case DataAccess.EstablishingConnectionResult.DataBaseNonExistent:
+                        case DataAccess.AsConfiguration.EstablishingConnectionResult.DataBaseNonExistent:
                             message = "Użytkownik nie ma dostępu do bazy danych " + dataBase + " lub baza danych nie istnieje. ";
 
                             break;

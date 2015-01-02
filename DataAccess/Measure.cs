@@ -6,17 +6,30 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+    /// <summary>
+    /// Obiekt reprezentujący jedną z miar kostki.
+    /// </summary>
     public class Measure
     {
-        //string name;
+        /// <summary>
+        /// Zwraca nazwę miary.
+        /// </summary>
         public string Name { get; private set; }
 
-        //string uniqueName;
+        /// <summary>
+        /// Zwraca nazwę miary w języku MDX.
+        /// </summary>
         public string UniqueName { get; private set; }
 
-        //string measureGroup;
+        /// <summary>
+        /// Zwraca nazwę grupy miar, do której należy miara.
+        /// </summary>
         public string MeasureGroup { get; private set; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy za pomocą obiektu reprezentującego miarę.
+        /// </summary>
+        /// <param name="measure">Obiekt reprezentujący miarę, pochodzący z ADOMD.NET.</param>
         public Measure(Microsoft.AnalysisServices.AdomdClient.Measure measure)
         {
             Name = measure.Name;

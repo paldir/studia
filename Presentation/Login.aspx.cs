@@ -13,7 +13,7 @@ namespace Presentation
     {
         TextBox textBoxOfDataBase;
         static string dataBase;
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             textBoxOfDataBase = (TextBox)login.FindControl("dataBase");
@@ -62,12 +62,13 @@ namespace Presentation
         {
             login.FailureText = "Podaj poprawne hasło!";
             login.DestinationPageUrl = "~/BasicAccess/Cubes.aspx";
+            login.LoggedIn += login_LoggedIn;
 
-            if (!String.IsNullOrEmpty(dataBase))
+            if (!IsPostBack && !String.IsNullOrEmpty(dataBase))
                 textBoxOfDataBase.Text = dataBase;
         }
 
-        protected void Login_Click(object sender, EventArgs e)
+        void login_LoggedIn(object sender, EventArgs e)
         {
             if (textBoxOfDataBase != null)
                 Session["dataBase"] = textBoxOfDataBase.Text;

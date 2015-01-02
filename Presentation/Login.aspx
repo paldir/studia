@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">                                                                            
-                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" CssClass="simpleButton" OnClick="Login_Click" runat="server" /></p>
+                            <p style="text-align: right"><asp:Button ID="Login" CommandName="Login" Text="Zaloguj" CssClass="simpleButton" runat="server" /></p>
                             <p style="text-align: center"><asp:Literal ID="FailureText" runat="server"></asp:Literal></p>
                         </td>
                     </tr>

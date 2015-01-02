@@ -6,17 +6,32 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+    /// <summary>
+    /// Obiekt reprezentujący element hierarchii będącej częścią wymiaru.
+    /// </summary>
     public class Member
     {
-        //string name;
+        /// <summary>
+        /// Zwraca nazwę elementu hierarchii.
+        /// </summary>
         public string Name { get; private set; }
 
-        //string uniqueName;
+        /// <summary>
+        /// Zwraca nazwę elementu hierarchii w języku MDX.
+        /// </summary>
         public string UniqueName { get; private set; }
 
         List<Member> children;
+        /// <summary>
+        /// Zwraca elementy potomne elementu hierarchii.
+        /// </summary>
+        /// <returns></returns>
         public List<Member> GetChildren() { return children; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego element hierarchii. Z powodu długiego czasu przetwarzania, elementy potomne reprezentowanego elementu są inicjalizowane tylko wtedy, gdy jest ich mniej niż 20.
+        /// </summary>
+        /// <param name="member">Obiekt reprezentujący element hierarchii, pochodzący z ADOMD.NET.</param>
         public Member(Microsoft.AnalysisServices.AdomdClient.Member member)
         {
             Name = member.Name;

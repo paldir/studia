@@ -6,17 +6,34 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+    /// <summary>
+    /// Reprezentuje wymiar kostki.
+    /// </summary>
     public class Dimension
     {
-        //string name;
+        /// <summary>
+        /// Zwraca nazwę wymiaru.
+        /// </summary>
         public string Name { get; private set; }
 
         List<Hierarchy> attributeHierarchies;
+        /// <summary>
+        /// Zwraca hierarchie atrybutów.
+        /// </summary>
+        /// <returns>Lista hierarchii obiektów reprezentujących hierarchie atrybutów.</returns>
         public List<Hierarchy> GetAttributeHierarchies() { return attributeHierarchies; }
 
         List<Hierarchy> hierarchies;
+        /// <summary>
+        /// Zwraca hierarchie.
+        /// </summary>
+        /// <returns>Lista hierarchii reprezentujących hierarchie.</returns>
         public List<Hierarchy> GetHierarchies() { return hierarchies; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego wymiar.
+        /// </summary>
+        /// <param name="dimension">Obiekt reprezentujący wymiar, pochodzący z ADOMD.NET.</param>
         public Dimension(Microsoft.AnalysisServices.AdomdClient.Dimension dimension)
         {
             Name = dimension.Name;

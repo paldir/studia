@@ -6,26 +6,47 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+    /// <summary>
+    /// Wyliczenie reprezentujące rodzaje hierarchii.
+    /// </summary>
     public enum HierarchyType { AttributeHierarchy, Hierarchy };
-
+    
+    /// <summary>
+    /// Obiekt reprezentujący hierarchie lub hierarchie atrybutów wymiaru.
+    /// </summary>
     public class Hierarchy
-    {
-
-        //string name;
+    {        
+        /// <summary>
+        /// Zwraca nazwę hierarchii.
+        /// </summary>
         public string Name { get; private set; }
 
-        //string uniqueName;
+        /// <summary>
+        /// Zwraca nazwę hierarchii w języku MDX.
+        /// </summary>
         public string UniqueName { get; private set; }
 
-        //string displayFolder;
+        /// <summary>
+        /// Zwraca folder, do którego przypisana jest hierarchia.
+        /// </summary>
         public string DisplayFolder { get; private set; }
 
-        //HierarchyType hierarchyType;
+        /// <summary>
+        /// Zwraca typ hierarchii.
+        /// </summary>
         public HierarchyType HierarchyType { get; private set; }
 
         List<Member> members;
+        /// <summary>
+        /// Zwraca elementy hierarchii.
+        /// </summary>
+        /// <returns>Lista elementów hierarchii.</returns>
         public List<Member> GetMembers() { return members; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego hierarchię.
+        /// </summary>
+        /// <param name="hierarchy">Obiekt reprezentujący hierarchię, pochodzący z ADOMD.NET.</param>
         public Hierarchy(Microsoft.AnalysisServices.AdomdClient.Hierarchy hierarchy)
         {
             Name = hierarchy.Name;
