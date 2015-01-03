@@ -8,8 +8,15 @@ using System.Drawing;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Wyświetla w określony sposób kontrolkę typu RadioButtonList.
+    /// </summary>
     public class MyRadioButtonList : RadioButtonList
     {
+        /// <summary>
+        /// Inicjalizuje instancję kontrolki MyRadioButtonList przy pomocy listy elementów, które mają się w niej znaleźć.
+        /// </summary>
+        /// <param name="items">Lista elementów mających stworzyć kontrolkę.</param>
         protected MyRadioButtonList(List<string> items)
         {
             Bitmap bitMap = new Bitmap(500, 200);

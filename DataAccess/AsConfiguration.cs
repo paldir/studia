@@ -9,7 +9,7 @@ using Microsoft.AnalysisServices.AdomdClient;
 namespace DataAccess
 {   
     /// <summary>
-    /// Zawiera metody pomocnicze dotyczące serwera Analysis Services oraz pola konfigurujące połączenie z serwerem.
+    /// Zawiera metody pomocnicze dotyczące połączenie z serwerem Analysis Services oraz pola konfigurujące połączenie z serwerem.
     /// </summary>
     public class AsConfiguration
     {
@@ -19,13 +19,13 @@ namespace DataAccess
         public enum EstablishingConnectionResult { Success, ServerNotRunning, DataBaseNonExistent };
         
         /// <summary>
-        /// Zwraca lub ustawia nazwę bazy danych, z którą łączą się elementy klasy. Domyślnie właściwość nie jest ustawiona i metody klasy próbują połączyć się z domyślną kostką wybranego serwera.
+        /// Zwraca lub ustawia nazwę bazy danych, z którą ma być zestawione połączenie. Domyślnie właściwość nie jest ustawiona i połączenie zestawiane jest z domyślną kostką wybranego serwera.
         /// </summary>
         public string DataBase { get; set; }
 
         string server = "localhost";
         /// <summary>
-        /// Zwraca lub ustawia adres serwera Analysis Services, który jest odpytywany przez metody klasy. Domyślną wartością jest "localhost".
+        /// Zwraca lub ustawia adres serwera Analysis Services, z którym zestawiane jest połączenie. Domyślną wartością jest "localhost".
         /// </summary>
         public string Server
         {
@@ -44,7 +44,7 @@ namespace DataAccess
         public const string UsefulResultValue = "Value";
         
         /// <summary>
-        /// Ustanawia połączenie z serwerem Analysis Services na podstawie z właściwości klasy.
+        /// Zestawia połączenie z serwerem Analysis Services na podstawie z właściwości klasy i zwraca obiekt je reprezentujący.
         /// </summary>
         /// <returns>Obiekt reprezentujący połączenie z serwerem Analysis Services.</returns>
         internal AdomdConnection EstablishConnection()
@@ -64,7 +64,7 @@ namespace DataAccess
         /// <summary>
         /// Sprawdza, czy aktualne wartości właściwości klasy pozwalają na zestawienie połączenia z serwerem.
         /// </summary>
-        /// <returns>Wynik próby ustanowienia połączenia z wybranymi parametrami.</returns>
+        /// <returns>Wynik próby ustanowienia połączenia z serwerem Analysis Services.</returns>
         public EstablishingConnectionResult TestConnection()
         {
             try
@@ -171,11 +171,11 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Sortuje rosnąco listę nazw hierarchii wymiarów według liczby członków przynależnych do danej hierarchii. Operuje na nazwach MDX-owych.
+        /// Sortuje w porządku rosnącym listę nazw hierarchii wymiarów według liczby członków przynależnych do danej hierarchii. Operuje na nazwach MDX-owych.
         /// </summary>
         /// <param name="namesOfHierarchies">Lista nazw hierarchii w języku MDX.</param>
-        /// <param name="selectedDimensions">Lista elementów wymiarów w języku MDX, należących do sortowanych hierarchii, na podstawie których generowany jest wynik sortowania.</param>
-        /// <returns>Posortowana lista nazw hierarchii.</returns>
+        /// <param name="selectedDimensions">Lista elementów wymiarów w języku MDX, należących do wszystkich sortowanych hierarchii, na podstawie których generowany jest wynik sortowania.</param>
+        /// <returns>Posortowana według liczby elementów lista nazw hierarchii.</returns>
         internal static List<string> SortHierarchiesByCountOfMembers(List<string> namesOfHierarchies, List<string> selectedDimensions)
         {
             int n = namesOfHierarchies.Count;

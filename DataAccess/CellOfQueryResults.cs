@@ -12,7 +12,7 @@ namespace DataAccess
     public class CellOfQueryResults
     {
         /// <summary>
-        /// Zwraca użyteczną informację komórki.
+        /// Zwraca użyteczną informację zawartą w komórce.
         /// </summary>
         public string Result { get; private set; }
 

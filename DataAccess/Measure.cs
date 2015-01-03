@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace DataAccess
 {
     /// <summary>
-    /// Obiekt reprezentujący jedną z miar kostki.
+    /// Obiekt reprezentujący miarę kostki.
     /// </summary>
     public class Measure
     {
         /// <summary>
-        /// Zwraca nazwę miary.
+        /// Zwraca przyjazną nazwę miary.
         /// </summary>
         public string Name { get; private set; }
 

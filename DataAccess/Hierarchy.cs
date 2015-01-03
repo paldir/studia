@@ -12,12 +12,12 @@ namespace DataAccess
     public enum HierarchyType { AttributeHierarchy, Hierarchy };
     
     /// <summary>
-    /// Obiekt reprezentujący hierarchie lub hierarchie atrybutów wymiaru.
+    /// Obiekt reprezentujący hierarchię.
     /// </summary>
     public class Hierarchy
     {        
         /// <summary>
-        /// Zwraca nazwę hierarchii.
+        /// Zwraca przyjazną nazwę hierarchii.
         /// </summary>
         public string Name { get; private set; }
 
@@ -27,7 +27,7 @@ namespace DataAccess
         public string UniqueName { get; private set; }
 
         /// <summary>
-        /// Zwraca folder, do którego przypisana jest hierarchia.
+        /// Zwraca nazwę folderu, do którego przypisana jest hierarchia.
         /// </summary>
         public string DisplayFolder { get; private set; }
 
@@ -38,9 +38,9 @@ namespace DataAccess
 
         List<Member> members;
         /// <summary>
-        /// Zwraca elementy hierarchii.
+        /// Zwraca członków hierarchii.
         /// </summary>
-        /// <returns>Lista elementów hierarchii.</returns>
+        /// <returns>Lista członków hierarchii.</returns>
         public List<Member> GetMembers() { return members; }
 
         /// <summary>

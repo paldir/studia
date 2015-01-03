@@ -7,11 +7,22 @@ using System.Web.UI.WebControls;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Wyświetla strukturę wymiaru w kontrolce typu TreeView.
+    /// </summary>
     public class DimensionTreeView : MyTreeView
     {
         List<TreeNode> listOfNodes;
+        /// <summary>
+        /// Zwraca listę węzłów kontrolki.
+        /// </summary>
+        /// <returns>Lista węzłów kontrolki reprezentujących poziomy wymiaru, którego dana kontrolka dotyczy.</returns>
         public List<TreeNode> GetListOfNodes() { return listOfNodes; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy DimensionTreeView na podstawie obiektu przedstawiającego strukturę wymiaru.
+        /// </summary>
+        /// <param name="dimension">Obiekt reprezentujący wymiar, pochodzący z warstwy dostępu do danych.</param>
         public DimensionTreeView(DataAccess.Dimension dimension)
             : this()
         {
@@ -36,7 +47,6 @@ namespace Presentation
                     List<DataAccess.Member> secondLevelChildren = hierarchy.GetMembers();
                     treeNodeSelectAction = TreeNodeSelectAction.None;
                     string imageUrl = null;
-                    //DataAccess.HierarchyType hierarchy
 
                     if (secondLevelChildren.Count > 0)
                         treeNodeSelectAction = TreeNodeSelectAction.Expand;
@@ -71,6 +81,10 @@ namespace Presentation
             AddNodesToTreeView();
         }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy DimensionTreeView na podstawie listy węzłów, które mają zostać użyte do stworzenia kontrolki.
+        /// </summary>
+        /// <param name="treeNodes">Lista węzłów.</param>
         public DimensionTreeView(List<TreeNode> treeNodes)
             : this()
         {

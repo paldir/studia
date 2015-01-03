@@ -9,14 +9,26 @@ using System.Drawing;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Wyświetla kontrolkę typu Table reprezentującą wyniki zapytania MDX.
+    /// </summary>
     public class TableOfResults : Table
     {
         string[][] results;
         List<Tree> necessaryTreeOfHierarchies;
 
         string[][] correspondingMDX;
+        /// <summary>
+        /// Zwraca dwuwymiarową tablicę zawierającą nazwy MDX komórek wyświetlanych w tablicy.
+        /// </summary>
+        /// <returns>Dwuwymiarowa tablica zawierająca nazwy MDX komórek wyświetlanych w tablicy</returns>
         public string[][] GetCorrespondingMdx() { return correspondingMDX; }
 
+        /// <summary>
+        /// Inicjalizuje instancję klasy TableOfResults przy pomocy wyników zapytania i listy struktur hierarchii użytkownika użytych w zapytaniu.
+        /// </summary>
+        /// <param name="queryResult">Obiekt reprezentujący wynik zapytania.</param>
+        /// <param name="treeOfHierarchies">Lista struktur poziomów hierarchii użytkownika, na podstawie których wygenerowano wynik zapytania.</param>
         public TableOfResults(DataAccess.QueryResults queryResult, List<Tree> treeOfHierarchies)
         {   
             results = queryResult.GetResults();
@@ -143,7 +155,7 @@ namespace Presentation
 
                     if (node != null && node.Parent != null)
                     {
-                        int index = -1;// = descriptionList.FindIndex(r => r[i] == node.Value);
+                        int index = -1;
 
                         for (int k = 0; k < descriptionList.Count; k++)
                             if (descriptionList[k][i] == node.Value && !sorted[k])
@@ -162,12 +174,11 @@ namespace Presentation
                             descriptionList.RemoveAt(index);
                             sorted.RemoveAt(index);
 
-                            int parentIndex = -1;// = descriptionList.FindIndex(b => b[i] == node.Parent.Value);
+                            int parentIndex = -1;
 
                             for (int k = 1; k < descriptionList.Count; k++)
                                 if (descriptionList[k][i] == node.Parent.Value)
                                 {
-                                    //List<string> currentRow = descriptionList[index - 1].ToList();
                                     List<string> currentRow = descriptionToMove.ToList();
                                     List<string> possibleParentRow = descriptionList[k].ToList();
 

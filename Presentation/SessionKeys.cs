@@ -5,8 +5,14 @@ using System.Web;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Dostarcza stałe będące kluczami używanymi w kolekcji Session stron aspx.
+    /// </summary>
     public static class SessionKeys
     {
+        /// <summary>
+        /// Klucze używane w strona klasy Browser.
+        /// </summary>
         public static class Browser
         {
             public const string SelectedDimensions = "selectedDimensions";
@@ -15,6 +21,9 @@ namespace Presentation
             public const string TreeViewNodes = "treeViewNodes";
             public const string TreeViewDataSource = "treeViewDataSource";
 
+            /// <summary>
+            /// Lista wszystkich kluczy.
+            /// </summary>
             public static List<string> All
             {
                 get
@@ -31,6 +40,9 @@ namespace Presentation
             }
         }
 
+        /// <summary>
+        /// Klucze używane w stronach klasy ReportConfiguration.
+        /// </summary>
         public static class ReportConfiguration
         {
             public const string NamesOfHierarchies = "namesOfHierarchies";
@@ -48,6 +60,9 @@ namespace Presentation
             public const string SelectedValueOfListOfColorsOfSecondBackgroundOfCaptions = "selectedValueOfListOfColorsOfSecondBackgroundOfCaptions";
             public const string SelectedValueOfListOfColorsOfBackgroundOfValues = "selectedValueOfListOfColorsOfBackgroundOfValues";
 
+            /// <summary>
+            /// Lista wszystkich kluczy.
+            /// </summary>
             public static List<string> All
             {
                 get

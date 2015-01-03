@@ -7,8 +7,15 @@ using System.Web.UI.WebControls;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Wyświetla kontrolkę typu TreeView przechowującą dostępne miary.
+    /// </summary>
     public class MeasureTreeView : MyTreeView
     {
+        /// <summary>
+        /// Inicjalizuje instancję kontrolki MeasureTreeView za pomocą listy miar.
+        /// </summary>
+        /// <param name="measures">Lista obiektów reprezentujących miary.</param>
         public MeasureTreeView(List<DataAccess.Measure> measures)
         {
             ID = "MeasuresTreeView";

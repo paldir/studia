@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DataAccess
 {
     /// <summary>
-    /// Obiekt reprezentujący wyniki zapytania MDX.
+    /// Obiekt reprezentujący wyniki zapytania MDX. Są to dwie dwuwymiarowe tablice. W jednej należy przechowywać użyteczne dane uzyskane z zapytania MDX, a w drugiej ich MDX-owe odpowiedniki.
     /// </summary>
     public class QueryResults
     {
@@ -26,7 +26,7 @@ namespace DataAccess
         public string[][] GetCorrespondingMdx() { return correspondingMDX; }
 
         /// <summary>
-        /// Inicjalizuje instancję klasy za pomocą wymiarów tabeli zawierającej wynik zapytania MDX.
+        /// Inicjalizuje instancję klasy za pomocą liczy wierszy i kolumn wyniku zapytania.
         /// </summary>
         /// <param name="rows">Liczba wierszy.</param>
         /// <param name="columns">Liczba kolumn.</param>
@@ -43,7 +43,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Zwraca lub ustawia użyteczną informację i odpowiadający jej MDX z wybranej komórki.
+        /// Zwraca lub ustawia komórkę wyniku zapytania o podanych indeksach.
         /// </summary>
         /// <param name="row">Numer wiersza.</param>
         /// <param name="column">Numer kolumny.</param>

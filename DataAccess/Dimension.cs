@@ -12,7 +12,7 @@ namespace DataAccess
     public class Dimension
     {
         /// <summary>
-        /// Zwraca nazwę wymiaru.
+        /// Zwraca przyjazną nazwę wymiaru.
         /// </summary>
         public string Name { get; private set; }
 
@@ -20,14 +20,14 @@ namespace DataAccess
         /// <summary>
         /// Zwraca hierarchie atrybutów.
         /// </summary>
-        /// <returns>Lista hierarchii obiektów reprezentujących hierarchie atrybutów.</returns>
+        /// <returns>Lista obiektów reprezentujących hierarchie atrybutów.</returns>
         public List<Hierarchy> GetAttributeHierarchies() { return attributeHierarchies; }
 
         List<Hierarchy> hierarchies;
         /// <summary>
-        /// Zwraca hierarchie.
+        /// Zwraca hierarchie użytkownika.
         /// </summary>
-        /// <returns>Lista hierarchii reprezentujących hierarchie.</returns>
+        /// <returns>Lista obiektów reprezentujących hierarchie użytkownika.</returns>
         public List<Hierarchy> GetHierarchies() { return hierarchies; }
 
         /// <summary>

@@ -42,9 +42,9 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Inicjalizuje obiekt z odpowiednią konfiguracją połączenia (oraz określoną nazwą kostki). Nazwa kostki jest opcjonalna, jednak dopóki nie zostanie ustawiona, poprawnie będzie działać tylko metoda GetCubes()."
+        /// Inicjalizuje instancję klasy CubeAsAccess z wybraną konfiguracją połączenia (oraz określoną nazwą kostki). Nazwa kostki jest opcjonalna, jednak dopóki nie zostanie ustawiona, nie będzie można korzystać poprawnie z metod, które zwracają informacje z kostki.
         /// </summary>
-        /// <param name="configuration">Obiekt zawierający konfigurację połączenie z serwerem Analysis Services.</param>
+        /// <param name="configuration">Obiekt zawierający konfigurację połączenia z serwerem Analysis Services.</param>
         /// <param name="cubeName">Nazwa kostki.</param>
         public CubeAsAccess(AsConfiguration configuration, string cubeName = null)
         {
@@ -57,7 +57,7 @@ namespace DataAccess
         /// <summary>
         /// Zwraca nazwy dostępnych kostek.
         /// </summary>
-        /// <returns>Lista nazwa dostępnych kostek.</returns>
+        /// <returns>Lista nazw dostępnych kostek.</returns>
         public List<string> GetCubes()
         {
             List<string> cubes = new List<string>();
@@ -110,7 +110,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Zwraca obiekt reprezentujący dany wymiar.
+        /// Zwraca obiekt reprezentujący wymiar.
         /// </summary>
         /// <param name="nameOfDimension">Nazwa wymiaru.</param>
         /// <returns>Obiekt reprezentujący wymiar.</returns>
@@ -125,11 +125,11 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Wysyła zapytanie do kostki i zwraca wyniki zapytania.
+        /// Na podstawie przekazanych parametrów buduje zapytanie MDX, wysyła je do kostki i zwraca wyniki.
         /// </summary>
-        /// <param name="selectedDimensions">Nazwy elementów wymiarów w języku MDX.</param>
+        /// <param name="selectedDimensions">Nazwy poziomów wymiarów w języku MDX.</param>
         /// <param name="selectedMeasures">Nazwy miar w języku MDX.</param>
-        /// <returns>Wynik zapytania wraz z MDX-owym opisem.</returns>
+        /// <returns>Obiekt reprezentujący wynik zapytania.</returns>
         public QueryResults GetResultsFromSelectedItems(List<string> selectedDimensions, List<string> selectedMeasures)
         {
             string mDXQuery = String.Empty;
@@ -194,7 +194,7 @@ namespace DataAccess
     }
 
     /// <summary>
-    /// Reprezentuje błąd związany z wartością właściwości CubeName.
+    /// Reprezentuje błąd związany z wartością właściwości CubeName klasy CubeAsAccess.
     /// </summary>
     public class CubeNameException : Exception
     {
