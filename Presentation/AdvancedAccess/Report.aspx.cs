@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 
 namespace Presentation.AdvancedAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która wyświetla raport. Zawiera kontrolkę ReportViewer, w której umieszczony jest raport, oraz przycisk pozwalający na pobranie raportu w formacie PDF.
+    /// </summary>
     public partial class Report : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
@@ -32,7 +35,7 @@ namespace Presentation.AdvancedAccess
             }
         }
 
-        System.IO.MemoryStream GetStreamOfReport(string reportDefinition)
+        static System.IO.MemoryStream GetStreamOfReport(string reportDefinition)
         {
             byte[] rdlBytes = System.Text.Encoding.UTF8.GetBytes(reportDefinition);
             return new System.IO.MemoryStream(rdlBytes);

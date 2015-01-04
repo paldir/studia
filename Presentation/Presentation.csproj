@@ -88,7 +88,10 @@
     <Content Include="Images\measure.png" />
     <Content Include="Images\member.png" />
     <Content Include="Images\root.png" />
-    <Content Include="Login.aspx" />
+    <Content Include="Images\wrapper.png" />
+    <Content Include="Login.aspx">
+      <BrowseToURL>~/Login.aspx</BrowseToURL>
+    </Content>
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -123,7 +126,7 @@
     <Compile Include="BasicAccess\Cubes.aspx.designer.cs">
       <DependentUpon>Cubes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CubeStructure.cs" />
+    <Compile Include="DimensionTreeView.cs" />
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -131,8 +134,18 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MeasureTreeView.cs" />
+    <Compile Include="MyTreeNode.cs" />
+    <Compile Include="MyTreeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MyRadioButtonList.cs" />
+    <Compile Include="RadioButtonListOfCubes.cs" />
+    <Compile Include="RadioButtonListOfDimensions.cs" />
     <Compile Include="RdlGenerator.cs" />
+    <Compile Include="SelectedDimension.cs" />
+    <Compile Include="SelectedItem.cs" />
+    <Compile Include="SelectedMeasure.cs" />
+    <Compile Include="SessionKeys.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -179,7 +192,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>4715</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:10502/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

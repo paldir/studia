@@ -7,21 +7,58 @@ using System.Web.UI.WebControls;
 
 namespace Presentation.BasicAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która umożliwia wybór przeglądanej kostki. Zawiera listę kostek dostępnych w wybranej wcześniej bazie danych.
+    /// </summary>
     public partial class Cubes : System.Web.UI.Page
     {
-        RadioButtonList listOfCubes;
-        
+        RadioButtonListOfCubes listOfCubes;
+
         protected void Page_Load(object sender, EventArgs e)
-        {   
-            BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler();
-            listOfCubes = CubeStructure.GetRadioButtonListOfCubesOrDimensions(handler.GetCubes(), CubeStructure.RadioButtonListType.Cubes);
+        {
+            string dataBase = Session["dataBase"].ToString();
+            DataAccess.AsConfiguration configuration = new DataAccess.AsConfiguration();
+            configuration.DataBase = dataBase;
+            Session["configuration"] = configuration;
+            BusinessLogic.CubeHandler handler = new BusinessLogic.CubeHandler(configuration);
+            DataAccess.AsConfiguration.EstablishingConnectionResult establishingConnectionResult = configuration.TestConnection();
 
-            placeOfListOfCubes.Controls.Add(listOfCubes);
+            switch (establishingConnectionResult)
+            {
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.Success:
+                    listOfCubes = new RadioButtonListOfCubes(handler.GetCubes());
 
-            buttonOfBrowsing.Click += buttonOfBrowsing_Click;
+                    placeOfListOfCubes.Controls.Add(listOfCubes);
 
-            foreach (string key in Browser.SessionKeys())
-                Session[key] = null;
+                    buttonOfBrowsing.Click += buttonOfBrowsing_Click;
+
+                    break;
+
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.ServerNotRunning:
+                case DataAccess.AsConfiguration.EstablishingConnectionResult.DataBaseNonExistent:
+                    buttonOfBrowsing.Enabled = false;
+                    string message = null;
+
+                    switch (establishingConnectionResult)
+                    {
+                        case DataAccess.AsConfiguration.EstablishingConnectionResult.ServerNotRunning:
+                            message = "Nie można połączyć się z serwerem. Upewnij się, że serwer jest uruchomiony. ";
+
+                            break;
+
+                        case DataAccess.AsConfiguration.EstablishingConnectionResult.DataBaseNonExistent:
+                            message = "Użytkownik nie ma dostępu do bazy danych " + dataBase + " lub baza danych nie istnieje. ";
+
+                            break;
+                    }
+
+                    placeOfListOfCubes.Controls.Add(new LiteralControl(message));
+
+                    break;
+            }
+
+            foreach (string key in SessionKeys.Browser.All.Concat(SessionKeys.ReportConfiguration.All))
+                Session.Remove(key);
         }
 
         void buttonOfBrowsing_Click(object sender, EventArgs e)

@@ -24,7 +24,8 @@
             <div id="placeOfUpdateProgress">
                 <asp:UpdateProgress ID="updateProgress" runat="server">
                     <ProgressTemplate>
-                        <img src="../Images/load.gif" />
+                        <img src="../Images/wrapper.png" class="wrapper" />
+                        <img src="../Images/load.gif" class="gif" />
                     </ProgressTemplate>
                 </asp:UpdateProgress>
             </div>

@@ -9,6 +9,9 @@ using System.Drawing;
 
 namespace Presentation.AdvancedAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która zawiera pola konfigurujące raport. Umożliwia zmianę wyglądu raportu.
+    /// </summary>
     public partial class ReportConfiguration : System.Web.UI.Page
     {
         #region fields
@@ -18,49 +21,50 @@ namespace Presentation.AdvancedAccess
         int[] countsOfMembersOfEachHierarchy;
         Font font;
         DropDownList listOfFonts;
-        /*DropDownList listOfColorsOfCaptionsTexts;
-        DropDownList listOfColorsOfValuesTexts;
-        DropDownList listOfColorsOfFirstBackgroundOfCaptions;
-        DropDownList listOfColorsOfSecondBackgroundOfCaptions;
-        DropDownList listOfColorsOfBackgroundOfValues;*/
 
         List<string> namesOfHierarchies
         {
             get
             {
-                if (Session["namesOfHierarchies"] == null)
-                    Session["namesOfHierarchies"] = new List<string>();
+                string key = SessionKeys.ReportConfiguration.NamesOfHierarchies;
+                
+                if (Session[key] == null)
+                    Session[key] = new List<string>();
 
-                return (List<string>)Session["namesOfHierarchies"];
+                return (List<string>)Session[key];
             }
 
-            set { Session["namesOfHierarchies"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.NamesOfHierarchies] = value; }
         }
 
         List<string> namesOfMeasures
         {
             get
             {
-                if (Session["namesOfMeasures"] == null)
-                    Session["namesOfMeasures"] = new List<string>();
+                string key = SessionKeys.ReportConfiguration.NamesOfMeasures;
+                
+                if (Session[key] == null)
+                    Session[key] = new List<string>();
 
-                return (List<string>)Session["namesOfMeasures"];
+                return (List<string>)Session[key];
             }
 
-            set { Session["namesOfMeasures"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.NamesOfMeasures] = value; }
         }
 
         List<string[]> rows
         {
             get
             {
-                if (Session["rows"] == null)
-                    Session["rows"] = new List<string[]>();
+                string key = SessionKeys.ReportConfiguration.Rows;
 
-                return (List<string[]>)Session["rows"];
+                if (Session[key] == null)
+                    Session[key] = new List<string[]>();
+
+                return (List<string[]>)Session[key];
             }
 
-            set { Session["rows"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.Rows] = value; }
         }
 
         int selectedIndexOfListOfHierarchies
@@ -79,138 +83,160 @@ namespace Presentation.AdvancedAccess
         {
             get
             {
-                if (Session["title"] == null)
-                    Session["title"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.Title;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["title"].ToString();
+                return Session[key].ToString();
             }
-            set { Session["title"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.Title] = value; }
         }
 
         string selectedValueOfListOfFormats
         {
             get
             {
-                if (Session["listOfFormats"] == null)
-                    Session["listOfFormats"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.ListOfFormats;
 
-                return Session["listOfFormats"].ToString();
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
+
+                return Session[key].ToString();
             }
-            set { Session["listOfFormats"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.ListOfFormats] = value; }
         }
 
         string selectedValueOfListOfOrientations
         {
             get
             {
-                if (Session["listOfOrientations"] == null)
-                    Session["listOfOrientations"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.ListOfOrientations;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["listOfOrientations"].ToString();
+                return Session[key].ToString();
             }
-            set { Session["listOfOrientations"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.ListOfOrientations] = value; }
         }
 
         string selectedValueOfTextBoxOfMarginSize
         {
             get
             {
-                if (Session["textBoxOfMarginSize"] == null)
-                    Session["textBoxOfMarginSize"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.TextBoxOfMarginSize;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["textBoxOfMarginSize"].ToString();
+                return Session[key].ToString();
             }
-            set { Session["textBoxOfMarginSize"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.TextBoxOfMarginSize] = value; }
         }
 
         string selectedValueOfListOfFonts
         {
             get
             {
-                if (Session["listOfFonts"] == null)
-                    Session["listOfFonts"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.ListOfFonts;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["listOfFonts"].ToString();
+                return Session[key].ToString();
             }
 
-            set { Session["listOfFonts"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.ListOfFonts] = value; }
         }
 
         string selectedValueOfTextBoxOfFontSize
         {
             get
             {
-                if (Session["textBoxOfFontSize"] == null)
-                    Session["textBoxOfFontSize"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.TextBoxOfFontSize;
 
-                return Session["textBoxOfFontSize"].ToString();
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
+
+                return Session[key].ToString();
             }
-            set { Session["textBoxOfFontSize"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.TextBoxOfFontSize] = value; }
         }
 
         string selectedValueOfListOfColorsOfCaptionsTexts
         {
             get
             {
-                if (Session["selectedValueOfListOfColorsOfCaptionsTexts"] == null)
-                    Session["selectedValueOfListOfColorsOfCaptionsTexts"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfCaptionsTexts;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["selectedValueOfListOfColorsOfCaptionsTexts"].ToString();
+                return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfColorsOfCaptionsTexts"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfCaptionsTexts] = value; }
         }
 
         string selectedValueOfListOfColorsOfValuesTexts
         {
             get
             {
-                if (Session["selectedValueOfListOfColorsOfValuesTexts"] == null)
-                    Session["selectedValueOfListOfColorsOfValuesTexts"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfValuesTexts;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["selectedValueOfListOfColorsOfValuesTexts"].ToString();
+                return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfColorsOfValuesTexts"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfValuesTexts] = value; }
         }
 
         string selectedValueOfListOfColorsOfFirstBackgroundOfCaptions
         {
             get
             {
-                if (Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] == null)
-                    Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfFirstBackgroundOfCaptions;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"].ToString();
+                return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfColorsOfFirstBackgroundOfCaptions"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfFirstBackgroundOfCaptions] = value; }
         }
 
         string selectedValueOfListOfColorsOfSecondBackgroundOfCaptions
         {
             get
             {
-                if (Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] == null)
-                    Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfSecondBackgroundOfCaptions;
+                
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
 
-                return Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"].ToString();
+                return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfColorsOfSecondBackgroundOfCaptions"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfSecondBackgroundOfCaptions] = value; }
         }
 
         string selectedValueOfListOfColorsOfBackgroundOfValues
         {
             get
             {
-                if (Session["selectedValueOfListOfColorsOfBackgroundOfValues"] == null)
-                    Session["selectedValueOfListOfColorsOfBackgroundOfValues"] = String.Empty;
+                string key = SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfBackgroundOfValues;
 
-                return Session["selectedValueOfListOfColorsOfBackgroundOfValues"].ToString();
+                if (Session[key] == null)
+                    Session[key] = String.Empty;
+
+                return Session[key].ToString();
             }
 
-            set { Session["selectedValueOfListOfColorsOfBackgroundOfValues"] = value; }
+            set { Session[SessionKeys.ReportConfiguration.SelectedValueOfListOfColorsOfBackgroundOfValues] = value; }
         }
         #endregion
 
@@ -222,25 +248,6 @@ namespace Presentation.AdvancedAccess
             InitializeButtons();
             InitializeListOfFonts();
             InitializeValues();
-        }
-
-        public static List<string> SessionKeys()
-        {
-            return new List<string>()
-            {
-                "title",
-                "listOfFormats",
-                "listOfOrientations",
-                "textBoxOfMarginSize",
-                "listOfFonts",
-                "textBoxOfFontSize",
-                "selectedValueOfListOfColorsOfCaptionsTexts",
-                "selectedValueOfListOfColorsOfValuesTexts",
-                "selectedValueOfListOfColorsOfFirstBackgroundOfCaptions",
-                "selectedValueOfListOfColorsOfSecondBackgroundOfCaptions",
-                "selectedValueOfListOfColorsOfBackgroundOfValues",
-                "selectedValueOfListOfColorsOfBackgroundOfValues"
-            };
         }
 
         void InitializeButtons()
@@ -266,7 +273,7 @@ namespace Presentation.AdvancedAccess
 
             listOfFonts.SelectedValue = "Arial";
 
-            if (selectedValueOfListOfFonts == String.Empty)
+            if (String.IsNullOrEmpty(selectedValueOfListOfFonts))
                 selectedValueOfListOfFonts = listOfFonts.SelectedValue;
             else
                 listOfFonts.SelectedValue = selectedValueOfListOfFonts;
@@ -290,8 +297,6 @@ namespace Presentation.AdvancedAccess
             if (selectedValueOfTextBoxOfMarginSize != String.Empty)
                 textBoxOfMarginSize.Text = selectedValueOfTextBoxOfMarginSize;
 
-            //listOfFonts.SelectedValue = selectedValueOfListOfFonts;
-
             if (selectedValueOfTextBoxOfFontSize != String.Empty)
                 textBoxOfFontSize.Text = selectedValueOfTextBoxOfFontSize;
 
@@ -310,18 +315,8 @@ namespace Presentation.AdvancedAccess
             if (selectedValueOfListOfColorsOfBackgroundOfValues != String.Empty)
                 listOfColorsOfBackgroundOfValues.Text = selectedValueOfListOfColorsOfBackgroundOfValues;
 
-            foreach (string key in SessionKeys())
-                Session[key] = null;
-
-            /*textBoxOfTitle.TextChanged += textBoxOfTitle_TextChanged;
-            listOfSizesOfPaper.SelectedIndexChanged += listOfSizesOfPaper_SelectedIndexChanged;
-            listOfOrientations.SelectedIndexChanged += listOfOrientations_SelectedIndexChanged;
-            textBoxOfMarginSize.TextChanged += textBoxOfMarginSize_TextChanged;
-            listOfColorsOfCaptionsTexts.TextChanged += listOfColorsOfCaptionsTexts_TextChanged;
-            listOfColorsOfFirstBackgroundOfCaptions.TextChanged += listOfColorsOfFirstBackgroundOfCaptions_TextChanged;
-            listOfColorsOfSecondBackgroundOfCaptions.TextChanged += listOfColorsOfSecondBackgroundOfCaptions_TextChanged;
-            listOfColorsOfValuesTexts.TextChanged += listOfColorsOfValuesTexts_TextChanged;
-            listOfColorsOfBackgroundOfValues.TextChanged += listOfColorsOfBackgroundOfValues_TextChanged;*/
+            foreach (string key in SessionKeys.ReportConfiguration.All)
+                Session.Remove(key);
         }
 
         protected override void CreateChildControls()
@@ -472,13 +467,6 @@ namespace Presentation.AdvancedAccess
             return result;
         }
 
-        string ReplacePolishCharacters(string statement)
-        {
-            statement = statement.Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
-
-            return statement;
-        }
-
         float GetFontSizeFromTextBox()
         {
             float fontSize;
@@ -489,7 +477,14 @@ namespace Presentation.AdvancedAccess
             return fontSize;
         }
 
-        string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
+        static string ReplacePolishCharacters(string statement)
+        {
+            statement = statement.Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
+
+            return statement;
+        }
+
+        static string ConvertReportDefinitionToPDFDefinition(string reportDefinition, float pDFRowHeight)
         {
             string pDFDefinition = String.Copy(reportDefinition);
             int index = reportDefinition.IndexOf("<TablixRow>");
@@ -637,7 +632,7 @@ namespace Presentation.AdvancedAccess
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.Text, new string[] { listOfColorsOfFirstBackgroundOfCaptions.Text, listOfColorsOfSecondBackgroundOfCaptions.Text }, listOfColorsOfValuesTexts.Text, listOfColorsOfBackgroundOfValues.Text);
+            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, Color.FromName(listOfColorsOfCaptionsTexts.Text), Color.FromName(listOfColorsOfFirstBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfSecondBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfValuesTexts.Text), Color.FromName(listOfColorsOfBackgroundOfValues.Text));
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
