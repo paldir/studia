@@ -9,6 +9,9 @@ using System.Drawing;
 
 namespace Presentation.AdvancedAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która zawiera pola konfigurujące raport. Umożliwia zmianę wyglądu raportu.
+    /// </summary>
     public partial class ReportConfiguration : System.Web.UI.Page
     {
         #region fields
@@ -629,7 +632,7 @@ namespace Presentation.AdvancedAccess
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, listOfColorsOfCaptionsTexts.Text, new string[] { listOfColorsOfFirstBackgroundOfCaptions.Text, listOfColorsOfSecondBackgroundOfCaptions.Text }, listOfColorsOfValuesTexts.Text, listOfColorsOfBackgroundOfValues.Text);
+            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, Color.FromName(listOfColorsOfCaptionsTexts.Text), Color.FromName(listOfColorsOfFirstBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfSecondBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfValuesTexts.Text), Color.FromName(listOfColorsOfBackgroundOfValues.Text));
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);

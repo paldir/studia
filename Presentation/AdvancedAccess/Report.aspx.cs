@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 
 namespace Presentation.AdvancedAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która wyświetla raport. Zawiera kontrolkę ReportViewer, w której umieszczony jest raport, oraz przycisk pozwalający na pobranie raportu w formacie PDF.
+    /// </summary>
     public partial class Report : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)

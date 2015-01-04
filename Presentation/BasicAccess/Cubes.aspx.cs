@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 
 namespace Presentation.BasicAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która umożliwia wybór przeglądanej kostki. Zawiera listę kostek dostępnych w wybranej wcześniej bazie danych.
+    /// </summary>
     public partial class Cubes : System.Web.UI.Page
     {
         RadioButtonListOfCubes listOfCubes;

@@ -34,8 +34,12 @@ namespace DataAccess
                 CubeDef cube;
 
                 using (AdomdConnection connection = aSConfiguration.EstablishConnection())
+                {
                     try { cube = connection.Cubes[value]; }
                     catch (ArgumentException) { throw new CubeNameException("Kostka " + value + " nie istnieje."); }
+
+                    connection.Close();
+                }
 
                 cubeName = value;
             }
@@ -72,6 +76,8 @@ namespace DataAccess
 
                             break;
                     }
+
+                connection.Close();
             }
 
             return cubes;
@@ -86,8 +92,12 @@ namespace DataAccess
             List<Measure> listOfMeasures = new List<Measure>();
 
             using (AdomdConnection connection = aSConfiguration.EstablishConnection())
+            {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Measure measure in connection.Cubes[CubeName].Measures)
                     listOfMeasures.Add(new Measure(measure));
+
+                connection.Close();
+            }
 
             listOfMeasures = listOfMeasures.OrderBy(m => m.MeasureGroup).ToList();
 
@@ -103,8 +113,12 @@ namespace DataAccess
             List<string> listOfDimensions = new List<string>();
 
             using (AdomdConnection connection = aSConfiguration.EstablishConnection())
+            {
                 foreach (Microsoft.AnalysisServices.AdomdClient.Dimension dimension in connection.Cubes[CubeName].Dimensions)
                     listOfDimensions.Add(dimension.Name);
+
+                connection.Close();
+            }
 
             return listOfDimensions;
         }
@@ -119,7 +133,11 @@ namespace DataAccess
             Dimension dimension;
 
             using (AdomdConnection connection = aSConfiguration.EstablishConnection())
+            {
                 dimension = new Dimension(connection.Cubes[CubeName].Dimensions[nameOfDimension]);
+
+                connection.Close();
+            }
 
             return dimension;
         }

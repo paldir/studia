@@ -9,6 +9,9 @@ using System.Drawing;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Pozwala wygenerować tabelaryczny raport w języku RDL.
+    /// </summary>
     public class RdlGenerator
     {
         enum TypeOfContent { Caption, Value, Header, Footer };
@@ -26,7 +29,20 @@ namespace Presentation
         string colorOfBackgroundOfValues;
         int currentBackgroundOfCaption;
 
-        public RdlGenerator(string titleOfReport, float[] columnsWidths, SizeF sizeOfPage, float marginSize, Font font, string colorOfCaptions, string[] colorsOfBackgroundsOfCaption, string colorOfValues, string colorOfBackgroundOfValues)
+        /// <summary>
+        /// Inicjalizuje instancję klasy RdlGenerator z parametrami określającymi wygląd i treść tworzonego raportu.
+        /// </summary>
+        /// <param name="titleOfReport">Tytuł raportu wyświetlany u góry strony.</param>
+        /// <param name="columnsWidths">Szerokości kolumn tabeli raportu. Długość tablicy nie powinna być mniejsza niż liczba kolumn, które będzie zawierał raport.</param>
+        /// <param name="sizeOfPage">Rozmiar strony.</param>
+        /// <param name="marginSize">Rozmiar marginesów.</param>
+        /// <param name="font">Czcionka, która zostanie użyta do wygenerowania raportu.</param>
+        /// <param name="colorOfCaptions">Kolor czcionki nagłówków tabeli.</param>
+        /// <param name="firstColorOfBackgroundsOfCaption">Kolor komórek z nagłówkami w nieparzystych kolumnach.</param>
+        /// <param name="secondColorOfBackgroundsOfCaption">Kolor komórek z nagłówkami w parzystych kolumnach.</param>
+        /// <param name="colorOfValues">Kolor czcionki komórek tabeli przechowujących użyteczne dane.</param>
+        /// <param name="colorOfBackgroundOfValues">Kolor tła</param>
+        public RdlGenerator(string titleOfReport, float[] columnsWidths, SizeF sizeOfPage, float marginSize, Font font, Color colorOfCaptions, Color firstColorOfBackgroundsOfCaption, Color secondColorOfBackgroundsOfCaption, Color colorOfValues, Color colorOfBackgroundOfValues)
         {
             Encoding encoding = new UTF8Encoding(false);
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -40,13 +56,20 @@ namespace Presentation
             this.sizeOfPage = sizeOfPage;
             this.marginSize = marginSize;
             this.font = font;
-            this.colorOfCaptions = colorOfCaptions;
-            this.colorsOfBackgroundsOfCaption = colorsOfBackgroundsOfCaption;
-            this.colorOfValues = colorOfValues;
-            this.colorOfBackgroundOfValues = colorOfBackgroundOfValues;
+            this.colorOfCaptions = colorOfCaptions.Name;
+            colorsOfBackgroundsOfCaption = new string[] { firstColorOfBackgroundsOfCaption.Name, secondColorOfBackgroundsOfCaption.Name };
+            this.colorOfValues = colorOfValues.Name;
+            this.colorOfBackgroundOfValues = colorOfBackgroundOfValues.Name;
             currentBackgroundOfCaption = 0;
         }
 
+        /// <summary>
+        /// Tworzy tabelaryczny raport w języku RDL.
+        /// </summary>
+        /// <param name="namesOfHierarchies">Lista nagłówków poziomów wymiarów.</param>
+        /// <param name="namesOfMeasures">Lista nagłówków miar.</param>
+        /// <param name="rows">Lista tablic, gdzie tablica jest wierszem, a komórka tablicy komórką tabeli. Wszystkie tablice powinny mieć jednakową długość równą sumie długości list przekazanych jako pierwszy i drugi parametr metody.</param>
+        /// <returns>Raport w języku RDL.</returns>
         public string WriteReport(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
         {
             writer.WriteStartElement("Report", "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition");
@@ -66,7 +89,11 @@ namespace Presentation
             writer.WriteEndElement();
             writer.Close();
 
-            return Encoding.Default.GetString(result.ToArray());
+            byte[] reportBytes = result.ToArray();
+
+            result.Close();
+
+            return Encoding.Default.GetString(reportBytes);
         }
 
         void WriteMainTablix(List<string> namesOfHierarchies, List<string> namesOfMeasures, List<string[]> rows)
@@ -282,9 +309,9 @@ namespace Presentation
 
             switch (typeOfContent)
             {
-                case TypeOfContent.Caption:
                 case TypeOfContent.Header:
                 case TypeOfContent.Value:
+                case TypeOfContent.Caption:
                     writer.WriteString("Center");
                     break;
                 case TypeOfContent.Footer:

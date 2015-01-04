@@ -9,6 +9,10 @@ using System.Xml;
 
 namespace Presentation
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, poprzez którą następuje logowanie do aplikacji. Zawiera trzy pola. Pierwsze pole pozwala wybrać poziom dostępu, drugie jest miejscem na wpisanie hasła dostępu.
+    /// Z kolei trzecie pole to nazwa bazy danych, z którą aplikacja będzie próbowała się połączyć. Trzecie pole może zostać wypełnione automatycznie poprzez wywołanie adresu strony w następujący sposób: Login.aspx?catalog=NazwaBazyDanych .
+    /// </summary>
     public partial class Login : System.Web.UI.Page
     {
         TextBox textBoxOfDataBase;

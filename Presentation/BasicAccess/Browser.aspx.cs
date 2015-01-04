@@ -9,6 +9,10 @@ using System.Text;
 
 namespace Presentation.BasicAccess
 {
+    /// <summary>
+    /// Reprezentuje stronę aspx, która jest właściwą przeglądarką kostki. Zawiera cztery kolumny. Pierwsza kolumna to lista dostępnych wymiarów.
+    /// Druga kolumna wyświetla strukturę aktualnie wybranego wymiaru. Trzecia kolumna to lista miar zdefiniowanych w kostce. Ostatnia kolumna prezentuje wynik zapytania w zależności od wybranych miar i poziomów wymiarów.
+    /// </summary>
     public partial class Browser : System.Web.UI.Page
     {
         #region fields
@@ -125,13 +129,6 @@ namespace Presentation.BasicAccess
             trigger.EventName = "SelectedIndexChanged";
 
             dimensionTreeViewUpdatePanel.Triggers.Add(trigger);
-
-            /*AsyncPostBackTrigger triggerOfListOfSelectedDimensions = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedDimensions.ControlID = "ListOfSelectedDimensions";
-            triggerOfListOfSelectedDimensions.EventName = "SelectedIndexChanged";
-
-            dimensionTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedDimensions);*/
         }
 
         void InitializeCentralColumn()
@@ -144,13 +141,6 @@ namespace Presentation.BasicAccess
                 measuresTreeView.FindNode(measure.Path).Checked = true;
 
             placeOfMeasuresTreeView.Controls.Add(measuresTreeView);
-
-            /*AsyncPostBackTrigger triggerOfListOfSelectedMeasures = new AsyncPostBackTrigger();
-            triggerOfListOfSelectedMeasures.ControlID = "ListOfSelectedMeasures";
-            triggerOfListOfSelectedMeasures.EventName = "SelectedIndexChanged";
-
-            measuresTreeViewUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);
-            tableOfResultsUpdatePanel.Triggers.Add(triggerOfListOfSelectedMeasures);*/
         }
 
         void InitializeRightColumn()
@@ -442,6 +432,8 @@ namespace Presentation.BasicAccess
                 {
                     ControlCollection cellControls = tableOfResults.Rows[i].Cells[j].Controls;
                     LiteralControl text = null;
+                    string paddingLeft = tableOfResults.Rows[i].Cells[j].Style["padding-left"];
+                    row[j] = String.Empty;
 
                     foreach (Control control in cellControls)
                         if (control.GetType() == typeof(LiteralControl))
@@ -451,13 +443,15 @@ namespace Presentation.BasicAccess
                             break;
                         }
 
+                    if (!String.IsNullOrEmpty(paddingLeft))
+                        for (int k = 0; k < Convert.ToInt16(paddingLeft.Replace("px", String.Empty)); k++)
+                            row[j] += "\t";
+
                     row[j] = text.Text;
                 }
 
                 rows.Add(row);
             }
-
-            //Session.Clear(); 
 
             Session[SessionKeys.ReportConfiguration.NamesOfHierarchies] = namesOfHierarchies;
             Session[SessionKeys.ReportConfiguration.NamesOfMeasures] = namesOfMeasures;
