@@ -16,10 +16,7 @@
                     <tr>
                         <td style="text-align: right">Poziom dostępu:</td>
                         <td>
-                            <asp:DropDownList ID="UserName" Width="200" runat="server">
-                                <asp:ListItem>Podstawowy</asp:ListItem>
-                                <asp:ListItem>Zaawansowany</asp:ListItem>
-                            </asp:DropDownList>
+                            <asp:DropDownList ID="UserName" Width="200" runat="server"></asp:DropDownList>
                         </td>
                     </tr>
                     <tr>
