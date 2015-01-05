@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using System.Xml;
+using System.Web.Security;
 
 namespace Presentation
 {
@@ -29,7 +30,17 @@ namespace Presentation
 
             xmlDocument.Load(Server.MapPath("~/Web.config"));
 
-            string connectionString = xmlDocument.SelectSingleNode("//connectionStrings/add").Attributes["connectionString"].Value;
+            XmlNode xmlNode = xmlDocument.SelectSingleNode("//connectionStrings/add");
+            string connectionString = "Data Source=localhost;";
+
+            if (xmlNode != null)
+            {
+                XmlAttribute xmlAttribute = xmlNode.Attributes["connectionString"];
+
+                if (xmlAttribute != null)
+                    connectionString = xmlAttribute.Value;
+            }
+
             System.Data.SqlClient.SqlConnection sqlConnection = new System.Data.SqlClient.SqlConnection(connectionString);
 
             try
@@ -39,8 +50,8 @@ namespace Presentation
 
                 if (Request.Params["ReturnUrl"] == null)
                 {
-                    System.Web.Security.FormsAuthentication.SignOut();
-                    System.Web.Security.Roles.DeleteCookie();
+                    FormsAuthentication.SignOut();
+                    Roles.DeleteCookie();
                     Session.Clear();
 
                     InitializeLogin();
@@ -67,6 +78,11 @@ namespace Presentation
             login.FailureText = "Podaj poprawne hasło!";
             login.DestinationPageUrl = "~/BasicAccess/Cubes.aspx";
             login.LoggedIn += login_LoggedIn;
+            DropDownList dropDownList = (DropDownList)login.FindControl("UserName");
+
+            if (dropDownList != null)
+                foreach (MembershipUser user in Membership.GetAllUsers())
+                    dropDownList.Items.Add(user.UserName);
 
             if (!IsPostBack && !String.IsNullOrEmpty(dataBase))
                 textBoxOfDataBase.Text = dataBase;
