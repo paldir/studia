@@ -16,7 +16,7 @@ namespace Presentation.AdvancedAccess
     {
         #region fields
         enum ListToModify { ListOfHierarchies, ListOfMeasures };
-        enum SizeOfPaper { A5, A4, A3 };
+        enum PaperSize { A5, A4, A3 };
         enum Orientation { Vertical, Horizontal };
         int[] countsOfMembersOfEachHierarchy;
         Font font;
@@ -604,35 +604,28 @@ namespace Presentation.AdvancedAccess
         {
             SortMembersOfHierarchies();
 
-            SizeF sizeOfPaper = new SizeF();
             float marginSize;
-
             font = new Font(listOfFonts.SelectedValue, GetFontSizeFromTextBox());
-
-            switch ((SizeOfPaper)listOfSizesOfPaper.SelectedIndex)
+            Dictionary<PaperSize, SizeF> paperSizeToSizeF = new Dictionary<PaperSize, SizeF>()
             {
-                case SizeOfPaper.A5:
-                    sizeOfPaper = new SizeF(14.8f, 21);
-                    break;
-                case SizeOfPaper.A4:
-                    sizeOfPaper = new SizeF(21, 29.7f);
-                    break;
-                case SizeOfPaper.A3:
-                    sizeOfPaper = new SizeF(29.7f, 42);
-                    break;
-            }
+                { PaperSize.A5, new SizeF(14.8f, 21) },
+                { PaperSize.A4, new SizeF(21, 29.7f) },
+                { PaperSize.A3, new SizeF(29.7f, 42) }
+            };
+
+            SizeF paperSize = paperSizeToSizeF[(PaperSize)listOfSizesOfPaper.SelectedIndex];
 
             if ((Orientation)listOfOrientations.SelectedIndex == Orientation.Horizontal)
             {
-                float tmp = sizeOfPaper.Width;
-                sizeOfPaper.Width = sizeOfPaper.Height;
-                sizeOfPaper.Height = tmp;
+                float tmp = paperSize.Width;
+                paperSize.Width = paperSize.Height;
+                paperSize.Height = tmp;
             }
 
             try { marginSize = Convert.ToSingle(textBoxOfMarginSize.Text); }
             catch { marginSize = 1; }
 
-            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), sizeOfPaper, marginSize, font, Color.FromName(listOfColorsOfCaptionsTexts.Text), Color.FromName(listOfColorsOfFirstBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfSecondBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfValuesTexts.Text), Color.FromName(listOfColorsOfBackgroundOfValues.Text));
+            RdlGenerator rdlGenerator = new RdlGenerator(ReplacePolishCharacters(textBoxOfTitle.Text), CalculateColumnsWidths(), paperSize, marginSize, font, Color.FromName(listOfColorsOfCaptionsTexts.Text), Color.FromName(listOfColorsOfFirstBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfSecondBackgroundOfCaptions.Text), Color.FromName(listOfColorsOfValuesTexts.Text), Color.FromName(listOfColorsOfBackgroundOfValues.Text));
             string reportDefinition = rdlGenerator.WriteReport(namesOfHierarchies, namesOfMeasures, rows);
             Session["reportDefinition"] = reportDefinition;
             Session["pDFDefinition"] = ConvertReportDefinitionToPDFDefinition(reportDefinition, font.Size * 2);
