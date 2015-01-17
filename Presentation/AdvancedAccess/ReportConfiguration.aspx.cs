@@ -285,34 +285,34 @@ namespace Presentation.AdvancedAccess
 
         void InitializeValues()
         {
-            if (selectedValueOfTitle != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfTitle))
                 textBoxOfTitle.Text = selectedValueOfTitle;
 
-            if (selectedValueOfListOfFormats != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfFormats))
                 listOfSizesOfPaper.SelectedValue = selectedValueOfListOfFormats;
 
-            if (selectedValueOfListOfOrientations != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfOrientations))
                 listOfOrientations.SelectedValue = selectedValueOfListOfOrientations;
 
-            if (selectedValueOfTextBoxOfMarginSize != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfTextBoxOfMarginSize))
                 textBoxOfMarginSize.Text = selectedValueOfTextBoxOfMarginSize;
 
-            if (selectedValueOfTextBoxOfFontSize != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfTextBoxOfFontSize))
                 textBoxOfFontSize.Text = selectedValueOfTextBoxOfFontSize;
 
-            if (selectedValueOfListOfColorsOfCaptionsTexts != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfColorsOfCaptionsTexts))
                 listOfColorsOfCaptionsTexts.Text = selectedValueOfListOfColorsOfCaptionsTexts;
 
-            if (selectedValueOfListOfColorsOfFirstBackgroundOfCaptions != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfColorsOfFirstBackgroundOfCaptions))
                 listOfColorsOfFirstBackgroundOfCaptions.Text = selectedValueOfListOfColorsOfFirstBackgroundOfCaptions;
 
-            if (selectedValueOfListOfColorsOfSecondBackgroundOfCaptions != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfColorsOfSecondBackgroundOfCaptions))
                 listOfColorsOfSecondBackgroundOfCaptions.Text = selectedValueOfListOfColorsOfSecondBackgroundOfCaptions;
 
-            if (selectedValueOfListOfColorsOfValuesTexts != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfColorsOfValuesTexts))
                 listOfColorsOfValuesTexts.Text = selectedValueOfListOfColorsOfValuesTexts;
 
-            if (selectedValueOfListOfColorsOfBackgroundOfValues != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfColorsOfBackgroundOfValues))
                 listOfColorsOfBackgroundOfValues.Text = selectedValueOfListOfColorsOfBackgroundOfValues;
 
             foreach (string key in SessionKeys.ReportConfiguration.All)

@@ -172,7 +172,7 @@ namespace Presentation.BasicAccess
 
         void CreateDimensionTreeView()
         {
-            if (selectedValueOfListOfDimensions != String.Empty)
+            if (!String.IsNullOrEmpty(selectedValueOfListOfDimensions))
             {
                 if (treeViewNodes.Count == 0 || treeViewDataSource != selectedValueOfListOfDimensions)
                 {
@@ -189,7 +189,7 @@ namespace Presentation.BasicAccess
                 {
                     string selectedDimensionName = selectedDimensions.ElementAt(i).Name;
 
-                    if (selectedDimensionName != String.Empty && selectedDimensionName.Substring(0, selectedDimensionName.IndexOf('/')) == listOfDimensions.SelectedItem.Text)
+                    if (!String.IsNullOrEmpty(selectedDimensionName) && selectedDimensionName.Substring(0, selectedDimensionName.IndexOf('/')) == listOfDimensions.SelectedItem.Text)
                         dimensionTreeView.FindNode(selectedDimensions.ElementAt(i).Path).Checked = true;
                 }
 
@@ -248,11 +248,7 @@ namespace Presentation.BasicAccess
         #region events handlers
         void listOfDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (selectedValueOfListOfDimensions != String.Empty)
-            //  listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "white";
-
             selectedValueOfListOfDimensions = listOfDimensions.SelectedValue;
-            //listOfDimensions.Items.FindByValue(selectedValueOfListOfDimensions).Attributes.CssStyle["background-color"] = "indianred";
 
             CreateDimensionTreeView();
         }
@@ -290,7 +286,6 @@ namespace Presentation.BasicAccess
                 if (!checkedNode.Checked)
                 {
                     List<string> valuesOfDimensionsDoomedForRemoval = new List<string>();
-                    //List<Tree> treeDoomedForRemoval = selectedDimensions.Select(d => d.Tree).ToList().FindAll(t => t != null && t.FindNodeByValue(e.Node.Value) != null);
                     List<Tree> treeDoomedForRemoval = selectedDimensions.FindAll(d => d.Tree != null && d.Tree.FindNodeByValue(e.Node.Value) != null).Select(d => d.Tree).ToList();
 
                     foreach (List<Tree> nodes in treeDoomedForRemoval.Select(t => t.AllChildNodes))
@@ -300,7 +295,7 @@ namespace Presentation.BasicAccess
                     {
                         string selectedDimensionName = selectedDimensions.ElementAt(i).Name;
 
-                        if (selectedDimensionName != String.Empty && selectedDimensionName.Substring(0, selectedDimensionName.IndexOf('/')) == listOfDimensions.SelectedValue)
+                        if (!String.IsNullOrEmpty(selectedDimensionName) && selectedDimensionName.Substring(0, selectedDimensionName.IndexOf('/')) == listOfDimensions.SelectedValue)
                             if (selectedDimensions.ElementAt(i).Path == checkedNode.ValuePath)
                                 valuesOfDimensionsDoomedForRemoval.Add(selectedDimensions.ElementAt(i).Value);
                     }
