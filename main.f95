@@ -1,26 +1,35 @@
 PROGRAM polynomialCalc
-    IMPLICIT NONE
-    CHARACTER(LEN=100):: poly1="2x^2+5x^3+4"
-    CHARACTER(LEN=100):: tmp
-    INTEGER:: deg1
+    CHARACTER(LEN=100):: poly1, poly2, tmp
+    INTEGER:: deg1, deg2
     INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients1
+    INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients2
+
+    poly1="2x^2"
+    poly2="11x"
 
     CALL RemoveSpaces(poly1, tmp)
     CALL FindDegree(tmp, deg1)
     ALLOCATE(coefficients1(deg1+1))
     CALL AnalyzePolynomial(tmp, deg1, coefficients1)
+    CALL RemoveSpaces(poly2, tmp)
+    CALL FindDegree(tmp, deg2)
+    ALLOCATE(coefficients2(deg2+1))
+    CALL AnalyzePolynomial(tmp, deg2, coefficients2)
 
-    PRINT *, tmp
-    PRINT *, "Degree: ", deg1
-    PRINT *, "Coefficients: ", coefficients1(1)
+    CALL DisplayPolynomial(deg1, coefficients1)
+    PRINT *, ""
+    CALL DisplayPolynomial(deg2, coefficients2)
 
+    DEALLOCATE(coefficients1)
+    DEALLOCATE(coefficients2)
 END PROGRAM polynomialCalc
 
 SUBROUTINE RemoveSpaces(polynomialString, stringWithoutSpaces)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
     CHARACTER(LEN=100), INTENT(OUT):: stringWithoutSpaces
-    INTEGER:: resultIndex=0
+    INTEGER:: resultIndex
     INTEGER:: stringLength
+    resultIndex=0
     stringLength=LEN(Trim(polynomialString))
 
     DO i=1, stringLength
@@ -40,15 +49,17 @@ END
 SUBROUTINE FindDegree(polynomialString, degree)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
     INTEGER, INTENT(OUT):: degree
-    INTEGER:: w
-    INTEGER:: stringLength
+    INTEGER:: w, dummy, stringLength, i
+    i=1
     degree=0
     stringLength=LEN(Trim(polynomialString))
 
-    DO i=1, stringLength
+    DO
         IF (polynomialString(i: i)=="x") THEN
-            IF (polynomialString(i+1: i+1)=="^") THEN
-                CALL ConvertStringToInt(polynomialString(i+2: stringLength), w)
+            i=i+1
+
+            IF (polynomialString(i: i)=="^") THEN
+                CALL ConvertStringToInt(polynomialString(i+1: stringLength), w, dummy)
             ELSE
                 w=1
             ENDIF
@@ -56,20 +67,28 @@ SUBROUTINE FindDegree(polynomialString, degree)
             IF (w>degree) THEN
                 degree=w
             ENDIF
+        ELSE
+            i=i+1
         ENDIF
+
+        IF (i>stringLength) EXIT
     END DO
 END
 
-SUBROUTINE ConvertStringToInt(string, output)
+SUBROUTINE ConvertStringToInt(string, output, outputLength)
     CHARACTER(LEN=100), INTENT(IN):: string
     INTEGER, INTENT(OUT):: output
-    INTEGER:: conversionFailed=1
+    INTEGER, INTENT(OUT):: outputLength
+    INTEGER:: conversionFailed
+    conversionFailed=1
 
     DO i=2, LEN(string)
         READ(string(1: i), *, IOSTAT=conversionFailed) output
 
         IF (conversionFailed/=0) THEN
-            READ(string(1: i-1), *) output
+            outputLength=i-1
+
+            READ(string(1: outputLength), *) output
             EXIT
         ENDIF
     END DO
@@ -79,11 +98,8 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
     INTEGER, INTENT(IN):: degree
     INTEGER, DIMENSION(degree+1), INTENT(OUT):: tableOfCoefficients
-    INTEGER:: factor
-    INTEGER:: power
-    INTEGER:: coefficient
-    INTEGER:: i=1
-    INTEGER:: stringLength
+    INTEGER:: factor, power, coefficient, stringLength, displacement, i
+    i=1
     stringLength=LEN(Trim(polynomialString))
 
     DO j=1, Size(tableOfCoefficients)
@@ -106,18 +122,18 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
         IF (polynomialString(i:i)=="x") THEN
             coefficient=1
         ELSE
-            CALL ConvertStringToInt(polynomialString(i:stringLength), coefficient)
+            CALL ConvertStringToInt(polynomialString(i:stringLength), coefficient, displacement)
 
-            i=i+1
+            i=i+displacement
         END IF
 
         IF (polynomialString(i:i)=="x") THEN
             i=i+1
 
             IF (polynomialString(i:i)=="^") THEN
-                CALL ConvertStringToInt(polynomialString(i+1: stringLength), power)
+                CALL ConvertStringToInt(polynomialString(i+1: stringLength), power, displacement)
 
-                i=i+2
+                i=i+1+displacement
             ELSE
                 power=1
             END IF
@@ -134,6 +150,32 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
     INTEGER, INTENT(IN):: degree
     INTEGER, DIMENSION(degree+1), INTENT(IN):: tableOfCoefficients
 
-! TODO (Zawadzcy#1#): not implemented
+    IF (degree==0) THEN
+        PRINT *, tableOfCoefficients(1)
+    ELSE
+        DO i=degree+1, 1, -1
+            IF (tableOfCoefficients(i)/=0) THEN
+                IF (i/=degree+1 .and. tableOfCoefficients(i)>0) THEN
+                    WRITE(*, "(A)", ADVANCE="no") " + "
+                END IF
 
+                IF ((tableOfCoefficients(i)/=1 .or. i==1) .and. (tableOfCoefficients(i)/=1 .or. i==0)) THEN
+                    WRITE(*, "(I0)", ADVANCE="no") tableOfCoefficients(i)
+                ENDIF
+
+                IF (tableOfCoefficients(i)==-1 .and. i/=1) THEN
+                    WRITE(*, "(A)", ADVANCE="no") " - "
+                END IF
+
+                IF (i/=1) THEN
+                    WRITE(*, "(A)", ADVANCE="no") "x"
+                END IF
+
+                IF (i/=2 .and. i/=1) THEN
+                    WRITE(*, "(A)", ADVANCE="no") "^"
+                    WRITE(*, "(I0)", ADVANCE="no") i-1
+                END IF
+            END IF
+        END DO
+    END IF
 END
