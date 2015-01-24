@@ -1,49 +1,62 @@
 PROGRAM polynomialCalc
-    CHARACTER(LEN=100):: poly1, poly2, tmp
-    INTEGER:: deg1, deg2
+    CHARACTER(LEN=100):: poly1, poly2, poly3
+    INTEGER:: deg1, deg2, deg3
     INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients1
     INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients2
+    INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients3
 
-    poly1="2x^2"
-    poly2="11x"
+    poly1="2x^3"
+    poly2="11-2x^3"
 
-    CALL RemoveSpaces(poly1, tmp)
-    CALL FindDegree(tmp, deg1)
+    CALL RemoveSpaces(poly1)
+    CALL FindDegree(poly1, deg1)
     ALLOCATE(coefficients1(deg1+1))
-    CALL AnalyzePolynomial(tmp, deg1, coefficients1)
-    CALL RemoveSpaces(poly2, tmp)
-    CALL FindDegree(tmp, deg2)
+    CALL AnalyzePolynomial(poly1, deg1, coefficients1)
+    CALL RemoveSpaces(poly2)
+    CALL FindDegree(poly2, deg2)
     ALLOCATE(coefficients2(deg2+1))
-    CALL AnalyzePolynomial(tmp, deg2, coefficients2)
+    CALL AnalyzePolynomial(poly2, deg2, coefficients2)
 
     CALL DisplayPolynomial(deg1, coefficients1)
     PRINT *, ""
     CALL DisplayPolynomial(deg2, coefficients2)
 
+    deg3=Max(deg1, deg2)
+
+    ALLOCATE(coefficients3(deg3+1))
+    CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    PRINT *, ""
+    CALL DisplayPolynomial(deg3, coefficients3)
+
     DEALLOCATE(coefficients1)
     DEALLOCATE(coefficients2)
+    DEALLOCATE(coefficients3)
 END PROGRAM polynomialCalc
 
-SUBROUTINE RemoveSpaces(polynomialString, stringWithoutSpaces)
-    CHARACTER(LEN=100), INTENT(IN):: polynomialString
-    CHARACTER(LEN=100), INTENT(OUT):: stringWithoutSpaces
+SUBROUTINE RemoveSpaces(polynomialString)
+    CHARACTER(LEN=100), INTENT(INOUT):: polynomialString
+    CHARACTER(LEN=100):: stringWithoutSpaces
     INTEGER:: resultIndex
     INTEGER:: stringLength
+    INTEGER:: removedChars
     resultIndex=0
     stringLength=LEN(Trim(polynomialString))
+    removedChars=0
 
     DO i=1, stringLength
         IF (polynomialString(i: i)/=" ") THEN
             resultIndex=resultIndex+1;
             stringWithoutSpaces(resultIndex: resultIndex)=polynomialString(i: i)
+        ELSE
+            removedChars=removedChars+1
         ENDIF
     END DO
 
-    DO i=stringLength+1, LEN(polynomialString)
+    DO i=stringLength+1-removedChars, LEN(polynomialString)
         stringWithoutSpaces(i:i)=" "
     END DO
 
-    stringWithoutSpaces=Trim(stringWithoutSpaces)
+    polynomialString=Trim(stringWithoutSpaces)
 END
 
 SUBROUTINE FindDegree(polynomialString, degree)
@@ -102,7 +115,7 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
     i=1
     stringLength=LEN(Trim(polynomialString))
 
-    DO j=1, Size(tableOfCoefficients)
+    DO j=1, degree+1
         tableOfCoefficients(j)=0
     END DO
 
@@ -155,15 +168,15 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
     ELSE
         DO i=degree+1, 1, -1
             IF (tableOfCoefficients(i)/=0) THEN
-                IF (i/=degree+1 .and. tableOfCoefficients(i)>0) THEN
+                IF (i/=degree+1 .AND. tableOfCoefficients(i)>0) THEN
                     WRITE(*, "(A)", ADVANCE="no") " + "
                 END IF
 
-                IF ((tableOfCoefficients(i)/=1 .or. i==1) .and. (tableOfCoefficients(i)/=1 .or. i==0)) THEN
+                IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=1 .OR. i==0)) THEN
                     WRITE(*, "(I0)", ADVANCE="no") tableOfCoefficients(i)
                 ENDIF
 
-                IF (tableOfCoefficients(i)==-1 .and. i/=1) THEN
+                IF (tableOfCoefficients(i)==-1 .AND. i/=1) THEN
                     WRITE(*, "(A)", ADVANCE="no") " - "
                 END IF
 
@@ -171,11 +184,48 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
                     WRITE(*, "(A)", ADVANCE="no") "x"
                 END IF
 
-                IF (i/=2 .and. i/=1) THEN
+                IF (i/=2 .AND. i/=1) THEN
                     WRITE(*, "(A)", ADVANCE="no") "^"
                     WRITE(*, "(I0)", ADVANCE="no") i-1
                 END IF
             END IF
         END DO
     END IF
+END
+
+SUBROUTINE Add(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
+    INTEGER, INTENT(IN):: degree1
+    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    INTEGER, INTENT(IN):: degree2
+    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    INTEGER, INTENT(INOUT):: resultDegree
+    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    INTEGER:: component1, component2, j
+
+    DO i=1, resultDegree+1
+        component1=0
+        component2=0
+
+        IF (i<=degree1+1) THEN
+            component1=tableOfCoefficients1(i)
+        END IF
+
+        IF (i<=degree2+1) THEN
+            component2=tableOfCoefficients2(i)
+        END IF
+
+        tableOfCoefficientsOfResult(i)=component1+component2
+    END DO
+
+    j=resultDegree+1
+
+    DO
+        IF (tableOfCoefficientsOfResult(j)==0 .AND. j/=1) THEN
+            j=j-1;
+        ELSE
+            EXIT
+        END IF
+    END DO
+
+    resultDegree=j-1
 END
