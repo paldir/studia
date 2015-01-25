@@ -63,16 +63,16 @@ PROGRAM polynomialCalc
 
     !------------------------------------------
 
-!    deg3=Abs(deg1-deg2)
-!
-!    IF (Allocated(coefficients3)) THEN
-!        DEALLOCATE(coefficients3)
-!    END IF
-!
-!    ALLOCATE(coefficients3(deg3+1))
-!    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-!    PRINT *, ""
-!    CALL DisplayPolynomial(deg3, coefficients3)
+    !    deg3=Abs(deg1-deg2)
+    !
+    !    IF (Allocated(coefficients3)) THEN
+    !        DEALLOCATE(coefficients3)
+    !    END IF
+    !
+    !    ALLOCATE(coefficients3(deg3+1))
+    !    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    !    PRINT *, ""
+    !    CALL DisplayPolynomial(deg3, coefficients3)
 
     !------------------------------------------
 
@@ -234,6 +234,8 @@ END
 SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
     INTEGER, INTENT(IN):: degree
     REAL, DIMENSION(degree+1), INTENT(IN):: tableOfCoefficients
+    CHARACTER(LEN=10):: formatString, numberOfDigits, possibleFormat
+    REAL:: tmp
 
     IF (degree==0) THEN
         PRINT *, tableOfCoefficients(1)
@@ -245,7 +247,18 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
                 END IF
 
                 IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=-1 .OR. i==1)) THEN
-                    WRITE(*, "(F0.5)", ADVANCE="no") tableOfCoefficients(i)
+                    DO j=1, 5
+                        WRITE(numberOfDigits, '(I0)') j
+
+                        formatString='(F0.'//numberOfDigits
+
+                        WRITE(possibleFormat, formatString//")") tableOfCoefficients(i)
+                        READ(possibleFormat, *) tmp
+
+                        IF (tmp==tableOfCoefficients(i)) EXIT
+                    END DO
+
+                    WRITE(*, formatString//")", ADVANCE="no") tableOfCoefficients(i)
                 ENDIF
 
                 IF (tableOfCoefficients(i)==-1 .AND. i/=1) THEN
