@@ -1,12 +1,12 @@
 PROGRAM polynomialCalc
     CHARACTER(LEN=100):: poly1, poly2, poly3
     INTEGER:: deg1, deg2, deg3
-    INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients1
-    INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients2
-    INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients3
+    REAL, DIMENSION(:), ALLOCATABLE:: coefficients1
+    REAL, DIMENSION(:), ALLOCATABLE:: coefficients2
+    REAL, DIMENSION(:), ALLOCATABLE:: coefficients3
 
-    poly1="x^4+4x^2-x+2"
-    poly2="x^4+x^3+10"
+    poly1="1.5x"
+    poly2="0.5x+5"
 
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
@@ -155,11 +155,31 @@ SUBROUTINE ConvertStringToInt(string, output, outputLength)
     END DO
 END
 
+SUBROUTINE ConvertStringToReal(string, output, outputLength)
+    CHARACTER(LEN=100), INTENT(IN):: string
+    REAL, INTENT(OUT):: output
+    INTEGER, INTENT(OUT):: outputLength
+    INTEGER:: conversionFailed
+    conversionFailed=1
+
+    DO i=2, LEN(string)
+        READ(string(1: i), *, IOSTAT=conversionFailed) output
+
+        IF (conversionFailed/=0) THEN
+            outputLength=i-1
+
+            READ(string(1: outputLength), *) output
+            EXIT
+        ENDIF
+    END DO
+END
+
 SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
     INTEGER, INTENT(IN):: degree
-    INTEGER, DIMENSION(degree+1), INTENT(OUT):: tableOfCoefficients
-    INTEGER:: factor, expon, coefficient, stringLength, displacement, i
+    REAL, DIMENSION(degree+1), INTENT(OUT):: tableOfCoefficients
+    INTEGER:: factor, expon, stringLength, displacement, i
+    REAL:: coefficient
     i=1
     stringLength=LEN(Trim(polynomialString))
 
@@ -183,7 +203,7 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
         IF (polynomialString(i:i)=="x") THEN
             coefficient=1
         ELSE
-            CALL ConvertStringToInt(polynomialString(i:stringLength), coefficient, displacement)
+            CALL ConvertStringToReal(polynomialString(i:stringLength), coefficient, displacement)
 
             i=i+displacement
         END IF
@@ -213,7 +233,7 @@ END
 
 SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
     INTEGER, INTENT(IN):: degree
-    INTEGER, DIMENSION(degree+1), INTENT(IN):: tableOfCoefficients
+    REAL, DIMENSION(degree+1), INTENT(IN):: tableOfCoefficients
 
     IF (degree==0) THEN
         PRINT *, tableOfCoefficients(1)
@@ -225,7 +245,7 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
                 END IF
 
                 IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=-1 .OR. i==1)) THEN
-                    WRITE(*, "(I0)", ADVANCE="no") tableOfCoefficients(i)
+                    WRITE(*, "(F0.5)", ADVANCE="no") tableOfCoefficients(i)
                 ENDIF
 
                 IF (tableOfCoefficients(i)==-1 .AND. i/=1) THEN
@@ -247,12 +267,13 @@ END
 
 SUBROUTINE Add(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
     INTEGER, INTENT(IN):: degree1
-    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    REAL, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
     INTEGER, INTENT(IN):: degree2
-    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    REAL, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
     INTEGER, INTENT(INOUT):: resultDegree
-    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
-    INTEGER:: summand1, summand2, j
+    REAL, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    REAL:: summand1, summand2
+    INTEGER:: j
 
     DO i=1, resultDegree+1
         summand1=0
@@ -284,12 +305,12 @@ END
 
 SUBROUTINE Subtract(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
     INTEGER, INTENT(IN):: degree1
-    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    REAL, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
     INTEGER, INTENT(IN):: degree2
-    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    REAL, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
     INTEGER, INTENT(INOUT):: resultDegree
-    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
-    INTEGER, DIMENSION(degree2+1):: subtrahend
+    REAL, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    REAL, DIMENSION(degree2+1):: subtrahend
 
     DO i=1, Size(tableOfCoefficients2)
         subtrahend(i)=-1*tableOfCoefficients2(i)
@@ -300,12 +321,12 @@ END
 
 SUBROUTINE Multiply(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
     INTEGER, INTENT(IN):: degree1
-    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    REAL, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
     INTEGER, INTENT(IN):: degree2
-    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    REAL, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
     INTEGER, INTENT(INOUT):: resultDegree
-    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
-    INTEGER:: tmp
+    REAL, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    REAL:: tmp
 
     DO i=1, Size(tableOfCoefficientsOfResult)
         tableOfCoefficientsOfResult(i)=0
@@ -325,14 +346,15 @@ END
 
 SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, resultCoeff)
     INTEGER, INTENT(IN):: degree1
-    INTEGER, DIMENSION(degree1+1), INTENT(IN):: coefficients1
+    REAL, DIMENSION(degree1+1), INTENT(IN):: coefficients1
     INTEGER, INTENT(IN):: degree2
-    INTEGER, DIMENSION(degree2+1), INTENT(IN):: coefficients2
+    REAL, DIMENSION(degree2+1), INTENT(IN):: coefficients2
     INTEGER, INTENT(INOUT):: resultDeg
-    INTEGER, DIMENSION(resultDeg+1), INTENT(OUT):: resultCoeff
-    INTEGER:: remainderDeg, monomialDegree, monomialCoefficient
-    INTEGER, DIMENSION(:), ALLOCATABLE:: remainderCoeff
-    INTEGER, DIMENSION(:), ALLOCATABLE:: monomial
+    REAL, DIMENSION(resultDeg+1), INTENT(OUT):: resultCoeff
+    INTEGER:: remainderDeg, monomialDegree
+    REAL:: monomialCoefficient
+    REAL, DIMENSION(:), ALLOCATABLE:: remainderCoeff
+    REAL, DIMENSION(:), ALLOCATABLE:: monomial
 
     IF (degree1/=0 .OR. coefficients1(1)/=0) THEN
         remainderDeg=degree1
