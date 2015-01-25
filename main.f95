@@ -61,6 +61,21 @@ PROGRAM polynomialCalc
     PRINT *, ""
     CALL DisplayPolynomial(deg3, coefficients3)
 
+    !------------------------------------------
+
+!    deg3=Abs(deg1-deg2)
+!
+!    IF (Allocated(coefficients3)) THEN
+!        DEALLOCATE(coefficients3)
+!    END IF
+!
+!    ALLOCATE(coefficients3(deg3+1))
+!    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+!    PRINT *, ""
+!    CALL DisplayPolynomial(deg3, coefficients3)
+
+    !------------------------------------------
+
     DEALLOCATE(coefficients1)
     DEALLOCATE(coefficients2)
     DEALLOCATE(coefficients3)
@@ -144,7 +159,7 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
     INTEGER, INTENT(IN):: degree
     INTEGER, DIMENSION(degree+1), INTENT(OUT):: tableOfCoefficients
-    INTEGER:: factor, power, coefficient, stringLength, displacement, i
+    INTEGER:: factor, expon, coefficient, stringLength, displacement, i
     i=1
     stringLength=LEN(Trim(polynomialString))
 
@@ -154,7 +169,7 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
 
     DO
         factor=1
-        power=0
+        expon=0
 
         IF (polynomialString(i:i)=="-") THEN
             factor=-1
@@ -177,20 +192,20 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
             i=i+1
 
             IF (polynomialString(i:i)=="^") THEN
-                CALL ConvertStringToInt(polynomialString(i+1: stringLength), power, displacement)
+                CALL ConvertStringToInt(polynomialString(i+1: stringLength), expon, displacement)
 
                 i=i+1+displacement
             ELSE
-                power=1
+                expon=1
             END IF
         END IF
 
-        IF (power==0) THEN
+        IF (expon==0) THEN
             i=i+1
         END IF
 
         coefficient=coefficient*factor
-        tableOfCoefficients(power+1)=tableOfCoefficients(power+1)+coefficient
+        tableOfCoefficients(expon+1)=tableOfCoefficients(expon+1)+coefficient
 
         IF (i>stringLength) EXIT
     END DO
@@ -237,21 +252,21 @@ SUBROUTINE Add(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, res
     INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
     INTEGER, INTENT(INOUT):: resultDegree
     INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
-    INTEGER:: component1, component2, j
+    INTEGER:: summand1, summand2, j
 
     DO i=1, resultDegree+1
-        component1=0
-        component2=0
+        summand1=0
+        summand2=0
 
         IF (i<=degree1+1) THEN
-            component1=tableOfCoefficients1(i)
+            summand1=tableOfCoefficients1(i)
         END IF
 
         IF (i<=degree2+1) THEN
-            component2=tableOfCoefficients2(i)
+            summand2=tableOfCoefficients2(i)
         END IF
 
-        tableOfCoefficientsOfResult(i)=component1+component2
+        tableOfCoefficientsOfResult(i)=summand1+summand2
     END DO
 
     j=resultDegree+1
@@ -305,5 +320,49 @@ SUBROUTINE Multiply(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2
                 tableOfCoefficientsOfResult(i+j-1)=tableOfCoefficientsOfResult(i+j-1)+tmp
             END DO
         END DO
+    END IF
+END
+
+SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, resultCoeff)
+    INTEGER, INTENT(IN):: degree1
+    INTEGER, DIMENSION(degree1+1), INTENT(IN):: coefficients1
+    INTEGER, INTENT(IN):: degree2
+    INTEGER, DIMENSION(degree2+1), INTENT(IN):: coefficients2
+    INTEGER, INTENT(INOUT):: resultDeg
+    INTEGER, DIMENSION(resultDeg+1), INTENT(OUT):: resultCoeff
+    INTEGER:: remainderDeg, monomialDegree, monomialCoefficient
+    INTEGER, DIMENSION(:), ALLOCATABLE:: remainderCoeff
+    INTEGER, DIMENSION(:), ALLOCATABLE:: monomial
+
+    IF (degree1/=0 .OR. coefficients1(1)/=0) THEN
+        remainderDeg=degree1
+
+        ALLOCATE(remainderCoeff(remainderDeg+1))
+
+        DO i=1, remainderDeg+1
+            remainderCoeff(i)=coefficients1(i)
+        END DO
+
+        IF (degree1-degree2<0) THEN
+            resultDeg=0
+            resultCoeff(1)=0
+        ELSE
+            resultDeg=degree1
+            resultDeg=resultDeg-degree2
+
+            DO i=1, resultDeg+1
+                resultCoeff(i)=0
+            END DO
+
+            DO
+                monomialDegree=remainderDeg-degree2
+                monomialCoefficient=remainderCoeff(remainderDeg+1)/coefficients2(degree2+1)
+
+                IF (.NOT. ((remainderDeg==0 .AND. remainderCoeff(1)==0) .OR. remainderDeg<degree2)) EXIT
+            END DO
+        END IF
+    ELSE
+        resultDeg=0
+        resultCoeff(1)=0
     END IF
 END
