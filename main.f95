@@ -5,8 +5,8 @@ PROGRAM polynomialCalc
     INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients2
     INTEGER, DIMENSION(:), ALLOCATABLE:: coefficients3
 
-    poly1="2x^3"
-    poly2="11-2x^3"
+    poly1="x^4+4x^2-x+2"
+    poly2="x^4+x^3+10"
 
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
@@ -20,11 +20,44 @@ PROGRAM polynomialCalc
     CALL DisplayPolynomial(deg1, coefficients1)
     PRINT *, ""
     CALL DisplayPolynomial(deg2, coefficients2)
+    PRINT *, ""
+
+    !------------------------------------------
 
     deg3=Max(deg1, deg2)
 
+    IF (Allocated(coefficients3)) THEN
+        DEALLOCATE(coefficients3)
+    END IF
+
     ALLOCATE(coefficients3(deg3+1))
     CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    PRINT *, ""
+    CALL DisplayPolynomial(deg3, coefficients3)
+
+    !------------------------------------------
+
+    deg3=Max(deg1, deg2)
+
+    IF (Allocated(coefficients3)) THEN
+        DEALLOCATE(coefficients3)
+    END IF
+
+    ALLOCATE(coefficients3(deg3+1))
+    CALL Subtract(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    PRINT *, ""
+    CALL DisplayPolynomial(deg3, coefficients3)
+
+    !------------------------------------------
+
+    deg3=deg1+deg2
+
+    IF (Allocated(coefficients3)) THEN
+        DEALLOCATE(coefficients3)
+    END IF
+
+    ALLOCATE(coefficients3(deg3+1))
+    CALL Multiply(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
     PRINT *, ""
     CALL DisplayPolynomial(deg3, coefficients3)
 
@@ -152,6 +185,10 @@ SUBROUTINE AnalyzePolynomial(polynomialString, degree, tableOfCoefficients)
             END IF
         END IF
 
+        IF (power==0) THEN
+            i=i+1
+        END IF
+
         coefficient=coefficient*factor
         tableOfCoefficients(power+1)=tableOfCoefficients(power+1)+coefficient
 
@@ -169,15 +206,15 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
         DO i=degree+1, 1, -1
             IF (tableOfCoefficients(i)/=0) THEN
                 IF (i/=degree+1 .AND. tableOfCoefficients(i)>0) THEN
-                    WRITE(*, "(A)", ADVANCE="no") " + "
+                    WRITE(*, "(A)", ADVANCE="no") "+"
                 END IF
 
-                IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=1 .OR. i==0)) THEN
+                IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=-1 .OR. i==1)) THEN
                     WRITE(*, "(I0)", ADVANCE="no") tableOfCoefficients(i)
                 ENDIF
 
                 IF (tableOfCoefficients(i)==-1 .AND. i/=1) THEN
-                    WRITE(*, "(A)", ADVANCE="no") " - "
+                    WRITE(*, "(A)", ADVANCE="no") "-"
                 END IF
 
                 IF (i/=1) THEN
@@ -228,4 +265,45 @@ SUBROUTINE Add(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, res
     END DO
 
     resultDegree=j-1
+END
+
+SUBROUTINE Subtract(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
+    INTEGER, INTENT(IN):: degree1
+    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    INTEGER, INTENT(IN):: degree2
+    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    INTEGER, INTENT(INOUT):: resultDegree
+    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    INTEGER, DIMENSION(degree2+1):: subtrahend
+
+    DO i=1, Size(tableOfCoefficients2)
+        subtrahend(i)=-1*tableOfCoefficients2(i)
+    END DO
+
+    CALL Add(degree1, tableOfCoefficients1, degree2, subtrahend, resultDegree, tableOfCoefficientsOfResult)
+END
+
+SUBROUTINE Multiply(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2, resultDegree, tableOfCoefficientsOfResult)
+    INTEGER, INTENT(IN):: degree1
+    INTEGER, DIMENSION(degree1+1), INTENT(IN):: tableOfCoefficients1
+    INTEGER, INTENT(IN):: degree2
+    INTEGER, DIMENSION(degree2+1), INTENT(IN):: tableOfCoefficients2
+    INTEGER, INTENT(INOUT):: resultDegree
+    INTEGER, DIMENSION(resultDegree+1), INTENT(OUT):: tableOfCoefficientsOfResult
+    INTEGER:: tmp
+
+    DO i=1, Size(tableOfCoefficientsOfResult)
+        tableOfCoefficientsOfResult(i)=0
+    END DO
+
+    IF ((degree1==0 .AND. tableOfCoefficients1(1)==0) .OR. (degree2==0 .AND. tableOfCoefficients2(1)==0)) THEN
+        resultDegree=0
+    ELSE
+        DO i=degree1+1, 1, -1
+            DO j=degree2+1, 1, -1
+                tmp=tableOfCoefficients1(i)*tableOfCoefficients2(j)
+                tableOfCoefficientsOfResult(i+j-1)=tableOfCoefficientsOfResult(i+j-1)+tmp
+            END DO
+        END DO
+    END IF
 END
