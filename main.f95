@@ -1,13 +1,15 @@
 PROGRAM polynomialCalc
     CHARACTER(LEN=100):: poly1, poly2, poly3
-    INTEGER:: deg1, deg2, deg3, remDeg
+    INTEGER:: deg1, deg2, deg3, remDeg, menu
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients1
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients2
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients3
     REAL, DIMENSION(:), ALLOCATABLE:: remCoefficients
 
-    poly1="x^6-5x+7"
-    poly2="2x^3-3x"
+    OPEN(1, FILE="input.txt", STATUS="old", ACTION="read")
+    READ(1, *) poly1
+    READ(1, *) poly2
+    CLOSE(1)
 
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
@@ -22,64 +24,69 @@ PROGRAM polynomialCalc
     PRINT *, ""
     CALL DisplayPolynomial(deg2, coefficients2)
     PRINT *, ""
-
-    !------------------------------------------
-
-    deg3=Max(deg1, deg2)
-
-    IF (Allocated(coefficients3)) THEN
-        DEALLOCATE(coefficients3)
-    END IF
-
-    ALLOCATE(coefficients3(deg3+1))
-    CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
     PRINT *, ""
-    CALL DisplayPolynomial(deg3, coefficients3)
 
-    !------------------------------------------
+    PRINT *, "1. Addition"
+    PRINT *, "2. Subtraction"
+    PRINT *, "3. Multiplication"
+    PRINT *, "4. Division"
+    READ (*, *) menu
 
-    deg3=Max(deg1, deg2)
 
-    IF (Allocated(coefficients3)) THEN
-        DEALLOCATE(coefficients3)
-    END IF
+    SELECT CASE (menu)
+        CASE (1)
+            deg3=Max(deg1, deg2)
 
-    ALLOCATE(coefficients3(deg3+1))
-    CALL Subtract(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-    PRINT *, ""
-    CALL DisplayPolynomial(deg3, coefficients3)
+            IF (Allocated(coefficients3)) THEN
+                DEALLOCATE(coefficients3)
+            END IF
 
-    !------------------------------------------
+            ALLOCATE(coefficients3(deg3+1))
+            CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+            PRINT *, ""
+            CALL DisplayPolynomial(deg3, coefficients3)
 
-    deg3=deg1+deg2
+        CASE (2)
+            deg3=Max(deg1, deg2)
 
-    IF (Allocated(coefficients3)) THEN
-        DEALLOCATE(coefficients3)
-    END IF
+            IF (Allocated(coefficients3)) THEN
+                DEALLOCATE(coefficients3)
+            END IF
 
-    ALLOCATE(coefficients3(deg3+1))
-    CALL Multiply(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-    PRINT *, ""
-    CALL DisplayPolynomial(deg3, coefficients3)
+            ALLOCATE(coefficients3(deg3+1))
+            CALL Subtract(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+            PRINT *, ""
+            CALL DisplayPolynomial(deg3, coefficients3)
 
-    !------------------------------------------
+        CASE (3)
+            deg3=deg1+deg2
 
-    deg3=Abs(deg1-deg2)
-    remDeg=deg1
+            IF (Allocated(coefficients3)) THEN
+                DEALLOCATE(coefficients3)
+            END IF
 
-    IF (Allocated(coefficients3)) THEN
-        DEALLOCATE(coefficients3)
-    END IF
+            ALLOCATE(coefficients3(deg3+1))
+            CALL Multiply(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+            PRINT *, ""
+            CALL DisplayPolynomial(deg3, coefficients3)
 
-    ALLOCATE(coefficients3(deg3+1))
-    ALLOCATE(remCoefficients(remDeg+1))
-    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3, remDeg, remCoefficients)
-    PRINT *, ""
-    CALL DisplayPolynomial(deg3, coefficients3)
-    WRITE(*, "(A)", ADVANCE="no") " remainder: "
-    CALL DisplayPolynomial(remDeg, remCoefficients)
+        CASE (4)
+            deg3=Abs(deg1-deg2)
+            remDeg=deg1
 
-    !------------------------------------------
+            IF (Allocated(coefficients3)) THEN
+                DEALLOCATE(coefficients3)
+            END IF
+
+            ALLOCATE(coefficients3(deg3+1))
+            ALLOCATE(remCoefficients(remDeg+1))
+            CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3, remDeg, remCoefficients)
+            PRINT *, ""
+            CALL DisplayPolynomial(deg3, coefficients3)
+            WRITE(*, "(A)", ADVANCE="no") " remainder: "
+            CALL DisplayPolynomial(remDeg, remCoefficients)
+
+    END SELECT
 
     PRINT *, ""
 
@@ -258,7 +265,7 @@ SUBROUTINE DisplayPolynomial(degree, tableOfCoefficients)
                 END IF
 
                 IF ((tableOfCoefficients(i)/=1 .OR. i==1) .AND. (tableOfCoefficients(i)/=-1 .OR. i==1)) THEN
-                    DO j=1, 5
+                    DO j=0, 5
                         WRITE(numberOfDigits, '(I0)') j
 
                         formatString='(F0.'//numberOfDigits
