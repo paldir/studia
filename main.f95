@@ -5,8 +5,8 @@ PROGRAM polynomialCalc
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients2
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients3
 
-    poly1="1.5x"
-    poly2="0.5x+5"
+    poly1="x^3-8x^2+15x-8"
+    poly2="x-1"
 
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
@@ -63,16 +63,16 @@ PROGRAM polynomialCalc
 
     !------------------------------------------
 
-    !    deg3=Abs(deg1-deg2)
-    !
-    !    IF (Allocated(coefficients3)) THEN
-    !        DEALLOCATE(coefficients3)
-    !    END IF
-    !
-    !    ALLOCATE(coefficients3(deg3+1))
-    !    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-    !    PRINT *, ""
-    !    CALL DisplayPolynomial(deg3, coefficients3)
+    deg3=Abs(deg1-deg2)
+
+    IF (Allocated(coefficients3)) THEN
+        DEALLOCATE(coefficients3)
+    END IF
+
+    ALLOCATE(coefficients3(deg3+1))
+    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    PRINT *, ""
+    CALL DisplayPolynomial(deg3, coefficients3)
 
     !------------------------------------------
 
@@ -364,10 +364,11 @@ SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, res
     REAL, DIMENSION(degree2+1), INTENT(IN):: coefficients2
     INTEGER, INTENT(INOUT):: resultDeg
     REAL, DIMENSION(resultDeg+1), INTENT(OUT):: resultCoeff
-    INTEGER:: remainderDeg, monomialDegree
+    INTEGER:: remainderDeg, monomialDegree, tmpDegree
     REAL:: monomialCoefficient
     REAL, DIMENSION(:), ALLOCATABLE:: remainderCoeff
     REAL, DIMENSION(:), ALLOCATABLE:: monomial
+    REAL, DIMENSION(:), ALLOCATABLE:: tmp
 
     IF (degree1/=0 .OR. coefficients1(1)/=0) THEN
         remainderDeg=degree1
@@ -378,26 +379,61 @@ SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, res
             remainderCoeff(i)=coefficients1(i)
         END DO
 
-        IF (degree1-degree2<0) THEN
+        resultDeg=degree1-degree2
+
+        IF (resultDeg<0) THEN
             resultDeg=0
             resultCoeff(1)=0
         ELSE
-            resultDeg=degree1
-            resultDeg=resultDeg-degree2
-
             DO i=1, resultDeg+1
                 resultCoeff(i)=0
             END DO
 
             DO
+                IF ((remainderDeg==0 .AND. remainderCoeff(1)==0) .OR. remainderDeg<degree2) EXIT
+
                 monomialDegree=remainderDeg-degree2
                 monomialCoefficient=remainderCoeff(remainderDeg+1)/coefficients2(degree2+1)
 
-                IF (.NOT. ((remainderDeg==0 .AND. remainderCoeff(1)==0) .OR. remainderDeg<degree2)) EXIT
+                IF(Allocated(monomial)) THEN
+                    DEALLOCATE(monomial)
+                END IF
+
+                ALLOCATE(monomial(monomialDegree+1))
+
+                DO i=1, monomialDegree+1
+                    monomial(i)=0
+                END DO
+
+                monomial(monomialDegree+1)=monomialCoefficient
+
+                CALL Add(resultDeg, resultCoeff, monomialDegree, monomial, resultDeg, resultCoeff)
+
+                IF(Allocated(tmp)) THEN
+                    DEALLOCATE(tmp)
+                END IF
+
+                tmpDegree=monomialDegree+degree2
+
+                ALLOCATE(tmp(tmpDegree+1))
+                CALL Multiply(monomialDegree, monomial, degree2, coefficients2, tmpDegree, tmp)
+                CALL Subtract(remainderDeg, remainderCoeff, tmpDegree, tmp, remainderDeg, remainderCoeff)
             END DO
         END IF
     ELSE
         resultDeg=0
         resultCoeff(1)=0
+    END IF
+
+    IF (Allocated(remainderCoeff)) THEN
+        DEALLOCATE(remainderCoeff)
+    END IF
+
+    IF (Allocated(monomial)) THEN
+        DEALLOCATE(monomial)
+    END IF
+
+    IF (Allocated(tmp)) THEN
+        DEALLOCATE(tmp)
     END IF
 END
