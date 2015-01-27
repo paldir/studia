@@ -1,12 +1,13 @@
 PROGRAM polynomialCalc
     CHARACTER(LEN=100):: poly1, poly2, poly3
-    INTEGER:: deg1, deg2, deg3
+    INTEGER:: deg1, deg2, deg3, remDeg
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients1
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients2
     REAL, DIMENSION(:), ALLOCATABLE:: coefficients3
+    REAL, DIMENSION(:), ALLOCATABLE:: remCoefficients
 
-    poly1="x^3-8x^2+15x-8"
-    poly2="x-1"
+    poly1="x^6-5x+7"
+    poly2="2x^3-3x"
 
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
@@ -64,21 +65,31 @@ PROGRAM polynomialCalc
     !------------------------------------------
 
     deg3=Abs(deg1-deg2)
+    remDeg=deg1
 
     IF (Allocated(coefficients3)) THEN
         DEALLOCATE(coefficients3)
     END IF
 
     ALLOCATE(coefficients3(deg3+1))
-    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+    ALLOCATE(remCoefficients(remDeg+1))
+    CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3, remDeg, remCoefficients)
     PRINT *, ""
     CALL DisplayPolynomial(deg3, coefficients3)
+    WRITE(*, "(A)", ADVANCE="no") " remainder: "
+    CALL DisplayPolynomial(remDeg, remCoefficients)
 
     !------------------------------------------
+
+    PRINT *, ""
 
     DEALLOCATE(coefficients1)
     DEALLOCATE(coefficients2)
     DEALLOCATE(coefficients3)
+
+    IF (Allocated(remCoefficients)) THEN
+        DEALLOCATE(remCoefficients)
+    END IF
 END PROGRAM polynomialCalc
 
 SUBROUTINE RemoveSpaces(polynomialString)
@@ -357,23 +368,22 @@ SUBROUTINE Multiply(degree1, tableOfCoefficients1, degree2, tableOfCoefficients2
     END IF
 END
 
-SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, resultCoeff)
+SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, resultCoeff, remainderDeg, remainderCoeff)
     INTEGER, INTENT(IN):: degree1
     REAL, DIMENSION(degree1+1), INTENT(IN):: coefficients1
     INTEGER, INTENT(IN):: degree2
     REAL, DIMENSION(degree2+1), INTENT(IN):: coefficients2
     INTEGER, INTENT(INOUT):: resultDeg
+    INTEGER, INTENT(INOUT):: remainderDeg
     REAL, DIMENSION(resultDeg+1), INTENT(OUT):: resultCoeff
-    INTEGER:: remainderDeg, monomialDegree, tmpDegree
+    REAL, DIMENSION(remainderDeg+1), INTENT(OUT):: remainderCoeff
+    INTEGER:: monomialDegree, tmpDegree
     REAL:: monomialCoefficient
-    REAL, DIMENSION(:), ALLOCATABLE:: remainderCoeff
     REAL, DIMENSION(:), ALLOCATABLE:: monomial
     REAL, DIMENSION(:), ALLOCATABLE:: tmp
 
     IF (degree1/=0 .OR. coefficients1(1)/=0) THEN
         remainderDeg=degree1
-
-        ALLOCATE(remainderCoeff(remainderDeg+1))
 
         DO i=1, remainderDeg+1
             remainderCoeff(i)=coefficients1(i)
@@ -423,10 +433,6 @@ SUBROUTINE Divide(degree1, coefficients1, degree2, coefficients2, resultDeg, res
     ELSE
         resultDeg=0
         resultCoeff(1)=0
-    END IF
-
-    IF (Allocated(remainderCoeff)) THEN
-        DEALLOCATE(remainderCoeff)
     END IF
 
     IF (Allocated(monomial)) THEN
