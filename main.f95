@@ -10,7 +10,6 @@ PROGRAM polynomialCalc
     READ(1, *) poly1
     READ(1, *) poly2
     CLOSE(1)
-
     CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
     ALLOCATE(coefficients1(deg1+1))
@@ -19,19 +18,16 @@ PROGRAM polynomialCalc
     CALL FindDegree(poly2, deg2)
     ALLOCATE(coefficients2(deg2+1))
     CALL AnalyzePolynomial(poly2, deg2, coefficients2)
-
     CALL DisplayPolynomial(deg1, coefficients1)
     PRINT *, ""
     CALL DisplayPolynomial(deg2, coefficients2)
     PRINT *, ""
     PRINT *, ""
-
     PRINT *, "1. Addition"
     PRINT *, "2. Subtraction"
     PRINT *, "3. Multiplication"
     PRINT *, "4. Division"
     READ (*, *) menu
-
 
     SELECT CASE (menu)
         CASE (1)
@@ -89,7 +85,6 @@ PROGRAM polynomialCalc
     END SELECT
 
     PRINT *, ""
-
     DEALLOCATE(coefficients1)
     DEALLOCATE(coefficients2)
     DEALLOCATE(coefficients3)
