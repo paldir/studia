@@ -54,10 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerators.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrarium.cs" />
+    <Compile Include="TerrariumThread.cs" />
     <Compile Include="Viper.cs" />
   </ItemGroup>
   <ItemGroup>

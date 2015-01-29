@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+using System.Threading.Tasks;
+
 namespace Snake
 {
     [Activity(Label = "Snake", MainLauncher = true, Icon = "@drawable/icon")]
