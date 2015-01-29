@@ -10,11 +10,9 @@ PROGRAM polynomialCalc
     READ(1, *) poly1
     READ(1, *) poly2
     CLOSE(1)
-    CALL RemoveSpaces(poly1)
     CALL FindDegree(poly1, deg1)
     ALLOCATE(coefficients1(deg1+1))
     CALL AnalyzePolynomial(poly1, deg1, coefficients1)
-    CALL RemoveSpaces(poly2)
     CALL FindDegree(poly2, deg2)
     ALLOCATE(coefficients2(deg2+1))
     CALL AnalyzePolynomial(poly2, deg2, coefficients2)
@@ -33,92 +31,49 @@ PROGRAM polynomialCalc
         CASE (1)
             deg3=Max(deg1, deg2)
 
-            IF (Allocated(coefficients3)) THEN
-                DEALLOCATE(coefficients3)
-            END IF
-
-            ALLOCATE(coefficients3(deg3+1))
-            CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-            PRINT *, ""
-            CALL DisplayPolynomial(deg3, coefficients3)
-
         CASE (2)
             deg3=Max(deg1, deg2)
 
-            IF (Allocated(coefficients3)) THEN
-                DEALLOCATE(coefficients3)
-            END IF
-
-            ALLOCATE(coefficients3(deg3+1))
-            CALL Subtract(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-            PRINT *, ""
-            CALL DisplayPolynomial(deg3, coefficients3)
-
         CASE (3)
             deg3=deg1+deg2
-
-            IF (Allocated(coefficients3)) THEN
-                DEALLOCATE(coefficients3)
-            END IF
-
-            ALLOCATE(coefficients3(deg3+1))
-            CALL Multiply(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
-            PRINT *, ""
-            CALL DisplayPolynomial(deg3, coefficients3)
 
         CASE (4)
             deg3=Abs(deg1-deg2)
             remDeg=deg1
 
-            IF (Allocated(coefficients3)) THEN
-                DEALLOCATE(coefficients3)
-            END IF
+    END SELECT
 
-            ALLOCATE(coefficients3(deg3+1))
+    ALLOCATE(coefficients3(deg3+1))
+
+    SELECT CASE (menu)
+        CASE (1)
+            CALL Add(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+
+        CASE (2)
+            CALL Subtract(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+
+        CASE (3)
+            CALL Multiply(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3)
+
+        CASE (4)
             ALLOCATE(remCoefficients(remDeg+1))
             CALL Divide(deg1, coefficients1, deg2, coefficients2, deg3, coefficients3, remDeg, remCoefficients)
-            PRINT *, ""
-            CALL DisplayPolynomial(deg3, coefficients3)
-            WRITE(*, "(A)", ADVANCE="no") " remainder: "
-            CALL DisplayPolynomial(remDeg, remCoefficients)
 
     END SELECT
+
+    CALL DisplayPolynomial(deg3, coefficients3)
+
+    IF (Allocated(remCoefficients)) THEN
+        WRITE(*, "(A)", ADVANCE="no") " remainder: "
+        CALL DisplayPolynomial(remDeg, remCoefficients)
+        DEALLOCATE(remCoefficients)
+    END IF
 
     PRINT *, ""
     DEALLOCATE(coefficients1)
     DEALLOCATE(coefficients2)
     DEALLOCATE(coefficients3)
-
-    IF (Allocated(remCoefficients)) THEN
-        DEALLOCATE(remCoefficients)
-    END IF
 END PROGRAM polynomialCalc
-
-SUBROUTINE RemoveSpaces(polynomialString)
-    CHARACTER(LEN=100), INTENT(INOUT):: polynomialString
-    CHARACTER(LEN=100):: stringWithoutSpaces
-    INTEGER:: resultIndex
-    INTEGER:: stringLength
-    INTEGER:: removedChars
-    resultIndex=0
-    stringLength=LEN(Trim(polynomialString))
-    removedChars=0
-
-    DO i=1, stringLength
-        IF (polynomialString(i: i)/=" ") THEN
-            resultIndex=resultIndex+1;
-            stringWithoutSpaces(resultIndex: resultIndex)=polynomialString(i: i)
-        ELSE
-            removedChars=removedChars+1
-        ENDIF
-    END DO
-
-    DO i=stringLength+1-removedChars, LEN(polynomialString)
-        stringWithoutSpaces(i:i)=" "
-    END DO
-
-    polynomialString=Trim(stringWithoutSpaces)
-END
 
 SUBROUTINE FindDegree(polynomialString, degree)
     CHARACTER(LEN=100), INTENT(IN):: polynomialString
