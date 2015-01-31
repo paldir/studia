@@ -27,13 +27,8 @@ namespace Snake
             CurrentCrawlingDirection = CrawlingDirection.Left;
             int terrariumHalf = Terrarium.SideLengthInCells / 2;
 
-
             for (int i = terrariumHalf - 2; i <= terrariumHalf + 2; i++)
                 coordinates.Add(new Android.Graphics.Point(i, terrariumHalf));
-
-            /*for (int i = 0; i < Terrarium.SideLengthInCells; i++)
-                for (int j = 0; j < Terrarium.SideLengthInCells; j++)
-                    Coordinates.Add(new Android.Graphics.Point(i, j));*/
         }
 
         public void LetCrawl()
@@ -68,6 +63,9 @@ namespace Snake
 
             if (newHead.X < 0 || newHead.X >= Terrarium.SideLengthInCells || newHead.Y < 0 || newHead.Y >= Terrarium.SideLengthInCells)
                 throw new Exception("W¹¿ przypieprzy³ ³bem w œcianê!");
+
+            if (coordinates.Exists(p => p.X == newHead.X && p.Y == newHead.Y))
+                throw new Exception("W¹¿ przypieprzy³ ³bem w swoj¹ dupê!");
 
             coordinates.Insert(0, newHead);
         }

@@ -29,7 +29,7 @@ namespace Snake
         {
             while (Running)
             {
-                await System.Threading.Tasks.Task.Delay(250);
+                await System.Threading.Tasks.Task.Delay(125);
                 
                 Android.Graphics.Canvas canvas = surfaceHolder.LockCanvas();
 
