@@ -21,6 +21,7 @@ namespace Snake
         Paint paint;
         float cellLength;
         TerrariumThread terrariumThread;
+        Color backgroundColor;
 
         public const int SideLengthInCells = 50;
         
@@ -31,7 +32,7 @@ namespace Snake
         {
             Viper = new Viper();
             paint = new Paint();
-            paint.Color = Color.White;
+            backgroundColor = Resources.GetColor(Resource.Color.TerrariumBackground);
 
             Holder.AddCallback(this);
         }
@@ -46,11 +47,32 @@ namespace Snake
             SetMeasuredDimension(sideLength, sideLength);
         }
 
-        public void DrawEnvironment(Android.Graphics.Canvas canvas)
-        {   
-            sideLength -= border * 2;
+        protected override void OnDraw(Canvas canvas)
+        {
+            paint.Color = Resources.GetColor(Resource.Color.TerrariumBackground);
 
-            foreach (Point point in Viper.GetCoordinates())
+            canvas.DrawRect(0, 0, canvas.Width, canvas.Height, paint);
+        }
+
+        public void DrawEnvironment(Android.Graphics.Canvas canvas)
+        {
+            sideLength -= border * 2;
+            paint.Color = backgroundColor;
+
+            canvas.DrawRect(0, 0, canvas.Width - 1, canvas.Height - 1, paint);
+
+            paint.Color = Color.Black;
+            paint.StrokeWidth = 1;
+
+            paint.SetStyle(Paint.Style.Stroke);
+
+            canvas.DrawRect(0, 0, canvas.Width - 1, canvas.Height - 1, paint);
+
+            paint.SetStyle(Paint.Style.Fill);
+
+            var tmp = Viper.GetCoordinates();
+
+            foreach (Point point in tmp)
             {
                 float x = point.X * cellLength + border;
                 float y = point.Y * cellLength + border;
@@ -91,6 +113,8 @@ namespace Snake
         public void SurfaceDestroyed(ISurfaceHolder holder)
         {
             terrariumThread.Running = false;
+
+            paint.Dispose();
         }
     }
 }

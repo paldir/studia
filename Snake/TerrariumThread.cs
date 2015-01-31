@@ -29,7 +29,7 @@ namespace Snake
         {
             while (Running)
             {
-                await System.Threading.Tasks.Task.Delay(1000);
+                await System.Threading.Tasks.Task.Delay(250);
                 
                 Android.Graphics.Canvas canvas = surfaceHolder.LockCanvas();
 
@@ -38,6 +38,8 @@ namespace Snake
                     terrarium.DrawEnvironment(canvas);
                     surfaceHolder.UnlockCanvasAndPost(canvas);
                 }
+
+                terrarium.Viper.LetCrawl();
             }
         }
     }

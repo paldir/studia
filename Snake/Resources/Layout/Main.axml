@@ -3,12 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/TerrariumBackground"
+    android:keepScreenOn="true">
     >
   <snake.Terrarium
     android:id="@+id/terrarium"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_centerInParent="true"
-    android:background="@drawable/TerrariumBackground"
     />
 </RelativeLayout>
