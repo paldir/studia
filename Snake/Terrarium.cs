@@ -27,11 +27,13 @@ namespace Snake
         public const int SideLengthInCells = 30;
 
         public Viper Viper { get; private set; }
+        public List<Food> Food { get; private set; }
 
         public Terrarium(Context context, Android.Util.IAttributeSet attrs)
             : base(context, attrs)
         {
             Viper = new Viper();
+            Food = new List<Snake.Food>();
             Color backgroundColor = Resources.GetColor(Resource.Color.TerrariumBackground);
             viperPaint = new Paint();
             viperPaint.Color = Color.Black;
@@ -63,7 +65,7 @@ namespace Snake
             canvas.DrawRect(0, 0, canvas.Width - 1, canvas.Height - 1, backgroundPaint);
             canvas.DrawRect(0, 0, canvas.Width - 1, canvas.Height - 1, borderPaint);
 
-            foreach (Point point in Viper.GetCoordinates())
+            foreach (Point point in Viper.GetCoordinates().Concat(Food.Select(f => f.GetPoint())))
             {
                 float x = point.X * cellLength + border + 1;
                 float y = point.Y * cellLength + border + 1;

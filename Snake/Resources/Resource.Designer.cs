@@ -98,8 +98,20 @@ namespace Snake
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f080004
+			public const int down = 2131230724;
+			
+			// aapt resource value: 0x7f080002
+			public const int left = 2131230722;
+			
+			// aapt resource value: 0x7f080003
+			public const int right = 2131230723;
+			
 			// aapt resource value: 0x7f080000
 			public const int terrarium = 2131230720;
+			
+			// aapt resource value: 0x7f080001
+			public const int up = 2131230721;
 			
 			static Id()
 			{

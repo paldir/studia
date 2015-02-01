@@ -72,7 +72,33 @@ namespace Snake
 
         public void LetExtend()
         {
-            throw new NotImplementedException("Roœniêcie ¿mii nie zaimplementowane.");
+            Point currentHead = coordinates.First();
+            Point newHead = null;
+
+            switch (CurrentCrawlingDirection)
+            {
+                case CrawlingDirection.Up:
+                    newHead = new Point(currentHead.X, currentHead.Y - 1);
+
+                    break;
+
+                case CrawlingDirection.Down:
+                    newHead = new Point(currentHead.X, currentHead.Y + 1);
+
+                    break;
+
+                case CrawlingDirection.Left:
+                    newHead = new Point(currentHead.X - 1, currentHead.Y);
+
+                    break;
+
+                case CrawlingDirection.Right:
+                    newHead = new Point(currentHead.X + 1, currentHead.Y);
+
+                    break;
+            }
+
+            coordinates.Insert(0, newHead);
         }
     }
 }

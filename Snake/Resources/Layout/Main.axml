@@ -3,12 +3,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/TerrariumBackground"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
     >
   <snake.Terrarium
     android:id="@+id/terrarium"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    />
+  <Button
+    android:id="@+id/up"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/terrarium"
     android:layout_centerInParent="true"
+    android:text="^"
+    />
+  <Button
+    android:id="@+id/left"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="("
+    android:layout_toLeftOf="@+id/up"
+    android:layout_below="@+id/up"
+    />
+  <Button
+    android:id="@+id/right"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text=")"
+    android:layout_toRightOf="@+id/up"
+    android:layout_below="@+id/up"
+    />
+  <Button
+    android:id="@+id/down"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="v"
+    android:layout_toLeftOf="@+id/right"
+    android:layout_below="@+id/right"
     />
 </RelativeLayout>
