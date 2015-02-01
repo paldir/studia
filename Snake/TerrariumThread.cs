@@ -46,7 +46,7 @@ namespace Snake
                     surfaceHolder.UnlockCanvasAndPost(canvas);
                 }
 
-                if (Food.Count < 3 && random.NextDouble() > 0.9 + Food.Count / 100)
+                if ((Food.Count < 1 && random.NextDouble() > 0.90) || (Food.Count < 2 && random.NextDouble() > 0.99))
                 {
                     Food food = new Food(random.Next(0, Terrarium.SideLengthInCells - 1), random.Next(0, Terrarium.SideLengthInCells - 1));
 
