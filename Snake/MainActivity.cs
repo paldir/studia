@@ -19,6 +19,7 @@ namespace Snake
         Button down { get { return FindViewById<Button>(Resource.Id.down); } }
         Button left { get { return FindViewById<Button>(Resource.Id.left); } }
         Button right { get { return FindViewById<Button>(Resource.Id.right); } }
+        TextView points { get { return FindViewById<TextView>(Resource.Id.points); } }
         Viper viper;
 
         protected override void OnCreate(Bundle bundle)
@@ -32,7 +33,9 @@ namespace Snake
             SetContentView(Resource.Layout.Main);
 
             viper = terrarium.Viper;
+            points.Text = "0";
             terrarium.Touch += terrarium_Touch;
+            terrarium.DinnerConsumed += terrarium_DinnerConsumed;
             up.Click += up_Click;
             down.Click += down_Click;
             left.Click += left_Click;
@@ -83,6 +86,11 @@ namespace Snake
                 else
                     down_Click(null, null);
             }
+        }
+
+        void terrarium_DinnerConsumed(object sender, EventArgs e)
+        {
+            points.Text = (Convert.ToInt16(points.Text) + 1).ToString();
         }
     }
 }

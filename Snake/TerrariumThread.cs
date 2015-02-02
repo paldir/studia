@@ -46,7 +46,7 @@ namespace Snake
                     surfaceHolder.UnlockCanvasAndPost(canvas);
                 }
 
-                if ((Food.Count < 1 && random.NextDouble() > 0.90) || (Food.Count < 2 && random.NextDouble() > 0.99))
+                if ((Food.Count < 1) || (Food.Count < 2 && random.NextDouble() > 0.99))
                 {
                     Food food = new Food(random.Next(0, Terrarium.SideLengthInCells - 1), random.Next(0, Terrarium.SideLengthInCells - 1));
 
@@ -59,9 +59,10 @@ namespace Snake
                     terrarium.Food.Remove(dinner);
                     dinner.Dispose();
                     terrarium.Viper.LetExtend();
+                    terrarium.OnDinnerConsumed(new EventArgs());
                 }
 
-                terrarium.Viper.LetCrawl();
+                //terrarium.Viper.LetCrawl();
             }
         }
     }
