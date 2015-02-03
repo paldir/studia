@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
-  <solid android:color="@color/TerrariumBackground" />
-  <stroke android:width="@dimen/Border" android:color="#000000"/>
-  <padding android:left="@dimen/Border" android:top="@dimen/Border" android:right="@dimen/Border" android:bottom="@dimen/Border" />
-</shape>

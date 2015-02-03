@@ -16,7 +16,7 @@ namespace Snake
 {
     public class Viper
     {
-        public CrawlingDirection CurrentCrawlingDirection { get; set; }
+        public Queue<CrawlingDirection> CurrentCrawlingDirection { get; set; }
 
         List<Point> coordinates;
         public List<Point> GetCoordinates() { return new List<Point>(coordinates); }
@@ -24,7 +24,7 @@ namespace Snake
         public Viper()
         {
             coordinates = new List<Android.Graphics.Point>();
-            CurrentCrawlingDirection = CrawlingDirection.Left;
+            CurrentCrawlingDirection = new Queue<CrawlingDirection>(new[] { CrawlingDirection.Left });
             int terrariumHalf = Terrarium.SideLengthInCells / 2;
 
             for (int i = terrariumHalf - 2; i <= terrariumHalf + 2; i++)
@@ -38,7 +38,7 @@ namespace Snake
 
             coordinates.RemoveAt(coordinates.Count - 1);
 
-            switch (CurrentCrawlingDirection)
+            switch (CurrentCrawlingDirection.First())
             {
                 case CrawlingDirection.Up:
                     newHead = new Point(currentHead.X, currentHead.Y - 1);
@@ -61,10 +61,13 @@ namespace Snake
                     break;
             }
 
+            if (CurrentCrawlingDirection.Count > 1)
+                CurrentCrawlingDirection.Dequeue();
+
             if (newHead.X < 0 || newHead.X >= Terrarium.SideLengthInCells || newHead.Y < 0 || newHead.Y >= Terrarium.SideLengthInCells)
                 throw new Exception("W¹¿ przypieprzy³ ³bem w œcianê!");
 
-            if (coordinates.Exists(p => p.X == newHead.X && p.Y == newHead.Y))
+            if (coordinates.Exists(c => Point.Equals(c, newHead)))
                 throw new Exception("W¹¿ przypieprzy³ ³bem w swoj¹ dupê!");
 
             coordinates.Insert(0, newHead);
@@ -72,33 +75,12 @@ namespace Snake
 
         public void LetExtend()
         {
-            Point currentHead = coordinates.First();
-            Point newHead = null;
+            Point tail = coordinates.Last();
+            Point almostTail = coordinates.ElementAt(coordinates.Count - 2);
+            int x = tail.X - almostTail.X;
+            int y = tail.Y - almostTail.Y;
 
-            switch (CurrentCrawlingDirection)
-            {
-                case CrawlingDirection.Up:
-                    newHead = new Point(currentHead.X, currentHead.Y - 1);
-
-                    break;
-
-                case CrawlingDirection.Down:
-                    newHead = new Point(currentHead.X, currentHead.Y + 1);
-
-                    break;
-
-                case CrawlingDirection.Left:
-                    newHead = new Point(currentHead.X - 1, currentHead.Y);
-
-                    break;
-
-                case CrawlingDirection.Right:
-                    newHead = new Point(currentHead.X + 1, currentHead.Y);
-
-                    break;
-            }
-
-            coordinates.Insert(0, newHead);
+            coordinates.Add(new Point(tail.X + x, tail.Y + y));
         }
     }
 }

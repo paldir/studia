@@ -38,7 +38,7 @@ namespace Snake
                 List<Point> viperCoordinates = terrarium.Viper.GetCoordinates();
                 Point viperHead = viperCoordinates.First();
                 Food dinner = terrarium.Food.Find(f => f.X == viperHead.X && f.Y == viperHead.Y);
-                Android.Graphics.Canvas canvas = surfaceHolder.LockCanvas();
+                Canvas canvas = surfaceHolder.LockCanvas();
 
                 if (canvas != null)
                 {
@@ -46,11 +46,11 @@ namespace Snake
                     surfaceHolder.UnlockCanvasAndPost(canvas);
                 }
 
-                if ((Food.Count < 1) || (Food.Count < 2 && random.NextDouble() > 0.99))
+                if (Food.Count < 1)
                 {
                     Food food = new Food(random.Next(0, Terrarium.SideLengthInCells - 1), random.Next(0, Terrarium.SideLengthInCells - 1));
 
-                    if (!viperCoordinates.Exists(p => p.X == food.X && p.Y == food.Y) && !terrarium.Food.Exists(p => p.X == food.X && p.Y == food.Y))
+                    if (!viperCoordinates.Exists(c => c.X == food.X && c.Y == food.Y) && !terrarium.Food.Exists(f => f.X == food.X && f.Y == food.Y))
                         terrarium.Food.Add(food);
                 }
 
@@ -62,7 +62,7 @@ namespace Snake
                     terrarium.OnDinnerConsumed(new EventArgs());
                 }
 
-                //terrarium.Viper.LetCrawl();
+                terrarium.Viper.LetCrawl();
             }
         }
     }

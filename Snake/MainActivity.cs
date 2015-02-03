@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Snake
 {
@@ -33,7 +34,7 @@ namespace Snake
             SetContentView(Resource.Layout.Main);
 
             viper = terrarium.Viper;
-            points.Text = "0";
+            points.Text = (0).ToString("D4");
             terrarium.Touch += terrarium_Touch;
             terrarium.DinnerConsumed += terrarium_DinnerConsumed;
             up.Click += up_Click;
@@ -44,27 +45,28 @@ namespace Snake
 
         void up_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection != CrawlingDirection.Down)
-                viper.CurrentCrawlingDirection = CrawlingDirection.Up;
+            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Down)
+                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Up);
         }
 
         void down_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection != CrawlingDirection.Up)
-                viper.CurrentCrawlingDirection = CrawlingDirection.Down;
+            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Up)
+                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Down);
         }
 
         void left_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection != CrawlingDirection.Right)
-                viper.CurrentCrawlingDirection = CrawlingDirection.Left;
+            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Right)
+                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Left);
         }
 
         void right_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection != CrawlingDirection.Left)
-                viper.CurrentCrawlingDirection = CrawlingDirection.Right;
+            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Left)
+                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Right);
         }
+
 
         void terrarium_Touch(object sender, View.TouchEventArgs e)
         {
@@ -90,7 +92,8 @@ namespace Snake
 
         void terrarium_DinnerConsumed(object sender, EventArgs e)
         {
-            points.Text = (Convert.ToInt16(points.Text) + 1).ToString();
+            points.Text = (Convert.ToInt16(points.Text) + 1).ToString("D4");
         }
     }
+
 }
