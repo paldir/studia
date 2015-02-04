@@ -61,6 +61,7 @@
     <Compile Include="Menu.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Score.cs" />
     <Compile Include="Terrarium.cs" />
     <Compile Include="TerrariumThread.cs" />
     <Compile Include="Viper.cs" />
@@ -104,6 +105,8 @@
     <AndroidResource Include="Resources\Drawable\ButtonColor.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\Row.xml" />
+    <AndroidResource Include="Resources\Drawable\HeaderRow.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,14 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/TerrariumBackground"
     android:orientation="vertical"
-    android:keepScreenOn="true"
-    >
+    android:keepScreenOn="true">
   <TextView
     android:id="@+id/points"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="#000000"
-    />
+    android:typeface="monospace" />
   <snake.Terrarium
     android:id="@+id/terrarium"
     android:layout_width="match_parent"
@@ -19,67 +18,45 @@
     android:layout_marginLeft="1dp"
     android:layout_marginRight="1dp"
     android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp"
-    />
+    android:layout_marginBottom="1dp" />
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <LinearLayout
-      style="@style/ControlRow"
-      >
-      <LinearLayout
-        style="@style/ControlCell"
-        />
+    android:orientation="vertical">
+    <LinearLayout style="@style/ControlRow">
+      <LinearLayout style="@style/ControlCell" />
       <Button
         style="@style/ControlButton"
         android:id="@+id/up"
         android:text="↑"
         android:background="@drawable/ButtonBackground"
-        android:textColor="@drawable/ButtonColor"
-        />
-      <LinearLayout
-        style="@style/ControlCell"
-        />
+        android:textColor="@drawable/ButtonColor" />
+      <LinearLayout style="@style/ControlCell" />
     </LinearLayout>
-    <LinearLayout
-      style="@style/ControlRow"
-      >
+    <LinearLayout style="@style/ControlRow">
       <Button
         style="@style/ControlButton"
         android:id="@+id/left"
         android:text="←"
         android:background="@drawable/ButtonBackground"
-        android:textColor="@drawable/ButtonColor"
-        />
-      <LinearLayout
-        style="@style/ControlCell"
-        />
+        android:textColor="@drawable/ButtonColor" />
+      <LinearLayout style="@style/ControlCell" />
       <Button
         style="@style/ControlButton"
         android:id="@+id/right"
         android:text="→"
         android:background="@drawable/ButtonBackground"
-        android:textColor="@drawable/ButtonColor"
-        />
+        android:textColor="@drawable/ButtonColor" />
     </LinearLayout>
-    <LinearLayout
-      style="@style/ControlRow"
-      >
-      <LinearLayout
-        style="@style/ControlCell"
-        />
+    <LinearLayout style="@style/ControlRow">
+      <LinearLayout style="@style/ControlCell" />
       <Button
         style="@style/ControlButton"
         android:id="@+id/down"
         android:text="↓"
         android:background="@drawable/ButtonBackground"
-        android:textColor="@drawable/ButtonColor"
-        />
-      <LinearLayout
-        style="@style/ControlCell"
-        />
+        android:textColor="@drawable/ButtonColor" />
+      <LinearLayout style="@style/ControlCell" />
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

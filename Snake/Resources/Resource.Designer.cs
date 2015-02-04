@@ -73,10 +73,16 @@ namespace Snake
 			public const int ButtonColor = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int Icon = 2130837508;
+			public const int HeaderRow = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int monoandroidsplash = 2130837509;
+			public const int Icon = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int monoandroidsplash = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int Row = 2130837511;
 			
 			static Drawable()
 			{
@@ -91,32 +97,38 @@ namespace Snake
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070006
-			public const int down = 2131165190;
-			
-			// aapt resource value: 0x7f070008
-			public const int exit = 2131165192;
-			
-			// aapt resource value: 0x7f070004
-			public const int left = 2131165188;
-			
-			// aapt resource value: 0x7f070001
-			public const int points = 2131165185;
-			
-			// aapt resource value: 0x7f070005
-			public const int right = 2131165189;
+			// aapt resource value: 0x7f070009
+			public const int best = 2131165193;
 			
 			// aapt resource value: 0x7f070007
-			public const int start = 2131165191;
+			public const int down = 2131165191;
+			
+			// aapt resource value: 0x7f07000a
+			public const int exit = 2131165194;
+			
+			// aapt resource value: 0x7f070005
+			public const int left = 2131165189;
+			
+			// aapt resource value: 0x7f070001
+			public const int menu = 2131165185;
+			
+			// aapt resource value: 0x7f070002
+			public const int points = 2131165186;
+			
+			// aapt resource value: 0x7f070006
+			public const int right = 2131165190;
+			
+			// aapt resource value: 0x7f070008
+			public const int start = 2131165192;
 			
 			// aapt resource value: 0x7f070000
 			public const int table = 2131165184;
 			
-			// aapt resource value: 0x7f070002
-			public const int terrarium = 2131165186;
-			
 			// aapt resource value: 0x7f070003
-			public const int up = 2131165187;
+			public const int terrarium = 2131165187;
+			
+			// aapt resource value: 0x7f070004
+			public const int up = 2131165188;
 			
 			static Id()
 			{
