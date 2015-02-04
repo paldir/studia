@@ -81,7 +81,7 @@ namespace Snake
                 else
                 {
                     Score score = scores.ElementAt(i);
-                    rowArray = new string[] { (i + 1).ToString("D2"), score.Date.ToString(), score.Points.ToString("D4") };
+                    rowArray = new string[] { (i + 1).ToString("D2"), score.Date.ToString("g"), score.Points.ToString("D4") };
 
                     if (newPoints != -1 && score.Date == now)
                     {
@@ -100,7 +100,7 @@ namespace Snake
 
                     cell.SetTypeface(Typeface.Monospace, TypefaceStyle.Normal);
                     cell.SetTextColor(textColor);
-                    cell.SetPadding(20, 5, 20, 5);
+                    cell.SetPadding(10, 1, 10, 1);
 
                     if (i == -1)
                         cell.SetTypeface(Typeface.Monospace, TypefaceStyle.Bold);
