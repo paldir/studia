@@ -20,10 +20,10 @@ namespace Snake
         Terrarium terrarium;
         CrawlingDirection previousCrawlingDirection;
 
-        public Queue<CrawlingDirection> CurrentCrawlingDirection { get; set; }
-
         List<Point> coordinates;
         public List<Point> GetCoordinates() { return new List<Point>(coordinates); }
+
+        public Queue<CrawlingDirection> CurrentCrawlingDirection { get; set; }
 
         public Viper(Terrarium terrarium)
         {
@@ -43,7 +43,7 @@ namespace Snake
             Point newHead = null;
             CrawlingDirection currentCrawlingDirection = CurrentCrawlingDirection.First();
 
-            coordinates.RemoveAt(coordinates.Count - 1);
+            coordinates.Remove(coordinates.Last());
 
             switch (currentCrawlingDirection)
             {

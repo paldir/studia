@@ -16,13 +16,6 @@ namespace Snake
 {
     public class Food
     {
-        static int count = 0;
-        public static int Count
-        {
-            get { return count; }
-            set { count = value; }
-        }
-
         Point point;
 
         public int X
@@ -38,6 +31,8 @@ namespace Snake
         }
 
         public Point GetPoint() { return new Point(point); }
+
+        public static int Count { get; set; }
 
         public Food(int x, int y)
         {

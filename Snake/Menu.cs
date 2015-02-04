@@ -17,7 +17,6 @@ namespace Snake
     {
         Button start { get { return FindViewById<Button>(Resource.Id.start); } }
         Button best { get { return FindViewById<Button>(Resource.Id.best); } }
-        Button exit { get { return FindViewById<Button>(Resource.Id.exit); } }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -28,23 +27,18 @@ namespace Snake
 
             start.Click += start_Click;
             best.Click += best_Click;
-            exit.Click += exit_Click;
         }
 
         void start_Click(object sender, EventArgs e)
         {
+            Food.Count = 0;
+            
             StartActivity(typeof(MainActivity));
         }
 
         void best_Click(object sender, EventArgs e)
         {
             StartActivity(typeof(BestScores));
-        }
-
-        void exit_Click(object sender, EventArgs e)
-        {
-            Finish();
-            System.Environment.Exit(0);
         }
     }
 }

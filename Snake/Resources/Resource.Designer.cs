@@ -97,14 +97,11 @@ namespace Snake
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070009
-			public const int best = 2131165193;
+			// aapt resource value: 0x7f07000a
+			public const int best = 2131165194;
 			
 			// aapt resource value: 0x7f070007
 			public const int down = 2131165191;
-			
-			// aapt resource value: 0x7f07000a
-			public const int exit = 2131165194;
 			
 			// aapt resource value: 0x7f070005
 			public const int left = 2131165189;
@@ -112,14 +109,17 @@ namespace Snake
 			// aapt resource value: 0x7f070001
 			public const int menu = 2131165185;
 			
+			// aapt resource value: 0x7f070008
+			public const int menuLayout = 2131165192;
+			
 			// aapt resource value: 0x7f070002
 			public const int points = 2131165186;
 			
 			// aapt resource value: 0x7f070006
 			public const int right = 2131165190;
 			
-			// aapt resource value: 0x7f070008
-			public const int start = 2131165192;
+			// aapt resource value: 0x7f070009
+			public const int start = 2131165193;
 			
 			// aapt resource value: 0x7f070000
 			public const int table = 2131165184;

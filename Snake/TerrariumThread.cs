@@ -52,6 +52,8 @@ namespace Snake
 
                     if (!viperCoordinates.Exists(c => c.X == food.X && c.Y == food.Y) && !terrarium.Food.Exists(f => f.X == food.X && f.Y == food.Y))
                         terrarium.Food.Add(food);
+                    else
+                        Food.Count--;
                 }
 
                 if (dinner != null)

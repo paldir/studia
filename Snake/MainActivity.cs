@@ -22,6 +22,7 @@ namespace Snake
         Button right { get { return FindViewById<Button>(Resource.Id.right); } }
         TextView points { get { return FindViewById<TextView>(Resource.Id.points); } }
         Viper viper;
+        Vibrator vibrator;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -30,7 +31,7 @@ namespace Snake
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
-            Food.Count = 0;
+            vibrator = (Vibrator)GetSystemService(Context.VibratorService);
 
             SetContentView(Resource.Layout.Main);
 
@@ -98,12 +99,15 @@ namespace Snake
         void terrarium_DinnerConsumed(object sender, EventArgs e)
         {
             points.Text = (Convert.ToInt16(points.Text) + 1).ToString("D4");
+
+            vibrator.Vibrate(100);
         }
 
         void terrarium_ViperDead(object sender, EventArgs e)
         {
             Intent bestScores = new Intent(this, typeof(BestScores));
 
+            vibrator.Vibrate(1000);
             bestScores.PutExtra("points", points.Text);
             Finish();
             StartActivity(bestScores);

@@ -74,14 +74,14 @@ namespace Snake
 
                 if (i == -1)
                 {
-                    rowArray = new string[] { "Date", "Score" };
+                    rowArray = new string[] { "No", "Date", "Score" };
 
                     row.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.HeaderRow));
                 }
                 else
                 {
                     Score score = scores.ElementAt(i);
-                    rowArray = new string[] { score.Date.ToString(), score.Points.ToString("D4") };
+                    rowArray = new string[] { (i + 1).ToString("D2"), score.Date.ToString(), score.Points.ToString("D4") };
 
                     if (newPoints != -1 && score.Date == now)
                     {
@@ -93,7 +93,7 @@ namespace Snake
                         row.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.Row));
                 }
 
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     TextView cell = new TextView(this);
                     cell.Text = rowArray[j];

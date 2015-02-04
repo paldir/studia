@@ -3,7 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/TerrariumBackground">
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/Icon"
+    android:layout_above="@+id/menuLayout"
+    android:layout_centerHorizontal="true" />
   <LinearLayout
+    android:id="@+id/menuLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,12 +25,6 @@
       style="@style/Button"
       android:id="@+id/best"
       android:text="Best scores"
-      android:background="@drawable/ButtonBackground"
-      android:textColor="@drawable/ButtonColor" />
-    <Button
-      style="@style/Button"
-      android:id="@+id/exit"
-      android:text="Exit"
       android:background="@drawable/ButtonBackground"
       android:textColor="@drawable/ButtonColor" />
   </LinearLayout>
