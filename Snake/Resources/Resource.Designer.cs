@@ -94,6 +94,9 @@ namespace Snake
 			// aapt resource value: 0x7f070005
 			public const int down = 2131165189;
 			
+			// aapt resource value: 0x7f070007
+			public const int exit = 2131165191;
+			
 			// aapt resource value: 0x7f070003
 			public const int left = 2131165187;
 			
@@ -102,6 +105,9 @@ namespace Snake
 			
 			// aapt resource value: 0x7f070004
 			public const int right = 2131165188;
+			
+			// aapt resource value: 0x7f070006
+			public const int start = 2131165190;
 			
 			// aapt resource value: 0x7f070001
 			public const int terrarium = 2131165185;
@@ -124,6 +130,9 @@ namespace Snake
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Menu = 2130903041;
 			
 			static Layout()
 			{
@@ -154,17 +163,20 @@ namespace Snake
 		public partial class Style
 		{
 			
-			// aapt resource value: 0x7f060001
-			public const int ControlButton = 2131099649;
-			
 			// aapt resource value: 0x7f060000
-			public const int ControlCell = 2131099648;
+			public const int Button = 2131099648;
 			
 			// aapt resource value: 0x7f060002
-			public const int ControlRow = 2131099650;
+			public const int ControlButton = 2131099650;
+			
+			// aapt resource value: 0x7f060001
+			public const int ControlCell = 2131099649;
 			
 			// aapt resource value: 0x7f060003
-			public const int Mono_Android_Theme_Splash = 2131099651;
+			public const int ControlRow = 2131099651;
+			
+			// aapt resource value: 0x7f060004
+			public const int Mono_Android_Theme_Splash = 2131099652;
 			
 			static Style()
 			{

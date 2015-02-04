@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Snake
 {
-    [Activity(Label = "Snake", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Snake")]
     public class MainActivity : Activity
     {
         Terrarium terrarium { get { return FindViewById<Terrarium>(Resource.Id.terrarium); } }

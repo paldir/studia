@@ -33,7 +33,7 @@ namespace Snake
         {
             Viper = new Viper();
             Food = new List<Snake.Food>();
-            border = 2;
+            border = 1;
             viperPaint = new Paint();
             viperPaint.Color = Color.Black;
             backgroundPaint = new Paint();
