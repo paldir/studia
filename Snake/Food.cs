@@ -14,13 +14,13 @@ using Android.Graphics;
 
 namespace Snake
 {
-    public class Food : IDisposable
+    public class Food
     {
         static int count = 0;
         public static int Count
         {
             get { return count; }
-            private set { count = value; }
+            set { count = value; }
         }
 
         Point point;
@@ -45,11 +45,6 @@ namespace Snake
             X = x;
             Y = y;
             Count++;
-        }
-
-        public void Dispose()
-        {
-            Count--;
         }
     }
 }

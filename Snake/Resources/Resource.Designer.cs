@@ -91,29 +91,32 @@ namespace Snake
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070005
-			public const int down = 2131165189;
+			// aapt resource value: 0x7f070006
+			public const int down = 2131165190;
 			
-			// aapt resource value: 0x7f070007
-			public const int exit = 2131165191;
-			
-			// aapt resource value: 0x7f070003
-			public const int left = 2131165187;
-			
-			// aapt resource value: 0x7f070000
-			public const int points = 2131165184;
+			// aapt resource value: 0x7f070008
+			public const int exit = 2131165192;
 			
 			// aapt resource value: 0x7f070004
-			public const int right = 2131165188;
-			
-			// aapt resource value: 0x7f070006
-			public const int start = 2131165190;
+			public const int left = 2131165188;
 			
 			// aapt resource value: 0x7f070001
-			public const int terrarium = 2131165185;
+			public const int points = 2131165185;
+			
+			// aapt resource value: 0x7f070005
+			public const int right = 2131165189;
+			
+			// aapt resource value: 0x7f070007
+			public const int start = 2131165191;
+			
+			// aapt resource value: 0x7f070000
+			public const int table = 2131165184;
 			
 			// aapt resource value: 0x7f070002
-			public const int up = 2131165186;
+			public const int terrarium = 2131165186;
+			
+			// aapt resource value: 0x7f070003
+			public const int up = 2131165187;
 			
 			static Id()
 			{
@@ -129,10 +132,13 @@ namespace Snake
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int BestScores = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int Menu = 2130903041;
+			public const int Main = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int Menu = 2130903042;
 			
 			static Layout()
 			{
@@ -175,8 +181,11 @@ namespace Snake
 			// aapt resource value: 0x7f060003
 			public const int ControlRow = 2131099651;
 			
+			// aapt resource value: 0x7f060005
+			public const int Mono_Android_Theme_Splash = 2131099653;
+			
 			// aapt resource value: 0x7f060004
-			public const int Mono_Android_Theme_Splash = 2131099652;
+			public const int TableCell = 2131099652;
 			
 			static Style()
 			{

@@ -31,7 +31,7 @@ namespace Snake
         public Terrarium(Context context, Android.Util.IAttributeSet attrs)
             : base(context, attrs)
         {
-            Viper = new Viper();
+            Viper = new Viper(this);
             Food = new List<Snake.Food>();
             border = 1;
             viperPaint = new Paint();
@@ -94,6 +94,17 @@ namespace Snake
         {
             if (DinnerConsumed != null)
                 DinnerConsumed(this, e);
+        }
+
+        public delegate void ViperDeadEventHandler(object sender, EventArgs e);
+        public event ViperDeadEventHandler ViperDead;
+
+        public void OnViperDead(EventArgs e)
+        {
+            if (ViperDead != null)
+                ViperDead(this, e);
+
+            terrariumThread.Running = false;
         }
     }
 }

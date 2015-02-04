@@ -30,6 +30,7 @@ namespace Snake
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
+            Food.Count = 0;
 
             SetContentView(Resource.Layout.Main);
 
@@ -37,34 +38,38 @@ namespace Snake
             points.Text = (0).ToString("D4");
             terrarium.Touch += terrarium_Touch;
             terrarium.DinnerConsumed += terrarium_DinnerConsumed;
+            terrarium.ViperDead += terrarium_ViperDead;
             up.Click += up_Click;
             down.Click += down_Click;
             left.Click += left_Click;
             right.Click += right_Click;
         }
 
+        public override void OnBackPressed()
+        {
+            base.OnBackPressed();
+
+            Finish();
+        }
+
         void up_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Down)
-                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Up);
+            viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Up);
         }
 
         void down_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Up)
-                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Down);
+            viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Down);
         }
 
         void left_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Right)
-                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Left);
+            viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Left);
         }
 
         void right_Click(object sender, EventArgs e)
         {
-            if (viper.CurrentCrawlingDirection.First() != CrawlingDirection.Left)
-                viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Right);
+            viper.CurrentCrawlingDirection.Enqueue(CrawlingDirection.Right);
         }
 
 
@@ -94,6 +99,14 @@ namespace Snake
         {
             points.Text = (Convert.ToInt16(points.Text) + 1).ToString("D4");
         }
-    }
 
+        void terrarium_ViperDead(object sender, EventArgs e)
+        {
+            Intent bestScores = new Intent(this, typeof(BestScores));
+
+            bestScores.PutExtra("points", points.Text);
+            Finish();
+            StartActivity(bestScores);
+        }
+    }
 }

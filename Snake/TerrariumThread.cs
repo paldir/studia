@@ -56,8 +56,9 @@ namespace Snake
 
                 if (dinner != null)
                 {
+                    Food.Count--;
+                    
                     terrarium.Food.Remove(dinner);
-                    dinner.Dispose();
                     terrarium.Viper.LetExtend();
                     terrarium.OnDinnerConsumed(new EventArgs());
                 }

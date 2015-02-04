@@ -23,7 +23,6 @@ namespace Snake
             base.OnCreate(bundle);
             RequestWindowFeature(WindowFeatures.NoTitle);
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-
             SetContentView(Resource.Layout.Menu);
 
             start.Click += start_Click;
