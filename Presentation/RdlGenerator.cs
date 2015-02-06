@@ -221,7 +221,7 @@ namespace Presentation
         {
             writer.WriteStartElement("TablixRow");
             writer.WriteStartElement("Height");
-            writer.WriteString(height.ToString() + "pt");
+            writer.WriteString(ConvertFloatToString(height) + "pt");
             writer.WriteEndElement();
             writer.WriteStartElement("TablixCells");
 

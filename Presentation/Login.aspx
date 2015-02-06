@@ -14,7 +14,7 @@
             <LayoutTemplate>
                 <table>
                     <tr>
-                        <td style="text-align: right">Poziom dostępu:</td>
+                        <td style="text-align: right">Użytkownik:</td>
                         <td>
                             <asp:DropDownList ID="UserName" Width="200" runat="server"></asp:DropDownList>
                         </td>

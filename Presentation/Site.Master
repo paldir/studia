@@ -16,7 +16,7 @@
             <div class="placeOfSiteMapPath">
                 <asp:SiteMapPath ID="siteMapPath" RootNodeStyle-CssClass="rootOfSiteMapPath" runat="server"></asp:SiteMapPath>
                 <div class="placeOfLogOut">
-                    Poziom dostępu: <asp:LoginName ID="LoginName" runat="server" /> <asp:LoginStatus ID="LoginStatus" runat="server" />
+                    Użytkownik: <asp:LoginName ID="LoginName" runat="server" /> <asp:LoginStatus ID="LoginStatus" runat="server" />
                 </div>
             </div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">

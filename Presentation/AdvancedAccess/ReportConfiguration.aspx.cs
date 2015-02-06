@@ -496,7 +496,7 @@ namespace Presentation.AdvancedAccess
 
                 if (index != -1)
                 {
-                    float value = Convert.ToSingle(reportDefinition.Substring(index + "<Height>".Length, end - (index + "<Height>".Length)));
+                    float value = Convert.ToSingle(reportDefinition.Substring(index + "<Height>".Length, end - (index + "<Height>".Length)).Replace('.', ','));
 
                     if (value % pDFRowHeight != 0)
                     {
