@@ -10,12 +10,12 @@ namespace DataAccess
     /// Wyliczenie reprezentujące rodzaje hierarchii.
     /// </summary>
     public enum HierarchyType { AttributeHierarchy, Hierarchy };
-    
+
     /// <summary>
     /// Obiekt reprezentujący hierarchię.
     /// </summary>
     public class Hierarchy
-    {        
+    {
         /// <summary>
         /// Zwraca przyjazną nazwę hierarchii.
         /// </summary>
@@ -41,7 +41,7 @@ namespace DataAccess
         /// Zwraca członków hierarchii.
         /// </summary>
         /// <returns>Lista członków hierarchii.</returns>
-        public List<Member> GetMembers() { return members; }
+        public List<Member> GetMembers() { return new List<Member>(members); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego hierarchię.

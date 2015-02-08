@@ -16,14 +16,14 @@ namespace DataAccess
         /// Zwraca dwuwymiarową tablicę zawierającą wynik zapytania.
         /// </summary>
         /// <returns>Dwuwymiarowa tablica zawierająca wynik zapytania.</returns>
-        public string[][] GetResults() { return results; }
+        public string[][] GetResults() { return results.Select(r => r.ToArray()).ToArray(); }
 
         string[][] correspondingMDX;
         /// <summary>
         /// Zwraca tablicę nazw w języku MDX. Każda komórka tablicy odpowiada komórce o tych samych indeksach w tablicy zawierającej wynik zapytania.
         /// </summary>
         /// <returns>Dwuwymiarowa tablica zawierająca nazwy MDX wyniku zapytania.</returns>
-        public string[][] GetCorrespondingMdx() { return correspondingMDX; }
+        public string[][] GetCorrespondingMdx() { return correspondingMDX.Select(r => r.ToArray()).ToArray(); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy za pomocą liczy wierszy i kolumn wyniku zapytania.

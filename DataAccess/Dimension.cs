@@ -21,14 +21,14 @@ namespace DataAccess
         /// Zwraca hierarchie atrybutów.
         /// </summary>
         /// <returns>Lista obiektów reprezentujących hierarchie atrybutów.</returns>
-        public List<Hierarchy> GetAttributeHierarchies() { return attributeHierarchies; }
+        public List<Hierarchy> GetAttributeHierarchies() { return new List<Hierarchy>(attributeHierarchies); }
 
         List<Hierarchy> hierarchies;
         /// <summary>
         /// Zwraca hierarchie użytkownika.
         /// </summary>
         /// <returns>Lista obiektów reprezentujących hierarchie użytkownika.</returns>
-        public List<Hierarchy> GetHierarchies() { return hierarchies; }
+        public List<Hierarchy> GetHierarchies() { return new List<Hierarchy>(hierarchies); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego wymiar.

@@ -26,7 +26,7 @@ namespace DataAccess
         /// Zwraca członków potomnych członka hierarchii.
         /// </summary>
         /// <returns></returns>
-        public List<Member> GetChildren() { return children; }
+        public List<Member> GetChildren() { return new List<Member>(children); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy przy pomocy obiektu reprezentującego członka hierarchii. Z powodu długiego czasu przetwarzania, członkowie potomni reprezentowanego członka są inicjalizowani tylko wtedy, gdy jest ich mniej niż 20.
