@@ -461,8 +461,12 @@ namespace Presentation.AdvancedAccess
 
             foreach (string[] row in rows)
                 for (int i = 0; i < row.Length; i++)
-                    if (graphics.MeasureString(row[i], font).Width > result[i])
-                        result[i] = graphics.MeasureString(row[i], font).Width;
+                {
+                    float size = graphics.MeasureString(row[i], font).Width;
+
+                    if (size > result[i])
+                        result[i] = size;
+                }
 
             return result;
         }
