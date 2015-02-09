@@ -22,7 +22,7 @@ namespace Presentation
         /// Zwraca dwuwymiarową tablicę zawierającą nazwy MDX komórek wyświetlanych w tablicy.
         /// </summary>
         /// <returns>Dwuwymiarowa tablica zawierająca nazwy MDX komórek wyświetlanych w tablicy</returns>
-        public string[][] GetCorrespondingMdx() { return correspondingMDX; }
+        public string[][] GetCorrespondingMdx() { return correspondingMDX.Select(r => r.ToArray()).ToArray(); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy TableOfResults przy pomocy wyników zapytania i listy struktur hierarchii użytkownika użytych w zapytaniu.

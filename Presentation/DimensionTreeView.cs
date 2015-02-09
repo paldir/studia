@@ -17,7 +17,7 @@ namespace Presentation
         /// Zwraca listę węzłów kontrolki.
         /// </summary>
         /// <returns>Lista węzłów kontrolki reprezentujących poziomy wymiaru, którego dana kontrolka dotyczy.</returns>
-        public List<TreeNode> GetListOfNodes() { return listOfNodes; }
+        public List<TreeNode> GetListOfNodes() { return new List<TreeNode>(listOfNodes); }
 
         /// <summary>
         /// Inicjalizuje instancję klasy DimensionTreeView na podstawie obiektu przedstawiającego strukturę wymiaru.
