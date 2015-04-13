@@ -1,0 +1,11 @@
+POJEDYNCZA PRECYZJA
+Max: 3.402823e+038
+Max teoretyczne: 3.402823e+038
+Min: 1.175494e-038
+Min teoretyczne: 1.175494e-038
+
+PODWOJNA PRECYZJA
+Max: 1.797693e+308
+Max teoretyczne: 1.797693e+308
+Min: 2.225074e-308
+Min teoretyczne: 2.225074e-308

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sortowania", "sortowania\sortowania.csproj", "{D28F7248-06B9-4571-AA1E-145711B11B2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "Sorting\Sorting.csproj", "{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comparing", "Comparing\Comparing.csproj", "{4DF94B41-E997-4759-B884-C17695338AE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D28F7248-06B9-4571-AA1E-145711B11B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D28F7248-06B9-4571-AA1E-145711B11B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D28F7248-06B9-4571-AA1E-145711B11B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D28F7248-06B9-4571-AA1E-145711B11B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF94B41-E997-4759-B884-C17695338AE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF94B41-E997-4759-B884-C17695338AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF94B41-E997-4759-B884-C17695338AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF94B41-E997-4759-B884-C17695338AE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
