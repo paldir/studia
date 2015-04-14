@@ -8,16 +8,15 @@ using System.Net.Sockets;
 
 namespace psk
 {
-    class TcpCommunicator : Communicator, ICommunicator
+    public class TcpCom : Communicator
     {
         TcpClient _tcpClient;
         NetworkStream _networkStream;
 
-        public bool Connected { get { return _tcpClient.Connected; } }
-
-        public TcpCommunicator(TcpClient tcpClient)
+        public TcpCom()
         {
-            _tcpClient = tcpClient;
+            _tcpClient = new TcpClient("localhost", Auxiliary.Tcp.Port);
+            _networkStream = _tcpClient.GetStream();
         }
 
         public override bool WriteLine(string line)
@@ -33,7 +32,8 @@ namespace psk
 
                 return true;
             }
-            catch { return false; }
+            catch
+            { return false; }
         }
 
         public override string ReadLine()
@@ -53,19 +53,8 @@ namespace psk
 
         public override void Dispose()
         {
-            Stop();
-        }
-
-        public void Start(CommandDelegate onCommand)
-        {
-            _networkStream = _tcpClient.GetStream();
-
-            WriteLine(onCommand(ReadLine()));
-        }
-
-        public void Stop()
-        {
             _networkStream.Dispose();
+            _tcpClient.Close();
         }
     }
 }

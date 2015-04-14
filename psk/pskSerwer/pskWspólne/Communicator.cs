@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace psk
 {
-    public abstract class Communicator
+    public abstract class Communicator : IDisposable
     {
         public abstract bool WriteLine(string line);
         public abstract string ReadLine();
+        public abstract void Dispose();
     }
 }

@@ -36,6 +36,11 @@ namespace psk
                 return streamReader.ReadToEnd();
         }
 
+        public override void Dispose()
+        {
+            Stop();
+        }
+
         public void Start(CommandDelegate onCommand)
         {
             WriteLine(onCommand(ReadLine()));

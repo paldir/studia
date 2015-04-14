@@ -49,5 +49,10 @@ namespace psk
 
             return line;
         }
+
+        public override void Dispose()
+        {
+            
+        }
     }
 }

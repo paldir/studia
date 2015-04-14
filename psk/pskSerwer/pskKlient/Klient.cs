@@ -11,14 +11,17 @@ namespace psk
         static void Main(string[] args)
         {
             string polecenie = PingPong.Ping(5, 10);
-            Communicator communicator = new FilesCom();
 
-            communicator.WriteLine(polecenie);
-            Console.WriteLine("Wysyłam: {0}", polecenie);
+            using (Communicator communicator = new TcpCom())
+            {
+                communicator.WriteLine(polecenie);
+                Console.WriteLine("Wysyłam: {0}", polecenie);
 
-            string odpowiedź = communicator.ReadLine();
+                string odpowiedź = communicator.ReadLine();
 
-            Console.WriteLine("Odebrano: {0}", odpowiedź);
+                Console.WriteLine("Odebrano: {0}", odpowiedź);
+            }
+
             Console.ReadKey();
         }
     }
