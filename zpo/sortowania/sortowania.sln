@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sortowania", "sortowania\sortowania.csproj", "{D28F7248-06B9-4571-AA1E-145711B11B2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "sortowania\Main.csproj", "{D28F7248-06B9-4571-AA1E-145711B11B2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "Sorting\Sorting.csproj", "{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sortowanie", "Sorting\Sortowanie.csproj", "{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comparing", "Comparing\Comparing.csproj", "{4DF94B41-E997-4759-B884-C17695338AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Porównywanie", "Comparing\Porównywanie.csproj", "{4DF94B41-E997-4759-B884-C17695338AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

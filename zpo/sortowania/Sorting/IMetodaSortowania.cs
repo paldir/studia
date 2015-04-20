@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace sortowania
 {
-    public interface ISortMethod<T> where T : IComparable, IComparable<T>
+    public interface IMetodaSortowania<T> where T : IComparable, IComparable<T>
     {
-        void Sort(IList<T> collection);
+        void Sortuj(IList<T> kolekcja);
     }
 }

@@ -8,53 +8,94 @@ namespace sortowania
 {
     class Program
     {
-        const int length = (int)1e7;
+        const int ilość = (int)1e7;
 
-        static uint IntegerKey(int value)
+        static int KluczCałkowity(int wartość)
         {
-            return (uint)Math.Abs(value);
+            return Math.Abs(wartość);
         }
 
-        static uint DoubleKey(double value)
+        static int KluczZmiennoprzecinkowy(double wartość)
         {
-            return (uint)Math.Abs(Math.Floor(value));
+            return (int)Math.Abs(Math.Floor(wartość));
         }
+
+        static List<List<int>> tablice = new List<List<int>>();
+
+        static readonly List<IMetodaSortowania<int>> metodySortowania = new List<IMetodaSortowania<int>>()
+        {
+            new Bąbelkowe<int>(),
+            new PrzezZliczanie<int>(KluczCałkowity),
+            new PrzezKopcowanie<int>(),
+            new PrzezŁączenie<int>(),
+            new Szybkie<int>(),
+            new PrzezWybór<int>()
+        };
 
         static void Main(string[] args)
         {
-            IList<int> array = new int[length];
-            Random random = new Random();
+            IList<int> kolekcja = new int[ilość];
+            Random los = new Random();
 
-            for (int i = 0; i < array.Count; i++)
-                array[i] = random.Next(1, length * 2);
+            for (int i = 0; i < kolekcja.Count; i++)
+                kolekcja[i] = los.Next(1, ilość * 2);
 
-            SortWithVisualization sortWithVisualization = new SortWithVisualization(new List<System.Threading.ThreadStart>() 
-            { 
-                ()=>new List<int>(array).Sort(new BubbleSort<int>()),
-                ()=>new List<int>(array).Sort(new CountingSort<int>(IntegerKey)),
-                ()=>new List<int>(array).Sort(new HeapSort<int>()),
-                ()=>new List<int>(array).Sort(new MergeSort<int>()),
-                ()=>new List<int>(array).Sort(new QuickSort<int>()),
-                ()=>new List<int>(array).Sort(new SelectionSort<int>()),
-            }, Dummy);
+            throw new Exception("Zamień is bad!");
 
-            Comparison comparison = new Comparison(sortWithVisualization);
+            List<System.Threading.ThreadStart> wątkiSortowania = new List<System.Threading.ThreadStart>();
 
-            comparison.Compare();
+            foreach (IMetodaSortowania<int> metodaSortowania in metodySortowania)
+            {
+                List<int> tablica = new List<int>(kolekcja);
+
+                tablice.Add(tablica);
+                wątkiSortowania.Add(() => tablica.Sortuj(metodaSortowania));
+            }
+
+            SortowanieZWizualizacją sortowanieZWizualizacją = new SortowanieZWizualizacją(wątkiSortowania, AktualizujStatystyki);
+            Porównywarka porównywarka = new Porównywarka(sortowanieZWizualizacją);
+
+            porównywarka.Porównaj();
 
             Console.Write("Koniec.");
             Console.ReadKey();
         }
 
-        static void DisplayCollection<T>(IList<T> collection)
+        static void WyświetlKolekcję<T>(IList<T> kolekcja)
         {
-            foreach (T element in collection)
+            foreach (T element in kolekcja)
                 Console.Write("{0} ", element);
 
             Console.WriteLine();
         }
 
-        static void Dummy()
-        { }
+        static void AktualizujStatystyki()
+        {
+            Console.Clear();
+
+            for (int i = 0; i < metodySortowania.Count; i++)
+            {
+                float postęp;
+                List<int> tablica = tablice[i];
+
+                if (tablica == null)
+                    postęp = 100;
+                else
+                {
+                    postęp = 0;
+
+                    for (int j = 1; j < ilość; j++)
+                        if (tablica[j - 1] <= tablica[j])
+                            postęp++;
+
+                    postęp = postęp / (ilość - 1) * 100;
+
+                    if (postęp == 100)
+                        tablica = null;
+                }
+
+                Console.WriteLine("{0}\t{1:N0}%", metodySortowania[i].GetType().Name, postęp);
+            }
+        }
     }
 }

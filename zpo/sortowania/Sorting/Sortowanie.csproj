@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D28F7248-06B9-4571-AA1E-145711B11B2D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{D11AE4CD-B1D1-4EB6-8771-64D928ED18F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>sortowania</RootNamespace>
-    <AssemblyName>sortowania</AssemblyName>
+    <AssemblyName>Sortowanie</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,20 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Bąbelkowe.cs" />
+    <Compile Include="PrzezZliczanie.cs" />
+    <Compile Include="Rozszerzenia.cs" />
+    <Compile Include="PrzezKopcowanie.cs" />
+    <Compile Include="IMetodaSortowania.cs" />
+    <Compile Include="PrzezŁączenie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Szybkie.cs" />
+    <Compile Include="PrzezWybór.cs" />
+    <Compile Include="SortowanieZWizualizacją.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Comparing\Comparing.csproj">
+    <ProjectReference Include="..\Comparing\Porównywanie.csproj">
       <Project>{4df94b41-e997-4759-b884-c17695338ae1}</Project>
-      <Name>Comparing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sorting\Sorting.csproj">
-      <Project>{d11ae4cd-b1d1-4eb6-8771-64d928ed18f6}</Project>
-      <Name>Sorting</Name>
+      <Name>Porównywanie</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

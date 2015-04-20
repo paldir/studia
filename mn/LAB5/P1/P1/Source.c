@@ -1,44 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 float** Malloc2d(int size);
 void Free2d(float** array, int size);	
 void Zeros2d(float** matrix, int size);
 void MultiplyMatrixByMatrix(float** first, float** second, int size, float** out);
 void SaveMatrixToFile(float** matrix, int size, char* fileName);
-
-/*float FindMax(float** matrix, int size, int row, int column, int* maxColumn)
-{
-	int j;
-	float max=abs(matrix[row][column]);
-	*maxColumn=column;
-
-	for(j=column+1; j<size; j++)
-	{
-		float element=abs(matrix[row][j]);
-		
-		if(element>max)
-		{
-			max=element;
-			*maxColumn=j;
-		}
-	}
-
-	return max;
-}
-
-void SwapColumns(float** matrix, int size, int index1, int index2)
-{
-	int i;
-	
-	for(i=0; i<size; i++)
-	{
-		float tmp=matrix[i][index1];
-		matrix[i][index1]=matrix[i][index2];
-		matrix[i][index2]=tmp;
-	}
-}*/
 
 int main()
 {
@@ -106,18 +75,8 @@ int main()
 
 	for (i = 0; i < size; i++)
 		for (j = 0; j < size; j++)
-			if (ACopy[i][j] != tmp[i][j])
-			{
-				printf("Blad.\n");
+			assert(ACopy[i][j] == tmp[i][j]);
 
-				system("pause");
-
-				goto exit;
-
-				break;
-			}
-
-	exit:
 	SaveMatrixToFile(L, size, "L.txt");
 	SaveMatrixToFile(U, size, "U.txt");
 	Free2d(A, size);
