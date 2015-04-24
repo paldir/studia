@@ -12,17 +12,17 @@ namespace psk
         {
             string polecenie = PingPong.Ping(5, 10);
 
-            QaClient client = new PingPongClient();
-            client.Communicator = new TcpCom();
+            PoKlient klient = new PingPongKlient();
+            klient.Komunikator = new TcpKom();
 
             throw new Exception("misz masz");
 
-            using (Communicator communicator = new TcpCom())
+            using (Komunikator komunikator = new TcpKom())
             {
-                communicator.WriteLine(polecenie);
+                komunikator.PiszLinię(polecenie);
                 Console.WriteLine("Wysyłam: {0}", polecenie);
 
-                string odpowiedź = communicator.ReadLine();
+                string odpowiedź = komunikator.CzytajLinię();
 
                 Console.WriteLine("Odebrano: {0}", odpowiedź);
             }

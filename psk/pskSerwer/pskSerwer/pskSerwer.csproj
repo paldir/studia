@@ -41,14 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilesCommunicator.cs" />
-    <Compile Include="FilesListener.cs" />
-    <Compile Include="ICommunicator.cs" />
-    <Compile Include="IListener.cs" />
+    <Compile Include="PlikiKomunikator.cs" />
+    <Compile Include="PlikiNasłuchiwacz.cs" />
+    <Compile Include="IKomunikator.cs" />
+    <Compile Include="INasłuchiwacz.cs" />
     <Compile Include="Serwer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TcpCommunicator.cs" />
-    <Compile Include="TcpListener.cs" />
+    <Compile Include="TcpKomunikator.cs" />
+    <Compile Include="TcpNasłuchiwacz.cs" />
     <Compile Include="_TcpServer.cs" />
   </ItemGroup>
   <ItemGroup>

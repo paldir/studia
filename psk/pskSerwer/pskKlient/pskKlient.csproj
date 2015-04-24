@@ -41,12 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilesCom.cs" />
-    <Compile Include="PingPongClient.cs" />
+    <Compile Include="PlikiKom.cs" />
+    <Compile Include="PingPongKlient.cs" />
     <Compile Include="Klient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QaClient.cs" />
-    <Compile Include="TcpCom.cs" />
+    <Compile Include="PoKlient.cs" />
+    <Compile Include="TcpKom.cs" />
     <Compile Include="_TcpClient.cs" />
   </ItemGroup>
   <ItemGroup>

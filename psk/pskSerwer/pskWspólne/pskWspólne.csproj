@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auxiliary.cs" />
-    <Compile Include="Communicator.cs" />
-    <Compile Include="IServiceModule.cs" />
+    <Compile Include="Pomocnicze.cs" />
+    <Compile Include="Komunikator.cs" />
+    <Compile Include="IUsługa.cs" />
     <Compile Include="PingPong.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

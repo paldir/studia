@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace psk
 {
-    public class PingPong : IServiceModule
+    public class PingPong : IUsługa
     {
-        static Random _random = new Random();
+        static Random _los = new Random();
 
         public static string Ping(int rozmiarPolecenia, int rozmiarOdpowiedzi)
         {
@@ -17,7 +17,7 @@ namespace psk
             return x + Śmieci(rozmiarPolecenia);
         }
 
-        public string AnswerCommand(string polecenie)
+        public string OdpowiedzNaKomendę(string polecenie)
         {
             string[] ss = polecenie.Split(' ');
 
@@ -34,12 +34,12 @@ namespace psk
 
         static string Śmieci(int ile)
         {
-            string dummy = String.Empty;
+            string śmieci = String.Empty;
 
             for (int i = 0; i < ile; i++)
-                dummy += (char)('a' + _random.Next(0, 26));
+                śmieci += (char)('a' + _los.Next(0, 26));
 
-            return dummy;
+            return śmieci;
         }
     }
 }

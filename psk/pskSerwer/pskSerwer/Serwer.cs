@@ -10,57 +10,57 @@ namespace psk
 {
     class Serwer
     {
-        static Dictionary<string, IServiceModule> _services = new Dictionary<string, IServiceModule>()
+        static Dictionary<string, IUsługa> _usługi = new Dictionary<string, IUsługa>()
         {
             {"ping", new PingPong()}
         };
 
-        static List<ICommunicator> _communicators = new List<ICommunicator>();
+        static List<IKomunikator> _komunikatory = new List<IKomunikator>();
 
-        static List<IListener> _listeners = new List<IListener>()
+        static List<INasłuchiwacz> _nasłuchiwacze = new List<INasłuchiwacz>()
         {
-            new FilesListener(),
-            new TcpListener()
+            new PlikiNasłuchiwacz(),
+            new TcpNasłuchiwacz()
         };
 
         static void Main(string[] args)
         {
-            foreach (IListener listener in _listeners)
+            foreach (INasłuchiwacz nasłuchiwacz in _nasłuchiwacze)
             {
-                System.Threading.Thread thread = new System.Threading.Thread(() => listener.Start(AddCommunicator, RemoveCommunicator));
+                System.Threading.Thread wątek = new System.Threading.Thread(() => nasłuchiwacz.Start(DodajKomunikator, UsuńKomunikator));
 
-                thread.Start();
+                wątek.Start();
             }
 
             Console.WriteLine("Naciśnij klawisz, aby zakończyć...");
             Console.ReadKey();
 
-            foreach (IListener listener in _listeners)
-                listener.Stop();
+            foreach (INasłuchiwacz nasłuchiwacz in _nasłuchiwacze)
+                nasłuchiwacz.Stop();
         }
 
-        static void AddCommunicator(ICommunicator communicator)
+        static void DodajKomunikator(IKomunikator komunikator)
         {
-            _communicators.Add(communicator);
-            communicator.Start(ParseCommand);
+            _komunikatory.Add(komunikator);
+            komunikator.Start(AnalizujKomendę);
         }
 
-        static void RemoveCommunicator(ICommunicator communicator)
+        static void UsuńKomunikator(IKomunikator komunikator)
         {
-            communicator.Stop();
-            _communicators.Remove(communicator);
+            komunikator.Stop();
+            _komunikatory.Remove(komunikator);
         }
 
-        static string ParseCommand(string command)
+        static string AnalizujKomendę(string komenda)
         {
-            int spaceIndex = command.IndexOf(" ");
+            int indeksSpacji = komenda.IndexOf(" ");
 
-            if (spaceIndex != -1)
+            if (indeksSpacji != -1)
             {
-                string service = command.Substring(0, spaceIndex).ToLower();
+                string usługa = komenda.Substring(0, indeksSpacji).ToLower();
 
-                if (_services.ContainsKey(service))
-                    return _services[service].AnswerCommand(command);
+                if (_usługi.ContainsKey(usługa))
+                    return _usługi[usługa].OdpowiedzNaKomendę(komenda);
             }
 
             return "Błąd!";
