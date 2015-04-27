@@ -22,9 +22,23 @@ namespace algorytmWęgierski
             }
         }
 
+        Wierzchołek _rodzic = null;
+        public Wierzchołek Rodzic
+        {
+            get { return _rodzic; }
+            set { _rodzic = value; }
+        }
+
+        bool _odwiedzony = false;
+        public bool Odwiedzony
+        {
+            get { return _odwiedzony; }
+            set { _odwiedzony = value; }
+        }
+
         public int Nazwa { get; private set; }
         public int ZbiórWGrafieDwudzielnym { get; private set; }
-        public List<Sąsiad> Sąsiedzi { get; private set; }
+        public List<Sąsiad> Sąsiedzi { get; set; }
         public int Etykieta { get; set; }
 
         public int? NazwaSkojarzonegoWierzchołka
