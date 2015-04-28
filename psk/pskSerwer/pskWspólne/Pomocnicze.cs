@@ -22,6 +22,7 @@ namespace psk
             public static readonly IPAddress AdresIp = Dns.GetHostEntry("localhost").AddressList[0];
             public const int Port = 14400;
             public const int RozmiarBufora = 256;
+            public const string KomendaZakończeniaPołączenia = "---<! END CONNECTION >!---";
         }
     }
 }

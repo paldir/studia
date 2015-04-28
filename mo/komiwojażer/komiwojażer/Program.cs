@@ -8,24 +8,24 @@ namespace komiwojażer
 {
     class Program
     {
-        static Dictionary<string, PołożenieGeograficzne> miasta = new Dictionary<string, PołożenieGeograficzne>()
+        static readonly string[] miasta = new string[]
         {
-            {"Warszawa", new PołożenieGeograficzne(52.229646, 21.011656)},
-            {"Kraków", new PołożenieGeograficzne(50.068807, 20.040579)},
-            {"Łódź", new PołożenieGeograficzne(51.771418, 19.536211)},
-            {"Wrocław", new PołożenieGeograficzne(51.125354, 17.059842)},
-            {"Poznań", new PołożenieGeograficzne(52.407650, 16.942865)},
-            {"Gdańsk", new PołożenieGeograficzne(54.337475, 18.630976)},
-            {"Szczecin", new PołożenieGeograficzne(53.393270, 14.604024)},
-            {"Bydgoszcz", new PołożenieGeograficzne(53.130631, 18.080068)},
-            {"Lublin", new PołożenieGeograficzne(51.239178, 22.585743)},
-            {"Katowice", new PołożenieGeograficzne(50.228170, 19.034315)},
-            {"Białystok", new PołożenieGeograficzne(53.143073, 23.179068)},
-            {"Gdynia", new PołożenieGeograficzne(54.516151, 18.503909)},
-            {"Częstochowa", new PołożenieGeograficzne(50.818215, 19.147834)},
-            {"Radom", new PołożenieGeograficzne(51.405643, 21.167707)},
-            {"Sosnowiec", new PołożenieGeograficzne(50.284124, 19.217879)},
-            {"Toruń", new PołożenieGeograficzne(53.027849, 18.640687)}
+            "Warszawa", 
+            "Kraków", 
+            "Łódź", 
+            "Wrocław",
+            "Poznań",
+            "Gdańsk", 
+            "Szczecin", 
+            "Bydgoszcz",
+            "Lublin",
+            "Katowice",
+            "Białystok",
+            "Gdynia", 
+            "Częstochowa",
+            "Radom",
+            "Sosnowiec", 
+            "Toruń"
         };
 
         static double ObliczOdległość(PołożenieGeograficzne położenie1, PołożenieGeograficzne położenie2)
@@ -39,13 +39,40 @@ namespace komiwojażer
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
             return R * c;
-            //return Math.Sqrt(Math.Pow(Math.Cos(Math.PI * położenie1.Szerokość / 180.0) * (położenie2.Długość - położenie1.Długość), 2.0) + Math.Pow(położenie2.Szerokość - położenie1.Szerokość, 2.0)) * Math.PI * 12756.274 / 360.0;
         }
 
         static void Main(string[] args)
         {
-            Console.WriteLine(ObliczOdległość(miasta["Bydgoszcz"], miasta["Toruń"]));
-            Console.ReadKey();
+            double[,] odległości;
+
+            {
+                int ilośćMiast = miasta.Length;
+                odległości = new double[ilośćMiast, ilośćMiast];
+                List<string> linie = new List<string>();
+                Dictionary<string, PołożenieGeograficzne> położeniaMiast = new Dictionary<string, PołożenieGeograficzne>();
+
+                using (System.IO.StreamReader strumień = new System.IO.StreamReader("miasta.txt"))
+                    while (!strumień.EndOfStream)
+                        linie.Add(strumień.ReadLine());
+
+                foreach (string miasto in miasta)
+                {
+                    string linia = linie.Find(l => l.StartsWith(miasto));
+                    int stopnieDługości = Int32.Parse(linia.Substring(24, 2));
+                    int minutyDługości = Int32.Parse(linia.Substring(27, 2));
+                    int stopnieSzerokości = Int32.Parse(linia.Substring(39, 2));
+                    int minutySzerokości = Int32.Parse(linia.Substring(42, 2));
+
+                    położeniaMiast.Add(miasto, new PołożenieGeograficzne(stopnieSzerokości + minutySzerokości / 60.0, stopnieDługości + minutyDługości / 60.0));
+                }
+
+                for (int i = 0; i < ilośćMiast; i++)
+                    for (int j = 0; j < ilośćMiast; j++)
+                        if (i == j)
+                            odległości[i, j] = Double.MaxValue;
+                        else
+                            odległości[i, j] = ObliczOdległość(położeniaMiast[miasta[i]], położeniaMiast[miasta[j]]);
+            }
         }
     }
 }

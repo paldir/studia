@@ -12,12 +12,12 @@ namespace psk
     {
         TcpClient _klientTcp;
         NetworkStream _strumieńSieciowy;
+        DelegatKomunikatora _rozłączenie;
 
-        public bool Połączony { get { return _klientTcp.Connected; } }
-
-        public TcpKomunikator(TcpClient klientTcp)
+        public TcpKomunikator(TcpClient klientTcp, DelegatKomunikatora rozłączenie)
         {
             _klientTcp = klientTcp;
+            _rozłączenie = rozłączenie;
         }
 
         public override bool PiszLinię(string linia)
@@ -60,7 +60,20 @@ namespace psk
         {
             _strumieńSieciowy = _klientTcp.GetStream();
 
-            PiszLinię(obsłużKomendę(CzytajLinię()));
+            try
+            {
+                while (true)
+                {
+                    string linia = CzytajLinię();
+
+                    PiszLinię(obsłużKomendę(linia));
+                }
+            }
+            catch (System.IO.IOException)
+            {
+            }
+
+            _rozłączenie(this);
         }
 
         public void Stop()

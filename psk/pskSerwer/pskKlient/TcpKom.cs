@@ -53,6 +53,7 @@ namespace psk
 
         public override void Dispose()
         {
+            PiszLinię(Pomocnicze.Tcp.KomendaZakończeniaPołączenia);
             _strumieńSieciowy.Dispose();
             _klientTcp.Close();
         }

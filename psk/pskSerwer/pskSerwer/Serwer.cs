@@ -12,7 +12,8 @@ namespace psk
     {
         static Dictionary<string, IUsługa> _usługi = new Dictionary<string, IUsługa>()
         {
-            {"ping", new PingPong()}
+            {"ping", new PingPong()},
+            {"chat", new Chat()}
         };
 
         static List<IKomunikator> _komunikatory = new List<IKomunikator>();
@@ -63,7 +64,7 @@ namespace psk
                     return _usługi[usługa].OdpowiedzNaKomendę(komenda);
             }
 
-            return "Błąd!";
+            return String.Empty;
         }
     }
 }

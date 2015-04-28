@@ -8,26 +8,52 @@ namespace psk
 {
     class Klient
     {
+        static Dictionary<string, Komunikator> komunikatory = new Dictionary<string, Komunikator>()
+        {
+            {"pliki", new PlikiKom()},
+            {"tcp", new TcpKom()}
+        };
+
+        static Komunikator aktywnyKomunikator;
+
         static void Main(string[] args)
         {
-            string polecenie = PingPong.Ping(5, 10);
+            string linia = null;
+            aktywnyKomunikator = komunikatory.First().Value;
+            WypiszNazwęAktywnegoKomunikatora();
+            Console.Write("> ");
 
-            PoKlient klient = new PingPongKlient();
-            klient.Komunikator = new TcpKom();
-
-            throw new Exception("misz masz");
-
-            using (Komunikator komunikator = new TcpKom())
+            while (linia != "exit")
             {
-                komunikator.PiszLinię(polecenie);
-                Console.WriteLine("Wysyłam: {0}", polecenie);
+                linia = Console.ReadLine();
 
-                string odpowiedź = komunikator.CzytajLinię();
+                if (!String.IsNullOrEmpty(linia))
+                {
+                    if (linia.StartsWith("kom"))
+                    {
+                        aktywnyKomunikator = komunikatory[linia.Replace("kom ", String.Empty)];
 
-                Console.WriteLine("Odebrano: {0}", odpowiedź);
+                        WypiszNazwęAktywnegoKomunikatora();
+                    }
+                    else
+                    {
+                        aktywnyKomunikator.PiszLinię(linia);
+                        Console.WriteLine(aktywnyKomunikator.CzytajLinię());
+                    }
+
+                    Console.Write("> ");
+                }
+
+                System.Threading.Thread.Sleep(Pomocnicze.CzasSpania);
             }
 
-            Console.ReadKey();
+            foreach (Komunikator komunikator in komunikatory.Values)
+                komunikator.Dispose();
+        }
+
+        static void WypiszNazwęAktywnegoKomunikatora()
+        {
+            Console.WriteLine("Aktywny komunikator to {0}.", komunikatory.FirstOrDefault(k => k.Value == aktywnyKomunikator).Key);
         }
     }
 }
