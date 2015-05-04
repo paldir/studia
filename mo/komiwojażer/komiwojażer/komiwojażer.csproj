@@ -41,10 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Element.cs" />
     <Compile Include="PołożenieGeograficzne.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rozszerzenia.cs" />
+    <Compile Include="Węzeł.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

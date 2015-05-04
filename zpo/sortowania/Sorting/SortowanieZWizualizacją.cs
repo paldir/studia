@@ -11,7 +11,6 @@ namespace sortowania
     public class SortowanieZWizualizacją : ZadanieZWizualizacją
     {
         IList<Thread> _wątkiSortowań;
-        object _semafor = new object();
 
         public AktualizacjaWizualizacji AktualizujWizualizację { get; set; }
 

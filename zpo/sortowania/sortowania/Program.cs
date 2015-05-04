@@ -10,22 +10,12 @@ namespace sortowania
     {
         const int ilość = (int)1e7;
 
-        static int KluczCałkowity(int wartość)
-        {
-            return Math.Abs(wartość);
-        }
-
-        static int KluczZmiennoprzecinkowy(double wartość)
-        {
-            return (int)Math.Abs(Math.Floor(wartość));
-        }
-
         static List<List<int>> tablice = new List<List<int>>();
 
         static readonly List<IMetodaSortowania<int>> metodySortowania = new List<IMetodaSortowania<int>>()
         {
             new Bąbelkowe<int>(),
-            new PrzezZliczanie<int>(KluczCałkowity),
+            new PrzezZliczanie<int>(e=>Math.Abs(e)),
             new PrzezKopcowanie<int>(),
             new PrzezŁączenie<int>(),
             new Szybkie<int>(),
@@ -39,8 +29,6 @@ namespace sortowania
 
             for (int i = 0; i < kolekcja.Count; i++)
                 kolekcja[i] = los.Next(1, ilość * 2);
-
-            throw new Exception("Zamień is bad!");
 
             List<System.Threading.ThreadStart> wątkiSortowania = new List<System.Threading.ThreadStart>();
 
