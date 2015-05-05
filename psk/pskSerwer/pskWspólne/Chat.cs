@@ -14,18 +14,34 @@ namespace psk
             Pisz
         };
 
-        Dictionary<string, List<string>> wiadomości;
+        Dictionary<string, List<string>> _wiadomości;
+
+        public Chat()
+        {
+            _wiadomości = new Dictionary<string, List<string>>();
+        }
 
         public string OdpowiedzNaKomendę(string komenda)
         {
-            komenda = komenda.Replace("chat ", String.Empty);
-            TrybObsługi tryb = (TrybObsługi)Enum.Parse(typeof(TrybObsługi), komenda.Substring(0, komenda.IndexOf(' ')), true);
+            string[] argumenty = komenda.Split(' ');
 
-            switch (tryb)
+            if (argumenty.Length > 2)
             {
+                TrybObsługi tryb = (TrybObsługi)Enum.Parse(typeof(TrybObsługi), argumenty[1], true);
+
+                switch (tryb)
+                {
+                    case TrybObsługi.Czytaj:
+
+                        break;
+
+                    case TrybObsługi.Pisz:
+
+                        break;
+                }
             }
 
-            return "Usługa działa";
+            return "Niepoprawna składnia polecenia.";
         }
     }
 }
