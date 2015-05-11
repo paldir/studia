@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace komiwojażer
 {
-    struct ElementZerowy
+    class ElementZerowy
     {
         public int I { get; set; }
         public int J { get; set; }
         public double PoprzedniaWartość { get; set; }
 
-        public ElementZerowy(int i, int j, double poprzedniaWartość)
-            : this()
+        public ElementZerowy(int i, int j)
         {
             I = i;
             J = j;
+        }
+
+        public ElementZerowy(int i, int j, double poprzedniaWartość)
+            : this(i, j)
+        {
             PoprzedniaWartość = poprzedniaWartość;
         }
     }
