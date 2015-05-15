@@ -107,17 +107,42 @@ namespace komiwojażer
 
             if (odległości[indeksJRozwiązania, indeksIRozwiązania] == Double.PositiveInfinity)
             {
-                ElementZerowy dotychczasoweRozwiązanie = rozwiązanie;
+                /*ElementZerowy następneDotychczasoweRozwiązanie = rozwiązanie;
+                ElementZerowy dotyczasoweRozwiązanie = null;
 
-                for (int i = 0; i < dotychczasoweRozwiązania.Count - 1; i++)
-                    dotychczasoweRozwiązanie = dotychczasoweRozwiązania.First(r => r.J == dotychczasoweRozwiązanie.I);
+                while (następneDotychczasoweRozwiązanie != null)
+                {
+                    dotyczasoweRozwiązanie = następneDotychczasoweRozwiązanie;
+                    następneDotychczasoweRozwiązanie = dotychczasoweRozwiązania.Find(r => r.J == następneDotychczasoweRozwiązanie.I);
+                }
 
-                odległości[rozwiązanie.J, dotychczasoweRozwiązanie.I] = Double.PositiveInfinity;
+                if (dotyczasoweRozwiązanie != null)
+                    odległości[indeksJRozwiązania, dotyczasoweRozwiązanie.I] = Double.PositiveInfinity;
+
+                następneDotychczasoweRozwiązanie = rozwiązanie;
+                dotyczasoweRozwiązanie = null;
+
+                while (następneDotychczasoweRozwiązanie != null)
+                {
+                    dotyczasoweRozwiązanie = następneDotychczasoweRozwiązanie;
+                    następneDotychczasoweRozwiązanie = dotychczasoweRozwiązania.Find(r => r.I == następneDotychczasoweRozwiązanie.J);
+                }
+
+                if (dotyczasoweRozwiązanie != null)
+                    odległości[dotyczasoweRozwiązanie.J, indeksIRozwiązania] = Double.PositiveInfinity;
+                 */
+
+                List<ElementZerowy> noweRozwiązania = dotychczasoweRozwiązania.Concat(new List<ElementZerowy>() { rozwiązanie }).ToList();
+
+                if (noweRozwiązania.Count > 1)
+                    UłóżŚcieżkęZRozwiązań(noweRozwiązania);
+
+                odległości[noweRozwiązania.Last().J, noweRozwiązania.First().I] = Double.PositiveInfinity;
             }
             else
                 odległości[indeksJRozwiązania, indeksIRozwiązania] = Double.PositiveInfinity;
 
-                return odległości;
+            return odległości;
         }
 
         static double[,] NieWybierajRozwiązania(double[,] oryginalneOdległości, ElementZerowy rozwiązanie)
@@ -189,7 +214,7 @@ namespace komiwojażer
             double[,] odległościPoczątkowe;
             int miastoStartu = 0;
 
-            {
+            /*{
                 odległościPoczątkowe = new double[,]
                 {
                     {1, 10, 8, 9, 7},
@@ -198,7 +223,7 @@ namespace komiwojażer
                     {9, 5,  8, 1, 6},
                     {7, 6, 9, 6, 1}
                 };
-            }
+            }*/
 
             /*{
                 odległościPoczątkowe = new double[,]
@@ -212,7 +237,7 @@ namespace komiwojażer
                 };
             }*/
 
-            /*{
+            {
                 int ilośćMiast = miasta.Length;
                 odległościPoczątkowe = new double[ilośćMiast, ilośćMiast];
                 List<string> linie = new List<string>();
@@ -236,7 +261,7 @@ namespace komiwojażer
                 for (int i = 0; i < ilośćMiast; i++)
                     for (int j = 0; j < ilośćMiast; j++)
                             odległościPoczątkowe[i, j] = ObliczOdległość(położeniaMiast[miasta[i]], położeniaMiast[miasta[j]]);
-            }*/
+            }
 
             int rozmiar = odległościPoczątkowe.GetLength(0);
             double[,] kopiaOdległości = new double[rozmiar, rozmiar];
@@ -282,21 +307,7 @@ namespace komiwojażer
                 węzłyDrzewa.Add(węzełPoNiewybraniuRozwiązania);
             }
 
-            Dictionary<int, List<int>> połączenia = new Dictionary<int, List<int>>();
-
-            for (int i = 0; i < rozmiar; i++)
-                połączenia.Add(i, new List<int>());
-
-            foreach (ElementZerowy rozwiązanie in węzeł.WybraneRozwiązania)
-            {
-                int i = rozwiązanie.I;
-                int j = rozwiązanie.J;
-
-                połączenia[i].Add(j);
-                połączenia[j].Add(i);
-            }
-
-            if (węzeł.ElementyZerowe.Count > 2)
+            /*if (węzeł.ElementyZerowe.Count > 2)
             {
                 ElementZerowy elementDoUsunięcia = null;
 
@@ -328,31 +339,17 @@ namespace komiwojażer
                 }
 
                 węzeł.ElementyZerowe.Remove(elementDoUsunięcia);
-            }
+            }*/
 
-            foreach (ElementZerowy rozwiązanie in węzeł.ElementyZerowe)
+            IEnumerable<ElementZerowy> rozwiązania = węzeł.WybraneRozwiązania.Concat(węzeł.ElementyZerowe);
+            List<int> ścieżka = new List<int>() { miastoStartu };
+
+            while (ścieżka.Count != rozmiar + 1)
             {
-                int i = rozwiązanie.I;
-                int j = rozwiązanie.J;
+                ElementZerowy element = rozwiązania.First(r => r.I == ścieżka.Last());
 
-                połączenia[i].Add(j);
-                połączenia[j].Add(i);
+                ścieżka.Add(element.J);
             }
-
-            List<int> ścieżka = new List<int> { miastoStartu };
-
-            for (int i = 0; i < rozmiar - 1; i++)
-            {
-                int start = ścieżka.Last();
-                int stop = połączenia[start].First(m => !ścieżka.Contains(m));
-
-                ścieżka.Add(stop);
-            }
-
-            if (połączenia[ścieżka.Last()].Contains(miastoStartu))
-                ścieżka.Add(miastoStartu);
-            else
-                throw new Exception();
 
             double koszt = 0;
 
@@ -371,6 +368,38 @@ namespace komiwojażer
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
             return R * c;
+        }
+
+        static void UłóżŚcieżkęZRozwiązań(List<ElementZerowy> rozwiązania)
+        {
+            int długość = rozwiązania.Count;
+            List<ElementZerowy> magazyn = new List<ElementZerowy>(rozwiązania);
+
+            rozwiązania.Clear();
+            rozwiązania.Add(magazyn.First());
+            magazyn.RemoveAt(0);
+
+            do
+            {
+                ElementZerowy rozwiązanie = magazyn.First();
+
+                magazyn.Remove(rozwiązanie);
+
+                int indeksPoprzednika = rozwiązania.FindIndex(r => r.J == rozwiązanie.I);
+
+                if (indeksPoprzednika == -1)
+                {
+                    int indeksNastępnika = rozwiązania.FindIndex(r => r.I == rozwiązanie.J);
+
+                    if (indeksNastępnika == -1)
+                        magazyn.Add(rozwiązanie);
+                    else
+                        rozwiązania.Insert(indeksNastępnika, rozwiązanie);
+                }
+                else
+                    rozwiązania.Insert(indeksPoprzednika + 1, rozwiązanie);
+            }
+            while (rozwiązania.Count != długość);
         }
     }
 }
