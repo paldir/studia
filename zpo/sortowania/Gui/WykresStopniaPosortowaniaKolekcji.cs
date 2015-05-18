@@ -12,29 +12,52 @@ namespace Gui
 {
     public partial class WykresStopniaPosortowaniaKolekcji : UserControl
     {
-        public IList<float> Kolekcja { get; set; }
+        float max;
+        float min;
+
+        IList<float> _kolekcja = new List<float>();
+        public IList<float> Kolekcja
+        {
+            get
+            {
+                return _kolekcja;
+            }
+
+            set
+            {
+                _kolekcja = value;
+
+                max = _kolekcja.Max();
+                min = _kolekcja.Min();
+            }
+        }
 
         public WykresStopniaPosortowaniaKolekcji()
         {
             InitializeComponent();
         }
 
-        public void PrzedstawKolekcjęNaWykresie()
+        public void PrzedstawKolekcjęNaWykresie<T>(int g)
         {
             int liczbaElementów = Kolekcja.Count;
             int liczbaElementówWGrupie = liczbaElementów / 100;
+            float szerokośćSłupka = wykres.Width / 100.0f;
+            float maksymalnaWysokośćSłupka = wykres.Height;
 
-            for (int i = 0; i < 100; i++)
-            {
-                float średnia = 0;
+            using (Graphics g = wykres.CreateGraphics())
+            using (Pen p = new Pen(Color.Black))
+                for (int i = 0; i < 100; i++)
+                {
+                    float średnia = 0;
 
-                for (int j = i * liczbaElementówWGrupie; j < (i + 1) * liczbaElementówWGrupie; j++)
-                    średnia += Kolekcja[j];
+                    for (int j = i * liczbaElementówWGrupie; j < (i + 1) * liczbaElementówWGrupie; j++)
+                        średnia += Kolekcja[j];
 
-                średnia /= liczbaElementówWGrupie;
+                    średnia /= liczbaElementówWGrupie;
+                    float xSłupka = i * szerokośćSłupka;
 
-
-            }
+                    g.DrawLine(p, xSłupka, 0, xSłupka, średnia / max * maksymalnaWysokośćSłupka);
+                }
         }
     }
 }

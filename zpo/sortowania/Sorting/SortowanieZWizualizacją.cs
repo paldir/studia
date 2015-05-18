@@ -8,18 +8,18 @@ using System.Threading;
 
 namespace sortowania
 {
-    public class SortowanieZWizualizacją : ZadanieZWizualizacją
+    public class SortowanieZWizualizacją<T> : ZadanieZWizualizacją where T : IComparable, IComparable<T>
     {
         IList<Thread> _wątkiSortowań;
 
         public AktualizacjaWizualizacji AktualizujWizualizację { get; set; }
 
-        public SortowanieZWizualizacją(IList<ThreadStart> metodySortujące, AktualizacjaWizualizacji aktulizacjaWizualizacji)
+        public SortowanieZWizualizacją(IList<IMetodaSortowania<T>> metodySortujące, Func<IList<T>, int> metodaŚredniej, IList<T> kolekcja, AktualizacjaWizualizacji aktualizacjaWizualizacji)
         {
             _wątkiSortowań = new List<Thread>();
-            AktualizujWizualizację = aktulizacjaWizualizacji;
+            AktualizujWizualizację = aktualizacjaWizualizacji;
 
-            foreach (ThreadStart metodaSortująca in metodySortujące)
+            foreach (IMetodaSortowania<T> metodaSortująca in metodySortujące)
             {
                 Thread wątek = new Thread(metodaSortująca);
 

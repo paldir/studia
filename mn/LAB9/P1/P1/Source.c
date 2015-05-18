@@ -7,9 +7,9 @@ float **Malloc2d(int row, int col);
 void Free2d(float **array, int size);	
 void Zeros(float *vector, int size);
 void Zeros2d(float **matrix, int size);
-void MultiplyMatrixByMatrix(float **first, int row, int col, float **second, float **out);
+void MultiplyMatrixByMatrix(float **first, int row1, int col1, float **second, int col2, float **out);
 void MultiplyMatrixByVector(const float **matrix, int row, int col, const float *vector, float *out);
-void SaveMatrixToFile(float **matrix, int size, const char *fileName);
+void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName);
 void SaveVectorToFile(const float *vector, int size, const char *fileName);
 float** ReadMatrixFromFile(const char* fileName, int* size);
 float* ReadVectorFromFile(const char* fileName, int* size);
@@ -36,26 +36,33 @@ int main()
 	int m;
 	int i, j;
 
-	x=ReadVectorFromFile("x.txt", &n);
-	y=ReadVectorFromFile("y.txt", &n);
-	sigma=ReadVectorFromFile("sigma.txt", &n);
-	A=Malloc2d(n, m);
-	transposedA=Malloc2d(m, n);
-	alfa=Malloc2d(m, m);
-	b=(float*)malloc(n*sizeof(float));
-	beta=(float*)malloc(m*sizeof(float));
-	
-	for(i=0; i<n; i++)
-		for(j=0; j<m; j++)
-			A[i][j]=powf(x[i], j)/sigma[i];
+	x = ReadVectorFromFile("x.txt", &n);
+	y = ReadVectorFromFile("y.txt", &n);
+	sigma = ReadVectorFromFile("sigma.txt", &n);
+	m = n - 1;
+	A = Malloc2d(n, m);
+	transposedA = Malloc2d(m, n);
+	alfa = Malloc2d(m, m);
+	b = (float*)malloc(n*sizeof(float));
+	beta = (float*)malloc(m*sizeof(float));
+
+	for (i = 0; i < n; i++)
+		for (j = 0; j < m; j++)
+			A[i][j] = powf(x[i], (float)j) / sigma[i];
 
 	Transpose(A, n, m, transposedA);
 
-	for(i=0; i<n; i++)
-		b[i]=y[i]/sigma[i];
+	for (i = 0; i < n; i++)
+		b[i] = y[i] / sigma[i];
 
-	MultiplyMatrixByMatrix(transposedA, m, n, A, alfa);
+	MultiplyMatrixByMatrix(transposedA, m, n, A, m, alfa);
 	MultiplyMatrixByVector(transposedA, m, n, b, beta);
+
+	SaveMatrixToFile(transposedA, m, n, "aT.txt");
+	SaveMatrixToFile(A, n, m, "A.txt");
+	SaveMatrixToFile(alfa, m, m, "alfa.txt");
+	SaveVectorToFile(beta, m, "beta.txt");
+	SaveVectorToFile(b, n, "b.txt");
 
 	free(x);
 	free(y);
@@ -146,7 +153,7 @@ float **Malloc2d(int row, int col)
 	int i;
 	float **array = (float**)malloc(row*sizeof(float*));
 
-	for (i = 0; i < col; i++)
+	for (i = 0; i < row; i++)
 		array[i] = (float*)malloc(col*sizeof(float));
 
 	return array;
@@ -166,8 +173,8 @@ void Zeros(float *vector, int size)
 {
 	int i;
 
-	for(i=0; i<size; i++)
-		vector[i]=0;
+	for (i = 0; i < size; i++)
+		vector[i] = 0;
 }
 
 void Zeros2d(float **matrix, int size)
@@ -179,16 +186,16 @@ void Zeros2d(float **matrix, int size)
 			matrix[i][j] = 0;
 }
 
-void MultiplyMatrixByMatrix(float **first, int row, int col, float **second, float **out)
+void MultiplyMatrixByMatrix(float **first, int row1, int col1, float **second, int col2, float **out)
 {
 	int i, j, k;
 
-	for (i = 0; i < row; i++)
-		for (j = 0; j < row; j++)
+	for (i = 0; i < row1; i++)
+		for (j = 0; j < col2; j++)
 		{
 			float sum = 0;
 
-			for (k = 0; k < col; k++)
+			for (k = 0; k < col1; k++)
 				sum += first[i][k] * second[k][j];
 
 			out[i][j] = sum;
@@ -210,17 +217,17 @@ void MultiplyMatrixByVector(const float **matrix, int row, int col, const float 
 	}
 }
 
-void SaveMatrixToFile(float **matrix, int size, const char *fileName)
+void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName)
 {
 	FILE *file = fopen(fileName, "w");
 	int i, j;
 
 	//fopen_s(&file, fileName, "w");
-	fprintf(file, "%d\n", size);
+	fprintf(file, "%d %d\n", row, col);
 
-	for (i = 0; i < size; i++)
+	for (i = 0; i < row; i++)
 	{
-		for (j = 0; j < size; j++)
+		for (j = 0; j < col; j++)
 			fprintf(file, "%f\t", matrix[i][j]);
 
 		fprintf(file, "\n");
@@ -360,7 +367,7 @@ void Transpose(float **matrix, int row, int col, float **out)
 	
 	for (i = 0; i < row; i++)
 		for (j = 0; j < col; j++)
-			out[i][j] = matrix[j][i];
+			out[j][i] = matrix[i][j];
 }
 
 void InverseMatrix(float **matrix, int size, float **out)
@@ -402,8 +409,8 @@ void InverseMatrix(float **matrix, int size, float **out)
 			inversedL[i][j] = x[i];
 	}
 
-	MultiplyMatrixByMatrix(transposedP, size, size, inversedU, tmp);
-	MultiplyMatrixByMatrix(tmp, size, size, inversedL, out);
+	MultiplyMatrixByMatrix(transposedP, size, size, inversedU, size, tmp);
+	MultiplyMatrixByMatrix(tmp, size, size, inversedL, size, out);
 
 	Free2d(L, size);
 	Free2d(inversedL, size);

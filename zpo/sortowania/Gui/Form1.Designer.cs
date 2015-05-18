@@ -33,7 +33,8 @@
             // 
             // wykresStopniaPosortowaniaKolekcji
             // 
-            this.wykresStopniaPosortowaniaKolekcji.Location = new System.Drawing.Point(77, 94);
+            this.wykresStopniaPosortowaniaKolekcji.Kolekcja = null;
+            this.wykresStopniaPosortowaniaKolekcji.Location = new System.Drawing.Point(12, 12);
             this.wykresStopniaPosortowaniaKolekcji.Name = "wykresStopniaPosortowaniaKolekcji";
             this.wykresStopniaPosortowaniaKolekcji.Size = new System.Drawing.Size(300, 300);
             this.wykresStopniaPosortowaniaKolekcji.TabIndex = 0;

@@ -40,13 +40,13 @@ namespace sortowania
                 wątkiSortowania.Add(() => tablica.Sortuj(metodaSortowania));
             }
 
-            SortowanieZWizualizacją sortowanieZWizualizacją = new SortowanieZWizualizacją(wątkiSortowania, AktualizujStatystyki);
+            /*SortowanieZWizualizacją sortowanieZWizualizacją = new SortowanieZWizualizacją(wątkiSortowania, AktualizujStatystyki);
             Porównywarka porównywarka = new Porównywarka(sortowanieZWizualizacją);
 
             porównywarka.Porównaj();
 
             Console.Write("Koniec.");
-            Console.ReadKey();
+            Console.ReadKey();*/
         }
 
         static void WyświetlKolekcję<T>(IList<T> kolekcja)

@@ -24,7 +24,7 @@ namespace regExILinq
             string wynikiTorunian = "<tr>.*?<td>Toruń</td>.*?</tr>";
             string osobyZNazwiskamiPięcioLubSześcioliterowymi = "<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.{5, 7}?</td>";
 
-            MatchCollection wynik = Regex.Matches(plik, wynikiTorunian, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            MatchCollection wynik = Regex.Matches(plik, wszystko, RegexOptions.Singleline | RegexOptions.IgnoreCase);
             List<Biegacz> biegacze = new List<Biegacz>();
 
             for (int i = 1; i < wynik.Count; i++)
@@ -51,16 +51,16 @@ namespace regExILinq
                 biegacze.Add(new Biegacz(miejsce, numer, rokUrodzenia, miejscowość, czas));
             }
 
-            foreach (Biegacz biegacz in biegacze)
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", biegacz.Miejsce, biegacz.Numer, biegacz.Miejscowość, biegacz.Czas);
+            /*foreach (Biegacz biegacz in biegacze)
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", biegacz.Miejsce, biegacz.Numer, biegacz.Miejscowość, biegacz.Czas);*/
 
-            /*IEnumerable<IGrouping<int, Biegacz>> wedługWieku = biegacze.GroupBy(b => b.RokUrodzenia);
+            IEnumerable<IGrouping<int, Biegacz>> wedługWieku = biegacze.GroupBy(b => b.RokUrodzenia);
             IEnumerable<IGrouping<string, Biegacz>> wedługMiejscowości = biegacze.GroupBy(b => b.Miejscowość.ToUpper());
 
             //WyświetlŚrednieGrup(wedługWieku, "Rok urodzenia");
             //WyświetlŚrednieGrup(wedługMiejscowości, "Miejscowość");
             //WyświetlŚrednieGrup(wedługWieku.Where(g => g.Count() >= 10), "Rok urodzenia");
-            WyświetlŚrednieGrup(wedługMiejscowości.Where(g => g.Count() >= 10), "Miejscowość");*/
+            WyświetlŚrednieGrup(wedługMiejscowości.Where(g => g.Count() >= 10), "Miejscowość");
 
             Console.ReadKey();
         }

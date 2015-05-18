@@ -8,26 +8,6 @@ namespace komiwojażer
 {
     class Program
     {
-        static readonly string[] miasta = new string[]
-        {
-            "Warszawa", 
-            "Kraków", 
-            "Łódź", 
-            "Wrocław",
-            "Poznań",
-            "Gdańsk", 
-            "Szczecin", 
-            "Bydgoszcz",
-            "Lublin",
-            "Katowice",
-            "Białystok",
-            "Gdynia", 
-            "Częstochowa",
-            "Radom",
-            "Sosnowiec", 
-            "Toruń"
-        };
-
         static List<ElementZerowy> Redukcja(double[,] odległości)
         {
             int wiersze = odległości.GetLength(0);
@@ -105,42 +85,26 @@ namespace komiwojażer
             for (int i = 0; i < oryginalneWiersze; i++)
                 odległości[i, indeksJRozwiązania] = Double.PositiveInfinity;
 
-            if (odległości[indeksJRozwiązania, indeksIRozwiązania] == Double.PositiveInfinity)
+            ElementZerowy początekŚcieżki;
+            ElementZerowy koniecŚcieżki;
+            ElementZerowy następnyPoczątekŚcieżki = rozwiązanie;
+            ElementZerowy następnyKoniecŚcieżki = rozwiązanie;
+
+            do
             {
-                /*ElementZerowy następneDotychczasoweRozwiązanie = rozwiązanie;
-                ElementZerowy dotyczasoweRozwiązanie = null;
-
-                while (następneDotychczasoweRozwiązanie != null)
-                {
-                    dotyczasoweRozwiązanie = następneDotychczasoweRozwiązanie;
-                    następneDotychczasoweRozwiązanie = dotychczasoweRozwiązania.Find(r => r.J == następneDotychczasoweRozwiązanie.I);
-                }
-
-                if (dotyczasoweRozwiązanie != null)
-                    odległości[indeksJRozwiązania, dotyczasoweRozwiązanie.I] = Double.PositiveInfinity;
-
-                następneDotychczasoweRozwiązanie = rozwiązanie;
-                dotyczasoweRozwiązanie = null;
-
-                while (następneDotychczasoweRozwiązanie != null)
-                {
-                    dotyczasoweRozwiązanie = następneDotychczasoweRozwiązanie;
-                    następneDotychczasoweRozwiązanie = dotychczasoweRozwiązania.Find(r => r.I == następneDotychczasoweRozwiązanie.J);
-                }
-
-                if (dotyczasoweRozwiązanie != null)
-                    odległości[dotyczasoweRozwiązanie.J, indeksIRozwiązania] = Double.PositiveInfinity;
-                 */
-
-                List<ElementZerowy> noweRozwiązania = dotychczasoweRozwiązania.Concat(new List<ElementZerowy>() { rozwiązanie }).ToList();
-
-                if (noweRozwiązania.Count > 1)
-                    UłóżŚcieżkęZRozwiązań(noweRozwiązania);
-
-                odległości[noweRozwiązania.Last().J, noweRozwiązania.First().I] = Double.PositiveInfinity;
+                początekŚcieżki = następnyPoczątekŚcieżki;
+                następnyPoczątekŚcieżki = dotychczasoweRozwiązania.Find(r => r.J == początekŚcieżki.I);
             }
-            else
-                odległości[indeksJRozwiązania, indeksIRozwiązania] = Double.PositiveInfinity;
+            while (następnyPoczątekŚcieżki != null);
+
+            do
+            {
+                koniecŚcieżki = następnyKoniecŚcieżki;
+                następnyKoniecŚcieżki = dotychczasoweRozwiązania.Find(r => r.I == koniecŚcieżki.J);
+            }
+            while (następnyKoniecŚcieżki != null);
+
+            odległości[koniecŚcieżki.J, początekŚcieżki.I] = Double.PositiveInfinity;
 
             return odległości;
         }
@@ -212,57 +176,10 @@ namespace komiwojażer
         static void Main(string[] args)
         {
             double[,] odległościPoczątkowe;
-            int miastoStartu = 0;
-
-            /*{
-                odległościPoczątkowe = new double[,]
-                {
-                    {1, 10, 8, 9, 7},
-                    {10, 1, 10, 5, 6},
-                    {8, 10, 1, 8, 9},
-                    {9, 5,  8, 1, 6},
-                    {7, 6, 9, 6, 1}
-                };
-            }*/
-
-            /*{
-                odległościPoczątkowe = new double[,]
-                {
-                    {1, 3, 93, 13, 33, 9},
-                    {4, 1, 77, 42, 21, 16},
-                    {45, 17, 1, 36, 16, 28},
-                    {39, 90, 80, 1, 56, 7},
-                    {28, 46, 88, 33, 1, 25},
-                    {3, 88, 18, 46, 92, 1}
-                };
-            }*/
-
-            {
-                int ilośćMiast = miasta.Length;
-                odległościPoczątkowe = new double[ilośćMiast, ilośćMiast];
-                List<string> linie = new List<string>();
-                Dictionary<string, PołożenieGeograficzne> położeniaMiast = new Dictionary<string, PołożenieGeograficzne>();
-
-                using (System.IO.StreamReader strumień = new System.IO.StreamReader("miasta.txt"))
-                    while (!strumień.EndOfStream)
-                        linie.Add(strumień.ReadLine());
-
-                foreach (string miasto in miasta)
-                {
-                    string linia = linie.Find(l => l.StartsWith(miasto));
-                    int stopnieDługości = Int32.Parse(linia.Substring(24, 2));
-                    int minutyDługości = Int32.Parse(linia.Substring(27, 2));
-                    int stopnieSzerokości = Int32.Parse(linia.Substring(39, 2));
-                    int minutySzerokości = Int32.Parse(linia.Substring(42, 2));
-
-                    położeniaMiast.Add(miasto, new PołożenieGeograficzne(stopnieSzerokości + minutySzerokości / 60.0, stopnieDługości + minutyDługości / 60.0));
-                }
-
-                for (int i = 0; i < ilośćMiast; i++)
-                    for (int j = 0; j < ilośćMiast; j++)
-                            odległościPoczątkowe[i, j] = ObliczOdległość(położeniaMiast[miasta[i]], położeniaMiast[miasta[j]]);
-            }
-
+            int miastoStartu = 15;
+            //odległościPoczątkowe = OdległościZYouTube();
+            //odległościPoczątkowe = OdległościZPrezentacji();
+            odległościPoczątkowe = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
             int rozmiar = odległościPoczątkowe.GetLength(0);
             double[,] kopiaOdległości = new double[rozmiar, rozmiar];
 
@@ -282,7 +199,7 @@ namespace komiwojażer
 
             while (strata > 0)
             {
-                węzłyDrzewa = węzłyDrzewa.OrderBy(w => w.LB).ThenByDescending(w => w.WybraneRozwiązania.Count).ToList();
+                węzłyDrzewa = węzłyDrzewa.OrderBy(w => w.LB).ToList();
                 węzeł = węzłyDrzewa.First();
 
                 węzłyDrzewa.Remove(węzeł);
@@ -307,40 +224,6 @@ namespace komiwojażer
                 węzłyDrzewa.Add(węzełPoNiewybraniuRozwiązania);
             }
 
-            /*if (węzeł.ElementyZerowe.Count > 2)
-            {
-                ElementZerowy elementDoUsunięcia = null;
-
-                foreach (ElementZerowy element1 in węzeł.ElementyZerowe)
-                {
-                    List<List<int>> drogi = new List<List<int>>();
-                    IEnumerable<ElementZerowy> połączeniaBezObecnego = węzeł.ElementyZerowe.Except(new List<ElementZerowy>() { element1 });
-
-                    foreach (ElementZerowy element2 in połączeniaBezObecnego)
-                        drogi.Add(new List<int>() { element2.I, element2.J });
-
-                    IEnumerable<List<int>> brakującePołączenia = Enumerable.Concat(połączenia.Values, drogi);
-                    bool dodaćBrakującePołączenia = true;
-
-                    for (int i = 0; i < rozmiar; i++)
-                        if (brakującePołączenia.Count(p => p.Contains(i)) != 2)
-                        {
-                            dodaćBrakującePołączenia = false;
-
-                            break;
-                        }
-
-                    if (dodaćBrakującePołączenia)
-                    {
-                        elementDoUsunięcia = element1;
-
-                        break;
-                    }
-                }
-
-                węzeł.ElementyZerowe.Remove(elementDoUsunięcia);
-            }*/
-
             IEnumerable<ElementZerowy> rozwiązania = węzeł.WybraneRozwiązania.Concat(węzeł.ElementyZerowe);
             List<int> ścieżka = new List<int>() { miastoStartu };
 
@@ -351,55 +234,62 @@ namespace komiwojażer
                 ścieżka.Add(element.J);
             }
 
+            foreach (int miasto in ścieżka)
+                Console.WriteLine(miasta[miasto]);
+
             double koszt = 0;
 
             for (int i = 1; i < ścieżka.Count; i++)
                 koszt += odległościPoczątkowe[ścieżka[i - 1], ścieżka[i]];
+
+            Console.WriteLine();
+            Console.WriteLine("Długość trasy to: {0}", koszt);
+            Console.ReadKey();
         }
 
-        static double ObliczOdległość(PołożenieGeograficzne położenie1, PołożenieGeograficzne położenie2)
+        static readonly string[] miasta = new string[]
         {
-            const int R = 6371;
-            double fi1 = położenie1.Szerokość.ToRadians();
-            double fi2 = położenie2.Szerokość.ToRadians();
-            double deltaFi = (położenie2.Szerokość - położenie1.Szerokość).ToRadians();
-            double deltaLambda = (położenie2.Długość - położenie1.Długość).ToRadians();
-            double a = Math.Sin(deltaFi / 2) * Math.Sin(deltaFi / 2) + Math.Cos(fi1) * Math.Cos(fi2) * Math.Sin(deltaLambda / 2) * Math.Sin(deltaLambda / 2);
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            "Warszawa", 
+            "Kraków", 
+            "Łódź", 
+            "Wrocław",
+            "Poznań",
+            "Gdańsk", 
+            "Szczecin", 
+            "Bydgoszcz",
+            "Lublin",
+            "Katowice",
+            "Białystok",
+            "Gdynia", 
+            "Częstochowa",
+            "Radom",
+            "Sosnowiec", 
+            "Toruń"
+        };
 
-            return R * c;
-        }
-
-        static void UłóżŚcieżkęZRozwiązań(List<ElementZerowy> rozwiązania)
+        static double[,] OdległościZYouTube()
         {
-            int długość = rozwiązania.Count;
-            List<ElementZerowy> magazyn = new List<ElementZerowy>(rozwiązania);
-
-            rozwiązania.Clear();
-            rozwiązania.Add(magazyn.First());
-            magazyn.RemoveAt(0);
-
-            do
-            {
-                ElementZerowy rozwiązanie = magazyn.First();
-
-                magazyn.Remove(rozwiązanie);
-
-                int indeksPoprzednika = rozwiązania.FindIndex(r => r.J == rozwiązanie.I);
-
-                if (indeksPoprzednika == -1)
+            return new double[,]
                 {
-                    int indeksNastępnika = rozwiązania.FindIndex(r => r.I == rozwiązanie.J);
+                    {1, 10, 8, 9, 7},
+                    {10, 1, 10, 5, 6},
+                    {8, 10, 1, 8, 9},
+                    {9, 5,  8, 1, 6},
+                    {7, 6, 9, 6, 1}
+                };
+        }
 
-                    if (indeksNastępnika == -1)
-                        magazyn.Add(rozwiązanie);
-                    else
-                        rozwiązania.Insert(indeksNastępnika, rozwiązanie);
-                }
-                else
-                    rozwiązania.Insert(indeksPoprzednika + 1, rozwiązanie);
-            }
-            while (rozwiązania.Count != długość);
+        static double[,] OdległościZPrezentacji()
+        {
+            return new double[,]
+                {
+                    {1, 3, 93, 13, 33, 9},
+                    {4, 1, 77, 42, 21, 16},
+                    {45, 17, 1, 36, 16, 28},
+                    {39, 90, 80, 1, 56, 7},
+                    {28, 46, 88, 33, 1, 25},
+                    {3, 88, 18, 46, 92, 1}
+                };
         }
     }
 }

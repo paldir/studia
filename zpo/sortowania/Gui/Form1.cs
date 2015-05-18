@@ -18,10 +18,10 @@ namespace Gui
 
         static readonly List<IMetodaSortowania<int>> metodySortowania = new List<IMetodaSortowania<int>>()
         {
-            new Bąbelkowe<int>()/*,
-            new PrzezZliczanie<int>(e=>Math.Abs(e)),
+            /*new Bąbelkowe<int>(),
+            new PrzezZliczanie<int>(e=>Math.Abs(e)),*/
             new PrzezKopcowanie<int>(),
-            new PrzezŁączenie<int>(),
+            /*new PrzezŁączenie<int>(),
             new Szybkie<int>(),
             new PrzezWybór<int>()*/
         };
@@ -46,10 +46,10 @@ namespace Gui
                 wątkiSortowania.Add(() => tablica.Sortuj(metodaSortowania));
             }
 
-            SortowanieZWizualizacją sortowanieZWizualizacją = new SortowanieZWizualizacją(wątkiSortowania, wykresStopniaPosortowaniaKolekcji.PrzedstawKolekcjęNaWykresie);
+            SortowanieZWizualizacją<int> sortowanieZWizualizacją = new SortowanieZWizualizacją<int>(metodySortowania, e => Math.Abs(e), kolekcja, );
             Porównywarka porównywarka = new Porównywarka(sortowanieZWizualizacją);
 
-            porównywarka.Porównaj();
+            new System.Threading.Thread(porównywarka.Porównaj).Start();
         }
     }
 }

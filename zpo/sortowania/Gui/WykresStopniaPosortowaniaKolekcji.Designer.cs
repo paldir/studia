@@ -37,6 +37,7 @@
             this.wykres.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.wykres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.wykres.Location = new System.Drawing.Point(3, 3);
             this.wykres.Name = "wykres";
             this.wykres.Size = new System.Drawing.Size(294, 294);
