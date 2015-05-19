@@ -47,7 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PoKlient.cs" />
     <Compile Include="TcpKom.cs" />
-    <Compile Include="_TcpClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

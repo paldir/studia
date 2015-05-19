@@ -10,8 +10,8 @@ namespace psk
     {
         enum TrybObsługi
         {
-            Czytaj,
-            Pisz
+            czytaj,
+            pisz
         };
 
         Dictionary<string, List<string>> _wiadomości;
@@ -27,17 +27,42 @@ namespace psk
 
             if (argumenty.Length > 2)
             {
-                TrybObsługi tryb = (TrybObsługi)Enum.Parse(typeof(TrybObsługi), argumenty[1], true);
+                TrybObsługi tryb = (TrybObsługi)Enum.Parse(typeof(TrybObsługi), argumenty[1].ToLower(), true);
+                string użytkownik = argumenty[2].Replace(Environment.NewLine, String.Empty);
 
                 switch (tryb)
                 {
-                    case TrybObsługi.Czytaj:
+                    case TrybObsługi.czytaj:
+                        if (_wiadomości.ContainsKey(użytkownik))
+                        {
+                            StringBuilder odpowiedź = new StringBuilder();
 
-                        break;
+                            foreach (string wiadomość in _wiadomości[użytkownik])
+                                odpowiedź.AppendLine(wiadomość);
 
-                    case TrybObsługi.Pisz:
+                            _wiadomości.Remove(użytkownik);
 
-                        break;
+                            return odpowiedź.ToString();
+                        }
+                        else
+                            return "Brak wiadomości.";
+
+                    case TrybObsługi.pisz:
+                        {
+                            StringBuilder budowniczyWiadomości = new StringBuilder();
+
+                            for (int i = 3; i < argumenty.Length; i++)
+                                budowniczyWiadomości.AppendFormat("{0} ", argumenty[i]);
+
+                            string wiadomość = budowniczyWiadomości.ToString();
+
+                            if (_wiadomości.ContainsKey(użytkownik))
+                                _wiadomości[użytkownik].Add(wiadomość);
+                            else
+                                _wiadomości.Add(użytkownik, new List<string>() { wiadomość });
+
+                            return "Wiadomość dodana.";
+                        }
                 }
             }
 

@@ -17,6 +17,7 @@ void SwapColumns(float **matrix, int size, int index1, int index2);
 void LUDecomposition(float **A, int size, float **L, float **U, float **P);
 void ForwardSubstitution(float **L, float *b, int size, float *out);
 void BackwardSubstitution(float **U, float *b, int size, float *out);
+void GaussElimination(float **A, float *b, int size, float *out);
 float MatrixNormInfinity(float **matrix, int size);
 void NormalizeMatrix(float **matrix, int size);
 void Transpose(float **matrix, int row, int col, float **out);
@@ -29,6 +30,7 @@ int main()
 	float *b;
 	float *sigma;
 	float *beta;
+	float *a;
 	float **A;
 	float **transposedA;
 	float **alfa;
@@ -40,6 +42,7 @@ int main()
 	y = ReadVectorFromFile("y.txt", &n);
 	sigma = ReadVectorFromFile("sigma.txt", &n);
 	m = n - 1;
+	a = (float*)malloc(m*sizeof(float));
 	A = Malloc2d(n, m);
 	transposedA = Malloc2d(m, n);
 	alfa = Malloc2d(m, m);
@@ -64,16 +67,42 @@ int main()
 	SaveVectorToFile(beta, m, "beta.txt");
 	SaveVectorToFile(b, n, "b.txt");
 
+	GaussElimination(alfa, beta, m, a);
+
+	SaveVectorToFile(a, m, "aRozwiazanie.txt");
+
 	free(x);
 	free(y);
 	free(sigma);
 	free(b);
 	free(beta);
+	free(a);
 	Free2d(A, n);
 	Free2d(transposedA, m);
 	Free2d(alfa, m);
 
 	return 0;
+}
+
+void GaussElimination(float **A, float *b, int size, float *out)
+{
+	float *y = malloc(size*sizeof(float));
+	float **L = Malloc2d(size, size);
+	float **U = Malloc2d(size, size);
+	float **P = Malloc2d(size, size);
+
+	LUDecomposition(A, size, L, U, P);
+	SaveMatrixToFile(L, size, size, "L.txt");
+	SaveMatrixToFile(U, size, size, "U.txt");
+	SaveMatrixToFile(P, size, size, "P.txt");
+	ForwardSubstitution(L, b, size, out);
+	BackwardSubstitution(U, out, size, y);
+	MultiplyMatrixByVector(P, size, size, y, out);
+
+	free(y);
+	Free2d(L, size);
+	Free2d(U, size);
+	Free2d(P, size);
 }
 
 void SwapColumns(float **matrix, int size, int index1, int index2)
@@ -98,6 +127,9 @@ void LUDecomposition(float **A, int size, float **L, float **U, float **P)
 				P[i][j] = 1;
 			else
 				P[i][j] = 0;
+
+	Zeros2d(L, size);
+	Zeros2d(U, size);
 
 	for (k = 0; k < size; k++)
 	{

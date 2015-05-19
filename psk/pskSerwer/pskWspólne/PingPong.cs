@@ -10,12 +10,12 @@ namespace psk
     {
         static Random _los = new Random();
 
-        public static string Ping(int rozmiarPolecenia, int rozmiarOdpowiedzi)
+        /*public static string Ping(int rozmiarPolecenia, int rozmiarOdpowiedzi)
         {
             string x = String.Format("ping {0} ", rozmiarOdpowiedzi);
 
             return x + Śmieci(rozmiarPolecenia);
-        }
+        }*/
 
         public string OdpowiedzNaKomendę(string polecenie)
         {
@@ -29,17 +29,17 @@ namespace psk
             if (!int.TryParse(ss[1], out rozmiar0))
                 return "Błąd!";
 
-            return "pong " + Śmieci(rozmiar0) + Environment.NewLine;
+            return String.Format("pong {0}{1}", Śmieci(rozmiar0), Environment.NewLine);
         }
 
         static string Śmieci(int ile)
         {
-            string śmieci = String.Empty;
+            StringBuilder budowniczyŚmieci = new StringBuilder();
 
             for (int i = 0; i < ile; i++)
-                śmieci += (char)('a' + _los.Next(0, 26));
+                budowniczyŚmieci.Append(Convert.ToChar('a' + _los.Next(0, 26)));
 
-            return śmieci;
+            return budowniczyŚmieci.ToString();
         }
     }
 }

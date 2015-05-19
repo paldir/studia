@@ -38,17 +38,21 @@ namespace psk
 
         public override string CzytajLinię()
         {
-            string linia = String.Empty;
-            byte[] bufor = new byte[Pomocnicze.Tcp.RozmiarBufora];
+            StringBuilder budowniczyLinii = new StringBuilder();
+            string fragmentLinii = String.Empty;
 
-            while (!linia.EndsWith(Environment.NewLine))
+            while (!fragmentLinii.EndsWith(Environment.NewLine))
             {
+                byte[] bufor = new byte[Pomocnicze.Tcp.RozmiarBufora];
+                
                 _strumieńSieciowy.Read(bufor, 0, bufor.Length);
 
-                linia += Encoding.UTF8.GetString(bufor).Replace("\0", String.Empty);
+                fragmentLinii = Encoding.UTF8.GetString(bufor).Replace("\0", String.Empty);
+
+                budowniczyLinii.Append(fragmentLinii);
             }
 
-            return linia;
+            return budowniczyLinii.ToString();
         }
 
         public override void Dispose()

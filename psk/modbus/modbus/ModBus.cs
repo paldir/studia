@@ -46,7 +46,7 @@ namespace modbus
             IEnumerable<byte> adresBajtowo = BitConverter.GetBytes(adres).Reverse();
             IEnumerable<byte> liczbaRejestrówBajtowo = BitConverter.GetBytes(liczbaRejestrów).Reverse();
             List<byte> wartościBajtowo = new List<byte>();
-            List<byte> pytanie = new List<byte> { 0, 1, 0, 0, 0, 6, 0, 10 };
+            List<byte> pytanie = new List<byte> { 0, 1, 0, 0, 0, 6, 0, 16 };
 
             foreach (ushort wartość in wartości)
                 wartościBajtowo.AddRange(BitConverter.GetBytes(wartość).Reverse());
@@ -56,7 +56,6 @@ namespace modbus
             byte[] zawartość;
 
             pośredniePytanie.Add(Convert.ToByte(2 * liczbaRejestrów));
-
             PytanieOdpowiedź(pośredniePytanie.Concat(wartościBajtowo), out nagłówek, out zawartość);
         }
         

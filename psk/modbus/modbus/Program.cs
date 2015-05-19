@@ -11,11 +11,10 @@ namespace modbus
         static void Main(string[] args)
         {
             Modbus mb = new Modbus("localhost", 502);
-            ushort[] odpowiedź;
 
-            odpowiedź = mb.PobierzRejestry(3, 3);
+            mb.UstawRejestry(1, new ushort[] { 19, 91 });
 
-            mb.UstawRejestry(3, new ushort[] { 14, 40 });
+            ushort[] odpowiedź = mb.PobierzRejestry(1, 2);
         }
     }
 }
