@@ -8,50 +8,32 @@ void Free2d(float **array, int size);
 void Zeros(float *vector, int size);
 void Zeros2d(float **matrix, int size);
 void MultiplyMatrixByMatrix(float **first, int row1, int col1, float **second, int col2, float **out);
-void MultiplyMatrixByVector(const float **matrix, int row, int col, const float *vector, float *out);
+void MultiplyMatrixByVector(float **matrix, int row, int col, float *vector, float *out);
 void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName);
-void SaveVectorToFile(const float *vector, int size, const char *fileName);
+void SaveMatrixToWolfram(float **matrix, int row, int col, const char *fileName);
+void SaveVectorToFile(float *vector, int size, const char *fileName);
 float** ReadMatrixFromFile(const char* fileName, int* size);
 float* ReadVectorFromFile(const char* fileName, int* size);
 void SwapColumns(float **matrix, int size, int index1, int index2);
-void LUDecomposition(float **A, int size, float **L, float **U, float **P);
+void LUDecomposition(float **A, int size, float **L, float **U);
 void ForwardSubstitution(float **L, float *b, int size, float *out);
 void BackwardSubstitution(float **U, float *b, int size, float *out);
 void GaussElimination(float **A, float *b, int size, float *out);
 float MatrixNormInfinity(float **matrix, int size);
-void NormalizeMatrix(float **matrix, int size);
+void NormalizeMatrix(float **matrix, float *vector, int size);
 void Transpose(float **matrix, int row, int col, float **out);
 void InverseMatrix(float **matrix, int size, float **out);
 
-int main()
+void Prepare(float *x, float *y, float *sigma, int m, int n, float **alfa, float *beta)
 {
-	float *x;
-	float *y;
-	float *b;
-	float *sigma;
-	float *beta;
-	float *a;
-	float **A;
-	float **transposedA;
-	float **alfa;
-	int n;
-	int m;
+	float *b = (float*)malloc(n*sizeof(float));
+	float **A = Malloc2d(n, m);
+	float **transposedA = Malloc2d(m, n);
 	int i, j;
-
-	x = ReadVectorFromFile("x.txt", &n);
-	y = ReadVectorFromFile("y.txt", &n);
-	sigma = ReadVectorFromFile("sigma.txt", &n);
-	m = n - 1;
-	a = (float*)malloc(m*sizeof(float));
-	A = Malloc2d(n, m);
-	transposedA = Malloc2d(m, n);
-	alfa = Malloc2d(m, m);
-	b = (float*)malloc(n*sizeof(float));
-	beta = (float*)malloc(m*sizeof(float));
 
 	for (i = 0; i < n; i++)
 		for (j = 0; j < m; j++)
-			A[i][j] = powf(x[i], (float)j) / sigma[i];
+			A[i][j] = (float)pow(x[i], j) / sigma[i];
 
 	Transpose(A, n, m, transposedA);
 
@@ -61,27 +43,141 @@ int main()
 	MultiplyMatrixByMatrix(transposedA, m, n, A, m, alfa);
 	MultiplyMatrixByVector(transposedA, m, n, b, beta);
 
-	SaveMatrixToFile(transposedA, m, n, "aT.txt");
-	SaveMatrixToFile(A, n, m, "A.txt");
-	SaveMatrixToFile(alfa, m, m, "alfa.txt");
-	SaveVectorToFile(beta, m, "beta.txt");
-	SaveVectorToFile(b, n, "b.txt");
+	free(b);
+	Free2d(A, n);
+	Free2d(transposedA, m);
+}
+
+int main()
+{
+	float *x;
+	float *y;
+	float *sigma;
+	float *a;
+	float *beta;
+	float *yPrim;
+	float **alfa;
+	float **inversedAlfa;
+	int n, m, i, j;
+	float chi = 0;
+	float chiAfterNormalization = 0;
+	float norm;
+	float normAfterNormalization;
+
+	x = ReadVectorFromFile("x.txt", &n);
+	y = ReadVectorFromFile("y.txt", &n);
+	sigma = ReadVectorFromFile("sigma.txt", &n);
+
+	printf("Podaj m: ");
+	scanf("%d", &m);
+
+	a = (float*)malloc(m*sizeof(float));
+	beta = (float*)malloc(m*sizeof(float));
+	yPrim = (float*)malloc(n*sizeof(float));
+	alfa = Malloc2d(m, m);
+	inversedAlfa = Malloc2d(m, m);
+
+	Prepare(x, y, sigma, m, n, alfa, beta);
+
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	GaussElimination(alfa, beta, m, a);
+	InverseMatrix(alfa, m, inversedAlfa);
 
-	SaveVectorToFile(a, m, "aRozwiazanie.txt");
+	norm = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
+
+	for (i = 0; i < n; i++)
+	{
+		float sum = 0;
+
+		for (j = 0; j < m; j++)
+			sum += a[j] * (float)pow(x[i], j);
+
+		yPrim[i] = sum;
+	}
+
+	for (i = 0; i < n; i++)
+		chi += (float)pow((y[i] - yPrim[i]) / sigma[i], 2.0f);
+
+	SaveMatrixToFile(inversedAlfa, m, m, "inversedAlfa.txt");
+	SaveVectorToFile(a, m, "a.txt");
+	SaveVectorToFile(yPrim, n, "yPrim.txt");
+
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	NormalizeMatrix(alfa, beta, m);
+	GaussElimination(alfa, beta, m, a);
+	InverseMatrix(alfa, m, inversedAlfa);
+
+	normAfterNormalization = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
+
+	for (i = 0; i < n; i++)
+	{
+		float sum = 0;
+
+		for (j = 0; j < m; j++)
+			sum += a[j] * (float)pow(x[i], j);
+
+		yPrim[i] = sum;
+	}
+
+	for (i = 0; i < n; i++)
+		chiAfterNormalization += (float)pow((y[i] - yPrim[i]) / sigma[i], 2);
+
+	SaveVectorToFile(a, m, "aAfterNormalization.txt");
+	SaveVectorToFile(yPrim, n, "yPrimAfterNormalization.txt");
+
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	printf("Chi: %e\n", chi);
+	printf("Chi po normalizacji: %e\n\n", chiAfterNormalization);
+	printf("Norma: %e\n", norm);
+	printf("Norma po normalizacji: %e\n", normAfterNormalization);
 
 	free(x);
 	free(y);
 	free(sigma);
-	free(b);
-	free(beta);
 	free(a);
-	Free2d(A, n);
-	Free2d(transposedA, m);
+	free(beta);
+	free(yPrim);
 	Free2d(alfa, m);
+	Free2d(inversedAlfa, m);
 
 	return 0;
+}
+
+void LUDecomposition(float **A, int size, float **L, float **U)
+{
+	int i, j, k;
+
+	Zeros2d(L, size);
+	Zeros2d(U, size);
+
+	for (j = 0; j < size; j++)
+	{
+		for (i = 0; i <= j; i++)
+		{
+			float sum = 0;
+
+			for (k = 0; k <= i - 1; k++)
+				sum += L[i][k] * U[k][j];
+
+			U[i][j] = A[i][j] - sum;
+		}
+
+		for (i = j + 1; i < size; i++)
+		{
+			float sum = 0;
+
+			for (k = 0; k <= j - 1; k++)
+				sum += L[i][k] * U[k][j];
+
+			L[i][j] = (A[i][j] - sum) / U[j][j];
+		}
+	}
+
+	for (i = 0; i < size; i++)
+		L[i][i] = 1;
 }
 
 void GaussElimination(float **A, float *b, int size, float *out)
@@ -89,95 +185,44 @@ void GaussElimination(float **A, float *b, int size, float *out)
 	float *y = malloc(size*sizeof(float));
 	float **L = Malloc2d(size, size);
 	float **U = Malloc2d(size, size);
-	float **P = Malloc2d(size, size);
 
-	LUDecomposition(A, size, L, U, P);
-	SaveMatrixToFile(L, size, size, "L.txt");
-	SaveMatrixToFile(U, size, size, "U.txt");
-	SaveMatrixToFile(P, size, size, "P.txt");
-	ForwardSubstitution(L, b, size, out);
-	BackwardSubstitution(U, out, size, y);
-	MultiplyMatrixByVector(P, size, size, y, out);
+	LUDecomposition(A, size, L, U);
+	ForwardSubstitution(L, b, size, y);
+	BackwardSubstitution(U, y, size, out);
 
 	free(y);
 	Free2d(L, size);
 	Free2d(U, size);
-	Free2d(P, size);
 }
 
-void SwapColumns(float **matrix, int size, int index1, int index2)
+void ForwardSubstitution(float **L, float *b, int size, float *out)
 {
-	int i;
+	int i, j;
 
 	for (i = 0; i < size; i++)
 	{
-		float tmp = matrix[i][index1];
-		matrix[i][index1] = matrix[i][index2];
-		matrix[i][index2] = tmp;
+		float sum = 0;
+
+		for (j = 0; j < i; j++)
+			sum += L[i][j] * out[j];
+
+		out[i] = (b[i] - sum) / L[i][i];
 	}
 }
 
-void LUDecomposition(float **A, int size, float **L, float **U, float **P)
+void BackwardSubstitution(float **U, float *b, int size, float *out)
 {
-	int i, j, k, p;
+	int i, j;
 
-	for (i = 0; i < size; i++)
-		for (j = 0; j < size; j++)
-			if (i == j)
-				P[i][j] = 1;
-			else
-				P[i][j] = 0;
-
-	Zeros2d(L, size);
-	Zeros2d(U, size);
-
-	for (k = 0; k < size; k++)
+	for (i = size - 1; i >= 0; i--)
 	{
-		for (j = k; j < size; j++)
-		{
-			float sum = 0;
+		float sum = 0;
 
-			for (p = 0; p <= k - 1; p++)
-				sum += L[k][p] * U[p][j];
+		for (j = size - 1; j > i; j--)
+			sum += U[i][j] * out[j];
 
-			U[k][j] = A[k][j] - sum;
-		}
-
-		for (i = k + 1; i < size; i++)
-		{
-
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-			float sum = 0;
-			float maxU = -1;
-			int maxUIndex = -1;
-
-			for (p = k; p < size; p++)
-			{
-				float tmp = fabsf(U[k][p]);
-
-				if (tmp > maxU)
-				{
-					maxU = tmp;
-					maxUIndex = p;
-				}
-			}
-
-			SwapColumns(A, size, k, maxUIndex);
-			SwapColumns(U, size, k, maxUIndex);
-			SwapColumns(P, size, k, maxUIndex);
-
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-			for (p = 0; p <= k - 1; p++)
-				sum += L[i][p] * U[p][k];
-
-			L[i][k] = (A[i][k] - sum) / maxU;
-		}
+		out[i] = (b[i] - sum) / U[i][i];
 	}
-
-	for (i = 0; i < size; i++)
-		L[i][i] = 1;
 }
 
 float **Malloc2d(int row, int col)
@@ -234,7 +279,7 @@ void MultiplyMatrixByMatrix(float **first, int row1, int col1, float **second, i
 		}
 }
 
-void MultiplyMatrixByVector(const float **matrix, int row, int col, const float *vector, float *out)
+void MultiplyMatrixByVector(float **matrix, int row, int col, float *vector, float *out)
 {
 	int i, j;
 
@@ -254,7 +299,6 @@ void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName)
 	FILE *file = fopen(fileName, "w");
 	int i, j;
 
-	//fopen_s(&file, fileName, "w");
 	fprintf(file, "%d %d\n", row, col);
 
 	for (i = 0; i < row; i++)
@@ -262,13 +306,44 @@ void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName)
 		for (j = 0; j < col; j++)
 			fprintf(file, "%f\t", matrix[i][j]);
 
+
 		fprintf(file, "\n");
 	}
 
 	fclose(file);
 }
 
-void SaveVectorToFile(const float *vector, int size, const char *fileName)
+void SaveMatrixToWolfram(float **matrix, int row, int col, const char *fileName)
+{
+	FILE *file = fopen(fileName, "w");
+	int i, j;
+
+	fprintf(file, "{");
+
+	for (i = 0; i < row; i++)
+	{
+		fprintf(file, "{");
+
+		for (j = 0; j < col; j++)
+		{
+			fprintf(file, "%f", matrix[i][j]);
+
+			if (j != col - 1)
+				fprintf(file, ", ");
+		}
+
+		fprintf(file, "}");
+
+		if (i != row - 1)
+			fprintf(file, ", ");
+	}
+
+	fprintf(file, "}");
+
+	fclose(file);
+}
+
+void SaveVectorToFile(float *vector, int size, const char *fileName)
 {
 	FILE *file = fopen(fileName, "w");
 	int i;
@@ -323,36 +398,6 @@ float* ReadVectorFromFile(const char* fileName, int* size)
 	return vector;
 }
 
-void ForwardSubstitution(float **L, float *b, int size, float *out)
-{
-	int i, j;
-
-	for (i = 0; i < size; i++)
-	{
-		float sum = 0;
-
-		for (j = 0; j < i; j++)
-			sum += L[i][j] * out[j];
-
-		out[i] = (b[i] - sum) / L[i][i];
-	}
-}
-
-void BackwardSubstitution(float **U, float *b, int size, float *out)
-{
-	int i, j;
-
-	for (i = size - 1; i >= 0; i--)
-	{
-		float sum = 0;
-
-		for (j = size - 1; j > i; j--)
-			sum += U[i][j] * out[j];
-
-		out[i] = (b[i] - sum) / U[i][i];
-	}
-}
-
 float MatrixNormInfinity(float **matrix, int size)
 {
 	int i, j;
@@ -372,21 +417,23 @@ float MatrixNormInfinity(float **matrix, int size)
 	return max;
 }
 
-void NormalizeMatrix(float **matrix, int size)
+void NormalizeMatrix(float **matrix, float *vector, int size)
 {
 	int i, j;
 
 	for (i = 0; i < size; i++)
 	{
-		float max = matrix[i][0];
+		float max = vector[i];
 
-		for (j = 1; j < size; j++)
+		for (j = 0; j < size; j++)
 		{
 			float element = matrix[i][j];
 
 			if (element > max)
 				max = element;
 		}
+
+		vector[i] /= max;
 
 		for (j = 0; j < size; j++)
 			matrix[i][j] /= max;
@@ -408,21 +455,13 @@ void InverseMatrix(float **matrix, int size, float **out)
 	float **inversedL = Malloc2d(size, size);
 	float **U = Malloc2d(size, size);
 	float **inversedU = Malloc2d(size, size);
-	float **P = Malloc2d(size, size);
-	float **transposedP = Malloc2d(size, size);
-	float **tmp = Malloc2d(size, size);
 	float *identityMatrixColumn = (float*)malloc(size*sizeof(float));
 	float *x = (float*)malloc(size*sizeof(float));
 	int i, j;
 
-	for (i = 0; i < size; i++)
-		for (j = 0; j < size; j++)
-			tmp[i][j] = matrix[i][j];
-
 	Zeros2d(L, size);
 	Zeros2d(U, size);
-	LUDecomposition(tmp, size, L, U, P);
-	Transpose(P, size, size, transposedP);
+	LUDecomposition(matrix, size, L, U);
 
 	for (j = 0; j < size; j++)
 	{
@@ -441,16 +480,12 @@ void InverseMatrix(float **matrix, int size, float **out)
 			inversedL[i][j] = x[i];
 	}
 
-	MultiplyMatrixByMatrix(transposedP, size, size, inversedU, size, tmp);
-	MultiplyMatrixByMatrix(tmp, size, size, inversedL, size, out);
+	MultiplyMatrixByMatrix(inversedU, size, size, inversedL, size, out);
 
 	Free2d(L, size);
 	Free2d(inversedL, size);
 	Free2d(U, size);
 	Free2d(inversedU, size);
-	Free2d(P, size);
-	Free2d(transposedP, size);
-	Free2d(tmp, size);
 	free(identityMatrixColumn);
 	free(x);
 }
