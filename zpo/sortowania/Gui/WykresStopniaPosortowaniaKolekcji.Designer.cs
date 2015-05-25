@@ -28,37 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.wykres = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.wykres)).BeginInit();
             this.SuspendLayout();
-            // 
-            // wykres
-            // 
-            this.wykres.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.wykres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.wykres.Location = new System.Drawing.Point(3, 3);
-            this.wykres.Name = "wykres";
-            this.wykres.Size = new System.Drawing.Size(294, 294);
-            this.wykres.TabIndex = 0;
-            this.wykres.TabStop = false;
             // 
             // WykresStopniaPosortowaniaKolekcji
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.wykres);
             this.Name = "WykresStopniaPosortowaniaKolekcji";
             this.Size = new System.Drawing.Size(300, 300);
-            ((System.ComponentModel.ISupportInitialize)(this.wykres)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox wykres;
 
     }
 }

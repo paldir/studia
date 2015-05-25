@@ -10,26 +10,37 @@ namespace sortowania
 {
     public class Porównywarka
     {
-        ZadanieZWizualizacją _zadanieZWizualizacją;
+        IList<ZadanieZWizualizacją> _zadaniaZWizualizacją;
 
-        public Porównywarka(ZadanieZWizualizacją zadanieZWizualizacją)
+        public Porównywarka(IList<ZadanieZWizualizacją> zadaniaZWizualizacją)
         {
-            _zadanieZWizualizacją = zadanieZWizualizacją;
+            _zadaniaZWizualizacją = zadaniaZWizualizacją;
         }
 
         public void Porównaj()
         {
-            _zadanieZWizualizacją.Uruchom();
-            _zadanieZWizualizacją.Zawieś();
-
-            while (true)
+            foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
             {
-                if (!_zadanieZWizualizacją.Wznów())
-                    break;
+                zadanie.Uruchom();
+                zadanie.Zawieś();
+            }
+
+            bool praca = true;
+
+            while (praca)
+            {
+                praca = false;
+                
+                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                    praca = praca | zadanie.Wznów();
 
                 Thread.Sleep(1000);
-                _zadanieZWizualizacją.Zawieś();
-                _zadanieZWizualizacją.AktualizujWizualizację();
+
+                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                    zadanie.Zawieś();
+
+                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                    zadanie.AktualizujWizualizację();
             }
         }
     }

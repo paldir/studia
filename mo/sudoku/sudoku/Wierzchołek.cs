@@ -10,7 +10,9 @@ namespace sudoku
     {
         public int Kolor { get; set; }
         public List<Wierzchołek> Sąsiedzi { get; set; }
-        public int Kwadrat { get; set; }
+        public int Kwadrat { get; private set; }
+        public int I { get; private set; }
+        public int J { get; private set; }
 
         public string KolorySąsiadów
         {
@@ -19,16 +21,18 @@ namespace sudoku
                 System.Text.StringBuilder kolory = new StringBuilder();
 
                 foreach (Wierzchołek sąsiad in Sąsiedzi)
-                    kolory.Append(String.Format("{0} ", sąsiad));
+                    kolory.AppendFormat("{0} ", sąsiad.Kolor);
 
                 return kolory.ToString();
             }
         }
 
-        public Wierzchołek(int kolor, int kwadrat)
+        public Wierzchołek(int kolor, int kwadrat, int i, int j)
         {
             Kolor = kolor;
             Kwadrat = kwadrat;
+            I = i;
+            J = j;
             Sąsiedzi = new List<Wierzchołek>();
         }
     }

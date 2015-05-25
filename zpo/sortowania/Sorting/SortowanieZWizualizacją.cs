@@ -8,57 +8,78 @@ using System.Threading;
 
 namespace sortowania
 {
+    public delegate void PrześlijDaneDoWizualizacji(List<int> dane);
+
     public class SortowanieZWizualizacją<T> : ZadanieZWizualizacją where T : IComparable, IComparable<T>
     {
-        IList<Thread> _wątkiSortowań;
+        Thread _wątekSortowania;
+        List<T> _kolekcja;
+        int _liczbagrup;
+        int _liczbaElementówWKażdejGrupie;
+        Func<T, int> _metodaKlucza;
+        Func<IList<T>, double> _metodaŚredniej;
+        IMetodaSortowania<T> _metodaSortowania;
+        AktualizacjaWizualizacji _aktualizacjaWizualizacji;
+        PrześlijDaneDoWizualizacji _przesłanieDanychDoWizualizacji;
+        object _object;
 
-        public AktualizacjaWizualizacji AktualizujWizualizację { get; set; }
-
-        public SortowanieZWizualizacją(IList<IMetodaSortowania<T>> metodySortujące, Func<IList<T>, int> metodaŚredniej, IList<T> kolekcja, AktualizacjaWizualizacji aktualizacjaWizualizacji)
+        public SortowanieZWizualizacją(IMetodaSortowania<T> metodaSortująca, IList<T> kolekcja, Func<T, int> metodaKlucza, Func<IList<T>, double> metodaŚredniej, int liczbaGrupWizualizacji, AktualizacjaWizualizacji aktualizacjaWizualizacji, PrześlijDaneDoWizualizacji przesłanieDanychDoWizualizacji)
         {
-            _wątkiSortowań = new List<Thread>();
-            AktualizujWizualizację = aktualizacjaWizualizacji;
+            _wątekSortowania = new Thread(Sortuj);
+            _kolekcja = new List<T>(kolekcja);
+            _liczbagrup = liczbaGrupWizualizacji;
+            _liczbaElementówWKażdejGrupie = kolekcja.Count / _liczbagrup;
+            _metodaKlucza = metodaKlucza;
+            _metodaŚredniej = metodaŚredniej;
+            _metodaSortowania = metodaSortująca;
+            _aktualizacjaWizualizacji = aktualizacjaWizualizacji;
+            _przesłanieDanychDoWizualizacji = przesłanieDanychDoWizualizacji;
+            _object = new object();
+        }
 
-            foreach (IMetodaSortowania<T> metodaSortująca in metodySortujące)
-            {
-                Thread wątek = new Thread(metodaSortująca);
+        void Sortuj()
+        {
+            _metodaSortowania.Sortuj(_kolekcja);
 
-                _wątkiSortowań.Add(wątek);
-            }
+            lock (_object) { };
         }
 
         public void Uruchom()
         {
-            foreach (Thread wątekSortowania in _wątkiSortowań)
-                wątekSortowania.Start();
+            _wątekSortowania.Start();
         }
 
         public void Zawieś()
         {
-            foreach (Thread wątekSortowania in _wątkiSortowań)
-                if (wątekSortowania.ThreadState == ThreadState.Running)
-                    try
-                    {
-                        wątekSortowania.Suspend();
-                    }
-                    catch (ThreadStateException) { }
+            lock (_object)
+                if (_wątekSortowania.ThreadState == ThreadState.Running)
+                    _wątekSortowania.Suspend();
         }
 
         public bool Wznów()
         {
-            bool byłoCoWznawiać = false;
+            bool praca = false;
 
-            foreach (Thread wątekSortowania in _wątkiSortowań)
-                if (wątekSortowania.ThreadState == ThreadState.Suspended)
-                    try
-                    {
-                        wątekSortowania.Resume();
+            lock (_object)
+                if (_wątekSortowania.ThreadState == ThreadState.Suspended)
+                {
+                    _wątekSortowania.Resume();
 
-                        byłoCoWznawiać = true;
-                    }
-                    catch (ThreadStateException) { }
+                    praca = true;
+                }
 
-            return byłoCoWznawiać;
+            return praca;
+        }
+
+        public void AktualizujWizualizację()
+        {
+            List<int> listaKluczy = new List<int>();
+
+            for (int i = 0; i < _liczbagrup; i++)
+                listaKluczy.Add(_metodaKlucza((T)Convert.ChangeType(_metodaŚredniej(_kolekcja.GetRange(i * _liczbaElementówWKażdejGrupie, _liczbaElementówWKażdejGrupie)), typeof(T))));
+
+            _przesłanieDanychDoWizualizacji(listaKluczy);
+            _aktualizacjaWizualizacji();
         }
     }
 }

@@ -18,12 +18,12 @@ namespace Gui
 
         static readonly List<IMetodaSortowania<int>> metodySortowania = new List<IMetodaSortowania<int>>()
         {
-            /*new Bąbelkowe<int>(),
-            new PrzezZliczanie<int>(e=>Math.Abs(e)),*/
+            new Bąbelkowe<int>(),
+            new PrzezZliczanie<int>(e=>Math.Abs(e)),
             new PrzezKopcowanie<int>(),
-            /*new PrzezŁączenie<int>(),
+            new PrzezŁączenie<int>(),
             new Szybkie<int>(),
-            new PrzezWybór<int>()*/
+            new PrzezWybór<int>()
         };
 
         public Form1()
@@ -36,18 +36,17 @@ namespace Gui
             for (int i = 0; i < kolekcja.Count; i++)
                 kolekcja[i] = los.Next(1, ilość * 2);
 
-            List<System.Threading.ThreadStart> wątkiSortowania = new List<System.Threading.ThreadStart>();
+            List<WykresStopniaPosortowaniaKolekcji> wykresy = new List<WykresStopniaPosortowaniaKolekcji>() { wykres1, wykres2, wykres3, wykres4, wykres5, wykres6 };
+            List<ZadanieZWizualizacją> sortowania = new List<ZadanieZWizualizacją>();
 
-            foreach (IMetodaSortowania<int> metodaSortowania in metodySortowania)
+            for (int i = 0; i < metodySortowania.Count; i++)
             {
-                List<int> tablica = new List<int>(kolekcja);
+                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), ś => ś.Average(), 100, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
 
-                wykresStopniaPosortowaniaKolekcji.Kolekcja = tablica.Select(e => Convert.ToSingle(e)).ToList();
-                wątkiSortowania.Add(() => tablica.Sortuj(metodaSortowania));
+                sortowania.Add(sortowanie);
             }
 
-            SortowanieZWizualizacją<int> sortowanieZWizualizacją = new SortowanieZWizualizacją<int>(metodySortowania, e => Math.Abs(e), kolekcja, );
-            Porównywarka porównywarka = new Porównywarka(sortowanieZWizualizacją);
+            Porównywarka porównywarka = new Porównywarka(sortowania);
 
             new System.Threading.Thread(porównywarka.Porównaj).Start();
         }

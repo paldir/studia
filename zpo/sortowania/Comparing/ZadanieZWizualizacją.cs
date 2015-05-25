@@ -10,7 +10,7 @@ namespace sortowania
 
     public interface ZadanieZWizualizacją
     {
-        AktualizacjaWizualizacji AktualizujWizualizację { get; set; }
+        void AktualizujWizualizację();
         void Uruchom();
         void Zawieś();
         bool Wznów();

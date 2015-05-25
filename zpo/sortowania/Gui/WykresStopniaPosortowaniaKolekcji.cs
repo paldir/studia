@@ -12,52 +12,49 @@ namespace Gui
 {
     public partial class WykresStopniaPosortowaniaKolekcji : UserControl
     {
-        float max;
-        float min;
-
-        IList<float> _kolekcja = new List<float>();
-        public IList<float> Kolekcja
-        {
-            get
-            {
-                return _kolekcja;
-            }
-
-            set
-            {
-                _kolekcja = value;
-
-                max = _kolekcja.Max();
-                min = _kolekcja.Min();
-            }
-        }
+        List<int> _daneDoWykresu;
+        int _maksymalnyElement;
 
         public WykresStopniaPosortowaniaKolekcji()
         {
             InitializeComponent();
         }
 
-        public void PrzedstawKolekcjęNaWykresie<T>(int g)
+        public void PrzedstawKolekcjęNaWykresie()
         {
-            int liczbaElementów = Kolekcja.Count;
-            int liczbaElementówWGrupie = liczbaElementów / 100;
-            float szerokośćSłupka = wykres.Width / 100.0f;
-            float maksymalnaWysokośćSłupka = wykres.Height;
 
-            using (Graphics g = wykres.CreateGraphics())
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            //base.OnPaint(e);
+
+            if (_daneDoWykresu == null)
+                return;
+
+            int liczbaElementów = _daneDoWykresu.Count;
+            float szerokośćSłupka = this.Width / liczbaElementów;
+            float maksymalnaWysokośćSłupka = this.Height;
+
+            Graphics g = e.Graphics;
             using (Pen p = new Pen(Color.Black))
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < liczbaElementów; i++)
                 {
-                    float średnia = 0;
-
-                    for (int j = i * liczbaElementówWGrupie; j < (i + 1) * liczbaElementówWGrupie; j++)
-                        średnia += Kolekcja[j];
-
-                    średnia /= liczbaElementówWGrupie;
                     float xSłupka = i * szerokośćSłupka;
+                    float x1 = i * szerokośćSłupka;
+                    float y1 = maksymalnaWysokośćSłupka;
+                    float x2 = x1;
+                    float y2 = maksymalnaWysokośćSłupka - _daneDoWykresu[i] / Convert.ToSingle(_maksymalnyElement) * maksymalnaWysokośćSłupka;
 
-                    g.DrawLine(p, xSłupka, 0, xSłupka, średnia / max * maksymalnaWysokośćSłupka);
+                    g.DrawLine(p, x1, y1, x2, y2);
                 }
+        }
+
+        public void AktualizujDaneDoWykresu(List<int> dane)
+        {
+            _daneDoWykresu = dane;
+            _maksymalnyElement = _daneDoWykresu.Max();
         }
     }
 }
