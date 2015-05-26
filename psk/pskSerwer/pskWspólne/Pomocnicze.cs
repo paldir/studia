@@ -24,5 +24,12 @@ namespace psk
             public const int RozmiarBufora = 256;
             public const string KomendaZakończeniaPołączenia = "---<! END CONNECTION >!---";
         }
+
+        public static class Udp
+        {
+            public const string Ip = "localhost";
+            public const int Port = 14401;
+            public const int RozmiarBufora = 256;
+        }
     }
 }

@@ -21,7 +21,8 @@ namespace psk
         static List<INasłuchiwacz> _nasłuchiwacze = new List<INasłuchiwacz>()
         {
             new PlikiNasłuchiwacz(),
-            new TcpNasłuchiwacz()
+            new TcpNasłuchiwacz(),
+            new UdpNasłuchiwacz()
         };
 
         static void Main(string[] args)
