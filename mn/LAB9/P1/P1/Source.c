@@ -23,6 +23,7 @@ float MatrixNormInfinity(float **matrix, int size);
 void NormalizeMatrix(float **matrix, float *vector, int size);
 void Transpose(float **matrix, int row, int col, float **out);
 void InverseMatrix(float **matrix, int size, float **out);
+void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName);
 
 void Prepare(float *x, float *y, float *sigma, int m, int n, float **alfa, float *beta)
 {
@@ -56,6 +57,7 @@ int main()
 	float *a;
 	float *beta;
 	float *yPrim;
+	float *yPrimAfterNormalization;
 	float **alfa;
 	float **inversedAlfa;
 	int n, m, i, j;
@@ -63,17 +65,34 @@ int main()
 	float chiAfterNormalization = 0;
 	float norm;
 	float normAfterNormalization;
+	float sig;
+	FILE *file = fopen("data.txt", "r");
 
-	x = ReadVectorFromFile("x.txt", &n);
-	y = ReadVectorFromFile("y.txt", &n);
-	sigma = ReadVectorFromFile("sigma.txt", &n);
-
+	printf("Podaj sigma: ");
+	scanf("%f", &sig);
 	printf("Podaj m: ");
 	scanf("%d", &m);
+
+	fscanf(file, "%d", &n);
+
+	x = (float*)malloc(n*sizeof(float));
+	y = (float*)malloc(n*sizeof(float));
+	sigma = (float*)malloc(n*sizeof(float));
+
+	for (i = 0; i < n; i++)
+	{
+		fscanf(file, "%f", &x[i]);
+		fscanf(file, "%f", &y[i]);
+
+		sigma[i] = sig;
+	}
+
+	fclose(file);
 
 	a = (float*)malloc(m*sizeof(float));
 	beta = (float*)malloc(m*sizeof(float));
 	yPrim = (float*)malloc(n*sizeof(float));
+	yPrimAfterNormalization = (float*)malloc(n*sizeof(float));
 	alfa = Malloc2d(m, m);
 	inversedAlfa = Malloc2d(m, m);
 
@@ -101,7 +120,7 @@ int main()
 
 	SaveMatrixToFile(inversedAlfa, m, m, "inversedAlfa.txt");
 	SaveVectorToFile(a, m, "a.txt");
-	SaveVectorToFile(yPrim, n, "yPrim.txt");
+	//SaveVectorToFile(yPrim, n, "yPrim.txt");
 
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -118,18 +137,19 @@ int main()
 		for (j = 0; j < m; j++)
 			sum += a[j] * (float)pow(x[i], j);
 
-		yPrim[i] = sum;
+		yPrimAfterNormalization[i] = sum;
 	}
 
 	for (i = 0; i < n; i++)
-		chiAfterNormalization += (float)pow((y[i] - yPrim[i]) / sigma[i], 2);
+		chiAfterNormalization += (float)pow((y[i] - yPrimAfterNormalization[i]) / sigma[i], 2);
 
 	SaveVectorToFile(a, m, "aAfterNormalization.txt");
-	SaveVectorToFile(yPrim, n, "yPrimAfterNormalization.txt");
+	SaveData(x, y, yPrim, yPrimAfterNormalization, n, "dataPrim.txt");
+	//SaveVectorToFile(yPrim, n, "yPrimAfterNormalization.txt");
 
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	printf("Chi: %e\n", chi);
+	printf("\nChi: %e\n", chi);
 	printf("Chi po normalizacji: %e\n\n", chiAfterNormalization);
 	printf("Norma: %e\n", norm);
 	printf("Norma po normalizacji: %e\n", normAfterNormalization);
@@ -140,6 +160,7 @@ int main()
 	free(a);
 	free(beta);
 	free(yPrim);
+	free(yPrimAfterNormalization);
 	Free2d(alfa, m);
 	Free2d(inversedAlfa, m);
 
@@ -488,4 +509,15 @@ void InverseMatrix(float **matrix, int size, float **out)
 	Free2d(inversedU, size);
 	free(identityMatrixColumn);
 	free(x);
+}
+
+void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName)
+{
+	FILE *file = fopen(fileName, "w");
+	int i;
+
+	for (i = 0; i < n; i++)
+		fprintf(file, "%f\t%f\t%f\t%f\n", x[i], y[i], yPrim[i], yPrimAfterNormalization[i]);
+
+	fclose(file);
 }
