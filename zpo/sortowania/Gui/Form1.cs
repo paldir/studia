@@ -36,12 +36,15 @@ namespace Gui
             for (int i = 0; i < kolekcja.Count; i++)
                 kolekcja[i] = los.Next(1, ilość * 2);
 
+            int maksymalnyKlucz = kolekcja.Select(k => Math.Abs(k)).Max();
+
             List<WykresStopniaPosortowaniaKolekcji> wykresy = new List<WykresStopniaPosortowaniaKolekcji>() { wykres1, wykres2, wykres3, wykres4, wykres5, wykres6 };
             List<ZadanieZWizualizacją> sortowania = new List<ZadanieZWizualizacją>();
 
             for (int i = 0; i < metodySortowania.Count; i++)
             {
-                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), ś => ś.Average(), 100, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
+                wykresy[i].MaksymalnyElement = maksymalnyKlucz;
+                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), ś => ś.Average(), 50, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
 
                 sortowania.Add(sortowanie);
             }

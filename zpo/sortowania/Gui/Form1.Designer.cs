@@ -28,55 +28,61 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.wykres1 = new Gui.WykresStopniaPosortowaniaKolekcji();
-            this.wykres2 = new Gui.WykresStopniaPosortowaniaKolekcji();
-            this.wykres3 = new Gui.WykresStopniaPosortowaniaKolekcji();
-            this.wykres4 = new Gui.WykresStopniaPosortowaniaKolekcji();
-            this.wykres5 = new Gui.WykresStopniaPosortowaniaKolekcji();
             this.wykres6 = new Gui.WykresStopniaPosortowaniaKolekcji();
+            this.wykres5 = new Gui.WykresStopniaPosortowaniaKolekcji();
+            this.wykres4 = new Gui.WykresStopniaPosortowaniaKolekcji();
+            this.wykres3 = new Gui.WykresStopniaPosortowaniaKolekcji();
+            this.wykres2 = new Gui.WykresStopniaPosortowaniaKolekcji();
+            this.wykres1 = new Gui.WykresStopniaPosortowaniaKolekcji();
             this.SuspendLayout();
-            // 
-            // wykres1
-            // 
-            this.wykres1.Location = new System.Drawing.Point(12, 12);
-            this.wykres1.Name = "wykres1";
-            this.wykres1.Size = new System.Drawing.Size(300, 300);
-            this.wykres1.TabIndex = 0;
-            // 
-            // wykres2
-            // 
-            this.wykres2.Location = new System.Drawing.Point(318, 12);
-            this.wykres2.Name = "wykres2";
-            this.wykres2.Size = new System.Drawing.Size(300, 300);
-            this.wykres2.TabIndex = 1;
-            // 
-            // wykres3
-            // 
-            this.wykres3.Location = new System.Drawing.Point(624, 12);
-            this.wykres3.Name = "wykres3";
-            this.wykres3.Size = new System.Drawing.Size(300, 300);
-            this.wykres3.TabIndex = 2;
-            // 
-            // wykres4
-            // 
-            this.wykres4.Location = new System.Drawing.Point(12, 318);
-            this.wykres4.Name = "wykres4";
-            this.wykres4.Size = new System.Drawing.Size(300, 300);
-            this.wykres4.TabIndex = 3;
-            // 
-            // wykres5
-            // 
-            this.wykres5.Location = new System.Drawing.Point(318, 318);
-            this.wykres5.Name = "wykres5";
-            this.wykres5.Size = new System.Drawing.Size(300, 300);
-            this.wykres5.TabIndex = 4;
             // 
             // wykres6
             // 
             this.wykres6.Location = new System.Drawing.Point(624, 318);
+            this.wykres6.MaksymalnyElement = 0;
             this.wykres6.Name = "wykres6";
             this.wykres6.Size = new System.Drawing.Size(300, 300);
             this.wykres6.TabIndex = 5;
+            // 
+            // wykres5
+            // 
+            this.wykres5.Location = new System.Drawing.Point(318, 318);
+            this.wykres5.MaksymalnyElement = 0;
+            this.wykres5.Name = "wykres5";
+            this.wykres5.Size = new System.Drawing.Size(300, 300);
+            this.wykres5.TabIndex = 4;
+            // 
+            // wykres4
+            // 
+            this.wykres4.Location = new System.Drawing.Point(12, 318);
+            this.wykres4.MaksymalnyElement = 0;
+            this.wykres4.Name = "wykres4";
+            this.wykres4.Size = new System.Drawing.Size(300, 300);
+            this.wykres4.TabIndex = 3;
+            // 
+            // wykres3
+            // 
+            this.wykres3.Location = new System.Drawing.Point(624, 12);
+            this.wykres3.MaksymalnyElement = 0;
+            this.wykres3.Name = "wykres3";
+            this.wykres3.Size = new System.Drawing.Size(300, 300);
+            this.wykres3.TabIndex = 2;
+            // 
+            // wykres2
+            // 
+            this.wykres2.Location = new System.Drawing.Point(318, 12);
+            this.wykres2.MaksymalnyElement = 0;
+            this.wykres2.Name = "wykres2";
+            this.wykres2.Size = new System.Drawing.Size(300, 300);
+            this.wykres2.TabIndex = 1;
+            // 
+            // wykres1
+            // 
+            this.wykres1.Location = new System.Drawing.Point(12, 12);
+            this.wykres1.MaksymalnyElement = 0;
+            this.wykres1.Name = "wykres1";
+            this.wykres1.Size = new System.Drawing.Size(300, 300);
+            this.wykres1.TabIndex = 0;
             // 
             // Form1
             // 

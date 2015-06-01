@@ -9,9 +9,9 @@ void Zeros(float *vector, int size);
 void Zeros2d(float **matrix, int size);
 void MultiplyMatrixByMatrix(float **first, int row1, int col1, float **second, int col2, float **out);
 void MultiplyMatrixByVector(float **matrix, int row, int col, float *vector, float *out);
-void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName);
+void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName, char* mode, char* title);
 void SaveMatrixToWolfram(float **matrix, int row, int col, const char *fileName);
-void SaveVectorToFile(float *vector, int size, const char *fileName);
+void SaveVectorToFile(float *vector, int size, const char *fileName, char* mode, char* title);
 float** ReadMatrixFromFile(const char* fileName, int* size);
 float* ReadVectorFromFile(const char* fileName, int* size);
 void SwapColumns(float **matrix, int size, int index1, int index2);
@@ -23,7 +23,7 @@ float MatrixNormInfinity(float **matrix, int size);
 void NormalizeMatrix(float **matrix, float *vector, int size);
 void Transpose(float **matrix, int row, int col, float **out);
 void InverseMatrix(float **matrix, int size, float **out);
-void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName);
+void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName, char* mode, char* title);
 
 void Prepare(float *x, float *y, float *sigma, int m, int n, float **alfa, float *beta)
 {
@@ -63,8 +63,8 @@ int main()
 	int n, m, i, j;
 	float chi = 0;
 	float chiAfterNormalization = 0;
-	float norm;
-	float normAfterNormalization;
+	float cond;
+	float condAfterNormalization;
 	float sig;
 	FILE *file = fopen("data.txt", "r");
 
@@ -103,7 +103,7 @@ int main()
 	GaussElimination(alfa, beta, m, a);
 	InverseMatrix(alfa, m, inversedAlfa);
 
-	norm = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
+	cond = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
 
 	for (i = 0; i < n; i++)
 	{
@@ -118,8 +118,8 @@ int main()
 	for (i = 0; i < n; i++)
 		chi += (float)pow((y[i] - yPrim[i]) / sigma[i], 2.0f);
 
-	SaveMatrixToFile(inversedAlfa, m, m, "inversedAlfa.txt");
-	SaveVectorToFile(a, m, "a.txt");
+	SaveMatrixToFile(inversedAlfa, m, m, "output.txt", "w", "Odwrocona alfa: ");
+	SaveVectorToFile(a, m, "output.txt", "a", "Wspolczynniki a: ");
 	//SaveVectorToFile(yPrim, n, "yPrim.txt");
 
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -128,7 +128,7 @@ int main()
 	GaussElimination(alfa, beta, m, a);
 	InverseMatrix(alfa, m, inversedAlfa);
 
-	normAfterNormalization = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
+	condAfterNormalization = MatrixNormInfinity(alfa, m)*MatrixNormInfinity(inversedAlfa, m);
 
 	for (i = 0; i < n; i++)
 	{
@@ -143,16 +143,21 @@ int main()
 	for (i = 0; i < n; i++)
 		chiAfterNormalization += (float)pow((y[i] - yPrimAfterNormalization[i]) / sigma[i], 2);
 
-	SaveVectorToFile(a, m, "aAfterNormalization.txt");
-	SaveData(x, y, yPrim, yPrimAfterNormalization, n, "dataPrim.txt");
+	SaveVectorToFile(a, m, "output.txt", "a", "Wspolczynniki a obliczone na podstawie znormalizowanych alfa i beta: ");
+	//SaveData(x, y, yPrim, yPrimAfterNormalization, n, "dataPrim.txt", "w");
 	//SaveVectorToFile(yPrim, n, "yPrimAfterNormalization.txt");
 
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	printf("\nChi: %e\n", chi);
-	printf("Chi po normalizacji: %e\n\n", chiAfterNormalization);
-	printf("Norma: %e\n", norm);
-	printf("Norma po normalizacji: %e\n", normAfterNormalization);
+	file = fopen("output.txt", "a");
+
+	fprintf(file, "\nChi^2: %e\n", chi);
+	fprintf(file, "Chi^2 po normalizacji: %e\n\n", chiAfterNormalization);
+	fprintf(file, "Wspolczynnik uwarunkowania: %e\n", cond);
+	fprintf(file, "Wspolczynnik uwarunkowania po normalizacji: %e\n\n", condAfterNormalization);
+	fclose(file);
+
+	SaveData(x, y, yPrim, yPrimAfterNormalization, n, "output.txt", "a", "x\t\ty\t\ty wyliczone\ty wyliczone po normalizacji");
 
 	free(x);
 	free(y);
@@ -169,31 +174,31 @@ int main()
 
 void LUDecomposition(float **A, int size, float **L, float **U)
 {
-	int i, j, k;
+	int i, j, k, p;
 
 	Zeros2d(L, size);
 	Zeros2d(U, size);
 
-	for (j = 0; j < size; j++)
+	for (k = 0; k < size; k++)
 	{
-		for (i = 0; i <= j; i++)
+		for (j = k; j < size; j++)
 		{
 			float sum = 0;
 
-			for (k = 0; k <= i - 1; k++)
-				sum += L[i][k] * U[k][j];
+			for (p = 0; p <= k - 1; p++)
+				sum += L[k][p] * U[p][j];
 
-			U[i][j] = A[i][j] - sum;
+			U[k][j] = A[k][j] - sum;
 		}
 
-		for (i = j + 1; i < size; i++)
+		for (i = k + 1; i < size; i++)
 		{
 			float sum = 0;
 
-			for (k = 0; k <= j - 1; k++)
-				sum += L[i][k] * U[k][j];
+			for (p = 0; p <= k - 1; p++)
+				sum += L[i][p] * U[p][k];
 
-			L[i][j] = (A[i][j] - sum) / U[j][j];
+			L[i][k] = (A[i][k] - sum) / U[k][k];
 		}
 	}
 
@@ -315,12 +320,13 @@ void MultiplyMatrixByVector(float **matrix, int row, int col, float *vector, flo
 	}
 }
 
-void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName)
+void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName, char* mode, char* title)
 {
-	FILE *file = fopen(fileName, "w");
+	FILE *file = fopen(fileName, mode);
 	int i, j;
 
-	fprintf(file, "%d %d\n", row, col);
+	fprintf(file, title);
+	fprintf(file, "\n");
 
 	for (i = 0; i < row; i++)
 	{
@@ -330,6 +336,8 @@ void SaveMatrixToFile(float **matrix, int row, int col, const char *fileName)
 
 		fprintf(file, "\n");
 	}
+
+	fprintf(file, "\n");
 
 	fclose(file);
 }
@@ -364,18 +372,18 @@ void SaveMatrixToWolfram(float **matrix, int row, int col, const char *fileName)
 	fclose(file);
 }
 
-void SaveVectorToFile(float *vector, int size, const char *fileName)
+void SaveVectorToFile(float *vector, int size, const char *fileName, char* mode, char* title)
 {
-	FILE *file = fopen(fileName, "w");
+	FILE *file = fopen(fileName, mode);
 	int i;
 
-	//fopen_s(&file, fileName, "w");
-	fprintf(file, "%d\n", size);
+	fprintf(file, title);
+	fprintf(file, "\n");
 
 	for (i = 0; i < size; i++)
 		fprintf(file, "%f\t", vector[i]);
 
-	fprintf(file, "\n");
+	fprintf(file, "\n\n");
 
 	fclose(file);
 }
@@ -511,13 +519,18 @@ void InverseMatrix(float **matrix, int size, float **out)
 	free(x);
 }
 
-void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName)
+void SaveData(float *x, float *y, float *yPrim, float *yPrimAfterNormalization, int n, char* fileName, char* mode, char* title)
 {
-	FILE *file = fopen(fileName, "w");
+	FILE *file = fopen(fileName, mode);
 	int i;
+
+	fprintf(file, title);
+	fprintf(file, "\n");
 
 	for (i = 0; i < n; i++)
 		fprintf(file, "%f\t%f\t%f\t%f\n", x[i], y[i], yPrim[i], yPrimAfterNormalization[i]);
+
+	fprintf(file, "\n");
 
 	fclose(file);
 }

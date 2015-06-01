@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace sortowania
 {
-    public delegate void PrześlijDaneDoWizualizacji(List<int> dane);
+    public delegate void PrzesłanieDanychDoWizualizacji(IList<int> dane, IList<float> stopniePosortowania);
 
     public class SortowanieZWizualizacją<T> : ZadanieZWizualizacją where T : IComparable, IComparable<T>
     {
@@ -20,10 +20,10 @@ namespace sortowania
         Func<IList<T>, double> _metodaŚredniej;
         IMetodaSortowania<T> _metodaSortowania;
         AktualizacjaWizualizacji _aktualizacjaWizualizacji;
-        PrześlijDaneDoWizualizacji _przesłanieDanychDoWizualizacji;
+        PrzesłanieDanychDoWizualizacji _przesłanieDanychDoWizualizacji;
         object _object;
 
-        public SortowanieZWizualizacją(IMetodaSortowania<T> metodaSortująca, IList<T> kolekcja, Func<T, int> metodaKlucza, Func<IList<T>, double> metodaŚredniej, int liczbaGrupWizualizacji, AktualizacjaWizualizacji aktualizacjaWizualizacji, PrześlijDaneDoWizualizacji przesłanieDanychDoWizualizacji)
+        public SortowanieZWizualizacją(IMetodaSortowania<T> metodaSortująca, IList<T> kolekcja, Func<T, int> metodaKlucza, Func<IList<T>, double> metodaŚredniej, int liczbaGrupWizualizacji, AktualizacjaWizualizacji aktualizacjaWizualizacji, PrzesłanieDanychDoWizualizacji przesłanieDanychDoWizualizacji)
         {
             _wątekSortowania = new Thread(Sortuj);
             _kolekcja = new List<T>(kolekcja);
@@ -74,11 +74,23 @@ namespace sortowania
         public void AktualizujWizualizację()
         {
             List<int> listaKluczy = new List<int>();
+            List<float> stopniePosortowania = new List<float>();
 
             for (int i = 0; i < _liczbagrup; i++)
-                listaKluczy.Add(_metodaKlucza((T)Convert.ChangeType(_metodaŚredniej(_kolekcja.GetRange(i * _liczbaElementówWKażdejGrupie, _liczbaElementówWKażdejGrupie)), typeof(T))));
+            {
+                throw new Exception("To zabija wydajność!");
+                List<T> podTablica = _kolekcja.GetRange(i * _liczbaElementówWKażdejGrupie, _liczbaElementówWKażdejGrupie);
+                int liczbaPosortowanychPar = 0;
 
-            _przesłanieDanychDoWizualizacji(listaKluczy);
+                for (int j = 0; j < podTablica.Count - 1; j++)
+                    if (podTablica[j].CompareTo(podTablica[j + 1]) <= 0)
+                        liczbaPosortowanychPar++;
+
+                listaKluczy.Add(_metodaKlucza((T)Convert.ChangeType(_metodaŚredniej(podTablica), typeof(T))));
+                stopniePosortowania.Add(liczbaPosortowanychPar / Convert.ToSingle(_liczbaElementówWKażdejGrupie) * 100);
+            }
+
+            _przesłanieDanychDoWizualizacji(listaKluczy, stopniePosortowania);
             _aktualizacjaWizualizacji();
         }
     }
