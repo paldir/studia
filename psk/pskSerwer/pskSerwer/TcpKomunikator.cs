@@ -22,13 +22,13 @@ namespace psk
 
         public override bool PiszLinię(string linia)
         {
+            if (!linia.EndsWith(Environment.NewLine))
+                linia += Environment.NewLine;
+
+            byte[] liniaBajtowa = Encoding.UTF8.GetBytes(linia);
+
             try
             {
-                if (!linia.EndsWith(Environment.NewLine))
-                    linia += Environment.NewLine;
-
-                byte[] liniaBajtowa = Encoding.UTF8.GetBytes(linia);
-
                 _strumieńSieciowy.Write(liniaBajtowa, 0, liniaBajtowa.Length);
 
                 return true;

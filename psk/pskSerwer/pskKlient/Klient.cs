@@ -11,7 +11,8 @@ namespace psk
         static Dictionary<string, Komunikator> komunikatory = new Dictionary<string, Komunikator>()
         {
             {"pliki", new PlikiKom()},
-            {"tcp", new TcpKom()}
+            {"tcp", new TcpKom()},
+            {"udp", new UdpKom()}
         };
 
         static Komunikator aktywnyKomunikator;

@@ -14,12 +14,12 @@ namespace psk
     {
         UdpClient _serwer;
         Thread _wątek;
-        System.Net.IPEndPoint _adresKlienta;
+        IPEndPoint _adresKlienta;
 
         public UdpKomunikator()
         {
             _serwer = new UdpClient(Pomocnicze.Udp.Ip, Pomocnicze.Udp.Port);
-            _adresKlienta = new System.Net.IPEndPoint(IPAddress.Any, 0);
+            _adresKlienta = new IPEndPoint(IPAddress.Any, 0);
         }
 
         public void Start(DelegatKomendy obsłużKomendę)
@@ -29,19 +29,7 @@ namespace psk
             while (true)
             {
                 if (_serwer.Available != 0)
-                {
-                    StringBuilder budowniczyLinii = new StringBuilder();
-                    string fragmentLinii = String.Empty;
-
-                    while (!fragmentLinii.EndsWith(Environment.NewLine))
-                    {
-                        fragmentLinii = CzytajLinię();
-
-                        budowniczyLinii.Append(fragmentLinii);
-                    }
-
-                    PiszLinię(obsłużKomendę(budowniczyLinii.ToString()));
-                }
+                    PiszLinię(obsłużKomendę(CzytajLinię()));
                 else
                     Thread.Sleep(Pomocnicze.CzasSpania);
             }
@@ -67,7 +55,17 @@ namespace psk
 
         public override string CzytajLinię()
         {
-            return Encoding.UTF8.GetString(_serwer.Receive(ref _adresKlienta));
+            StringBuilder budowniczyLinii = new StringBuilder();
+            string fragmentLinii = String.Empty;
+
+            while (!fragmentLinii.EndsWith(Environment.NewLine))
+            {
+                fragmentLinii = Encoding.UTF8.GetString(_serwer.Receive(ref _adresKlienta));
+
+                budowniczyLinii.Append(fragmentLinii);
+            }
+
+            return budowniczyLinii.ToString();
         }
 
         public override void Dispose()

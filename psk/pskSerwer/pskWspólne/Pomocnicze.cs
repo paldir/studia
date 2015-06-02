@@ -19,7 +19,7 @@ namespace psk
 
         public static class Tcp
         {
-            public static readonly IPAddress AdresIp = Dns.GetHostEntry("localhost").AddressList[0];
+            public const string AdresIp = "localhost";
             public const int Port = 14400;
             public const int RozmiarBufora = 256;
             public const string KomendaZakończeniaPołączenia = "---<! END CONNECTION >!---";

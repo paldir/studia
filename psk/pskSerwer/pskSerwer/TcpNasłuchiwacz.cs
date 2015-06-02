@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Threading;
+using System.Net.Sockets;
 
 namespace psk
 {
@@ -15,7 +16,7 @@ namespace psk
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
             _wątek = Thread.CurrentThread;
-            System.Net.Sockets.TcpListener nasłuchiwacz = new System.Net.Sockets.TcpListener(Pomocnicze.Tcp.AdresIp, Pomocnicze.Tcp.Port);
+            TcpListener nasłuchiwacz = new TcpListener(System.Net.Dns.GetHostEntry(Pomocnicze.Tcp.AdresIp).AddressList[0], Pomocnicze.Tcp.Port);
 
             nasłuchiwacz.Start();
 
