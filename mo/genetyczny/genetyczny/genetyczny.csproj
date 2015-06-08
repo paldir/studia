@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KawałekRuletki.cs" />
+    <Compile Include="Osobnik.cs" />
     <Compile Include="PołożenieGeograficzne.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

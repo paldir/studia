@@ -11,10 +11,11 @@ namespace psk
     public static class Pomocnicze
     {
         public const int CzasSpania = 1000;
+        public const string Pulpit = @"C:\Users\Zawadzcy\Desktop";
 
         public static class Pliki
         {
-            public const string Katalog = @"C:\Users\pk\Desktop\tmp";
+            public static readonly string Katalog = System.IO.Path.Combine(Pulpit, "tmp");
         }
 
         public static class Tcp

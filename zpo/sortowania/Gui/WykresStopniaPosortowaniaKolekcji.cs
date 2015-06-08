@@ -16,6 +16,11 @@ namespace Gui
         IList<float> _stopniePosortowania;
 
         public int MaksymalnyElement { get; set; }
+        public string TytułWykresu
+        {
+            get { return tytuł.Text; }
+            set { tytuł.Text = value; }
+        }
 
         public WykresStopniaPosortowaniaKolekcji()
         {
@@ -40,9 +45,20 @@ namespace Gui
             using (Pen krawędzie = new Pen(Color.Black))
                 for (int i = 0; i < liczbaElementów; i++)
                 {
-                    float stopień = _stopniePosortowania[i] * 510;
-                    int zielony = Convert.ToInt32(stopień % 255);
-                    int czerwony = 255 - zielony;
+                    double stopień = _stopniePosortowania[i];
+                    int czerwony, zielony;
+                    int tmp = Convert.ToInt32(Math.Round(stopień * 255));
+
+                    if (stopień <= 0.5)
+                    {
+                        czerwony = 255;
+                        zielony = tmp;
+                    }
+                    else
+                    {
+                        zielony = 255;
+                        czerwony = 255 - tmp;
+                    }
 
                     using (Brush wypełnienie = new SolidBrush(Color.FromArgb(czerwony, zielony, 0)))
                     {

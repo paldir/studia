@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatKlient.cs" />
+    <Compile Include="FtpKlient.cs" />
     <Compile Include="PlikiKom.cs" />
     <Compile Include="PingPongKlient.cs" />
     <Compile Include="Klient.cs" />

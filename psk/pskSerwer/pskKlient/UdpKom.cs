@@ -45,8 +45,9 @@ namespace psk
             StringBuilder budowniczyLinii = new StringBuilder();
 
             while (!linia.EndsWith(Environment.NewLine))
-            {
-                if (_klient.Available != 0)
+                if (_klient.Available == 0)
+                    System.Threading.Thread.Sleep(Pomocnicze.CzasSpania);
+                else
                 {
                     IPEndPoint serwer = new IPEndPoint(IPAddress.Any, 0);
 
@@ -58,9 +59,6 @@ namespace psk
 
                     budowniczyLinii.Append(linia);
                 }
-                else
-                    System.Threading.Thread.Sleep(Pomocnicze.CzasSpania);
-            }
 
             return budowniczyLinii.ToString();
         }

@@ -30,11 +30,18 @@ namespace sortowania
             while (praca)
             {
                 praca = false;
-                
-                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
-                    praca = praca | zadanie.Wznów();
+                List<ZadanieZWizualizacją> zadaniaDoUsunięcia = new List<ZadanieZWizualizacją>();
 
-                Thread.Sleep(1000);
+                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                    if (zadanie.Wznów())
+                        praca = true;
+                    else
+                        zadaniaDoUsunięcia.Add(zadanie);
+
+                foreach (ZadanieZWizualizacją zadanie in zadaniaDoUsunięcia)
+                    _zadaniaZWizualizacją.Remove(zadanie);
+
+                Thread.Sleep(100);
 
                 foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
                     zadanie.Zawieś();

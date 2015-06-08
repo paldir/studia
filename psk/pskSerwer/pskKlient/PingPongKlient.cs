@@ -10,11 +10,12 @@ namespace psk
     {
         public override Komunikator Komunikator { get; set; }
 
-        public override string PytanieOdpowiedź(string question)
+        public override string PytanieOdpowiedź(string pytanie)
         {
-            Komunikator.PiszLinię(question);
-
-            return Komunikator.CzytajLinię();
+            if (Komunikator.PiszLinię(pytanie))
+                return Komunikator.CzytajLinię();
+            else
+                return "Błąd.";
         }
     }
 }

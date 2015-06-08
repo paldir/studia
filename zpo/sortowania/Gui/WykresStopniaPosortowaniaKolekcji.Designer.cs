@@ -28,20 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.tytuł = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // tytuł
+            // 
+            this.tytuł.AutoSize = true;
+            this.tytuł.Location = new System.Drawing.Point(3, 0);
+            this.tytuł.Name = "tytuł";
+            this.tytuł.Size = new System.Drawing.Size(74, 13);
+            this.tytuł.TabIndex = 0;
+            this.tytuł.Text = "Tytuł wykresu";
             // 
             // WykresStopniaPosortowaniaKolekcji
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tytuł);
             this.DoubleBuffered = true;
             this.Name = "WykresStopniaPosortowaniaKolekcji";
             this.Size = new System.Drawing.Size(300, 300);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Label tytuł;
+
 
 
     }

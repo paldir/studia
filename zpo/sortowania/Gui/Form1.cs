@@ -26,6 +26,16 @@ namespace Gui
             new PrzezWybór<int>()
         };
 
+        static readonly List<string> nazwySortowań = new List<string>()
+        {
+            "Bąbelkowe",
+            "Przez zliczanie",
+            "Przez kopcowanie",
+            "Przez łączenie",
+            "Szybkie",
+            "Przez wybór"
+        };
+
         public Form1()
         {
             InitializeComponent();
@@ -44,7 +54,8 @@ namespace Gui
             for (int i = 0; i < metodySortowania.Count; i++)
             {
                 wykresy[i].MaksymalnyElement = maksymalnyKlucz;
-                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), ś => ś.Average(), 50, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
+                wykresy[i].TytułWykresu = nazwySortowań[i];
+                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), Średnia, 50, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
 
                 sortowania.Add(sortowanie);
             }
@@ -52,6 +63,16 @@ namespace Gui
             Porównywarka porównywarka = new Porównywarka(sortowania);
 
             new System.Threading.Thread(porównywarka.Porównaj).Start();
+        }
+
+        static double Średnia(IList<int> kolekcja, int początek, int koniec)
+        {
+            double suma = 0;
+
+            for (int i = początek; i < koniec; i++)
+                suma += kolekcja[i];
+
+            return suma / (koniec - początek);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace psk
         static Dictionary<string, IUsługa> _usługi = new Dictionary<string, IUsługa>()
         {
             {"ping", new PingPong()},
-            {"chat", new Chat()}
+            {"chat", new Chat()},
+            {"ftp", new Ftp()}
         };
 
         static List<IKomunikator> _komunikatory = new List<IKomunikator>();

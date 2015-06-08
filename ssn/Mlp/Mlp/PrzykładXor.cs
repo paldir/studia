@@ -8,45 +8,14 @@ namespace Mlp
 {
     struct PrzykładXor
     {
-        int _x1;
-        public int X1
-        {
-            get
-            {
-                return _x1;
-            }
-
-            set
-            {
-                if (value == -1 || value == 1)
-                    _x1 = value;
-                else
-                    throw new Exception("Dozwolone wartości to -1 i 1.");
-            }
-        }
-
-        int _x2;
-        public int X2
-        {
-            get
-            {
-                return _x2;
-            }
-
-            set
-            {
-                if (value == -1 || value == 1)
-                    _x2 = value;
-                else
-                    throw new Exception("Dozwolone wartości to -1 i 1.");
-            }
-        }
+        public int X1 { get; set; }
+        public int X2 { get; set; }
 
         public int Wynik
         {
             get
             {
-                return X1 == X2 ? -1 : 1;
+                return X1 == X2 ? 0 : 1;
             }
         }
 

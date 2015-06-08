@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
+    <Compile Include="Ftp.cs" />
     <Compile Include="Pomocnicze.cs" />
     <Compile Include="Komunikator.cs" />
     <Compile Include="IUsługa.cs" />

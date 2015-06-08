@@ -12,6 +12,12 @@ namespace psk
     {
         bool _stop = false;
 
+        public PlikiNasłuchiwacz()
+        {
+            if (!Directory.Exists(Pomocnicze.Pliki.Katalog))
+                Directory.CreateDirectory(Pomocnicze.Pliki.Katalog);
+        }
+
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
             while (!_stop)

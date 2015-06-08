@@ -18,7 +18,7 @@ namespace psk
 
         public UdpKomunikator()
         {
-            _serwer = new UdpClient(Pomocnicze.Udp.Ip, Pomocnicze.Udp.Port);
+            _serwer = new UdpClient(Pomocnicze.Udp.Port);
             _adresKlienta = new IPEndPoint(IPAddress.Any, 0);
         }
 
@@ -28,10 +28,10 @@ namespace psk
 
             while (true)
             {
-                if (_serwer.Available != 0)
-                    PiszLinię(obsłużKomendę(CzytajLinię()));
-                else
+                if (_serwer.Available == 0)
                     Thread.Sleep(Pomocnicze.CzasSpania);
+                else
+                    PiszLinię(obsłużKomendę(CzytajLinię()));
             }
         }
 
