@@ -10,24 +10,27 @@ namespace psk
 {
     class Serwer
     {
-        static Dictionary<string, IUsługa> _usługi = new Dictionary<string, IUsługa>()
+        static Dictionary<string, IUsługa> _usługi;
+
+        static List<IKomunikator> _komunikatory = new List<IKomunikator>();
+        static List<INasłuchiwacz> _nasłuchiwacze;
+
+        static void Main(string[] args)
+        {
+            _usługi = new Dictionary<string, IUsługa>()
         {
             {"ping", new PingPong()},
             {"chat", new Chat()},
             {"ftp", new Ftp()}
         };
 
-        static List<IKomunikator> _komunikatory = new List<IKomunikator>();
-
-        static List<INasłuchiwacz> _nasłuchiwacze = new List<INasłuchiwacz>()
+            _nasłuchiwacze = new List<INasłuchiwacz>()
         {
             new PlikiNasłuchiwacz(),
             new TcpNasłuchiwacz(),
             new UdpNasłuchiwacz()
         };
-
-        static void Main(string[] args)
-        {
+            
             foreach (INasłuchiwacz nasłuchiwacz in _nasłuchiwacze)
             {
                 System.Threading.Thread wątek = new System.Threading.Thread(() => nasłuchiwacz.Start(DodajKomunikator, UsuńKomunikator));

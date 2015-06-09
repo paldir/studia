@@ -12,7 +12,7 @@ namespace psk
     {
         readonly string katalog = Path.Combine(Pomocnicze.Pulpit, "ftp");
 
-        public enum Tryb { Up, Down };
+        public enum Tryb { Up, Down, Del };
 
         public Ftp()
         {
@@ -47,19 +47,18 @@ namespace psk
                     }
 
                 case Tryb.Down:
-                    using (FileStream strumień = new FileStream(ścieżkaDoPliku, FileMode.Open))
-                    {
-                        plikBajtowo = new byte[strumień.Length];
-
-                        strumień.Read(plikBajtowo, 0, plikBajtowo.Length);
-
-                        plikWBase64 = Convert.ToBase64String(plikBajtowo);
-                    }
+                    plikBajtowo = File.ReadAllBytes(ścieżkaDoPliku);
+                    plikWBase64 = Convert.ToBase64String(plikBajtowo);
 
                     return plikWBase64;
+
+                case Tryb.Del:
+                    File.Delete(ścieżkaDoPliku);
+
+                    return "Plik usunięty.";
             }
 
-            return "Błąd.";
+            return "Nieobsługiwana opcja.";
         }
     }
 }

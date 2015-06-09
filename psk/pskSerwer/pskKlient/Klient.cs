@@ -29,7 +29,7 @@ namespace psk
             };
 
             string linia = null;
-            _aktywnyKomunikator = _komunikatory.First().Value;
+            _aktywnyKomunikator = _komunikatory["tcp"];
             WypiszNazwęAktywnegoKomunikatora();
             Console.Write("> ");
 
@@ -51,7 +51,7 @@ namespace psk
                     else
                     {
                         string[] polecenie = linia.Split(' ');
-                        PoKlient _klient = _klienci.Single(k => k.Key.StartsWith(polecenie[0])).Value;
+                        PoKlient _klient = _klienci[polecenie[0]];
                         _klient.Komunikator = _aktywnyKomunikator;
 
                         Console.WriteLine(_klient.PytanieOdpowiedź(linia));

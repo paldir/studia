@@ -21,7 +21,6 @@ namespace psk
 
         public override bool PiszLinię(string linia)
         {
-
             if (!linia.EndsWith(Environment.NewLine))
                 linia += Environment.NewLine;
 

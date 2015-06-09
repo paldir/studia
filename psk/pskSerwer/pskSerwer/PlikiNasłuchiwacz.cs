@@ -10,7 +10,9 @@ namespace psk
 {
     class PlikiNasłuchiwacz : INasłuchiwacz
     {
-        bool _stop = false;
+        FileSystemWatcher _obserwator;
+        DelegatKomunikatora _połączenie;
+        DelegatKomunikatora _rozłączenie;
 
         public PlikiNasłuchiwacz()
         {
@@ -20,26 +22,24 @@ namespace psk
 
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
-            while (!_stop)
-            {
-                string[] pliki = Directory.GetFiles(Pomocnicze.Pliki.Katalog, "*.in");
+            _obserwator = new FileSystemWatcher(Pomocnicze.Pliki.Katalog, "*.in");
+            _obserwator.Created += _obserwator_Created;
+            _obserwator.EnableRaisingEvents = true;
+            _połączenie = połączenie;
+            _rozłączenie = rozłączenie;
+        }
 
-                if (pliki.Any())
-                    foreach (string plik in pliki)
-                    {
-                        PlikiKomunikator plikiKomunikator = new PlikiKomunikator(plik);
+        void _obserwator_Created(object sender, FileSystemEventArgs e)
+        {
+            PlikiKomunikator plikiKomunikator = new PlikiKomunikator(e.FullPath);
 
-                        połączenie(plikiKomunikator);
-                        rozłączenie(plikiKomunikator);
-                    }
-                else
-                    System.Threading.Thread.Sleep(Pomocnicze.CzasSpania);
-            }
+            _połączenie(plikiKomunikator);
+            _rozłączenie(plikiKomunikator);
         }
 
         public void Stop()
         {
-            _stop = true;
+            _obserwator.Dispose();
         }
     }
 }

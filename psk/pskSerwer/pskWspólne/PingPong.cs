@@ -10,13 +10,6 @@ namespace psk
     {
         static Random _los = new Random();
 
-        /*public static string Ping(int rozmiarPolecenia, int rozmiarOdpowiedzi)
-        {
-            string x = String.Format("ping {0} ", rozmiarOdpowiedzi);
-
-            return x + Śmieci(rozmiarPolecenia);
-        }*/
-
         public string OdpowiedzNaKomendę(string polecenie)
         {
             string[] ss = polecenie.Split(' ');

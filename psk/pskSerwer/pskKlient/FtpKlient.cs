@@ -33,7 +33,13 @@ namespace psk
             switch (tryb)
             {
                 case Ftp.Tryb.Down:
-                    
+                    string ścieżkaDoPliku = komenda[3];
+                    byte[] plikBajtowo = Convert.FromBase64String(odpowiedź);
+
+                    using (FileStream strumień = new FileStream(ścieżkaDoPliku, FileMode.Create))
+                        strumień.Write(plikBajtowo, 0, plikBajtowo.Length);
+
+                    odpowiedź = "Plik zapisany.\n";
 
                     break;
             }

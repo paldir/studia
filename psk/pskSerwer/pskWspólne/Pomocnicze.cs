@@ -11,7 +11,7 @@ namespace psk
     public static class Pomocnicze
     {
         public const int CzasSpania = 1000;
-        public const string Pulpit = @"C:\Users\Zawadzcy\Desktop";
+        public const string Pulpit = @"C:\Users\pk\Desktop";
 
         public static class Pliki
         {
