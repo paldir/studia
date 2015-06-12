@@ -43,31 +43,113 @@ int main()
 	typedef float (*funkcja)(float, float);
 	funkcja f=f_1;
 	funkcja y=y_1;
+	char* format="%f\t%e\t%e\t%e\n";
+	char* naglowki="t\t\ty\t\tyDokladne\tblad\n";
+	FILE *plikH=fopen("h.txt", "w");
+	int zapisY=0;
 
-	for(h=0.1f; h>=0.0001; h/=10)
+	fprintf(plikH, "h\t\tEuler\t\tRK2\t\tRK4\n");
+
+	for(h=0.1f; h>=1e-7; h/=10)
 	{
 		FILE *plik;
-		float yDokladne=y(t0, y0);
-		float yPoprzednie=y0;
+		float bladMax=0;
+		float yNast=y0;
 
-		sprintf(nazwaPliku, "wyniki%f.txt", h);
-
-		plik=fopen(nazwaPliku, "w");
-
-		fprintf(plik, "%f\t%f\t%f\t%f\n", t0, y0, yDokladne, y0-yDokladne);
-
-		for(t=t0+h; t<=tMax; t+=h)
+		if(zapisY)
 		{
-			float noweY=yPoprzednie+h*f(t, yPoprzednie);
-			yDokladne=y(t, y0);
+				sprintf(nazwaPliku, "Euler_%f.txt", h);
 
-			fprintf(plik, "%f\t%f\t%f\t%f\n", t, noweY, yDokladne, noweY-yDokladne);
+				plik=fopen(nazwaPliku, "w");
 
-			yPoprzednie=noweY;
+				fprintf(plik, naglowki);
 		}
 
-		fclose(plik);
+		for(t=t0; t<=tMax; t+=h)
+		{
+			float yDokladne=y(t, y0);
+			float blad=fabsf(yNast-yDokladne);
+
+			if(blad>bladMax)
+				bladMax=blad;
+			
+			if(zapisY)
+				fprintf(plik, format, t, yNast, yDokladne, blad);
+
+			yNast=yNast+h*f(t, yNast);
+		}
+
+		fprintf(plikH, "%f\t%e\t", h, bladMax);
+
+		bladMax=0;
+		yNast=y0;
+
+		if(zapisY)
+		{
+			fclose(plik);
+			sprintf(nazwaPliku, "RK2_%f.txt", h);
+
+			plik=fopen(nazwaPliku, "w");
+
+			fprintf(plik, naglowki);
+		}
+
+		for(t=t0; t<=tMax; t+=h)
+		{
+			float k1=f(t, yNast)*h;
+			float k2=f(t+h, yNast+k1)*h;
+			float yDokladne=y(t, y0);
+			float blad=fabsf(yNast-yDokladne);
+
+			if(blad>bladMax)
+				bladMax=blad;
+
+			if(zapisY)
+				fprintf(plik, format, t, yNast, yDokladne, blad);
+
+			yNast=yNast+0.5f*(k1+k2);
+		}
+
+		fprintf(plikH, "%e\t", bladMax);
+
+		bladMax=0;
+		yNast=y0;
+
+		if(zapisY)
+		{
+			fclose(plik);	
+			sprintf(nazwaPliku, "RK4_%f.txt", h);
+
+				plik=fopen(nazwaPliku, "w");
+
+				fprintf(plik, naglowki);
+		}
+
+		for(t=t0; t<=tMax; t+=h)
+		{
+			float k1=f(t, yNast)*h;
+			float k2=f(t+h/2, yNast+k1/2)*h;
+			float k3=f(t+h/2, yNast+k2/2)*h;
+			float k4=f(t+h, yNast+k3)*h;
+			float yDokladne=y(t, y0);
+			float blad=fabsf(yNast-yDokladne);
+
+			if(blad>bladMax)
+				bladMax=blad;
+
+			if(zapisY)
+				fprintf(plik, format, t, yNast, yDokladne, blad);
+
+			yNast=yNast+1.0f/6*(k1+2*k2+2*k3+k4);
+		}
+
+		if(zapisY)
+			fclose(plik);
+
+		fprintf(plikH, "%e\t\n", bladMax);
 	}
+
+	fclose(plikH);
 	
 	return 0;
 }
