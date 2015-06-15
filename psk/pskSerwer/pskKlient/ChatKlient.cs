@@ -15,7 +15,7 @@ namespace psk
             if (Komunikator.PiszLinię(pytanie))
                 return Komunikator.CzytajLinię();
             else
-                return "Błąd.";
+                return Pomocnicze.KomunikatyBłędów.Pytanie;
         }
     }
 }

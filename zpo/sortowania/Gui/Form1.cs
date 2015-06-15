@@ -12,9 +12,16 @@ using sortowania;
 
 namespace Gui
 {
+    public enum PoczątkowaKolekcja
+    {
+        Losowa,
+        OdwrotniePosortowana,
+        WstępniePosortowana
+    }
+    
     public partial class Form1 : Form
     {
-        const int ilość = (int)1e7;
+        Porównywarka _porównywarka;
 
         static readonly List<IMetodaSortowania<int>> metodySortowania = new List<IMetodaSortowania<int>>()
         {
@@ -36,15 +43,40 @@ namespace Gui
             "Przez wybór"
         };
 
+        public static int Ilość { get; set; }
+        public static int LiczbaGrup { get; set; }
+        public static PoczątkowaKolekcja PoczątkowaKolekcja { get; set; }
+
         public Form1()
         {
             InitializeComponent();
 
-            IList<int> kolekcja = new int[ilość];
+            IList<int> kolekcja = new int[Ilość];
             Random los = new Random();
 
-            for (int i = 0; i < kolekcja.Count; i++)
-                kolekcja[i] = los.Next(1, ilość * 2);
+            switch (PoczątkowaKolekcja)
+            {
+                case Gui.PoczątkowaKolekcja.Losowa:
+                    for (int i = 0; i < Ilość; i++)
+                        kolekcja[i] = los.Next(1, Ilość);
+
+                    break;
+
+                case Gui.PoczątkowaKolekcja.OdwrotniePosortowana:
+                    for (int i = 0; i < Ilość; i++)
+                        kolekcja[i] = Ilość - i;
+
+                    break;
+
+                case Gui.PoczątkowaKolekcja.WstępniePosortowana:
+                    for (int i = 0; i < Ilość; i++)
+                        if (i % 3 == 0)
+                            kolekcja[i] = los.Next(1, Ilość);
+                        else
+                            kolekcja[i] = i;
+
+                    break;
+            }
 
             int maksymalnyKlucz = kolekcja.Select(k => Math.Abs(k)).Max();
 
@@ -53,16 +85,20 @@ namespace Gui
 
             for (int i = 0; i < metodySortowania.Count; i++)
             {
-                wykresy[i].MaksymalnyElement = maksymalnyKlucz;
-                wykresy[i].TytułWykresu = nazwySortowań[i];
-                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), Średnia, 50, wykresy[i].PrzedstawKolekcjęNaWykresie, wykresy[i].AktualizujDaneDoWykresu);
+                WykresStopniaPosortowaniaKolekcji wykres = wykresy[i];
+                wykres.MaksymalnyElement = maksymalnyKlucz;
+                wykres.TytułWykresu = nazwySortowań[i];
+                DaneDoWykresu dane = new DaneDoWykresu(LiczbaGrup);
+                wykres.Dane = dane;
+                SortowanieZWizualizacją<int> sortowanie = new SortowanieZWizualizacją<int>(metodySortowania[i], kolekcja, k => Math.Abs(k), Średnia, dane, wykres.PrzedstawKolekcjęNaWykresie);
 
                 sortowania.Add(sortowanie);
             }
 
-            Porównywarka porównywarka = new Porównywarka(sortowania);
+            _porównywarka = new Porównywarka(sortowania);
 
-            new System.Threading.Thread(porównywarka.Porównaj).Start();
+            szybkość_Scroll(null, null);
+            new System.Threading.Thread(_porównywarka.Porównaj).Start();
         }
 
         static double Średnia(IList<int> kolekcja, int początek, int koniec)
@@ -73,6 +109,11 @@ namespace Gui
                 suma += kolekcja[i];
 
             return suma / (koniec - początek);
+        }
+
+        private void szybkość_Scroll(object sender, EventArgs e)
+        {
+            _porównywarka.OdstępPomiędzyWizualizacją = szybkość.Value;
         }
     }
 }

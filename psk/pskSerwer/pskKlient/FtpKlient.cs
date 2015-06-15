@@ -26,25 +26,28 @@ namespace psk
                     break;
             }
 
-            Komunikator.PiszLinię(pytanie);
-
-            string odpowiedź = Komunikator.CzytajLinię();
-
-            switch (tryb)
+            if (Komunikator.PiszLinię(pytanie))
             {
-                case Ftp.Tryb.Down:
-                    string ścieżkaDoPliku = komenda[3];
-                    byte[] plikBajtowo = Convert.FromBase64String(odpowiedź);
+                string odpowiedź = Komunikator.CzytajLinię();
 
-                    using (FileStream strumień = new FileStream(ścieżkaDoPliku, FileMode.Create))
-                        strumień.Write(plikBajtowo, 0, plikBajtowo.Length);
+                switch (tryb)
+                {
+                    case Ftp.Tryb.Down:
+                        string ścieżkaDoPliku = komenda[3];
+                        byte[] plikBajtowo = Convert.FromBase64String(odpowiedź);
 
-                    odpowiedź = "Plik zapisany.\n";
+                        using (FileStream strumień = new FileStream(ścieżkaDoPliku, FileMode.Create))
+                            strumień.Write(plikBajtowo, 0, plikBajtowo.Length);
 
-                    break;
+                        odpowiedź = "Plik zapisany.\n";
+
+                        break;
+                }
+
+                return odpowiedź;
             }
-
-            return odpowiedź;
+            else
+                return Pomocnicze.KomunikatyBłędów.Pytanie;
         }
     }
 }

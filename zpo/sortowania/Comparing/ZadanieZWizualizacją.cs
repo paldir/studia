@@ -12,7 +12,7 @@ namespace sortowania
     {
         void AktualizujWizualizację();
         void Uruchom();
-        void Zawieś();
-        bool Wznów();
+        bool Zawieś();
+        void Wznów();
     }
 }

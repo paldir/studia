@@ -11,9 +11,9 @@ namespace psk
     class Serwer
     {
         static Dictionary<string, IUsługa> _usługi;
-
         static List<IKomunikator> _komunikatory = new List<IKomunikator>();
         static List<INasłuchiwacz> _nasłuchiwacze;
+        static object _locker = new object();
 
         static void Main(string[] args)
         {
@@ -26,11 +26,12 @@ namespace psk
 
             _nasłuchiwacze = new List<INasłuchiwacz>()
         {
-            new PlikiNasłuchiwacz(),
-            new TcpNasłuchiwacz(),
-            new UdpNasłuchiwacz()
+            new PlikiNasłuchiwacz(Pomocnicze.Pliki.Katalog),
+            new TcpNasłuchiwacz(Pomocnicze.Tcp.Port),
+            new UdpNasłuchiwacz(Pomocnicze.Udp.Port),
+            new NetRemotingNasłuchiwacz(Pomocnicze.NetRemoting.Port)
         };
-            
+
             foreach (INasłuchiwacz nasłuchiwacz in _nasłuchiwacze)
             {
                 System.Threading.Thread wątek = new System.Threading.Thread(() => nasłuchiwacz.Start(DodajKomunikator, UsuńKomunikator));
@@ -47,14 +48,18 @@ namespace psk
 
         static void DodajKomunikator(IKomunikator komunikator)
         {
-            _komunikatory.Add(komunikator);
+            lock (_locker)
+                _komunikatory.Add(komunikator);
+
             komunikator.Start(AnalizujKomendę);
         }
 
         static void UsuńKomunikator(IKomunikator komunikator)
         {
             komunikator.Stop();
-            _komunikatory.Remove(komunikator);
+
+            lock (_locker)
+                _komunikatory.Remove(komunikator);
         }
 
         static string AnalizujKomendę(string komenda)

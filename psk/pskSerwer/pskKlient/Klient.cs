@@ -16,9 +16,10 @@ namespace psk
         {
             _komunikatory = new Dictionary<string, Komunikator>()  
             {
-                {"pliki", new PlikiKom()},
-                {"tcp", new TcpKom()},
-                {"udp", new UdpKom()}
+                {"pliki", new PlikiKom(Pomocnicze.Pliki.Katalog)},
+                {"tcp", new TcpKom(Pomocnicze.Tcp.AdresIp,Pomocnicze.Tcp.Port)},
+                {"udp", new UdpKom(Pomocnicze.Udp.Ip, Pomocnicze.Udp.Port)},
+                {"net", new NetRemotingKom(String.Format("http://{0}:{1}/{2}", Pomocnicze.NetRemoting.Ip, Pomocnicze.NetRemoting.Port, Pomocnicze.NetRemoting.NazwaUsługi))}
             };
 
             _klienci = new Dictionary<string, PoKlient>()

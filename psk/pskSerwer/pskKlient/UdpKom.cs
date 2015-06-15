@@ -13,11 +13,11 @@ namespace psk
     {
         UdpClient _klient;
 
-        public UdpKom()
+        public UdpKom(string ip, int port)
         {
             _klient = new UdpClient();
 
-            _klient.Connect(Pomocnicze.Udp.Ip, Pomocnicze.Udp.Port);
+            _klient.Connect(ip, port);
         }
 
         public override bool PiszLinię(string linia)

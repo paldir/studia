@@ -13,10 +13,16 @@ namespace psk
     {
         DelegatKomunikatora _rozłączenie;
         UdpKomunikator _komunikator;
+        int _port;
+
+        public UdpNasłuchiwacz(int port)
+        {
+            _port = port;
+        }
 
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
-            _komunikator = new UdpKomunikator();
+            _komunikator = new UdpKomunikator(_port);
             _rozłączenie = rozłączenie;
 
             połączenie(_komunikator);

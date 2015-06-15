@@ -13,9 +13,9 @@ namespace psk
         TcpClient _klientTcp;
         NetworkStream _strumieńSieciowy;
 
-        public TcpKom()
+        public TcpKom(string ip, int port)
         {
-            _klientTcp = new TcpClient("localhost", Pomocnicze.Tcp.Port);
+            _klientTcp = new TcpClient(ip, port);
             _strumieńSieciowy = _klientTcp.GetStream();
         }
 
@@ -44,7 +44,7 @@ namespace psk
             while (!fragmentLinii.EndsWith(Environment.NewLine))
             {
                 byte[] bufor = new byte[Pomocnicze.Tcp.RozmiarBufora];
-                
+
                 _strumieńSieciowy.Read(bufor, 0, bufor.Length);
 
                 fragmentLinii = Encoding.UTF8.GetString(bufor).Replace("\0", String.Empty);

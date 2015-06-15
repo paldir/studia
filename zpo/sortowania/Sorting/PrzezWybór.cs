@@ -22,7 +22,13 @@ namespace sortowania
                         iMinimum = i;
 
                 if (iMinimum != j)
-                    kolekcja.Zamień(j, iMinimum);
+                {
+                    //kolekcja.Zamień(j, iMinimum);
+
+                    T tmp = kolekcja[j];
+                    kolekcja[j] = kolekcja[iMinimum];
+                    kolekcja[iMinimum] = tmp;
+                }
             }
         }
     }

@@ -12,6 +12,13 @@ namespace sortowania
     {
         IList<ZadanieZWizualizacją> _zadaniaZWizualizacją;
 
+        int _odstęp = 100;
+        public int OdstępPomiędzyWizualizacją
+        {
+            get { return _odstęp; }
+            set { _odstęp = value; }
+        }
+
         public Porównywarka(IList<ZadanieZWizualizacją> zadaniaZWizualizacją)
         {
             _zadaniaZWizualizacją = zadaniaZWizualizacją;
@@ -23,6 +30,7 @@ namespace sortowania
             {
                 zadanie.Uruchom();
                 zadanie.Zawieś();
+                zadanie.AktualizujWizualizację();
             }
 
             bool praca = true;
@@ -30,25 +38,23 @@ namespace sortowania
             while (praca)
             {
                 praca = false;
-                List<ZadanieZWizualizacją> zadaniaDoUsunięcia = new List<ZadanieZWizualizacją>();
 
                 foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
-                    if (zadanie.Wznów())
+                    zadanie.Wznów();
+
+                Thread.Sleep(OdstępPomiędzyWizualizacją);
+
+                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                    if (zadanie.Zawieś())
                         praca = true;
-                    else
-                        zadaniaDoUsunięcia.Add(zadanie);
-
-                foreach (ZadanieZWizualizacją zadanie in zadaniaDoUsunięcia)
-                    _zadaniaZWizualizacją.Remove(zadanie);
-
-                Thread.Sleep(100);
-
-                foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
-                    zadanie.Zawieś();
 
                 foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
                     zadanie.AktualizujWizualizację();
+
             }
+
+            foreach (ZadanieZWizualizacją zadanie in _zadaniaZWizualizacją)
+                zadanie.AktualizujWizualizację();
         }
     }
 }

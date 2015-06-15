@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bąbelkowe.cs" />
+    <Compile Include="DaneDoWykresu.cs" />
     <Compile Include="PrzezZliczanie.cs" />
     <Compile Include="Rozszerzenia.cs" />
     <Compile Include="PrzezKopcowanie.cs" />

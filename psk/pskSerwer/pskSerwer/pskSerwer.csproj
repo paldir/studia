@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetRemotingKomunikator.cs" />
+    <Compile Include="NetRemotingNasłuchiwacz.cs" />
     <Compile Include="PlikiKomunikator.cs" />
     <Compile Include="PlikiNasłuchiwacz.cs" />
     <Compile Include="IKomunikator.cs" />

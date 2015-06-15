@@ -20,7 +20,11 @@ namespace sortowania
                 for (int i = 1; i < n; i++)
                     if (kolekcja[i - 1].CompareTo(kolekcja[i]) > 0)
                     {
-                        kolekcja.Zamień(i - 1, i);
+                        //kolekcja.Zamień(i - 1, i);
+
+                        T tmp = kolekcja[i - 1];
+                        kolekcja[i - 1] = kolekcja[i];
+                        kolekcja[i] = tmp;
 
                         zamiana = true;
                     }

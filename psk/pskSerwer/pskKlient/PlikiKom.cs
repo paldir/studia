@@ -13,12 +13,18 @@ namespace psk
     {
         static int _indeks = 0;
         string _plikWynikowy;
+        string _katalog;
+
+        public PlikiKom(string ścieżkaDoKatalogu)
+        {
+            _katalog = ścieżkaDoKatalogu;
+        }
 
         public override bool PiszLinię(string linia)
         {
             try
             {
-                string plik = Path.Combine(Pomocnicze.Pliki.Katalog, String.Format("command{0}.in", _indeks));
+                string plik = Path.Combine(_katalog, String.Format("command{0}.in", _indeks));
 
                 Interlocked.Increment(ref _indeks);
 
@@ -36,11 +42,15 @@ namespace psk
         {
             string linia = null;
 
-            while (linia == null)
+            while (String.IsNullOrEmpty(linia))
             {
                 if (File.Exists(_plikWynikowy))
-                    using (StreamReader strumień = new StreamReader(_plikWynikowy))
-                        linia = strumień.ReadToEnd();
+                    try
+                    {
+                        using (StreamReader strumień = new StreamReader(_plikWynikowy))
+                            linia = strumień.ReadToEnd();
+                    }
+                    catch (IOException) { }
                 else
                     Thread.Sleep(Pomocnicze.CzasSpania);
             }
@@ -52,7 +62,7 @@ namespace psk
 
         public override void Dispose()
         {
-            
+
         }
     }
 }

@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ChatKlient.cs" />
     <Compile Include="FtpKlient.cs" />
+    <Compile Include="NetRemotingKom.cs" />
     <Compile Include="PlikiKom.cs" />
     <Compile Include="PingPongKlient.cs" />
     <Compile Include="Klient.cs" />
@@ -55,6 +57,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\pskSerwer\pskSerwer.csproj">
+      <Project>{fdda55e6-32b4-495d-9d3e-ee78c31e46de}</Project>
+      <Name>pskSerwer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\pskWspólne\pskWspólne.csproj">
       <Project>{680e7a3e-8f99-4a34-9538-eeb1f0a3e411}</Project>
       <Name>pskWspólne</Name>

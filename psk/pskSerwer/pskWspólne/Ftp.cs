@@ -47,18 +47,29 @@ namespace psk
                     }
 
                 case Tryb.Down:
-                    plikBajtowo = File.ReadAllBytes(ścieżkaDoPliku);
-                    plikWBase64 = Convert.ToBase64String(plikBajtowo);
+                    if (File.Exists(ścieżkaDoPliku))
+                    {
+                        plikBajtowo = File.ReadAllBytes(ścieżkaDoPliku);
+                        plikWBase64 = Convert.ToBase64String(plikBajtowo);
+                    }
+                    else
+                        return "Plik nie istnieje.";
 
                     return plikWBase64;
 
                 case Tryb.Del:
-                    File.Delete(ścieżkaDoPliku);
+                    if (File.Exists(ścieżkaDoPliku))
+                    {
+                        File.Delete(ścieżkaDoPliku);
 
-                    return "Plik usunięty.";
+                        return "Plik usunięty.";
+                    }
+                    else
+                        return "Plik nie istnieje.";
+
+                default:
+                    return Pomocnicze.KomunikatyBłędów.Usługa;
             }
-
-            return "Nieobsługiwana opcja.";
         }
     }
 }

@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Threading;
+using System.Diagnostics;
 
 namespace sortowania
 {
-    public delegate void PrzesłanieDanychDoWizualizacji(IList<int> dane, IList<float> stopniePosortowania);
-
     public class SortowanieZWizualizacją<T> : ZadanieZWizualizacją where T : IComparable, IComparable<T>
     {
         Thread _wątekSortowania;
@@ -20,28 +19,37 @@ namespace sortowania
         Func<IList<T>, int, int, double> _metodaŚredniej;
         IMetodaSortowania<T> _metodaSortowania;
         AktualizacjaWizualizacji _aktualizacjaWizualizacji;
-        PrzesłanieDanychDoWizualizacji _przesłanieDanychDoWizualizacji;
+        DaneDoWykresu _dane;
         object _object;
+        bool _sortowanieTrwa;
+        ProcessThread _wątekProcesu;
 
-        public SortowanieZWizualizacją(IMetodaSortowania<T> metodaSortująca, IList<T> kolekcja, Func<T, int> metodaKlucza, Func<IList<T>, int, int, double> metodaŚredniej, int liczbaGrupWizualizacji, AktualizacjaWizualizacji aktualizacjaWizualizacji, PrzesłanieDanychDoWizualizacji przesłanieDanychDoWizualizacji)
+        public SortowanieZWizualizacją(IMetodaSortowania<T> metodaSortująca, IList<T> kolekcja, Func<T, int> metodaKlucza, Func<IList<T>, int, int, double> metodaŚredniej, DaneDoWykresu dane, AktualizacjaWizualizacji aktualizacjaWizualizacji)
         {
             _wątekSortowania = new Thread(Sortuj);
             _kolekcja = new List<T>(kolekcja);
-            _liczbagrup = liczbaGrupWizualizacji;
+            _dane = dane;
+            _liczbagrup = dane.ŚrednieGrupKluczy.Length;
             _liczbaElementówWKażdejGrupie = kolekcja.Count / _liczbagrup;
             _metodaKlucza = metodaKlucza;
             _metodaŚredniej = metodaŚredniej;
             _metodaSortowania = metodaSortująca;
             _aktualizacjaWizualizacji = aktualizacjaWizualizacji;
-            _przesłanieDanychDoWizualizacji = przesłanieDanychDoWizualizacji;
+            _sortowanieTrwa = true;
             _object = new object();
         }
 
         void Sortuj()
         {
+            Thread.BeginThreadAffinity();
+            _wątekProcesu = Process.GetCurrentProcess().Threads.Cast<ProcessThread>().Single(w => w.Id == AppDomain.GetCurrentThreadId());
             _metodaSortowania.Sortuj(_kolekcja);
+            Thread.EndThreadAffinity();
 
-            lock (_object) { };
+            lock (_object)
+            {
+                _sortowanieTrwa = false;
+            }
         }
 
         public void Uruchom()
@@ -49,33 +57,23 @@ namespace sortowania
             _wątekSortowania.Start();
         }
 
-        public void Zawieś()
+        public bool Zawieś()
         {
             lock (_object)
-                if (_wątekSortowania.ThreadState == ThreadState.Running)
+                if (_sortowanieTrwa)
                     _wątekSortowania.Suspend();
+
+            return _sortowanieTrwa;
         }
 
-        public bool Wznów()
+        public void Wznów()
         {
-            bool praca = false;
-
-            lock (_object)
-                if (_wątekSortowania.ThreadState == ThreadState.Suspended)
-                {
-                    _wątekSortowania.Resume();
-
-                    praca = true;
-                }
-
-            return praca;
+            if (_wątekSortowania.ThreadState == System.Threading.ThreadState.Suspended)
+                _wątekSortowania.Resume();
         }
 
         public void AktualizujWizualizację()
         {
-            List<int> listaKluczy = new List<int>();
-            List<float> stopniePosortowania = new List<float>();
-
             for (int i = 0; i < _liczbagrup; i++)
             {
                 int indeksPoczątku = i * _liczbaElementówWKażdejGrupie;
@@ -86,11 +84,13 @@ namespace sortowania
                     if (_kolekcja[j].CompareTo(_kolekcja[j + 1]) <= 0)
                         liczbaPosortowanychPar++;
 
-                listaKluczy.Add(_metodaKlucza((T)Convert.ChangeType(_metodaŚredniej(_kolekcja, indeksPoczątku, indeksKońca), typeof(T))));
-                stopniePosortowania.Add(liczbaPosortowanychPar / Convert.ToSingle(_liczbaElementówWKażdejGrupie));
+                _dane.ŚrednieGrupKluczy[i] = _metodaKlucza((T)Convert.ChangeType(_metodaŚredniej(_kolekcja, indeksPoczątku, indeksKońca), typeof(T)));
+                _dane.StopniePosortowania[i] = liczbaPosortowanychPar / Convert.ToSingle(_liczbaElementówWKażdejGrupie);
             }
 
-            _przesłanieDanychDoWizualizacji(listaKluczy, stopniePosortowania);
+            if (_wątekProcesu != null)
+                _dane.Czas = _wątekProcesu.TotalProcessorTime;
+
             _aktualizacjaWizualizacji();
         }
     }

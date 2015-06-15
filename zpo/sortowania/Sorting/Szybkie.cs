@@ -29,19 +29,31 @@ namespace sortowania
             int indeksPodziału = (początek + koniec) / 2;
             T wartośćPodziału = A[indeksPodziału];
 
-            A.Zamień(indeksPodziału, koniec);
+            //A.Zamień(indeksPodziału, koniec);
+
+            T tmp = A[indeksPodziału];
+            A[indeksPodziału] = A[koniec];
+            A[koniec] = tmp;
 
             int iTmp = początek;
 
             for (int i = początek; i <= koniec - 1; i++)
                 if (A[i].CompareTo(wartośćPodziału) < 0)
                 {
-                    A.Zamień(i, iTmp);
+                    //A.Zamień(i, iTmp);
+
+                    T tmpElement1 = A[i];
+                    A[i] = A[iTmp];
+                    A[iTmp] = tmpElement1;
 
                     iTmp++;
                 }
 
-            A.Zamień(iTmp, koniec);
+            //A.Zamień(iTmp, koniec);
+
+            T tmpElement2 = A[iTmp];
+            A[iTmp] = A[koniec];
+            A[koniec] = tmpElement2;
 
             return iTmp;
         }

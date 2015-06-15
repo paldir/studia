@@ -32,8 +32,15 @@ namespace psk
 
         public override string CzytajLinię()
         {
-            using (StreamReader strumień = new StreamReader(_ścieżka))
-                return strumień.ReadToEnd();
+            while (true)
+            {
+                try
+                {
+                    using (StreamReader strumień = new StreamReader(_ścieżka))
+                        return strumień.ReadToEnd();
+                }
+                catch (IOException) { }
+            }
         }
 
         public override void Dispose()

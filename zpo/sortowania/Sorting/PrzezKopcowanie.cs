@@ -18,7 +18,11 @@ namespace sortowania
 
             while (koniec > 0)
             {
-                kolekcja.Zamień(koniec, 0);
+                //kolekcja.Zamień(koniec, 0);
+
+                T tmp = kolekcja[koniec];
+                kolekcja[koniec] = kolekcja[0];
+                kolekcja[0] = tmp;
 
                 koniec--;
 
@@ -36,6 +40,15 @@ namespace sortowania
 
                 początek--;
             }
+
+            /*int end = 1;
+
+            while (end < ilość)
+            {
+                Przesiej(a, 0, end);
+
+                end++;
+            }*/
         }
 
         void Przesiej(IList<T> a, int początek, int koniec)
@@ -57,11 +70,32 @@ namespace sortowania
                     break;
                 else
                 {
-                    a.Zamień(korzeń, zamiana);
+                    //a.Zamień(korzeń, zamiana);
+
+                    T tmp = a[korzeń];
+                    a[korzeń] = a[zamiana];
+                    a[zamiana] = tmp;
 
                     korzeń = zamiana;
                 }
             }
+
+            /*int dziecko = koniec;
+
+            while (dziecko > początek)
+            {
+                int rodzic = Convert.ToInt32(Math.Floor((dziecko - 1.0) / 2));
+
+                if (a[rodzic].CompareTo(a[dziecko]) < 0)
+                {
+                    T tmp = a[rodzic];
+                    a[rodzic] = a[dziecko];
+                    a[dziecko] = tmp;
+                    dziecko = rodzic;
+                }
+                else
+                    return;
+            }*/
         }
     }
 }

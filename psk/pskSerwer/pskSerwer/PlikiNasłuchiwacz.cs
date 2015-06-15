@@ -13,16 +13,19 @@ namespace psk
         FileSystemWatcher _obserwator;
         DelegatKomunikatora _połączenie;
         DelegatKomunikatora _rozłączenie;
+        string _katalog;
 
-        public PlikiNasłuchiwacz()
+        public PlikiNasłuchiwacz(string ścieżkaDoKatalogu)
         {
-            if (!Directory.Exists(Pomocnicze.Pliki.Katalog))
-                Directory.CreateDirectory(Pomocnicze.Pliki.Katalog);
+            _katalog = ścieżkaDoKatalogu;
+
+            if (!Directory.Exists(_katalog))
+                Directory.CreateDirectory(_katalog);
         }
 
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
-            _obserwator = new FileSystemWatcher(Pomocnicze.Pliki.Katalog, "*.in");
+            _obserwator = new FileSystemWatcher(_katalog, "*.in");
             _obserwator.Created += _obserwator_Created;
             _obserwator.EnableRaisingEvents = true;
             _połączenie = połączenie;

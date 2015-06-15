@@ -12,14 +12,12 @@ namespace Gui
 {
     public partial class WykresStopniaPosortowaniaKolekcji : UserControl
     {
-        IList<int> _daneDoWykresu;
-        IList<float> _stopniePosortowania;
-
+        public sortowania.DaneDoWykresu Dane { get; set; }
         public int MaksymalnyElement { get; set; }
         public string TytułWykresu
         {
-            get { return tytuł.Text; }
-            set { tytuł.Text = value; }
+            get { return _tytuł.Text; }
+            set { _tytuł.Text = value; }
         }
 
         public WykresStopniaPosortowaniaKolekcji()
@@ -34,10 +32,13 @@ namespace Gui
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (_daneDoWykresu == null)
+            if (Dane == null)
                 return;
 
-            int liczbaElementów = _daneDoWykresu.Count;
+            _czas.Text = String.Format("{0:mm\\:ss\\:ff}", Dane.Czas);
+            IList<int> daneDoWykresu = Dane.ŚrednieGrupKluczy;
+            IList<float> stopniePosortowania = Dane.StopniePosortowania;
+            int liczbaElementów = daneDoWykresu.Count;
             float szerokośćSłupka = Width / Convert.ToSingle(liczbaElementów) - 0.125f;
             float maksymalnaWysokośćSłupka = Height;
 
@@ -45,7 +46,7 @@ namespace Gui
             using (Pen krawędzie = new Pen(Color.Black))
                 for (int i = 0; i < liczbaElementów; i++)
                 {
-                    double stopień = _stopniePosortowania[i];
+                    double stopień = stopniePosortowania[i];
                     int czerwony, zielony;
                     int tmp = Convert.ToInt32(Math.Round(stopień * 255));
 
@@ -63,19 +64,13 @@ namespace Gui
                     using (Brush wypełnienie = new SolidBrush(Color.FromArgb(czerwony, zielony, 0)))
                     {
                         float x1 = i * szerokośćSłupka;
-                        float wysokośćSłupka = _daneDoWykresu[i] / Convert.ToSingle(MaksymalnyElement) * maksymalnaWysokośćSłupka;
+                        float wysokośćSłupka = daneDoWykresu[i] / Convert.ToSingle(MaksymalnyElement) * maksymalnaWysokośćSłupka;
                         float y1 = maksymalnaWysokośćSłupka - wysokośćSłupka - 3;
 
                         g.FillRectangle(wypełnienie, x1 + 0.5f, y1 + 0.5f, szerokośćSłupka - 0.5f, wysokośćSłupka - 0.5f);
                         g.DrawRectangle(krawędzie, x1, y1, szerokośćSłupka, wysokośćSłupka);
                     }
                 }
-        }
-
-        public void AktualizujDaneDoWykresu(IList<int> dane, IList<float> stopniePosortowania)
-        {
-            _daneDoWykresu = dane;
-            _stopniePosortowania = stopniePosortowania;
         }
     }
 }

@@ -93,26 +93,32 @@ namespace Som
                 _neurony[indeksZwycięzcy].Y += 0.5f * (_punktPrzyciągający.Y - _neurony[indeksZwycięzcy].Y);
 
                 Odśwież();
+                PrzyciągnijLeweNeurony(indeksZwycięzcy);
+                PrzyciągnijPraweNeurony(indeksZwycięzcy);
+            }
+        }
 
-                float przesunięcie = 0.25f;
+        void PrzyciągnijLeweNeurony(int indeksZwycięzcy)
+        {
+            float przesunięcie = 0.25f;
 
-                for (int i = indeksZwycięzcy - 1; i >= 0; i--)
-                {
-                    _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
-                    _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
-                    przesunięcie /= 2;
-                }
+            for (int i = indeksZwycięzcy - 1; i >= 0; i--)
+            {
+                _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
+                _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
+                przesunięcie /= 2;
+            }
+        }
 
-                przesunięcie = 0.25f;
+        void PrzyciągnijPraweNeurony(int indeksZwycięzcy)
+        {
+            float przesunięcie = 0.25f;
 
-                for (int i = indeksZwycięzcy + 1; i < _neurony.Length; i++)
-                {
-                    _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
-                    _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
-                    przesunięcie /= 2;
-                }
-
-                Odśwież();
+            for (int i = indeksZwycięzcy + 1; i < _neurony.Length; i++)
+            {
+                _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
+                _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
+                przesunięcie /= 2;
             }
         }
 

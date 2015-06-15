@@ -12,11 +12,17 @@ namespace psk
     class TcpNasłuchiwacz : INasłuchiwacz
     {
         Thread _wątek;
+        int _port;
+
+        public TcpNasłuchiwacz(int port)
+        {
+            _port = port;
+        }
 
         public void Start(DelegatKomunikatora połączenie, DelegatKomunikatora rozłączenie)
         {
             _wątek = Thread.CurrentThread;
-            TcpListener nasłuchiwacz = new TcpListener(System.Net.Dns.GetHostEntry(Pomocnicze.Tcp.AdresIp).AddressList[0], Pomocnicze.Tcp.Port);
+            TcpListener nasłuchiwacz = new TcpListener(System.Net.Dns.GetHostEntry("localhost").AddressList[0], _port);
 
             nasłuchiwacz.Start();
 

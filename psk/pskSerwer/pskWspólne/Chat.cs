@@ -66,7 +66,7 @@ namespace psk
                 }
             }
 
-            return "Niepoprawna składnia polecenia.";
+            return Pomocnicze.KomunikatyBłędów.Usługa;
         }
     }
 }
