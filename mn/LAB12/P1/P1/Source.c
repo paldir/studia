@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 float y_1(float t, float y0)
 {
@@ -41,16 +42,58 @@ int main()
 	float t;
 	char nazwaPliku[100];
 	typedef float (*funkcja)(float, float);
-	funkcja f=f_1;
-	funkcja y=y_1;
+	funkcja f;
+	funkcja y;
 	char* format="%f\t%e\t%e\t%e\n";
 	char* naglowki="t\t\ty\t\tyDokladne\tblad\n";
+	char linia[100];
 	FILE *plikH=fopen("h.txt", "w");
-	int zapisY=0;
+	int zapisY;
+	int wybor;
+	float hMin;
+	float hMax;
+	FILE *konfig=fopen("konfig.txt", "r");
+
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fscanf(konfig, "%d", &wybor);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fscanf(konfig, "%d", &zapisY);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fgets(linia, 100, konfig);
+	fscanf(konfig, "%e", &hMax);
+	fscanf(konfig, "%e", &hMin);
+	fclose(konfig);
+
+	switch(wybor)
+	{
+	case 1:
+		f=f_1;
+		y=y_1;
+
+		break;
+
+	case 2:
+		f=f_2;
+		y=y_2;
+	
+		break;
+
+	case 3:
+		f=f_3;
+		y=y_3;
+
+		break;
+	}
 
 	fprintf(plikH, "h\t\tEuler\t\tRK2\t\tRK4\n");
 
-	for(h=0.1f; h>=1e-7; h/=10)
+	for(h=hMax; h>=hMin; h/=10)
 	{
 		FILE *plik;
 		float bladMax=0;
@@ -58,7 +101,7 @@ int main()
 
 		if(zapisY)
 		{
-				sprintf(nazwaPliku, "Euler_%f.txt", h);
+				sprintf(nazwaPliku, "wynikiEuler_%f.txt", h);
 
 				plik=fopen(nazwaPliku, "w");
 
@@ -87,7 +130,7 @@ int main()
 		if(zapisY)
 		{
 			fclose(plik);
-			sprintf(nazwaPliku, "RK2_%f.txt", h);
+			sprintf(nazwaPliku, "wynikiRK2_%f.txt", h);
 
 			plik=fopen(nazwaPliku, "w");
 
@@ -118,7 +161,7 @@ int main()
 		if(zapisY)
 		{
 			fclose(plik);	
-			sprintf(nazwaPliku, "RK4_%f.txt", h);
+			sprintf(nazwaPliku, "wynikiRK4_%f.txt", h);
 
 				plik=fopen(nazwaPliku, "w");
 

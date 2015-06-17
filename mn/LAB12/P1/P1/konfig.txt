@@ -1,0 +1,11 @@
+// 1. y(t)=y_0*e^(-t)	2. y(t)=y_0*e^t		3. y(t)=t-1+(y_0+1)*e^(-t)
+Numer_funkcji
+1
+
+// 0 - nie, inne liczby - tak
+Zapis_y_do_plikow
+0
+
+// h pocz¹tkowe powinno byæ <= od koñcowego
+Zakres_badanych_h
+1e-1 1e-7

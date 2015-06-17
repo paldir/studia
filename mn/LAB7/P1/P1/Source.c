@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -5,10 +6,10 @@
 float **Malloc2d(int size);
 void Free2d(float **array, int size);	
 void Zeros2d(float **matrix, int size);
-void MultiplyMatrixByMatrix(const float **first, const float **second, int size, float **out);
-void MultiplyMatrixByVector(const float **matrix, const float *vector, int size, float *out);
-void SaveMatrixToFile(const float **matrix, int size, const char *fileName);
-void SaveVectorToFile(const float *vector, int size, const char *fileName);
+void MultiplyMatrixByMatrix(float **first, float **second, int size, float **out);
+void MultiplyMatrixByVector(float **matrix, float *vector, int size, float *out);
+void SaveMatrixToFile(float **matrix, int size, const char *fileName);
+void SaveVectorToFile(float *vector, int size, const char *fileName);
 float **ReadMatrixFromFile(const char* fileName, int* size);
 float *ReadVectorFromFile(const char* fileName, int* size);
 
@@ -84,10 +85,10 @@ void LUDecomposition(float **A, int size, float **L, float **U, float **P)
 		L[i][i] = 1;
 }
 
-void GaussElimination(const float **L, const float **U, const float *b, int size, float *out)
+void GaussElimination(float **L, float **U, float *b, int size, float *out)
 {
 	int i, j;
-	float *y = malloc(size*sizeof(float));
+	float *y = (float*)malloc(size*sizeof(float));
 
 	for (i = 0; i < size; i++)
 	{
@@ -130,8 +131,8 @@ int main()
 	U = Malloc2d(size);
 	P = Malloc2d(size);
 	b = ReadVectorFromFile("b.txt", &size);
-	x = malloc(size*sizeof(float));
-	xPrim = malloc(size*sizeof(float));
+	x = (float*)malloc(size*sizeof(float));
+	xPrim = (float*)malloc(size*sizeof(float));
 
 	Zeros2d(U, size);
 	Zeros2d(L, size);
@@ -186,7 +187,7 @@ void Zeros2d(float **matrix, int size)
 			matrix[i][j] = 0;
 }
 
-void MultiplyMatrixByMatrix(const float **first, const float **second, int size, float **out)
+void MultiplyMatrixByMatrix(float **first, float **second, int size, float **out)
 {
 	int i, j, k;
 
@@ -202,7 +203,7 @@ void MultiplyMatrixByMatrix(const float **first, const float **second, int size,
 		}
 }
 
-void MultiplyMatrixByVector(const float **matrix, const float *vector, int size, float *out)
+void MultiplyMatrixByVector(float **matrix, float *vector, int size, float *out)
 {
 	int i, j;
 
@@ -217,12 +218,11 @@ void MultiplyMatrixByVector(const float **matrix, const float *vector, int size,
 	}
 }
 
-void SaveMatrixToFile(const float **matrix, int size, const char *fileName)
+void SaveMatrixToFile(float **matrix, int size, const char *fileName)
 {
-	FILE *file;
+	FILE *file=fopen(fileName, "w");
 	int i, j;
 
-	fopen_s(&file, fileName, "w");
 	fprintf(file, "%d\n", size);
 
 	for (i = 0; i < size; i++)
@@ -236,12 +236,11 @@ void SaveMatrixToFile(const float **matrix, int size, const char *fileName)
 	fclose(file);
 }
 
-void SaveVectorToFile(const float *vector, int size, const char *fileName)
+void SaveVectorToFile(float *vector, int size, const char *fileName)
 {
-	FILE *file;
+	FILE *file=fopen(fileName, "w");
 	int i;
 
-	fopen_s(&file, fileName, "w");
 	fprintf(file, "%d\n", size);
 
 	for (i = 0; i < size; i++)
@@ -254,18 +253,17 @@ void SaveVectorToFile(const float *vector, int size, const char *fileName)
 
 float** ReadMatrixFromFile(const char* fileName, int* size)
 {
-	FILE* file;
+	FILE* file=fopen(fileName, "r");
 	float** matrix;
 	int i, j;
 
-	fopen_s(&file, fileName, "r");
-	fscanf_s(file, "%d", size);
+	fscanf(file, "%d", size);
 
 	matrix = Malloc2d(*size);
 
 	for (i = 0; i < *size; i++)
 		for (j = 0; j < *size; j++)
-			fscanf_s(file, "%f", &matrix[i][j]);
+			fscanf(file, "%f", &matrix[i][j]);
 
 	fclose(file);
 
@@ -274,17 +272,16 @@ float** ReadMatrixFromFile(const char* fileName, int* size)
 
 float* ReadVectorFromFile(const char* fileName, int* size)
 {
-	FILE* file;
+	FILE* file=fopen(fileName, "r");
 	float* vector;
 	int i;
 
-	fopen_s(&file, fileName, "r");
-	fscanf_s(file, "%d", size);
+	fscanf(file, "%d", size);
 
-	vector = malloc(*size * sizeof(float));
+	vector = (float*)malloc(*size * sizeof(float));
 
 	for (i = 0; i < *size; i++)
-		fscanf_s(file, "%f", &vector[i]);
+		fscanf(file, "%f", &vector[i]);
 
 	fclose(file);
 
