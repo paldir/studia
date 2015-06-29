@@ -161,5 +161,11 @@ namespace Hopfield
             _dodawanieWektoraUczącego.Enabled = _usuwanieWzorców.Enabled = _koniecUczenia.Enabled = true;
             _symulacja.Enabled = false;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_wątek != null)
+                _wątek.Abort();
+        }
     }
 }

@@ -95,7 +95,7 @@
             this.ilość.Size = new System.Drawing.Size(120, 20);
             this.ilość.TabIndex = 6;
             this.ilość.Value = new decimal(new int[] {
-            10,
+            50,
             0,
             0,
             0});

@@ -19,6 +19,7 @@ namespace Som
         PointF[] _punktyOgraniczające;
         Prosta[] _prosteOgraniczające;
         PointF _punktPrzyciągający;
+        float _promień;
 
         public int SzybkośćAnimacji { get; set; }
         public int LiczbaNeuronów { get; set; }
@@ -31,9 +32,9 @@ namespace Som
             _los = new Random();
             _punktyOgraniczające = new PointF[4];
             _prosteOgraniczające = new Prosta[3];
-            _punktyOgraniczające[0] = _punktyOgraniczające[3] = new PointF(LosowaSzerokość(), 0);
-            _punktyOgraniczające[1] = new PointF(0, LosowaWysokość(0.5f));
-            _punktyOgraniczające[2] = new PointF(ClientSize.Width, LosowaWysokość(0.75f));
+            _punktyOgraniczające[0] = _punktyOgraniczające[3] = new PointF(ClientRectangle.Width / 2, 0);
+            _punktyOgraniczające[1] = new PointF(0, ClientRectangle.Height);
+            _punktyOgraniczające[2] = new PointF(ClientSize.Width, ClientRectangle.Height);
 
             for (int i = 0; i < 3; i++)
             {
@@ -49,11 +50,14 @@ namespace Som
         public void Animacja()
         {
             _neurony = new PointF[LiczbaNeuronów];
+            float początkowyPromień = 100;
+            _promień = początkowyPromień;
+            float zmniejszaniePromienia = 1.0f / LiczbaNeuronów;
 
             for (int i = 0; i < LiczbaNeuronów; i++)
                 _neurony[i] = new PointF(LosowaSzerokość(), LosowaWysokość());
 
-            while (!Stop)
+            while (!Stop && _promień > 0)
             {
                 bool punktWPrzestrzeni;
                 PointF losowyPunkt;
@@ -72,11 +76,11 @@ namespace Som
 
                 Odśwież();
 
-                PointF zwycięzca = _neurony[0];
-                float odległośćZwycięzcy = DługośćWektora(zwycięzca, _punktPrzyciągający);
-                int indeksZwycięzcy = 0;
+                PointF zwycięzca;
+                float odległośćZwycięzcy = Single.MaxValue;
+                int indeksZwycięzcy = -1;
 
-                for (int i = 1; i < _neurony.Length; i++)
+                for (int i = 0; i < _neurony.Length; i++)
                 {
                     PointF neuron = _neurony[i];
                     float odległość = DługośćWektora(neuron, _punktPrzyciągający);
@@ -89,36 +93,45 @@ namespace Som
                     }
                 }
 
-                _neurony[indeksZwycięzcy].X += 0.5f * (_punktPrzyciągający.X - _neurony[indeksZwycięzcy].X);
-                _neurony[indeksZwycięzcy].Y += 0.5f * (_punktPrzyciągający.Y - _neurony[indeksZwycięzcy].Y);
+                _promień -= zmniejszaniePromienia;
+                float siłaPrzyciągania = _promień / początkowyPromień;
 
-                Odśwież();
-                PrzyciągnijLeweNeurony(indeksZwycięzcy);
-                PrzyciągnijPraweNeurony(indeksZwycięzcy);
+                {
+                    int liczbaPrzesuwanychNeuronów = Convert.ToInt32(Math.Floor(siłaPrzyciągania * LiczbaNeuronów * 0.25));
+                    siłaPrzyciągania *= 0.5f;
+                    _neurony[indeksZwycięzcy].X += siłaPrzyciągania * (_punktPrzyciągający.X - _neurony[indeksZwycięzcy].X);
+                    _neurony[indeksZwycięzcy].Y += siłaPrzyciągania * (_punktPrzyciągający.Y - _neurony[indeksZwycięzcy].Y);
+
+                    Odśwież();
+                    PrzyciągnijLeweNeurony(indeksZwycięzcy, liczbaPrzesuwanychNeuronów, siłaPrzyciągania);
+                    PrzyciągnijPraweNeurony(indeksZwycięzcy, liczbaPrzesuwanychNeuronów, siłaPrzyciągania);
+                }
+            }
+
+            Stop = true;
+        }
+
+        void PrzyciągnijLeweNeurony(int indeksZwycięzcy, int ilośćNeuronów, float siłaPrzyciągania)
+        {
+            int indeks = indeksZwycięzcy - 1;
+
+            for (int i = 0; i < ilośćNeuronów && indeks >= 0; i++)
+            {
+                _neurony[indeks].X += siłaPrzyciągania * (_punktPrzyciągający.X - _neurony[indeks].X);
+                _neurony[indeks].Y += siłaPrzyciągania * (_punktPrzyciągający.Y - _neurony[indeks].Y);
+                indeks--;
             }
         }
 
-        void PrzyciągnijLeweNeurony(int indeksZwycięzcy)
+        void PrzyciągnijPraweNeurony(int indeksZwycięzcy, int ilośćNeuronów, float siłaPrzyciągania)
         {
-            float przesunięcie = 0.25f;
+            int indeks = indeksZwycięzcy + 1;
 
-            for (int i = indeksZwycięzcy - 1; i >= 0; i--)
+            for (int i = 0; i < ilośćNeuronów && indeks < _neurony.Length; i++)
             {
-                _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
-                _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
-                przesunięcie /= 2;
-            }
-        }
-
-        void PrzyciągnijPraweNeurony(int indeksZwycięzcy)
-        {
-            float przesunięcie = 0.25f;
-
-            for (int i = indeksZwycięzcy + 1; i < _neurony.Length; i++)
-            {
-                _neurony[i].X += przesunięcie * (_punktPrzyciągający.X - _neurony[i].X);
-                _neurony[i].Y += przesunięcie * (_punktPrzyciągający.Y - _neurony[i].Y);
-                przesunięcie /= 2;
+                _neurony[indeks].X += siłaPrzyciągania * (_punktPrzyciągający.X - _neurony[indeks].X);
+                _neurony[indeks].Y += siłaPrzyciągania * (_punktPrzyciągający.Y - _neurony[indeks].Y);
+                indeks++;
             }
         }
 
@@ -162,6 +175,13 @@ namespace Som
 
             using (SolidBrush punkt = new SolidBrush(Color.Red))
                 NarysujPunkt(g, punkt, _punktPrzyciągający);
+
+            using (Pen promień = new Pen(Color.Red))
+            {
+                float bok = _promień * 2;
+
+                g.DrawEllipse(promień, 475 - _promień, 100 - _promień, bok, bok);
+            }
         }
 
         void NarysujPunkt(Graphics g, SolidBrush pędzel, PointF punkt)
