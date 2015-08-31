@@ -8,10 +8,10 @@ namespace plecak
 {
     class Program
     {
-        float _V;
-        List<Przedmiot> _przedmioty;
+        static float _V = 100;
+        static List<Przedmiot> _przedmioty;
 
-        float Lowerbound(IEnumerable<Przedmiot> J, IEnumerable<Przedmiot> K)
+        static float Lowerbound(ref IEnumerable<Przedmiot> J, IEnumerable<Przedmiot> K)
         {
             float x = _V - J.Sum(p => p.w);
             float y = J.Sum(p => p.p);
@@ -22,7 +22,7 @@ namespace plecak
                 IEnumerable<Przedmiot> sumaJK = Enumerable.Union(J, K);
                 float wagaPrzedmiotu = przedmiot.w;
 
-                if (!(sumaJK.Count() == 1 && sumaJK.Contains(przedmiot)) && wagaPrzedmiotu <= x)
+                if (!sumaJK.Contains(przedmiot) && wagaPrzedmiotu <= x)
                 {
                     J = Enumerable.Union(J, new List<Przedmiot>() { przedmiot });
                     x -= wagaPrzedmiotu;
@@ -33,15 +33,34 @@ namespace plecak
             return y;
         }
 
-        float KNAP(int k, out List<Przedmiot> plecak)
+        static float KNAP(int k, out IEnumerable<Przedmiot> plecak)
         {
             float Q = 0;
             plecak = null;
             List<List<Przedmiot>> podzbiory = new List<List<Przedmiot>>();
+            int liczbaPrzedmiotów = _przedmioty.Count;
 
-            foreach (List<Przedmiot> podzbiór in podzbiory)
+            for (int i = 1; i < Math.Pow(liczbaPrzedmiotów, 2); i++)
             {
-                float lowerbound = Lowerbound(podzbiór, new List<Przedmiot>());
+                IEnumerable<bool> maska = Convert.ToString(i, 2).ToCharArray().Select(z => z == '1');
+
+                if (maska.Count(b => b) <= k)
+                {
+                    List<Przedmiot> podzbiór = new List<Przedmiot>();
+
+                    for (int j = 0; j < maska.Count(); j++)
+                        if (maska.ElementAt(j))
+                            podzbiór.Add(_przedmioty[j]);
+
+                    if (podzbiór.Sum(p => p.w) <= _V)
+                        podzbiory.Add(podzbiór);
+                }
+            }
+
+            for (int i = 0; i < podzbiory.Count; i++)
+            {
+                IEnumerable<Przedmiot> podzbiór = podzbiory[i];
+                float lowerbound = Lowerbound(ref podzbiór, new List<Przedmiot>());
 
                 if (lowerbound > Q)
                 {
@@ -55,7 +74,15 @@ namespace plecak
 
         static void Main(string[] args)
         {
+            IEnumerable<Przedmiot> plecak;
+            _przedmioty = new List<Przedmiot>();
 
+            _przedmioty.Add(new Przedmiot(200, 50));
+            _przedmioty.Add(new Przedmiot(155, 40));
+            _przedmioty.Add(new Przedmiot(115, 30));
+            _przedmioty.Add(new Przedmiot(200, 25));
+
+            KNAP(4, out plecak);
         }
     }
 }

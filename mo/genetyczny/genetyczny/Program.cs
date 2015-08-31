@@ -8,6 +8,8 @@ namespace genetyczny
 {
     class Program
     {
+        const double epsilon = Double.Epsilon * 2;
+        
         static List<Osobnik> LosujPopulację(int liczbaOsobników)
         {
             List<Osobnik> populacja = new List<Osobnik>();
@@ -57,8 +59,9 @@ namespace genetyczny
             int[] genyTaty = tata.Geny;
             int ilośćGenów = genyMamy.Length;
             Random los = new Random();
-            int indeks1 = los.Next(0, ilośćGenów);
-            int indeks2 = indeks1;
+            int liczbaStałychGenów = los.Next(2, 4);
+            int indeks1 = los.Next(0, ilośćGenów - liczbaStałychGenów);
+            int indeks2 = indeks1 + liczbaStałychGenów;
             int[] noweGenyMamy = new int[ilośćGenów];
             int[] noweGenyTaty = new int[ilośćGenów];
 
@@ -77,9 +80,8 @@ namespace genetyczny
 
             for (int i = indeks1; i < indeks2; i++)
             {
-                int tmp = genyMamy[i];
-                noweGenyMamy[i] = genyTaty[i];
-                noweGenyTaty[i] = tmp;
+                noweGenyMamy[i] = genyMamy[i];
+                noweGenyTaty[i] = genyTaty[i];
             }
 
             for (int i = 0; i < indeks1; i++)
@@ -103,10 +105,11 @@ namespace genetyczny
         static void Main(string[] args)
         {
             odległości = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
-            List<Osobnik> populacja = LosujPopulację(100);
+            List<Osobnik> populacja = LosujPopulację(miasta.Length * 10);
             Random los = new Random();
+            bool jedziemy = true;
 
-            for (int ą = 0; ą < 10000; ą++)
+            for (int ź = 0; jedziemy; ź++)
             {
                 double sumaPrzystosowania = populacja.Sum(o => o.Przystosowanie);
 
@@ -145,6 +148,12 @@ namespace genetyczny
                     nowePokolenie.Add(nowyTata);
                 }
 
+                double długośćTrasyStara = populacja.Sum(p => p.DługośćTrasy);
+                double długośćTrasyNowa = nowePokolenie.Sum(p => p.DługośćTrasy);
+
+                if (Math.Abs(długośćTrasyStara - długośćTrasyNowa) <= epsilon)
+                    jedziemy = false;
+
                 populacja = nowePokolenie;
 
                 foreach (Osobnik osobnik in populacja)
@@ -152,7 +161,7 @@ namespace genetyczny
                     int[] geny = osobnik.Geny;
 
                     for (int i = 0; i < geny.Length - 1; i++)
-                        if (los.Next(1000) == 1)
+                        if (los.Next(1000 * liczebnośćPopulacji) == 1)
                         {
                             int tmp = geny[i];
                             geny[i] = geny[i + 1];
@@ -161,10 +170,12 @@ namespace genetyczny
                 }
             }
 
-            populacja.Sort();
+            double trasa = populacja.Min(p => p.DługośćTrasy);
 
-            foreach (int numer in populacja.First().Geny)
+            foreach (int numer in populacja.First(p => p.DługośćTrasy == trasa).Geny)
                 Console.WriteLine(miasta[numer]);
+
+            Console.WriteLine("\nDługość trasy: {0}", trasa);
         }
 
         static double[,] odległości;

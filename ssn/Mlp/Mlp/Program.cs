@@ -14,7 +14,7 @@ namespace Mlp
         {
             int liczbaIteracji;
             Random los = new Random();
-            int[] wartości = new int[] { 0, 1 };
+            int[] wartości = new int[] { -1, 1 };
             List<PrzykładXor> przykłady = new List<PrzykładXor>();
             List<double[,]> wagi = new List<double[,]>()
             {
@@ -29,9 +29,18 @@ namespace Mlp
                     for (int j = 0; j < warstwa.GetLength(1); j++)
                         warstwa[i, j] = los.NastępnaMałaLiczba();
 
-            foreach (int wartość1 in wartości)
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("dane.txt"))
+                while (!strumień.EndOfStream)
+                {
+                    string[] linia = strumień.ReadLine().Split(' ', '\t');
+                    PrzykładXor przykład = new PrzykładXor(Convert.ToInt32(linia[0]), Convert.ToInt32(linia[1]));
+
+                    przykłady.Add(przykład);
+                }
+
+            /*foreach (int wartość1 in wartości)
                 foreach (int wartość2 in wartości)
-                    przykłady.Add(new PrzykładXor(wartość1, wartość2));
+                    przykłady.Add(new PrzykładXor(wartość1, wartość2));*/
 
             Console.Write("Podaj liczbę iteracji: ");
 
@@ -129,15 +138,15 @@ namespace Mlp
 
         static double F(double value)
         {
-            //return Math.Tanh(value);
-            return 1 / (1 + Math.Exp(-value));
+            return Math.Tanh(value);
+            //return 1 / (1 + Math.Exp(-value));
         }
 
         static double FPrim(double value)
         {
-            //return (4 * Math.Pow(Math.Cosh(value), 2)) / Math.Pow(Math.Cosh(2 * value) + 1, 2);
+            return (4 * Math.Pow(Math.Cosh(value), 2)) / Math.Pow(Math.Cosh(2 * value) + 1, 2);
             //return Math.Exp(value) / Math.Pow(Math.Exp(value) + 1, 2);
-            return F(value) * (1 - F(value));
+            //return F(value) * (1 - F(value));
         }
     }
 }

@@ -176,7 +176,7 @@ namespace komiwojażer
         static void Main(string[] args)
         {
             double[,] odległościPoczątkowe;
-            int miastoStartu = 15;
+            int miastoStartu = 0;
             //odległościPoczątkowe = OdległościZYouTube();
             //odległościPoczątkowe = OdległościZPrezentacji();
             odległościPoczątkowe = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
@@ -258,13 +258,13 @@ namespace komiwojażer
             "Szczecin", 
             "Bydgoszcz",
             "Lublin",
-            "Katowice",
+            "Katowice"/*,
             "Białystok",
             "Gdynia", 
             "Częstochowa",
             "Radom",
             "Sosnowiec", 
-            "Toruń"
+            "Toruń"*/
         };
 
         static double[,] OdległościZYouTube()
