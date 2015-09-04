@@ -8,7 +8,7 @@ namespace plecak
 {
     class Program
     {
-        static float _V = 100;
+        static float _V;
         static List<Przedmiot> _przedmioty;
 
         static float Lowerbound(ref IEnumerable<Przedmiot> J, IEnumerable<Przedmiot> K)
@@ -47,10 +47,11 @@ namespace plecak
                 if (maska.Count(b => b) <= k)
                 {
                     List<Przedmiot> podzbiór = new List<Przedmiot>();
+                    int rozmiarMaski = maska.Count();
 
-                    for (int j = 0; j < maska.Count(); j++)
+                    for (int j = rozmiarMaski - 1; j >= 0; j--)
                         if (maska.ElementAt(j))
-                            podzbiór.Add(_przedmioty[j]);
+                            podzbiór.Add(_przedmioty[rozmiarMaski - j - 1]);
 
                     if (podzbiór.Sum(p => p.w) <= _V)
                         podzbiory.Add(podzbiór);
@@ -76,13 +77,26 @@ namespace plecak
         {
             IEnumerable<Przedmiot> plecak;
             _przedmioty = new List<Przedmiot>();
+            int k = Int32.Parse(System.IO.File.ReadAllText("k.txt"));
+            _V = Int32.Parse(System.IO.File.ReadAllText("pojemność.txt"));
 
-            _przedmioty.Add(new Przedmiot(200, 50));
-            _przedmioty.Add(new Przedmiot(155, 40));
-            _przedmioty.Add(new Przedmiot(115, 30));
-            _przedmioty.Add(new Przedmiot(200, 25));
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("przedmioty.txt"))
+                while (!strumień.EndOfStream)
+                {
+                    IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(p => Int32.Parse(p));
 
-            KNAP(4, out plecak);
+                    _przedmioty.Add(new Przedmiot(linia.First(), linia.Last()));
+                }
+
+            _przedmioty = _przedmioty.OrderByDescending(p => p.p / p.w).ToList();
+
+            KNAP(k, out plecak);
+
+            foreach (Przedmiot przedmiot in plecak)
+                Console.WriteLine("w: {0}\tp: {1}", przedmiot.w, przedmiot.p);
+
+            Console.WriteLine("sw: {0}\tsp: {1}", plecak.Sum(p => p.w), plecak.Sum(p => p.p));
+            Console.ReadKey();
         }
     }
 }

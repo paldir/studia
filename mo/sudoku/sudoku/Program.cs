@@ -91,7 +91,7 @@ namespace sudoku
             Wyświetl(sudoku);
         }
 
-        static bool WpiszJedyneMożliwości(Wierzchołek[,] sudoku)
+        /*static bool WpiszJedyneMożliwości(Wierzchołek[,] sudoku)
         {
             bool zmiana = false;
 
@@ -144,7 +144,7 @@ namespace sudoku
             }
 
             return zmiana;
-        }
+        }*/
 
         public static readonly List<int> Liczby = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 

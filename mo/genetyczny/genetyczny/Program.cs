@@ -9,7 +9,7 @@ namespace genetyczny
     class Program
     {
         const double epsilon = Double.Epsilon * 2;
-        
+
         static List<Osobnik> LosujPopulację(int liczbaOsobników)
         {
             List<Osobnik> populacja = new List<Osobnik>();
@@ -34,23 +34,10 @@ namespace genetyczny
                     dostępneGeny.RemoveAt(wylosowanyGen);
                 }
 
-                populacja.Add(new Osobnik(geny, DługośćTrasy(geny)));
+                populacja.Add(new Osobnik(geny));
             }
 
             return populacja;
-        }
-
-        static double DługośćTrasy(int[] geny)
-        {
-            double odległość = 0;
-            int liczbaGenów = geny.Length;
-
-            for (int i = 0; i < liczbaGenów - 1; i++)
-                odległość += odległości[geny[i], geny[i + 1]];
-
-            odległość += odległości[geny[liczbaGenów - 1], geny[0]];
-
-            return odległość;
         }
 
         static void Krzyżuj(Osobnik mama, Osobnik tata, out Osobnik nowaMama, out Osobnik nowyTata)
@@ -67,16 +54,6 @@ namespace genetyczny
 
             for (int i = 0; i < ilośćGenów; i++)
                 noweGenyMamy[i] = noweGenyTaty[i] = -1;
-
-            while (indeks2 == indeks1)
-                indeks2 = los.Next(0, ilośćGenów);
-
-            if (indeks1 > indeks2)
-            {
-                int tmp = indeks1;
-                indeks1 = indeks2;
-                indeks2 = tmp;
-            }
 
             for (int i = indeks1; i < indeks2; i++)
             {
@@ -98,18 +75,20 @@ namespace genetyczny
                 noweGenyTaty[i] = tmp;
             }
 
-            nowaMama = new Osobnik(noweGenyMamy, DługośćTrasy(noweGenyMamy));
-            nowyTata = new Osobnik(noweGenyTaty, DługośćTrasy(noweGenyTaty));
+            nowaMama = new Osobnik(noweGenyMamy);
+            nowyTata = new Osobnik(noweGenyTaty);
         }
 
         static void Main(string[] args)
         {
-            odległości = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
-            List<Osobnik> populacja = LosujPopulację(miasta.Length * 10);
+            Osobnik.Odległości = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
             Random los = new Random();
-            bool jedziemy = true;
+            IEnumerable<int> linie = System.IO.File.ReadAllLines("konfig.txt").Select(l => Int32.Parse(l));
+            int liczebność = linie.First();
+            int iteracje = linie.Last();
+            List<Osobnik> populacja = LosujPopulację(liczebność);
 
-            for (int ź = 0; jedziemy; ź++)
+            for (int ź = 0; ź < iteracje; ź++)
             {
                 double sumaPrzystosowania = populacja.Sum(o => o.Przystosowanie);
 
@@ -148,15 +127,7 @@ namespace genetyczny
                     nowePokolenie.Add(nowyTata);
                 }
 
-                double długośćTrasyStara = populacja.Sum(p => p.DługośćTrasy);
-                double długośćTrasyNowa = nowePokolenie.Sum(p => p.DługośćTrasy);
-
-                if (Math.Abs(długośćTrasyStara - długośćTrasyNowa) <= epsilon)
-                    jedziemy = false;
-
-                populacja = nowePokolenie;
-
-                foreach (Osobnik osobnik in populacja)
+                foreach (Osobnik osobnik in nowePokolenie)
                 {
                     int[] geny = osobnik.Geny;
 
@@ -166,8 +137,12 @@ namespace genetyczny
                             int tmp = geny[i];
                             geny[i] = geny[i + 1];
                             geny[i + 1] = tmp;
+
+                            osobnik.PrzeliczDługośćTrasy();
                         }
                 }
+
+                populacja = nowePokolenie;
             }
 
             double trasa = populacja.Min(p => p.DługośćTrasy);
@@ -176,9 +151,8 @@ namespace genetyczny
                 Console.WriteLine(miasta[numer]);
 
             Console.WriteLine("\nDługość trasy: {0}", trasa);
+            Console.ReadKey();
         }
-
-        static double[,] odległości;
 
         static readonly string[] miasta = new string[]
         {
@@ -190,8 +164,8 @@ namespace genetyczny
             "Gdańsk", 
             "Szczecin", 
             "Bydgoszcz",
-            "Lublin",
-            "Katowice"/*,
+            "Lublin",/*
+            "Katowice",
             "Białystok",
             "Gdynia", 
             "Częstochowa",

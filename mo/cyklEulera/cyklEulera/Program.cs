@@ -43,32 +43,16 @@ namespace cyklEulera
 
         static void Main(string[] args)
         {
-            List<Wierzchołek> graf = new List<Wierzchołek>()
-            {
-                new Wierzchołek(1, 2, 3),
-                new Wierzchołek(2, 1, 3),
-                new Wierzchołek(3, 1, 2, 4, 5),
-                new Wierzchołek(4, 3, 5),
-                new Wierzchołek(5, 3, 4)
-            };
+            List<Wierzchołek> graf = new List<Wierzchołek>();
 
-            /*List<Wierzchołek> graf = new List<Wierzchołek>()
-            {
-                new Wierzchołek(1, 2, 3, 5),
-                new Wierzchołek(2, 1, 3, 4),
-                new Wierzchołek(3, 1, 2, 4, 5),
-                new Wierzchołek(4, 3, 5, 2),
-                new Wierzchołek(5, 3, 4, 1)
-            };*/
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("input.txt"))
+                while (!strumień.EndOfStream)
+                {
+                    IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(w => Convert.ToInt32(w));
+                    int wierzchołek = linia.First();
 
-            /*List<Wierzchołek> graf = new List<Wierzchołek>()
-            {
-                new Wierzchołek(1, 2, 3, 5, 4),
-                new Wierzchołek(2, 1, 3, 4, 5),
-                new Wierzchołek(3, 1, 2, 4, 5),
-                new Wierzchołek(4, 3, 5, 2, 1),
-                new Wierzchołek(5, 3, 4, 1, 2)
-            };*/
+                    graf.Add(new Wierzchołek(wierzchołek, linia.Except(new int[] { wierzchołek })));
+                }
 
             foreach (Wierzchołek wierzchołek in CyklEulera(graf, graf[0]))
                 Console.Write("{0} ", wierzchołek.Nazwa);

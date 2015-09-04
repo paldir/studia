@@ -20,5 +20,7 @@ namespace cyklEulera
             foreach (int sąsiad in sąsiedzi)
                 Sąsiedzi.Add(sąsiad);
         }
+
+        public Wierzchołek(int nazwa, IEnumerable<int> sąsiedzi) : this(nazwa, sąsiedzi.ToArray()) { }
     }
 }

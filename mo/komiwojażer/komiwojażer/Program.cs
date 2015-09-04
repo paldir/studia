@@ -179,7 +179,8 @@ namespace komiwojażer
             int miastoStartu = 0;
             //odległościPoczątkowe = OdległościZYouTube();
             //odległościPoczątkowe = OdległościZPrezentacji();
-            odległościPoczątkowe = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
+            //odległościPoczątkowe = PołożenieGeograficzne.WyznaczOdległościPomiędzyMiastami(miasta, "miasta.txt");
+            odległościPoczątkowe = tmp;
             int rozmiar = odległościPoczątkowe.GetLength(0);
             double[,] kopiaOdległości = new double[rozmiar, rozmiar];
 
@@ -258,13 +259,13 @@ namespace komiwojażer
             "Szczecin", 
             "Bydgoszcz",
             "Lublin",
-            "Katowice"/*,
+            "Katowice",
             "Białystok",
             "Gdynia", 
             "Częstochowa",
             "Radom",
             "Sosnowiec", 
-            "Toruń"*/
+            "Toruń"
         };
 
         static double[,] OdległościZYouTube()
@@ -291,5 +292,14 @@ namespace komiwojażer
                     {3, 88, 18, 46, 92, 1}
                 };
         }
+
+        static double[,] tmp
+            = new double[,]
+            {
+                {1, 1, 8, 1},
+                {1, 1, 1, 5},
+                {8, 1, 1, 1},
+                {1, 5, 1, 1}
+};
     }
 }

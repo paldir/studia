@@ -8,7 +8,7 @@ namespace algorytmWęgierski
 {
     class Program
     {
-        static readonly int[,] krawędzie = new int[,]
+        /*static int[,] krawędzie = new int[,]
             {
                 {1, 11, 1},
                 {1, 12, 6},
@@ -16,7 +16,7 @@ namespace algorytmWęgierski
                 {2, 13, 6},
                 {3, 11, 4},
                 {3, 13, 1}
-            };
+            };*/
 
         /*static readonly int[,] krawędzie = new int[,]
             {
@@ -30,19 +30,22 @@ namespace algorytmWęgierski
 
         static void OdbudujKrawędzie(List<Wierzchołek> graf)
         {
-            for (int i = 0; i < krawędzie.GetLength(0); i++)
-            {
-                Wierzchołek wierzchołek1 = graf.Find(w => w.Nazwa == krawędzie[i, 0]);
-                Wierzchołek wierzchołek2 = graf.Find(w => w.Nazwa == krawędzie[i, 1]);
-                List<Sąsiad> sąsiedzi1 = wierzchołek1.Sąsiedzi;
-                List<Sąsiad> sąsiedzi2 = wierzchołek2.Sąsiedzi;
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("krawędzie.txt"))
+                while (!strumień.EndOfStream)
+                {
+                    IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(k => Convert.ToInt32(k));
 
-                if (!sąsiedzi1.Exists(s => s.Wierzchołek == wierzchołek2))
-                    sąsiedzi1.Add(new Sąsiad(wierzchołek2, krawędzie[i, 2]));
+                    Wierzchołek wierzchołek1 = graf.Find(w => w.Nazwa == linia.First());
+                    Wierzchołek wierzchołek2 = graf.Find(w => w.Nazwa == linia.ElementAt(1));
+                    List<Sąsiad> sąsiedzi1 = wierzchołek1.Sąsiedzi;
+                    List<Sąsiad> sąsiedzi2 = wierzchołek2.Sąsiedzi;
 
-                if (!sąsiedzi2.Exists(s => s.Wierzchołek == wierzchołek1))
-                    sąsiedzi2.Add(new Sąsiad(wierzchołek1, krawędzie[i, 2]));
-            }
+                    if (!sąsiedzi1.Exists(s => s.Wierzchołek == wierzchołek2))
+                        sąsiedzi1.Add(new Sąsiad(wierzchołek2, linia.Last()));
+
+                    if (!sąsiedzi2.Exists(s => s.Wierzchołek == wierzchołek1))
+                        sąsiedzi2.Add(new Sąsiad(wierzchołek1, linia.Last()));
+                }
         }
 
         static void UtwórzGrafRówny(List<Wierzchołek> graf)
@@ -75,11 +78,17 @@ namespace algorytmWęgierski
         {
             List<Wierzchołek> graf = new List<Wierzchołek>();
 
-            for (int i = 1; i <= 3; i++)
-                graf.Add(new Wierzchołek(i, 1));
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("dwudzielność.txt"))
+            {
+                IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(k => Convert.ToInt32(k));
+                int wierzchołek = linia.First();
 
-            for (int i = 11; i <= 13; i++)
-                graf.Add(new Wierzchołek(i, 2));
+                for (int i = 1; i <= wierzchołek - 1; i++)
+                    graf.Add(new Wierzchołek(i, 1));
+
+                for (int i = wierzchołek; i <= linia.Last(); i++)
+                    graf.Add(new Wierzchołek(i, 2));
+            }
 
             bool drugiKrok = true;
             List<Wierzchołek> v1 = graf.FindAll(w => w.ZbiórWGrafieDwudzielnym == 1);
@@ -133,7 +142,7 @@ namespace algorytmWęgierski
                 }
 
                 sąsiedziS = N_l(S);
-                Wierzchołek y = sąsiedziS.Except(T).First();
+                Wierzchołek y = sąsiedziS.Except(T).Single();
                 drugiKrok = y.SkojarzonyZ == null;
 
                 if (drugiKrok)
@@ -151,7 +160,16 @@ namespace algorytmWęgierski
             int suma = 0;
 
             foreach (Wierzchołek wierzchołek in v1)
-                suma += wierzchołek.Sąsiedzi.First().Waga;
+            {
+                Sąsiad sąsiad = wierzchołek.Sąsiedzi.Single();
+                int waga = sąsiad.Waga;
+                suma += waga;
+
+                Console.WriteLine("{0}\t{1}\t{2}", wierzchołek.Nazwa, sąsiad.Wierzchołek.Nazwa, waga);
+            }
+
+            Console.WriteLine("\t\t{0}", suma);
+            Console.ReadKey();
         }
 
         static void SkojarzeniePoczątkowe(List<Wierzchołek> graf)

@@ -117,7 +117,8 @@ namespace maksymalneSkojarzenie
                     {
                         Krawędź krawędź = new Krawędź(wierzchołek.Nazwa, wierzchołek.SkojarzonyZ.Nazwa);
 
-                        if (!krawędzieSkojarzone.Contains(krawędź))
+                        if (!
+                            krawędzieSkojarzone.Contains(krawędź))
                             krawędzieSkojarzone.Add(krawędź);
                     }
 
@@ -153,38 +154,27 @@ namespace maksymalneSkojarzenie
         {
             List<Wierzchołek> graf = new List<Wierzchołek>();
 
-            for (int i = 1; i <= 7; i++)
-                graf.Add(new Wierzchołek(i, 1));
-
-            for (int i = 8; i <= 14; i++)
-                graf.Add(new Wierzchołek(i, 2));
-
-            int[,] tablicaKrawędzi = new int[,]
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("dwudzielność.txt"))
             {
-                {1, 8}, 
-                {1, 9},
-                {1, 10},
-                {1, 13}, 
-                {1, 14},
-                {2, 8},
-                {2, 12},
-                {2, 14},
-                {3, 8},
-                {3, 10},
-                {4, 9},
-                {4, 10},
-                {5, 11},
-                {5, 12},
-                {6, 11},
-                {6, 12},
-                {7, 10},
-                {7, 11}
-            };
+                IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(k => Convert.ToInt32(k));
+                int wierzchołek = linia.First();
+
+                for (int i = 1; i <= wierzchołek - 1; i++)
+                    graf.Add(new Wierzchołek(i, 1));
+
+                for (int i = wierzchołek; i <= linia.Last(); i++)
+                    graf.Add(new Wierzchołek(i, 2));
+            }
 
             List<Krawędź> krawędzie = new List<Krawędź>();
 
-            for (int i = 0; i < tablicaKrawędzi.GetLength(0); i++)
-                krawędzie.Add(new Krawędź(tablicaKrawędzi[i, 0], tablicaKrawędzi[i, 1]));
+            using (System.IO.StreamReader strumień = new System.IO.StreamReader("krawędzie.txt"))
+                while (!strumień.EndOfStream)
+                {
+                    IEnumerable<int> linia = strumień.ReadLine().Split('\t').Select(k => Convert.ToInt32(k));
+
+                    krawędzie.Add(new Krawędź(linia.First(), linia.Last()));
+                }
 
             krawędzie = krawędzie.Distinct().ToList();
 
@@ -201,6 +191,15 @@ namespace maksymalneSkojarzenie
             }
 
             MaksymalneSkojarzenie(graf);
+
+            foreach (Wierzchołek wierzchołek in graf)
+            {
+                int? skojarzonyZ = wierzchołek.NazwaSkojarzonegoWierzchołka;
+
+                Console.WriteLine("{0} skojarzony z {1}", wierzchołek.Nazwa, skojarzonyZ.HasValue ? skojarzonyZ.Value.ToString() : "niczym");
+            }
+
+            Console.ReadKey();
         }
     }
 }
