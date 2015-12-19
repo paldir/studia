@@ -1,0 +1,19 @@
+# http://scienceblogs.com/goodmath/wp-content/blogs.dir/476/files/2012/04/i-56b36b0280bacb6dc765751d3ba52d56-example-scc-graph.png
+#a h
+#a b f
+#b d
+#c g
+#d a g
+#e c f
+#f e
+#g h
+#h c
+## http://www.algorytm.org/images/grafy/sss.gif
+#1 7
+#1 2
+#2 3
+#3 4
+#4 2 5 7
+#5 6
+#6 5
+#7 2

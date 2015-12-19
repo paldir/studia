@@ -1,0 +1,20 @@
+﻿@model razorĆwiczenia.Models.Lokal
+
+<table>
+	   <tr>
+		   <td><img src="@Url.Content(Model.PhotoPath)" /></td>
+		   <td>
+			   <table>
+				   <tr>
+					   <td>@Model.Nazwa</td>
+				   </tr>
+				   <tr>
+					   <td>@Model.Miasto</td>
+				   </tr>
+				   <tr>
+					   <td>@Model.Ocena</td>
+				   </tr>
+			   </table>
+		   </td>
+	   </tr>
+</table>

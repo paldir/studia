@@ -1,0 +1,77 @@
+﻿<Window x:Class="KółkoIKrzyżyk.Widok.GłówneOkno"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:kik="clr-namespace:KółkoIKrzyżyk"
+        xmlns:mw="clr-namespace:KółkoIKrzyżyk.ModelWidoku"
+        xmlns:w="clr-namespace:KółkoIKrzyżyk.Widok"
+        Title="Kółko i krzyżyk" ResizeMode="CanMinimize" WindowState="Maximized" Name="Okno">
+    <Window.DataContext>
+        <mw:GłównyModelWidoku></mw:GłównyModelWidoku>
+    </Window.DataContext>
+    <Window.Resources>
+        <w:ZawartośćPolaNaŚcieżkęDoObrazkaConverter x:Key="ZawartośćPolaNaŚcieżkęDoObrazkaConverter"></w:ZawartośćPolaNaŚcieżkęDoObrazkaConverter>
+        <w:RozmiarOknaNaRozmiarObrazkaConverter x:Key="RozmiarOknaNaRozmiarObrazkaConverter"></w:RozmiarOknaNaRozmiarObrazkaConverter>
+        <w:EnumNaZaznaczniePolaRadioConverter x:Key="EnumNaZaznaczniePolaRadioConverter"></w:EnumNaZaznaczniePolaRadioConverter>
+        <DataTemplate x:Key="WierszPlanszy">
+            <Border BorderThickness="1" BorderBrush="Black">
+                <Button>
+                    <Button.Command>
+                        <Binding ElementName="Okno" Path="DataContext.WykonanieRuchu"></Binding>
+                    </Button.Command>
+                    <Button.CommandParameter>
+                        <Binding></Binding>
+                    </Button.CommandParameter>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Image Source="{Binding Converter={StaticResource ZawartośćPolaNaŚcieżkęDoObrazkaConverter}}">
+                                    <Image.Height>
+                                        <MultiBinding Converter="{StaticResource RozmiarOknaNaRozmiarObrazkaConverter}">
+                                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}" Path="ActualHeight"></Binding>
+                                            <Binding ElementName="Okno" Path="DataContext.DługośćBokuPlanszy"></Binding>
+                                        </MultiBinding>
+                                    </Image.Height>
+                                </Image>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="Plansza">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource WierszPlanszy}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <ItemsControl ItemTemplate="{StaticResource Plansza}" ItemsSource="{Binding Plansza}" Margin="10"></ItemsControl>
+            <Grid>
+                <StackPanel IsEnabled="{Binding BrakGry}">
+                    <GroupBox Header="Tryb gry">
+                        <StackPanel>
+                            <RadioButton Content="SI vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.SiVsSi}}"></RadioButton>
+                            <RadioButton Content="Gracz vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.GraczVsSi}}"></RadioButton>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Zaczynający" IsEnabled="{Binding ŻywyGracz}">
+                        <StackPanel>
+                            <RadioButton Content="Gracz" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Gracz}}"></RadioButton>
+                            <RadioButton Content="SI" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Si}}"></RadioButton>
+                        </StackPanel>
+                    </GroupBox>
+                    <Button FontSize="30" Command="{Binding RozpoczęcieGry}" IsEnabled="{Binding BrakGry}">Start!</Button>
+                    <Label Content="{Binding Tryb}"></Label>
+                    <Label Content="{Binding BrakGry}"></Label>
+                    <Label Content="{Binding KtoZaczyna}"></Label>
+                    <Label Content="{Binding Wynik}"></Label>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

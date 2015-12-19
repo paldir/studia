@@ -1,0 +1,26 @@
+void DFSM(wierzcho³ek b, ojciec_v)
+{
+	K[v]=szary;
+	t++;
+	first[b]=l[v]=t;
+
+	for(x nale¿y do s¹siedzi[v]
+	{
+		if (k[x]=bia³y)
+		{
+			DFSM(x, v);
+
+			l[v]=min{l[v], l[x]};
+		}
+		else
+		{
+			if (x!=ojciec_v)
+			{
+				l[v]=min{first[x], l[v]};
+			}
+		}
+	}
+
+	if (l[v]=first[v])
+		(v, ojciec_v) jest mostem!
+}

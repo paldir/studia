@@ -1,0 +1,66 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="generator" content="Microsoft Visual Studio, see http://msdn.microsoft.com/vstudio/" />
+    <meta name="Keywords" content="PSW, Widgets" />
+    <meta name="Description" content="About PSW, Inc., it's widgets, employees and company" />
+    <meta name="copyright" content="Copyright (c) 2012 PSW, Inc. All rights reserved." />
+    <link href="App_Themes/css-print.css" rel="stylesheet" type="text/css" media="print" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <title>PSW</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <%--asp--%>
+        <!--
+
+TOP INFORMTION
+
+-->
+        <div id="top-information">
+            <div id="logo">
+                <a href="Default.aspx">PSW, Inc.</a>
+            </div>
+            <div id="top-information-home">
+                <a href="Default.aspx">Home</a>
+            </div>
+            <div id="top-information-phone">
+                888-555-0100
+            </div>
+        </div>
+        <!--
+
+TOP NAV
+
+-->
+        <div class="none"><a href="#maincontent">skip to the main content area of this page</a></div>
+        <div id="nav-main">
+            <%--asp--%>
+            <div>
+                &nbsp;
+            </div>
+        </div>
+        <a id="maincontent"></a>
+        <asp:ContentPlaceHolder ID="mainContent" runat="server">
+        </asp:ContentPlaceHolder>
+        <%--asp--%>
+        <!--
+
+FOOTER
+
+-->
+        <div id="footer">
+            Copyright &copy; 2012 PSW, Inc. <a href="LegalNotice.aspx">Terms of Use</a>
+            <div>
+                &nbsp;
+            </div>
+        </div>
+        <div id="footer-sub">
+            <%--asp--%>
+        </div>
+    </form>
+</body>
+</html>

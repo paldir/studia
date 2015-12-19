@@ -1,0 +1,24 @@
+﻿# http://www.personal.kent.edu/~rmuhamma/GraphTheory/MyGraphTheory/Diagrams/g45.gif
+#a f
+#a b c
+#b c
+#c d
+#d e f
+#e f
+# http://d2dskowxfbo68o.cloudfront.net/wp-content/uploads/Bridge2.png
+#0 6
+#0 1 2
+#1 2 3 4 6
+#3 5
+#4 5
+# http://d2dskowxfbo68o.cloudfront.net/wp-content/uploads/ArticulationPoints.png
+#0 4
+#0 1 2 3
+#1 2
+#3 4
+# http://faculty.simpson.edu/lydia.sinapova/www/cmsc250/LN250_Weiss/L25-Fig04.gif
+#a f
+#a c e
+#b c d
+#c e f
+#d f

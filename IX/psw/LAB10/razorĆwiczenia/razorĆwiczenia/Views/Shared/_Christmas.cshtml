@@ -1,0 +1,52 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Lokale !</title>
+</head>
+<body>
+    <div>
+        <?xml version="1.0" encoding="UTF-8" ?>
+
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+        <head>
+            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+            <meta name="description" content="Lokale !" />
+            <meta name="keywords" content="Lokale !" />
+            <link rel="stylesheet" type="text/css" href="~/Templates/styleC.css" />
+            <title>Lokale !</title>
+        </head>
+        <body>
+            <div id="wrap">
+                <div id="header">
+                    <h1>Lokale !</h1>
+                    <h2>Mniam mniam i wiele wiÄcej...</h2>
+                </div>
+                <div id="menu">
+                    <ul>
+                        <li>@Html.ActionLink("Start", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Lokale", "Index", "Lokale")</li>
+                        <li>@Html.ActionLink("O nas", "About", "Home")</li>
+                    </ul>
+                </div>
+                <div id="content">
+                    @RenderBody()
+
+                </div>
+                <div id="footer">
+                    <div class="left">
+                        <a href="http://www.simpletemplates.org">www.simpletemplates.org</a>
+                    </div>
+                    <div class="right">
+                        <!-- Please consider leaving the credit - link back to our website in the footer intact or if you want to remove it please buy link back free license on http://www.simpletemplates.org/simple-website-template-3.html
+                        -->
+                        Design by <a href="http://www.simpletemplates.org">Simple Website Templates</a>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+            </div>
+        </body>
+    </html>
+</div>
+</body>
+</html>
