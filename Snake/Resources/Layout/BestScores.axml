@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:background="@color/TerrariumBackground">
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#000000"
+    android:typeface="monospace"
+    android:text="Best scores"
+    android:textStyle="bold"
+    android:textSize="20dp"
+    android:layout_centerHorizontal="true"
+    android:layout_above="@+id/table" />
+  <TableLayout 
+    android:id="@+id/table" 
+    android:layout_centerInParent="true"
+    android:layout_height="wrap_content" 
+    android:layout_width="wrap_content">
+  </TableLayout>
+  <Button
+    style="@style/Button"
+    android:id="@+id/menu"
+    android:text="Back to menu"
+    android:background="@drawable/ButtonBackground"
+    android:textColor="@drawable/ButtonColor"
+    android:layout_below="@+id/table"
+    android:layout_centerHorizontal="true"
+    android:layout_width="wrap_content" />
+</RelativeLayout>

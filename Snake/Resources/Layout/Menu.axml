@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/TerrariumBackground">
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/Icon"
+    android:layout_above="@+id/menuLayout"
+    android:layout_centerHorizontal="true" />
+  <LinearLayout
+    android:id="@+id/menuLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_centerInParent="true">
+    <Button
+      style="@style/Button"
+      android:id="@+id/start"
+      android:text="Play!"
+      android:background="@drawable/ButtonBackground"
+      android:textColor="@drawable/ButtonColor" />
+    <Button
+      style="@style/Button"
+      android:id="@+id/best"
+      android:text="Best scores"
+      android:background="@drawable/ButtonBackground"
+      android:textColor="@drawable/ButtonColor" />
+  </LinearLayout>
+</RelativeLayout>
