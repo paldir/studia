@@ -1,0 +1,9 @@
+﻿body {
+    background-image: url(background.png);
+}
+
+#battleField {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

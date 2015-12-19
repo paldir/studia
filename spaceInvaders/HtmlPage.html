@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Space Invaders</title>
+
+    <script src="BattleFieldManagement.js"></script>
+    <script src="Drawing.js"></script>
+    <script src="ShipsAndMissiles.js"></script>
+
+    <link href="StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+    <canvas id="battleField" width="700" height="700"></canvas>
+    <audio id="soundOfMissileOfInvader" src="soundOfMissileOfInvader.wav"></audio>
+    <audio id="soundOfMissileOfHero" src="soundOfMissileOfHero.wav"></audio>
+    <audio id="soundOfDestructionOfInvader" src="soundOfDestructionOfInvader.wav"></audio>
+    <audio id="soundOfHitHero" src="soundOfHitHero.wav"></audio>
+
+    <script>
+        var battleFieldManagement = new BattleFieldManagement();
+        var drawing = new Drawing('battleField');
+        var clock = 0;
+        var pressedKeys = {};
+        var stateOfBattleField = {};
+        var level = 1;
+        Hero.lifes = 3;
+       
+        onkeydown = function (e) { pressedKeys[e.keyCode] = true; };
+        onkeyup = function (e) { delete pressedKeys[e.keyCode]; };
+
+        var interval = setInterval(function () { Update(); }, 33);
+
+        function Update() {
+            drawing.ClearBattleField();
+            //drawing.DrawGrid();
+            drawing.DrawInvaders(battleFieldManagement.invaders);
+            drawing.DrawMissilesOfInvaders(battleFieldManagement.missilesOfInvaders);
+            drawing.DrawHero(battleFieldManagement.hero);
+            drawing.DrawMissilesOfHero(battleFieldManagement.missilesOfHero);
+            drawing.DrawStats(level, Hero.lifes);
+
+            if (clock % (11 - level) == 0) {
+                battleFieldManagement.MoveInvaders();
+                clock = 0;
+            }
+
+            if (Math.random() < 0.01 * level)
+                battleFieldManagement.LaunchMissileOfInvader();
+
+            battleFieldManagement.MoveMissilesOfHero();
+            battleFieldManagement.MoveMissilesOfInvaders();
+            battleFieldManagement.DestroyHero();
+            battleFieldManagement.DestroyInvaders();
+            battleFieldManagement.HandleKeys(pressedKeys);
+
+            stateOfBattleField = battleFieldManagement.CheckState();
+
+            if (!stateOfBattleField['heroAlive']) {
+                drawing.ClearBattleField();
+                drawing.DrawEndOfGameCommunicate("Game over! ");
+                clearInterval(interval);
+            }
+
+            if (!stateOfBattleField['invadersAlive']) {
+                level++;
+
+                if (level == 11) {
+                    drawing.ClearBattleField();
+                    drawing.DrawEndOfGameCommunicate("Congratulations! ");
+                    clearInterval(interval);
+                }
+                else
+                    battleFieldManagement = new BattleFieldManagement();
+            }
+
+            clock++;
+        }
+    </script>
+</body>
+</html>
