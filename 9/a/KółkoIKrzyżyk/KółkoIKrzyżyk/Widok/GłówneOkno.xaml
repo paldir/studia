@@ -47,6 +47,11 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </DataTemplate>
+        <Style x:Key="LiczbowePoleTekstowe" TargetType="TextBox">
+            <Setter Property="Width" Value="50"></Setter>
+            <Setter Property="TextAlignment" Value="Right"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
@@ -63,6 +68,18 @@
                         <StackPanel>
                             <RadioButton Content="Gracz" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Gracz}}"></RadioButton>
                             <RadioButton Content="SI" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Si}}"></RadioButton>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Liczby">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Rozmiar:</Label>
+                                <TextBox Text="{Binding DługośćBokuPlanszy}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Zwycięska liczba pól:</Label>
+                                <TextBox Text="{Binding ZwycięskaLiczbaPól}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                            </StackPanel>
                         </StackPanel>
                     </GroupBox>
                     <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>

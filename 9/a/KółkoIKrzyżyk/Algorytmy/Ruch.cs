@@ -10,12 +10,13 @@ namespace Algorytmy
     {
         bool _perspektywaKółka;
         int _głębokość;
-        const int ZwycięskaLiczbaPól = 3;
+        int _zwycięskaLiczbaPól = 3;
 
-        public Ruch(bool kółko, int głębokość)
+        public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól)
         {
             _perspektywaKółka = kółko;
             _głębokość = głębokość;
+            _zwycięskaLiczbaPól = zwycięskaLiczbaPól;
         }
 
         public bool Minimax(Pole[,] stanGry, out WynikGry wynik)
@@ -185,7 +186,7 @@ namespace Algorytmy
                 return punktyKrzyżyka - punktyKółka;
         }
 
-        static bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik)
+        bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik)
         {
             int rozmiar = stanGry.GetLength(0);
             punktyKółka = punktyKrzyżyka = 0;
@@ -196,7 +197,7 @@ namespace Algorytmy
                     int liczbaKółek = 0;
                     int liczbaKrzyżyków = 0;
                     int liczbaPustych = 0;
-                    int początekKolejnejTrójki = j + ZwycięskaLiczbaPól;
+                    int początekKolejnejTrójki = j + _zwycięskaLiczbaPól;
 
                     for (int k = j; k < początekKolejnejTrójki && k < rozmiar; k++)
                         SprawdźZawartośćPola(stanGry[i, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
@@ -211,7 +212,7 @@ namespace Algorytmy
                     int liczbaKółek = 0;
                     int liczbaKrzyżyków = 0;
                     int liczbaPustych = 0;
-                    int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
+                    int początekKolejnejTrójki = i + _zwycięskaLiczbaPól;
 
                     for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
                         SprawdźZawartośćPola(stanGry[k, j], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
@@ -327,11 +328,11 @@ namespace Algorytmy
                 liczbaPustych++;
         }
 
-        static bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
+        bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
-            if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == ZwycięskaLiczbaPól - liczbaKółekWLinii)
+            if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii)
             {
-                if (liczbaKółekWLinii == ZwycięskaLiczbaPól)
+                if (liczbaKółekWLinii == _zwycięskaLiczbaPól)
                 {
                     punktyKółka = Double.MaxValue;
                     punktyKrzyżyka = 0;
@@ -340,12 +341,12 @@ namespace Algorytmy
                     return true;
                 }
                 
-                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / ZwycięskaLiczbaPól * 100, 2);
+                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, 2);
             }
 
-            if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == ZwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
+            if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
             {
-                if (liczbaKrzyżykówWLinii == ZwycięskaLiczbaPól)
+                if (liczbaKrzyżykówWLinii == _zwycięskaLiczbaPól)
                 {
                     punktyKółka = 0;
                     punktyKrzyżyka = Double.MaxValue;
@@ -354,7 +355,7 @@ namespace Algorytmy
                     return true;
                 }
 
-                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / ZwycięskaLiczbaPól * 100, 2);
+                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, 2);
             }
 
             wynik = WynikGry.Remis | WynikGry.Trwająca;

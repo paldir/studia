@@ -15,8 +15,8 @@ namespace KółkoIKrzyżyk.ModelWidoku
         bool _ruchGracza;
         DispatcherTimer _minutnik;
 
+        public int ZwycięskaLiczbaPól { get; set; }
         public Plansza Plansza { get; private set; }
-        public int DługośćBokuPlanszy { get; private set; }
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
 
@@ -73,6 +73,20 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
+        int _długośćBokuPlanszy;
+        public int DługośćBokuPlanszy
+        {
+            get { return _długośćBokuPlanszy; }
+            
+            set 
+            {
+                _długośćBokuPlanszy = value;
+                Plansza = new Plansza(value);
+
+                OnPropertyChanged("DługośćBokuPlanszy");
+            }
+        }
+
         public bool ŻywyGracz
         {
             get { return Tryb == KółkoIKrzyżyk.TrybGry.GraczVsSi; }
@@ -87,7 +101,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             RozpoczęcieGry = new Komenda(RozpocznijGrę);
             WykonanieRuchu = new Komenda(WykonajRuch);
             DługośćBokuPlanszy = 4;
-            Plansza = new ModelWidoku.Plansza(DługośćBokuPlanszy);
+            ZwycięskaLiczbaPól = 3;
             BrakGry = true;
         }
 
@@ -130,7 +144,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         void minutnik_Tick(object sender, EventArgs e)
         {
-            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, 4);
+            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, 4, ZwycięskaLiczbaPól);
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
             Algorytmy.WynikGry wynik;
 
