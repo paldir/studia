@@ -65,7 +65,7 @@
                             <RadioButton Content="SI" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Si}}"></RadioButton>
                         </StackPanel>
                     </GroupBox>
-                    <Button FontSize="30" Command="{Binding RozpoczęcieGry}" IsEnabled="{Binding BrakGry}">Start!</Button>
+                    <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
                     <Label Content="{Binding Tryb}"></Label>
                     <Label Content="{Binding BrakGry}"></Label>
                     <Label Content="{Binding KtoZaczyna}"></Label>

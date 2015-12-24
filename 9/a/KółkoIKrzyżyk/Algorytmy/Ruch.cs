@@ -10,6 +10,7 @@ namespace Algorytmy
     {
         bool _perspektywaKółka;
         int _głębokość;
+        const int ZwycięskaLiczbaPól = 3;
 
         public Ruch(bool kółko, int głębokość)
         {
@@ -190,6 +191,65 @@ namespace Algorytmy
             punktyKółka = punktyKrzyżyka = 0;
 
             for (int i = 0; i < rozmiar; i++)
+                for (int j = 0; j < rozmiar; j++)
+                {
+                    int liczbaKółek = 0;
+                    int liczbaKrzyżyków = 0;
+                    int liczbaPustych = 0;
+                    int początekKolejnejTrójki = j + ZwycięskaLiczbaPól;
+
+                    for (int k = j; k < początekKolejnejTrójki && k < rozmiar; k++)
+                        SprawdźZawartośćPola(stanGry[i, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+
+                    if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                        return true;
+                }
+
+            for (int j = 0; j < rozmiar; j++)
+                for (int i = 0; i < rozmiar; i++)
+                {
+                    int liczbaKółek = 0;
+                    int liczbaKrzyżyków = 0;
+                    int liczbaPustych = 0;
+                    int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
+
+                    for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
+                        SprawdźZawartośćPola(stanGry[k, j], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+
+                    if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                        return true;
+                }
+
+            /*for (int i = 0; i < rozmiar; i++)
+                for (int j = 0; j < rozmiar - ZwycięskaLiczbaPól; j++)
+                {
+                    int liczbaKółek = 0;
+                    int liczbaKrzyżyków = 0;
+                    int liczbaPustych = 0;
+                    int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
+
+                    for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
+                        SprawdźZawartośćPola(stanGry[k, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+
+                    if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                        return true;
+                }
+
+            for (int i = 0; i < rozmiar; i++)
+            {
+                int liczbaKółek = 0;
+                int liczbaKrzyżyków = 0;
+                int liczbaPustych = 0;
+                int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
+
+                for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
+                    SprawdźZawartośćPola(stanGry[k, rozmiar - k - 1], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+
+                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                    return true;
+            }*/
+
+            /*for (int i = 0; i < rozmiar; i++)
             {
                 int liczbaKółek = 0;
                 int liczbaKrzyżyków = 0;
@@ -233,7 +293,7 @@ namespace Algorytmy
 
                 if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, rozmiar, ref punktyKółka, ref punktyKrzyżyka, out wynik))
                     return true;
-            }
+            }*/
 
             bool istniejąPustePola = false;
 
@@ -257,21 +317,21 @@ namespace Algorytmy
             return false;
         }
 
-        static void SprawdźZawartośćPola(Pole pole, ref int liczbaKółek, ref int liczbaKrzyżyków)
+        static void SprawdźZawartośćPola(Pole pole, ref int liczbaKółek, ref int liczbaKrzyżyków, ref int liczbaPustych)
         {
             if (pole == Pole.Kółko)
                 liczbaKółek++;
             else if (pole == Pole.Krzyżyk)
                 liczbaKrzyżyków++;
+            else
+                liczbaPustych++;
         }
 
-        static bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int długośćLinii, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
+        static bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
-            if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0)
+            if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == ZwycięskaLiczbaPól - liczbaKółekWLinii)
             {
-                punktyKółka += Convert.ToDouble(liczbaKółekWLinii) / długośćLinii * 100;
-
-                if (liczbaKółekWLinii == długośćLinii)
+                if (liczbaKółekWLinii == ZwycięskaLiczbaPól)
                 {
                     punktyKółka = Double.MaxValue;
                     punktyKrzyżyka = 0;
@@ -279,13 +339,13 @@ namespace Algorytmy
 
                     return true;
                 }
+                
+                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / ZwycięskaLiczbaPól * 100, 2);
             }
 
-            if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0)
+            if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == ZwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
             {
-                punktyKrzyżyka += Convert.ToDouble(liczbaKrzyżykówWLinii) / długośćLinii * 100;
-
-                if (liczbaKrzyżykówWLinii == długośćLinii)
+                if (liczbaKrzyżykówWLinii == ZwycięskaLiczbaPól)
                 {
                     punktyKółka = 0;
                     punktyKrzyżyka = Double.MaxValue;
@@ -293,6 +353,8 @@ namespace Algorytmy
 
                     return true;
                 }
+
+                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / ZwycięskaLiczbaPól * 100, 2);
             }
 
             wynik = WynikGry.Remis | WynikGry.Trwająca;

@@ -64,8 +64,8 @@ namespace KółkoIKrzyżyk.ModelWidoku
         public Algorytmy.WynikGry Wynik
         {
             get { return _wynik; }
-            
-            set 
+
+            set
             {
                 _wynik = value;
 
@@ -86,7 +86,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
             RozpoczęcieGry = new Komenda(RozpocznijGrę);
             WykonanieRuchu = new Komenda(WykonajRuch);
-            DługośćBokuPlanszy = 3;
+            DługośćBokuPlanszy = 4;
             Plansza = new ModelWidoku.Plansza(DługośćBokuPlanszy);
             BrakGry = true;
         }
@@ -130,7 +130,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         void minutnik_Tick(object sender, EventArgs e)
         {
-            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, Int32.MaxValue);
+            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, 4);
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
             Algorytmy.WynikGry wynik;
 
