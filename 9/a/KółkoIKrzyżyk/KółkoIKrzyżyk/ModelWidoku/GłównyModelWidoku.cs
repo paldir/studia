@@ -16,9 +16,10 @@ namespace KółkoIKrzyżyk.ModelWidoku
         DispatcherTimer _minutnik;
 
         public int ZwycięskaLiczbaPól { get; set; }
-        public Plansza Plansza { get; private set; }
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
+        public int GłębokośćRekurencji { get; set; }
+        public Zaczynający KtoZaczyna { get; set; }
 
         TrybGry _tryb;
         public TrybGry Tryb
@@ -29,21 +30,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             {
                 _tryb = value;
 
-                OnPropertyChanged("TrybGry");
                 OnPropertyChanged("ŻywyGracz");
-            }
-        }
-
-        Zaczynający _ktoZaczyna;
-        public Zaczynający KtoZaczyna
-        {
-            get { return _ktoZaczyna; }
-
-            set
-            {
-                _ktoZaczyna = value;
-
-                OnPropertyChanged("Zaczynający");
             }
         }
 
@@ -52,7 +39,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
         {
             get { return _brakGry; }
 
-            set
+            private set
             {
                 _brakGry = value;
 
@@ -65,7 +52,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
         {
             get { return _wynik; }
 
-            set
+            private set
             {
                 _wynik = value;
 
@@ -77,8 +64,8 @@ namespace KółkoIKrzyżyk.ModelWidoku
         public int DługośćBokuPlanszy
         {
             get { return _długośćBokuPlanszy; }
-            
-            set 
+
+            set
             {
                 _długośćBokuPlanszy = value;
                 Plansza = new Plansza(value);
@@ -86,6 +73,20 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 OnPropertyChanged("DługośćBokuPlanszy");
             }
         }
+
+        Plansza _plansza;
+        public Plansza Plansza
+        {
+            get { return _plansza; }
+
+            private set
+            {
+                _plansza = value;
+
+                OnPropertyChanged("Plansza");
+            }
+        }
+
 
         public bool ŻywyGracz
         {
@@ -100,8 +101,9 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
             RozpoczęcieGry = new Komenda(RozpocznijGrę);
             WykonanieRuchu = new Komenda(WykonajRuch);
-            DługośćBokuPlanszy = 4;
-            ZwycięskaLiczbaPól = 3;
+            DługośćBokuPlanszy = 10;
+            ZwycięskaLiczbaPól = 5;
+            GłębokośćRekurencji = 3;
             BrakGry = true;
         }
 
@@ -144,7 +146,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         void minutnik_Tick(object sender, EventArgs e)
         {
-            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, 4, ZwycięskaLiczbaPól);
+            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
             Algorytmy.WynikGry wynik;
 
@@ -152,7 +154,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     gra[i, j] = Plansza[i][j].Zawartość;
 
-            if (algorytm.Minimax(gra, out wynik))
+            if (algorytm.AlfaBetaObcięcie(gra, out wynik))
             {
                 BrakGry = true;
 

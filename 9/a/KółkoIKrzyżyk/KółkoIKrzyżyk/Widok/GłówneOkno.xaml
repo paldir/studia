@@ -80,13 +80,13 @@
                                 <Label>Zwycięska liczba pól:</Label>
                                 <TextBox Text="{Binding ZwycięskaLiczbaPól}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Głębokość rekurencji:</Label>
+                                <TextBox Text="{Binding GłębokośćRekurencji}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                            </StackPanel>
                         </StackPanel>
                     </GroupBox>
                     <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
-                    <Label Content="{Binding Tryb}"></Label>
-                    <Label Content="{Binding BrakGry}"></Label>
-                    <Label Content="{Binding KtoZaczyna}"></Label>
-                    <Label Content="{Binding Wynik}"></Label>
                 </StackPanel>
             </Grid>
         </DockPanel>
