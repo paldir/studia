@@ -20,6 +20,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
         public Komenda RozpoczęcieGry { get; private set; }
         public int GłębokośćRekurencji { get; set; }
         public Zaczynający KtoZaczyna { get; set; }
+        public Pole OstatnioWypełnionePole { get; set; }
 
         TrybGry _tryb;
         public TrybGry Tryb

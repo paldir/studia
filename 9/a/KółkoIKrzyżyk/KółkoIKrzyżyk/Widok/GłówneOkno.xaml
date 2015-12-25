@@ -14,13 +14,7 @@
         <w:EnumNaZaznaczniePolaRadioConverter x:Key="EnumNaZaznaczniePolaRadioConverter"></w:EnumNaZaznaczniePolaRadioConverter>
         <DataTemplate x:Key="WierszPlanszy">
             <Border BorderThickness="1" BorderBrush="Black">
-                <Button>
-                    <Button.Command>
-                        <Binding ElementName="Okno" Path="DataContext.WykonanieRuchu"></Binding>
-                    </Button.Command>
-                    <Button.CommandParameter>
-                        <Binding></Binding>
-                    </Button.CommandParameter>
+                <Button Command="{Binding ElementName=Okno, Path=DataContext.WykonanieRuchu}" CommandParameter="{Binding}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <DockPanel>

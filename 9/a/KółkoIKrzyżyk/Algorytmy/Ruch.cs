@@ -10,7 +10,7 @@ namespace Algorytmy
     {
         bool _perspektywaKółka;
         int _głębokość;
-        int _zwycięskaLiczbaPól = 3;
+        int _zwycięskaLiczbaPól;
 
         public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól)
         {
@@ -221,80 +221,43 @@ namespace Algorytmy
                         return true;
                 }
 
-            /*for (int i = 0; i < rozmiar; i++)
-                for (int j = 0; j < rozmiar - ZwycięskaLiczbaPól; j++)
-                {
-                    int liczbaKółek = 0;
-                    int liczbaKrzyżyków = 0;
-                    int liczbaPustych = 0;
-                    int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
-
-                    for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
-                        SprawdźZawartośćPola(stanGry[k, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
-
-                    if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                        return true;
-                }
-
-            for (int i = 0; i < rozmiar; i++)
             {
-                int liczbaKółek = 0;
-                int liczbaKrzyżyków = 0;
-                int liczbaPustych = 0;
-                int początekKolejnejTrójki = i + ZwycięskaLiczbaPól;
+                int ostatniSprawdzanyIndeks = rozmiar - _zwycięskaLiczbaPól;
 
-                for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
-                    SprawdźZawartośćPola(stanGry[k, rozmiar - k - 1], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+                for (int i = 0; i <= ostatniSprawdzanyIndeks; i++)
+                    for (int j = 0; j <= ostatniSprawdzanyIndeks; j++)
+                    {
+                        int liczbaKółek = 0;
+                        int liczbaKrzyżyków = 0;
+                        int liczbaPustych = 0;
 
-                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                    return true;
-            }*/
+                        for (int k = 0; k < _zwycięskaLiczbaPól; k++)
+                            SprawdźZawartośćPola(stanGry[i + k, j + k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
-            /*for (int i = 0; i < rozmiar; i++)
-            {
-                int liczbaKółek = 0;
-                int liczbaKrzyżyków = 0;
-
-                for (int j = 0; j < rozmiar; j++)
-                    SprawdźZawartośćPola(stanGry[i, j], ref liczbaKółek, ref liczbaKrzyżyków);
-
-                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, rozmiar, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                    return true;
-            }
-
-            for (int j = 0; j < rozmiar; j++)
-            {
-                int liczbaKółek = 0;
-                int liczbaKrzyżyków = 0;
-
-                for (int i = 0; i < rozmiar; i++)
-                    SprawdźZawartośćPola(stanGry[i, j], ref liczbaKółek, ref liczbaKrzyżyków);
-
-                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, rozmiar, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                    return true;
+                        if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                            return true;
+                    }
             }
 
             {
-                int liczbaKółek = 0;
-                int liczbaKrzyżyków = 0;
+                int ostatniSprawdzanyIndeksWierszy = rozmiar - _zwycięskaLiczbaPól;
+                int pierwszySprawdzanyIndeksKolumny = rozmiar - 1;
+                int ostatniSprawdzanyIndeksKolumn = _zwycięskaLiczbaPól - 1;
 
-                for (int i = 0; i < rozmiar; i++)
-                    SprawdźZawartośćPola(stanGry[i, i], ref liczbaKółek, ref liczbaKrzyżyków);
+                for (int i = 0; i <= ostatniSprawdzanyIndeksWierszy; i++)
+                    for (int j = pierwszySprawdzanyIndeksKolumny; j >= ostatniSprawdzanyIndeksKolumn; j--)
+                    {
+                        int liczbaKółek = 0;
+                        int liczbaKrzyżyków = 0;
+                        int liczbaPustych = 0;
 
-                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, rozmiar, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                    return true;
+                        for (int k = 0; k < _zwycięskaLiczbaPól; k++)
+                            SprawdźZawartośćPola(stanGry[i + k, j - k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
+
+                        if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                            return true;
+                    }
             }
-
-            {
-                int liczbaKółek = 0;
-                int liczbaKrzyżyków = 0;
-
-                for (int i = 0; i < rozmiar; i++)
-                    SprawdźZawartośćPola(stanGry[i, rozmiar - 1 - i], ref liczbaKółek, ref liczbaKrzyżyków);
-
-                if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, rozmiar, ref punktyKółka, ref punktyKrzyżyka, out wynik))
-                    return true;
-            }*/
 
             bool istniejąPustePola = false;
 
@@ -331,31 +294,31 @@ namespace Algorytmy
         bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
             if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii)
-            {
+            {                
+                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, 2);
+
                 if (liczbaKółekWLinii == _zwycięskaLiczbaPól)
                 {
-                    punktyKółka = Double.MaxValue;
+                    //punktyKółka = Double.MaxValue;
                     punktyKrzyżyka = 0;
                     wynik = WynikGry.Kółko;
 
                     return true;
                 }
-                
-                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, 2);
             }
 
             if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
             {
+                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, 2);
+
                 if (liczbaKrzyżykówWLinii == _zwycięskaLiczbaPól)
                 {
                     punktyKółka = 0;
-                    punktyKrzyżyka = Double.MaxValue;
+                    //punktyKrzyżyka = Double.MaxValue;
                     wynik = WynikGry.Krzyżyk;
 
                     return true;
                 }
-
-                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, 2);
             }
 
             wynik = WynikGry.Remis | WynikGry.Trwająca;
