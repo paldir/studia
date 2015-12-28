@@ -18,10 +18,16 @@
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
-                                <Image Source="{Binding Converter={StaticResource ZawartośćPolaNaŚcieżkęDoObrazkaConverter}}">
+                                <Image>
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource ZawartośćPolaNaŚcieżkęDoObrazkaConverter}">
+                                            <Binding></Binding>
+                                            <Binding ElementName="Okno" Path="DataContext.OstatnioWypełnionePole"></Binding>
+                                        </MultiBinding>
+                                    </Image.Source>
                                     <Image.Height>
                                         <MultiBinding Converter="{StaticResource RozmiarOknaNaRozmiarObrazkaConverter}">
-                                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}" Path="ActualHeight"></Binding>
+                                            <Binding ElementName="Okno" Path="ActualHeight"></Binding>
                                             <Binding ElementName="Okno" Path="DataContext.DługośćBokuPlanszy"></Binding>
                                         </MultiBinding>
                                     </Image.Height>

@@ -29,12 +29,12 @@ namespace Algorytmy
             return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik);
         }
 
-        public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik)
+        public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik, out int a, out int b)
         {
             double punktyKółka;
             double punktyKrzyżyka;
 
-            NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, Double.NegativeInfinity, Double.PositiveInfinity);
+            NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, Double.NegativeInfinity, Double.PositiveInfinity, out a, out b);
 
             return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik);
         }
@@ -93,11 +93,12 @@ namespace Algorytmy
             return ekstremum;
         }
 
-        double NastępnyAlfaBetaObcięcie(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość, double alfa, double beta)
+        double NastępnyAlfaBetaObcięcie(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość, double alfa, double beta, out int a, out int b)
         {
             double punktyKółka;
             double punktyKrzyżyka;
             WynikGry wynik;
+            a = b = -1;
 
             if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik) || głębokość == 0)
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
@@ -125,7 +126,7 @@ namespace Algorytmy
                         {
                             Pole[,] możliwyStan = KopiujStanGry(stanGry);
                             możliwyStan[i, j] = znakAktualnegoGracza;
-                            double opłacalnośćRozwiązania = NastępnyAlfaBetaObcięcie(możliwyStan, false, !ruchKółka, głębokość - 1, alfa, beta);
+                            double opłacalnośćRozwiązania = NastępnyAlfaBetaObcięcie(możliwyStan, false, !ruchKółka, głębokość - 1, alfa, beta, out a, out b);
                             alfa = Math.Max(alfa, ekstremum);
 
                             if (opłacalnośćRozwiązania > ekstremum)
@@ -154,7 +155,7 @@ namespace Algorytmy
                         {
                             Pole[,] możliwyStan = KopiujStanGry(stanGry);
                             możliwyStan[i, j] = znakAktualnegoGracza;
-                            double opłacalnośćRozwiązania = NastępnyAlfaBetaObcięcie(możliwyStan, true, !ruchKółka, głębokość - 1, alfa, beta);
+                            double opłacalnośćRozwiązania = NastępnyAlfaBetaObcięcie(możliwyStan, true, !ruchKółka, głębokość - 1, alfa, beta, out a, out b);
                             beta = Math.Min(beta, ekstremum);
 
                             if (opłacalnośćRozwiązania < ekstremum)
@@ -174,6 +175,8 @@ namespace Algorytmy
             }
 
             stanGry[ekstremalneI, ekstremalneJ] = znakAktualnegoGracza;
+            a = ekstremalneI;
+            b = ekstremalneJ;
 
             return ekstremum;
         }

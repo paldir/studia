@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 using System.IO;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace KółkoIKrzyżyk.Widok
 {
-    class ZawartośćPolaNaŚcieżkęDoObrazkaConverter : IValueConverter
+    class ZawartośćPolaNaŚcieżkęDoObrazkaConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             const string folder = "Obrazki";
             string nazwaObrazka;
-            ModelWidoku.Pole zawartość = value as ModelWidoku.Pole;
+            ModelWidoku.Pole zawartość = values[0] as ModelWidoku.Pole;
+            ModelWidoku.Pole ostatnioWypełnionePole = values[1] as ModelWidoku.Pole;
 
             switch (zawartość.Zawartość)
             {
@@ -35,10 +37,13 @@ namespace KółkoIKrzyżyk.Widok
                     break;
             }
 
-            return Path.GetFullPath(Path.Combine(folder, nazwaObrazka));
+            if (zawartość == ostatnioWypełnionePole)
+                nazwaObrazka = String.Concat("niebieski", nazwaObrazka);
+
+            return new BitmapImage(new Uri(Path.GetFullPath(Path.Combine(folder, nazwaObrazka))));
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

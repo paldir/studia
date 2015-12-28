@@ -137,6 +137,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 else
                     znak = Algorytmy.Pole.Krzyżyk;
 
+                OstatnioWypełnionePole = pole;
                 pole.Zawartość = znak;
                 _ruchKółka = !_ruchKółka;
                 _ruchGracza = false;
@@ -150,12 +151,14 @@ namespace KółkoIKrzyżyk.ModelWidoku
             Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
             Algorytmy.WynikGry wynik;
+            int a;
+            int b;
 
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     gra[i, j] = Plansza[i][j].Zawartość;
 
-            if (algorytm.AlfaBetaObcięcie(gra, out wynik))
+            if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b))
             {
                 BrakGry = true;
 
@@ -163,6 +166,11 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
 
             Wynik = wynik;
+
+            if (wynik == Algorytmy.WynikGry.Trwająca)
+                OstatnioWypełnionePole = Plansza[a][b];
+            else
+                OstatnioWypełnionePole = null;
 
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
