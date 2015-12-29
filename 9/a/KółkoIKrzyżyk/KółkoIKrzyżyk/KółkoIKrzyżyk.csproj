@@ -59,6 +59,7 @@
     <Compile Include="ModelWidoku\Komenda.cs" />
     <Compile Include="ModelWidoku\ObiektModelWidoku.cs" />
     <Compile Include="ModelWidoku\Pole.cs" />
+    <Compile Include="Widok\CzyjaKolejkaConverter.cs" />
     <Compile Include="Widok\GłówneOkno.xaml.cs">
       <DependentUpon>GłówneOkno.xaml</DependentUpon>
     </Compile>
@@ -68,6 +69,8 @@
     </Compile>
     <Compile Include="Widok\RozmiarOknaNaRozmiarObrazkaConverter.cs" />
     <Compile Include="Widok\EnumNaZaznaczniePolaRadioConverter.cs" />
+    <Compile Include="Widok\BooleanNaWidocznośćKontrolki.cs" />
+    <Compile Include="Widok\WynikGryNaTreśćEtykiety.cs" />
     <Compile Include="Widok\ZawartośćPolaNaŚcieżkęObrazkaConverter.cs" />
     <Page Include="Widok\GłówneOkno.xaml">
       <SubType>Designer</SubType>

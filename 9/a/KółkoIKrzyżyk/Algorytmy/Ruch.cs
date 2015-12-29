@@ -19,24 +19,24 @@ namespace Algorytmy
             _zwycięskaLiczbaPól = zwycięskaLiczbaPól;
         }
 
-        public bool Minimax(Pole[,] stanGry, out WynikGry wynik)
+        public bool Minimax(Pole[,] stanGry, out WynikGry wynik, out KierunekZwycięskiejLinii kierunek)
         {
             double punktyKółka;
             double punktyKrzyżyka;
 
             NastępnyMinimax(stanGry, true, _perspektywaKółka, _głębokość);
 
-            return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik);
+            return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek);
         }
 
-        public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik, out int a, out int b)
+        public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik, out int a, out int b, out KierunekZwycięskiejLinii kierunek)
         {
             double punktyKółka;
             double punktyKrzyżyka;
 
             NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, Double.NegativeInfinity, Double.PositiveInfinity, out a, out b);
 
-            return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik);
+            return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek);
         }
 
         double NastępnyMinimax(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość)
@@ -44,8 +44,9 @@ namespace Algorytmy
             double punktyKółka;
             double punktyKrzyżyka;
             WynikGry wynik;
+            KierunekZwycięskiejLinii kierunek;
 
-            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik) || głębokość == 0)
+            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
 
             int rozmiar = stanGry.GetLength(0);
@@ -98,9 +99,10 @@ namespace Algorytmy
             double punktyKółka;
             double punktyKrzyżyka;
             WynikGry wynik;
+            KierunekZwycięskiejLinii kierunek;
             a = b = -1;
 
-            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik) || głębokość == 0)
+            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
 
             int rozmiar = stanGry.GetLength(0);
@@ -189,7 +191,7 @@ namespace Algorytmy
                 return punktyKrzyżyka - punktyKółka;
         }
 
-        bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik)
+        bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik, out KierunekZwycięskiejLinii kierunek)
         {
             int rozmiar = stanGry.GetLength(0);
             punktyKółka = punktyKrzyżyka = 0;
@@ -206,7 +208,11 @@ namespace Algorytmy
                         SprawdźZawartośćPola(stanGry[i, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                     if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                    {
+                        kierunek = KierunekZwycięskiejLinii.Poziomy;
+
                         return true;
+                    }
                 }
 
             for (int j = 0; j < rozmiar; j++)
@@ -221,7 +227,11 @@ namespace Algorytmy
                         SprawdźZawartośćPola(stanGry[k, j], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                     if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                    {
+                        kierunek = KierunekZwycięskiejLinii.Pionowy;
+
                         return true;
+                    }
                 }
 
             {
@@ -238,7 +248,11 @@ namespace Algorytmy
                             SprawdźZawartośćPola(stanGry[i + k, j + k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                         if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                        {
+                            kierunek = KierunekZwycięskiejLinii.UkośnieOdLewejDoPrawej;
+
                             return true;
+                        }
                     }
             }
 
@@ -258,7 +272,11 @@ namespace Algorytmy
                             SprawdźZawartośćPola(stanGry[i + k, j - k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                         if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
+                        {
+                            kierunek = KierunekZwycięskiejLinii.UkośnieOdPrawejDoLewej;
+                            
                             return true;
+                        }
                     }
             }
 
@@ -271,6 +289,8 @@ namespace Algorytmy
 
                     break;
                 }
+
+            kierunek = KierunekZwycięskiejLinii.BrakWygranej;
 
             if (!istniejąPustePola)
             {

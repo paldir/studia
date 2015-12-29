@@ -4,6 +4,7 @@
         xmlns:kik="clr-namespace:KółkoIKrzyżyk"
         xmlns:mw="clr-namespace:KółkoIKrzyżyk.ModelWidoku"
         xmlns:w="clr-namespace:KółkoIKrzyżyk.Widok"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         Title="Kółko i krzyżyk" ResizeMode="CanMinimize" WindowState="Maximized" Name="Okno">
     <Window.DataContext>
         <mw:GłównyModelWidoku></mw:GłównyModelWidoku>
@@ -12,6 +13,9 @@
         <w:ZawartośćPolaNaŚcieżkęDoObrazkaConverter x:Key="ZawartośćPolaNaŚcieżkęDoObrazkaConverter"></w:ZawartośćPolaNaŚcieżkęDoObrazkaConverter>
         <w:RozmiarOknaNaRozmiarObrazkaConverter x:Key="RozmiarOknaNaRozmiarObrazkaConverter"></w:RozmiarOknaNaRozmiarObrazkaConverter>
         <w:EnumNaZaznaczniePolaRadioConverter x:Key="EnumNaZaznaczniePolaRadioConverter"></w:EnumNaZaznaczniePolaRadioConverter>
+        <w:CzyjaKolejkaConverter x:Key="CzyjaKolejkaConverter"></w:CzyjaKolejkaConverter>
+        <w:BooleanNaWidocznośćKontrolki x:Key="BooleanNaWidocznośćKontrolki"></w:BooleanNaWidocznośćKontrolki>
+        <w:WynikGryNaTreśćEtykiety x:Key="WynikGryNaTreśćEtykiety"></w:WynikGryNaTreśćEtykiety>
         <DataTemplate x:Key="WierszPlanszy">
             <Border BorderThickness="1" BorderBrush="Black">
                 <Button Command="{Binding ElementName=Okno, Path=DataContext.WykonanieRuchu}" CommandParameter="{Binding}">
@@ -52,6 +56,10 @@
             <Setter Property="TextAlignment" Value="Right"></Setter>
             <Setter Property="VerticalAlignment" Value="Center"></Setter>
         </Style>
+        <Style x:Key="EtykietaStatusu" TargetType="Label">
+            <Setter Property="FontSize" Value="30"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
@@ -87,6 +95,17 @@
                         </StackPanel>
                     </GroupBox>
                     <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
+                    <Label Content="{Binding Wynik, Converter={StaticResource WynikGryNaTreśćEtykiety}}" Style="{StaticResource EtykietaStatusu}"></Label>
+                    <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}">
+                        <Label.Visibility>
+                            <Binding Path="BrakGry" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
+                                <Binding.ConverterParameter>
+                                    <System:Boolean>True</System:Boolean>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </Label.Visibility>
+                    </Label>
+                    <Label Content="{Binding Kierunek}"></Label>
                 </StackPanel>
             </Grid>
         </DockPanel>
