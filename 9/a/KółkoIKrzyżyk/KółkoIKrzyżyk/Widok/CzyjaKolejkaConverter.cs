@@ -13,9 +13,9 @@ namespace KółkoIKrzyżyk.Widok
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if ((bool)value)
-                return "Twój ruch.";
+                return "gracz";
             else
-                return "Ruch komputera.";
+                return "komputer";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

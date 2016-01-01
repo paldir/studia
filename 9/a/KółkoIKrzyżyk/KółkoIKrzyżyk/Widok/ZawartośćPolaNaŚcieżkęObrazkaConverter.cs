@@ -14,7 +14,6 @@ namespace KółkoIKrzyżyk.Widok
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            const string folder = "Obrazki";
             string nazwaObrazka;
             ModelWidoku.Pole zawartość = values[0] as ModelWidoku.Pole;
             ModelWidoku.Pole ostatnioWypełnionePole = values[1] as ModelWidoku.Pole;
@@ -22,22 +21,22 @@ namespace KółkoIKrzyżyk.Widok
             switch (zawartość.Zawartość)
             {
                 case Algorytmy.Pole.Kółko:
-                    nazwaObrazka = "kółko.png";
+                    nazwaObrazka = "kolko.png";
 
                     break;
 
                 case Algorytmy.Pole.Krzyżyk:
-                    nazwaObrazka = "krzyżyk.png";
+                    nazwaObrazka = "krzyzyk.png";
 
                     break;
 
                 case Algorytmy.Pole.ZwycięskieKółko:
-                    nazwaObrazka = "zwycięskieKółko.png";
+                    nazwaObrazka = "zwycieskieKolko.png";
 
                     break;
 
                 case Algorytmy.Pole.ZwycięskiKrzyżyk:
-                    nazwaObrazka = "zwycięskiKrzyżyk.png";
+                    nazwaObrazka = "zwycieskiKrzyzyk.png";
 
                     break;
 
@@ -50,7 +49,9 @@ namespace KółkoIKrzyżyk.Widok
             if (zawartość == ostatnioWypełnionePole)
                 nazwaObrazka = String.Concat("niebieski", nazwaObrazka);
 
-            return new BitmapImage(new Uri(Path.GetFullPath(Path.Combine(folder, nazwaObrazka))));
+            nazwaObrazka = String.Concat("/Obrazki/", nazwaObrazka);
+
+            return new BitmapImage(new Uri(nazwaObrazka, UriKind.Relative));
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)

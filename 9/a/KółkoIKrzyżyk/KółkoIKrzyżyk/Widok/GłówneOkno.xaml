@@ -57,7 +57,7 @@
             <Setter Property="VerticalAlignment" Value="Center"></Setter>
         </Style>
         <Style x:Key="EtykietaStatusu" TargetType="Label">
-            <Setter Property="FontSize" Value="30"></Setter>
+            <Setter Property="FontSize" Value="20"></Setter>
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
         </Style>
     </Window.Resources>
@@ -95,16 +95,20 @@
                         </StackPanel>
                     </GroupBox>
                     <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
-                    <Label Content="{Binding Wynik, Converter={StaticResource WynikGryNaTreśćEtykiety}}" Style="{StaticResource EtykietaStatusu}"></Label>
-                    <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}">
-                        <Label.Visibility>
+                    <GroupBox Header="Status gry">
+                        <Label Content="{Binding Wynik, Converter={StaticResource WynikGryNaTreśćEtykiety}}" Style="{StaticResource EtykietaStatusu}"></Label>
+                    </GroupBox>
+                    <GroupBox Header="Wykonawca ruchu">
+                        <GroupBox.Visibility>
                             <Binding Path="BrakGry" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
                                 <Binding.ConverterParameter>
                                     <System:Boolean>True</System:Boolean>
                                 </Binding.ConverterParameter>
                             </Binding>
-                        </Label.Visibility>
-                    </Label>
+                        </GroupBox.Visibility>
+                        <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}">
+                        </Label>
+                    </GroupBox>
                 </StackPanel>
             </Grid>
         </DockPanel>

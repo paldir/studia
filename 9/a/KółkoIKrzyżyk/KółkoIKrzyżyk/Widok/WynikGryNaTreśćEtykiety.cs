@@ -15,19 +15,19 @@ namespace KółkoIKrzyżyk.Widok
             switch ((Algorytmy.WynikGry)value)
             {
                 case Algorytmy.WynikGry.Trwająca:
-                    return "Gra w toku.";
+                    return "w toku";
 
                 case Algorytmy.WynikGry.Remis:
-                    return "Remis.";
+                    return "remis";
 
                 case Algorytmy.WynikGry.Kółko:
-                    return "Zwycięstwo kółka.";
+                    return "zwycięstwo kółka";
 
                 case Algorytmy.WynikGry.Krzyżyk:
-                    return "Zwycięstwo krzyżyka.";
+                    return "zwycięstwo krzyżyka";
 
                 default:
-                    return "Gra nierozpoczęta.";
+                    return "nierozpoczęta";
             }
         }
 
