@@ -58,5 +58,29 @@ namespace KółkoIKrzyżyk.Properties {
                 this["GłębokośćRekurencji"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SiVsSi")]
+        public global::KółkoIKrzyżyk.TrybGry TrybGry {
+            get {
+                return ((global::KółkoIKrzyżyk.TrybGry)(this["TrybGry"]));
+            }
+            set {
+                this["TrybGry"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gracz")]
+        public global::KółkoIKrzyżyk.Zaczynający Zaczynający {
+            get {
+                return ((global::KółkoIKrzyżyk.Zaczynający)(this["Zaczynający"]));
+            }
+            set {
+                this["Zaczynający"] = value;
+            }
+        }
     }
 }

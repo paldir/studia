@@ -11,5 +11,11 @@
     <Setting Name="GłębokośćRekurencji" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="TrybGry" Type="KółkoIKrzyżyk.TrybGry" Scope="User">
+      <Value Profile="(Default)">SiVsSi</Value>
+    </Setting>
+    <Setting Name="Zaczynający" Type="KółkoIKrzyżyk.Zaczynający" Scope="User">
+      <Value Profile="(Default)">Gracz</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

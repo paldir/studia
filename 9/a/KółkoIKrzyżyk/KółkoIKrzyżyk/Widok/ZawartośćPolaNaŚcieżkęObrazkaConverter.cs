@@ -31,6 +31,16 @@ namespace KółkoIKrzyżyk.Widok
 
                     break;
 
+                case Algorytmy.Pole.ZwycięskieKółko:
+                    nazwaObrazka = "zwycięskieKółko.png";
+
+                    break;
+
+                case Algorytmy.Pole.ZwycięskiKrzyżyk:
+                    nazwaObrazka = "zwycięskiKrzyżyk.png";
+
+                    break;
+
                 default:
                     nazwaObrazka = "puste.png";
 
