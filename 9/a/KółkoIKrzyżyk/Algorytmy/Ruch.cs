@@ -12,12 +12,14 @@ namespace Algorytmy
         int _głębokość;
         int _zwycięskaLiczbaPól;
         int _rozmiar;
+        Action _inkrementacjaLiczbyPrzeanalizowanychRuchów;
 
-        public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól)
+        public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól, Action inkrementacjaLiczbyPrzeanalizowanychRuchów)
         {
             _perspektywaKółka = kółko;
             _głębokość = głębokość;
             _zwycięskaLiczbaPól = zwycięskaLiczbaPól;
+            _inkrementacjaLiczbyPrzeanalizowanychRuchów = inkrementacjaLiczbyPrzeanalizowanychRuchów;
         }
 
         public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik, out int a, out int b, out KierunekZwycięskiejLinii kierunek)
@@ -66,6 +68,9 @@ namespace Algorytmy
                             możliwyStan[i, j] = znakAktualnegoGracza;
                             double opłacalnośćRozwiązania = NastępnyAlfaBetaObcięcie(możliwyStan, false, !ruchKółka, głębokość - 1, alfa, beta, out a, out b);
                             alfa = Math.Max(alfa, ekstremum);
+
+                            if (głębokość == _głębokość)
+                                _inkrementacjaLiczbyPrzeanalizowanychRuchów();
 
                             if (opłacalnośćRozwiązania > ekstremum)
                             {

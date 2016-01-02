@@ -155,6 +155,32 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
+        int _liczbaMożliwychRuchów;
+        public int LiczbaMożliwychRuchów
+        {
+            get { return _liczbaMożliwychRuchów; }
+
+            set
+            {
+                _liczbaMożliwychRuchów = value;
+
+                OnPropertyChanged("LiczbaMożliwychRuchów");
+            }
+        }
+
+        int _liczbaPrzeanalizowanychRuchów;
+        public int LiczbaPrzeanalizowanychRuchów
+        {
+            get { return _liczbaPrzeanalizowanychRuchów; }
+
+            set
+            {
+                _liczbaPrzeanalizowanychRuchów = value;
+
+                OnPropertyChanged("LiczbaPrzeanalizowanychRuchów");
+            }
+        }
+
         public bool ŻywyGracz
         {
             get { return Tryb == TrybGry.GraczVsSi; }
@@ -209,6 +235,8 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
                 if (Wynik == Algorytmy.WynikGry.Trwająca)
                 {
+                    LiczbaPrzeanalizowanychRuchów = 1;
+                    
                     Thread.Sleep(1000);
                     WykonajRuchJakoKomputer();
 
@@ -240,7 +268,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
                     OstatnioWypełnionePole = pole;
                     pole.Zawartość = znak;
-                    Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
+                    Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól, InkrementujLiczbęPrzeanalizowanychRuchów);
                     Algorytmy.Pole[,] stanGry = KonwertujNaTypZAlgorytmu();
                     double punktyKółka;
                     double punktyKrzyżyka;
@@ -263,11 +291,16 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         void WykonajRuchJakoKomputer()
         {
-            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
+            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól, InkrementujLiczbęPrzeanalizowanychRuchów);
             Algorytmy.Pole[,] gra = KonwertujNaTypZAlgorytmu();
             Algorytmy.WynikGry wynik;
             int a;
             int b;
+            LiczbaMożliwychRuchów = 0;
+
+            foreach (Algorytmy.Pole pole in gra)
+                if (pole == Algorytmy.Pole.Puste)
+                    LiczbaMożliwychRuchów++;
 
             if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out _kierunek))
                 BrakGry = true;
@@ -425,6 +458,11 @@ namespace KółkoIKrzyżyk.ModelWidoku
                         break;
                 }
             }
+        }
+
+        void InkrementujLiczbęPrzeanalizowanychRuchów()
+        {
+            LiczbaPrzeanalizowanychRuchów++;
         }
 
         void Current_Exit(object sender, ExitEventArgs e)

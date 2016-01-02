@@ -113,6 +113,16 @@
                         <GroupBox Header="Wykonawca ruchu">
                             <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}"></Label>
                         </GroupBox>
+                        <GroupBox Header="Obliczanie kolejnego ruchu">
+                            <GroupBox.Visibility>
+                                <Binding Path="RuchGracza" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
+                                    <Binding.ConverterParameter>
+                                        <System:Boolean>True</System:Boolean>
+                                    </Binding.ConverterParameter>
+                                </Binding>
+                            </GroupBox.Visibility>
+                            <ProgressBar Maximum="{Binding LiczbaMożliwychRuchów}" Value="{Binding LiczbaPrzeanalizowanychRuchów}" Height="20" Margin="10"></ProgressBar>
+                        </GroupBox>
                     </StackPanel>
                 </StackPanel>
             </Grid>
