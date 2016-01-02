@@ -11,6 +11,7 @@ namespace Algorytmy
         bool _perspektywaKółka;
         int _głębokość;
         int _zwycięskaLiczbaPól;
+        int _rozmiar;
 
         public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól)
         {
@@ -19,79 +20,15 @@ namespace Algorytmy
             _zwycięskaLiczbaPól = zwycięskaLiczbaPól;
         }
 
-        public bool Minimax(Pole[,] stanGry, out WynikGry wynik, out KierunekZwycięskiejLinii kierunek)
-        {
-            double punktyKółka;
-            double punktyKrzyżyka;
-
-            NastępnyMinimax(stanGry, true, _perspektywaKółka, _głębokość);
-
-            return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek);
-        }
-
         public bool AlfaBetaObcięcie(Pole[,] stanGry, out WynikGry wynik, out int a, out int b, out KierunekZwycięskiejLinii kierunek)
         {
             double punktyKółka;
             double punktyKrzyżyka;
+            _rozmiar = stanGry.GetLength(0);
 
             NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, Double.NegativeInfinity, Double.PositiveInfinity, out a, out b);
 
             return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek);
-        }
-
-        double NastępnyMinimax(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość)
-        {
-            double punktyKółka;
-            double punktyKrzyżyka;
-            WynikGry wynik;
-            KierunekZwycięskiejLinii kierunek;
-
-            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
-                return WartośćWyniku(punktyKółka, punktyKrzyżyka);
-
-            int rozmiar = stanGry.GetLength(0);
-            Pole znakAktualnegoGracza;
-
-            if (ruchKółka)
-                znakAktualnegoGracza = Pole.Kółko;
-            else
-                znakAktualnegoGracza = Pole.Krzyżyk;
-
-            Func<double, double, bool> funkcjaPorównująca;
-            double ekstremum;
-            int ekstremalneI = -1;
-            int ekstremalneJ = -1;
-
-            if (maksymalizacja)
-            {
-                ekstremum = Single.NegativeInfinity;
-                funkcjaPorównująca = (x, y) => x > y;
-            }
-            else
-            {
-                ekstremum = Single.PositiveInfinity;
-                funkcjaPorównująca = (x, y) => x < y;
-            }
-
-            for (int i = 0; i < rozmiar; i++)
-                for (int j = 0; j < rozmiar; j++)
-                    if (stanGry[i, j] == Pole.Puste)
-                    {
-                        Pole[,] możliwyStan = KopiujStanGry(stanGry);
-                        możliwyStan[i, j] = znakAktualnegoGracza;
-                        double opłacalnośćRozwiązania = NastępnyMinimax(możliwyStan, !maksymalizacja, !ruchKółka, głębokość - 1);
-
-                        if (funkcjaPorównująca(opłacalnośćRozwiązania, ekstremum))
-                        {
-                            ekstremum = opłacalnośćRozwiązania;
-                            ekstremalneI = i;
-                            ekstremalneJ = j;
-                        }
-                    }
-
-            stanGry[ekstremalneI, ekstremalneJ] = znakAktualnegoGracza;
-
-            return ekstremum;
         }
 
         double NastępnyAlfaBetaObcięcie(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość, double alfa, double beta, out int a, out int b)
@@ -105,7 +42,6 @@ namespace Algorytmy
             if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
 
-            int rozmiar = stanGry.GetLength(0);
             Pole znakAktualnegoGracza;
 
             if (ruchKółka)
@@ -121,9 +57,9 @@ namespace Algorytmy
             {
                 ekstremum = Single.NegativeInfinity;
 
-                for (int i = 0; i < rozmiar; i++)
+                for (int i = 0; i < _rozmiar; i++)
                 {
-                    for (int j = 0; j < rozmiar; j++)
+                    for (int j = 0; j < _rozmiar; j++)
                         if (stanGry[i, j] == Pole.Puste)
                         {
                             Pole[,] możliwyStan = KopiujStanGry(stanGry);
@@ -150,9 +86,9 @@ namespace Algorytmy
             {
                 ekstremum = Single.PositiveInfinity;
 
-                for (int i = 0; i < rozmiar; i++)
+                for (int i = 0; i < _rozmiar; i++)
                 {
-                    for (int j = 0; j < rozmiar; j++)
+                    for (int j = 0; j < _rozmiar; j++)
                         if (stanGry[i, j] == Pole.Puste)
                         {
                             Pole[,] możliwyStan = KopiujStanGry(stanGry);
@@ -191,7 +127,7 @@ namespace Algorytmy
                 return punktyKrzyżyka - punktyKółka;
         }
 
-        bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik, out KierunekZwycięskiejLinii kierunek)
+        public bool GraZakończona(Pole[,] stanGry, out double punktyKółka, out double punktyKrzyżyka, out WynikGry wynik, out KierunekZwycięskiejLinii kierunek)
         {
             int rozmiar = stanGry.GetLength(0);
             punktyKółka = punktyKrzyżyka = 0;
@@ -316,13 +252,14 @@ namespace Algorytmy
 
         bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
+            int potęga = 3;
+            
             if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii)
-            {                
-                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, 2);
+            {
+                punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, potęga);
 
                 if (liczbaKółekWLinii == _zwycięskaLiczbaPól)
                 {
-                    //punktyKółka = Double.MaxValue;
                     punktyKrzyżyka = 0;
                     wynik = WynikGry.Kółko;
 
@@ -332,12 +269,11 @@ namespace Algorytmy
 
             if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
             {
-                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, 2);
+                punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, potęga);
 
                 if (liczbaKrzyżykówWLinii == _zwycięskaLiczbaPól)
                 {
                     punktyKółka = 0;
-                    //punktyKrzyżyka = Double.MaxValue;
                     wynik = WynikGry.Krzyżyk;
 
                     return true;

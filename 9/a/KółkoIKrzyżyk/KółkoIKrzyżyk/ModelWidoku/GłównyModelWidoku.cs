@@ -155,7 +155,6 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-
         public bool ŻywyGracz
         {
             get { return Tryb == TrybGry.GraczVsSi; }
@@ -208,17 +207,16 @@ namespace KółkoIKrzyżyk.ModelWidoku
                     _ruchKółka = !_ruchKółka;
                 }
 
-                Thread.Sleep(1000);
+                if (Wynik == Algorytmy.WynikGry.Trwająca)
+                {
+                    Thread.Sleep(1000);
+                    WykonajRuchJakoKomputer();
 
-                Algorytmy.Pole[,] stanGry = WykonajRuchJakoKomputer();
-                Application aplikacja = Application.Current;
-                _ruchKółka = !_ruchKółka;
+                    _ruchKółka = !_ruchKółka;
 
-                if (aplikacja != null)
-                    aplikacja.Dispatcher.Invoke(() => ZapiszNowyStanGry(stanGry));
-
-                if (ŻywyGracz)
-                    RuchGracza = true;
+                    if (ŻywyGracz)
+                        RuchGracza = true;
+                }
             }
             while (Wynik == Algorytmy.WynikGry.Trwająca);
 
@@ -242,6 +240,20 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
                     OstatnioWypełnionePole = pole;
                     pole.Zawartość = znak;
+                    Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
+                    Algorytmy.Pole[,] stanGry = KonwertujNaTypZAlgorytmu();
+                    double punktyKółka;
+                    double punktyKrzyżyka;
+                    Algorytmy.WynikGry wynik;
+
+                    if (algorytm.GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out _kierunek))
+                    {
+                        BrakGry = true;
+                        Wynik = wynik;
+
+                        PrzedstawWynikGry(stanGry, pole.I, pole.J);
+                        ZapiszNowyStanGry(stanGry);
+                    }
 
                     lock (_lock)
                         Monitor.Pulse(_lock);
@@ -249,153 +261,27 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        Algorytmy.Pole[,] WykonajRuchJakoKomputer()
+        void WykonajRuchJakoKomputer()
         {
             Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
-            Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
+            Algorytmy.Pole[,] gra = KonwertujNaTypZAlgorytmu();
             Algorytmy.WynikGry wynik;
-            Algorytmy.KierunekZwycięskiejLinii kierunek;
             int a;
             int b;
 
-            for (int i = 0; i < DługośćBokuPlanszy; i++)
-                for (int j = 0; j < DługośćBokuPlanszy; j++)
-                    gra[i, j] = Plansza[i][j].Zawartość;
-
-            if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out kierunek))
+            if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out _kierunek))
                 BrakGry = true;
 
             Wynik = wynik;
-            _kierunek = kierunek;
+            Application aplikacja = Application.Current;
 
             if (wynik == Algorytmy.WynikGry.Trwająca)
                 OstatnioWypełnionePole = Plansza[a][b];
             else
-            {
-                OstatnioWypełnionePole = null;
+                PrzedstawWynikGry(gra, a, b);
 
-                if (kierunek != Algorytmy.KierunekZwycięskiejLinii.BrakWygranej)
-                {
-                    Algorytmy.Pole poszukiwane;
-                    Algorytmy.Pole zamiennik;
-
-                    if (Wynik == Algorytmy.WynikGry.Kółko)
-                    {
-                        poszukiwane = Algorytmy.Pole.Kółko;
-                        zamiennik = Algorytmy.Pole.ZwycięskieKółko;
-                    }
-                    else
-                    {
-                        poszukiwane = Algorytmy.Pole.Krzyżyk;
-                        zamiennik = Algorytmy.Pole.ZwycięskiKrzyżyk;
-                    }
-
-                    switch (kierunek)
-                    {
-                        case Algorytmy.KierunekZwycięskiejLinii.Poziomy:
-                            for (int j = b; j >= 0; j--)
-                                if (gra[a, j] == poszukiwane)
-                                    gra[a, j] = zamiennik;
-                                else
-                                    break;
-
-                            for (int j = b + 1; j < DługośćBokuPlanszy; j++)
-                                if (gra[a, j] == poszukiwane)
-                                    gra[a, j] = zamiennik;
-                                else
-                                    break;
-
-                            break;
-
-                        case Algorytmy.KierunekZwycięskiejLinii.Pionowy:
-                            for (int i = a; i >= 0; i--)
-                                if (gra[i, b] == poszukiwane)
-                                    gra[i, b] = zamiennik;
-                                else
-                                    break;
-
-                            for (int i = a + 1; i < DługośćBokuPlanszy; i++)
-                                if (gra[i, b] == poszukiwane)
-                                    gra[i, b] = zamiennik;
-                                else
-                                    break;
-
-                            break;
-
-                        case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdLewejDoPrawej:
-                            for (int k = 0; k < DługośćBokuPlanszy; k++)
-                            {
-                                int i = a - k;
-                                int j = b - k;
-
-                                if (i >= 0 && j >= 0)
-                                {
-                                    if (gra[i, j] == poszukiwane)
-                                        gra[i, j] = zamiennik;
-                                    else
-                                        break;
-                                }
-                                else
-                                    break;
-                            }
-
-                            for (int k = 1; k < DługośćBokuPlanszy; k++)
-                            {
-                                int i = a + k;
-                                int j = b + k;
-
-                                if (i < DługośćBokuPlanszy && j < DługośćBokuPlanszy)
-                                {
-                                    if (gra[i, j] == poszukiwane)
-                                        gra[i, j] = zamiennik;
-                                    else
-                                        break;
-                                }
-                                else
-                                    break;
-                            }
-
-                            break;
-
-                        case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdPrawejDoLewej:
-                            for (int k = 0; k < DługośćBokuPlanszy; k++)
-                            {
-                                int i = a - k;
-                                int j = b + k;
-
-                                if (i >= 0 && j < DługośćBokuPlanszy)
-                                {
-                                    if (gra[i, j] == poszukiwane)
-                                        gra[i, j] = zamiennik;
-                                    else
-                                        break;
-                                }
-                                else
-                                    break;
-                            }
-
-                            for (int k = 1; k < DługośćBokuPlanszy; k++)
-                            {
-                                int i = a + k;
-                                int j = b - k;
-
-                                if (i < DługośćBokuPlanszy && j >= 0)
-                                {
-                                    if (gra[i, j] == poszukiwane)
-                                        gra[i, j] = zamiennik;
-                                    else
-                                        break;
-                                }
-                                else
-                                    break;
-                            }
-
-                            break;
-                    }
-                }
-            }
-
-            return gra;
+            if (aplikacja != null)
+                aplikacja.Dispatcher.Invoke(() => ZapiszNowyStanGry(gra));
         }
 
         void ZapiszNowyStanGry(Algorytmy.Pole[,] gra)
@@ -403,6 +289,142 @@ namespace KółkoIKrzyżyk.ModelWidoku
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     Plansza[i][j].Zawartość = gra[i, j];
+        }
+
+        Algorytmy.Pole[,] KonwertujNaTypZAlgorytmu()
+        {
+            Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
+
+            for (int i = 0; i < DługośćBokuPlanszy; i++)
+                for (int j = 0; j < DługośćBokuPlanszy; j++)
+                    gra[i, j] = Plansza[i][j].Zawartość;
+
+            return gra;
+        }
+
+        void PrzedstawWynikGry(Algorytmy.Pole[,] gra, int a, int b)
+        {
+            OstatnioWypełnionePole = null;
+
+            if (_kierunek != Algorytmy.KierunekZwycięskiejLinii.BrakWygranej)
+            {
+                Algorytmy.Pole poszukiwane;
+                Algorytmy.Pole zamiennik;
+
+                if (Wynik == Algorytmy.WynikGry.Kółko)
+                {
+                    poszukiwane = Algorytmy.Pole.Kółko;
+                    zamiennik = Algorytmy.Pole.ZwycięskieKółko;
+                }
+                else
+                {
+                    poszukiwane = Algorytmy.Pole.Krzyżyk;
+                    zamiennik = Algorytmy.Pole.ZwycięskiKrzyżyk;
+                }
+
+                switch (_kierunek)
+                {
+                    case Algorytmy.KierunekZwycięskiejLinii.Poziomy:
+                        for (int j = b; j >= 0; j--)
+                            if (gra[a, j] == poszukiwane)
+                                gra[a, j] = zamiennik;
+                            else
+                                break;
+
+                        for (int j = b + 1; j < DługośćBokuPlanszy; j++)
+                            if (gra[a, j] == poszukiwane)
+                                gra[a, j] = zamiennik;
+                            else
+                                break;
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.Pionowy:
+                        for (int i = a; i >= 0; i--)
+                            if (gra[i, b] == poszukiwane)
+                                gra[i, b] = zamiennik;
+                            else
+                                break;
+
+                        for (int i = a + 1; i < DługośćBokuPlanszy; i++)
+                            if (gra[i, b] == poszukiwane)
+                                gra[i, b] = zamiennik;
+                            else
+                                break;
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdLewejDoPrawej:
+                        for (int k = 0; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a - k;
+                            int j = b - k;
+
+                            if (i >= 0 && j >= 0)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        for (int k = 1; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a + k;
+                            int j = b + k;
+
+                            if (i < DługośćBokuPlanszy && j < DługośćBokuPlanszy)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdPrawejDoLewej:
+                        for (int k = 0; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a - k;
+                            int j = b + k;
+
+                            if (i >= 0 && j < DługośćBokuPlanszy)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        for (int k = 1; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a + k;
+                            int j = b - k;
+
+                            if (i < DługośćBokuPlanszy && j >= 0)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        break;
+                }
+            }
         }
 
         void Current_Exit(object sender, ExitEventArgs e)

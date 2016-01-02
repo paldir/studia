@@ -102,16 +102,18 @@
                     <GroupBox Header="Status gry">
                         <Label Content="{Binding Wynik, Converter={StaticResource WynikGryNaTreśćEtykiety}}" Style="{StaticResource EtykietaStatusu}"></Label>
                     </GroupBox>
-                    <GroupBox Header="Wykonawca ruchu">
-                        <GroupBox.Visibility>
+                    <StackPanel>
+                        <StackPanel.Visibility>
                             <Binding Path="BrakGry" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
                                 <Binding.ConverterParameter>
                                     <System:Boolean>True</System:Boolean>
                                 </Binding.ConverterParameter>
                             </Binding>
-                        </GroupBox.Visibility>
-                        <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}"></Label>
-                    </GroupBox>
+                        </StackPanel.Visibility>
+                        <GroupBox Header="Wykonawca ruchu">
+                            <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}"></Label>
+                        </GroupBox>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </DockPanel>
