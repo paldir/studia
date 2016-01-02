@@ -16,6 +16,7 @@
         <w:CzyjaKolejkaConverter x:Key="CzyjaKolejkaConverter"></w:CzyjaKolejkaConverter>
         <w:BooleanNaWidocznośćKontrolki x:Key="BooleanNaWidocznośćKontrolki"></w:BooleanNaWidocznośćKontrolki>
         <w:WynikGryNaTreśćEtykiety x:Key="WynikGryNaTreśćEtykiety"></w:WynikGryNaTreśćEtykiety>
+        <w:BooleanNaOdwrotnośćConverter x:Key="BooleanNaOdwrotnośćConverter"></w:BooleanNaOdwrotnośćConverter>
         <DataTemplate x:Key="WierszPlanszy">
             <Border BorderThickness="1" BorderBrush="Black">
                 <Button Command="{Binding ElementName=Okno, Path=DataContext.WykonanieRuchu}" CommandParameter="{Binding}">
@@ -65,36 +66,39 @@
         <DockPanel LastChildFill="True">
             <ItemsControl ItemTemplate="{StaticResource Plansza}" ItemsSource="{Binding Plansza}" Margin="10"></ItemsControl>
             <Grid>
-                <StackPanel IsEnabled="{Binding BrakGry}">
-                    <GroupBox Header="Tryb gry">
-                        <StackPanel>
-                            <RadioButton Content="SI vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.SiVsSi}}"></RadioButton>
-                            <RadioButton Content="Gracz vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.GraczVsSi}}"></RadioButton>
-                        </StackPanel>
-                    </GroupBox>
-                    <GroupBox Header="Zaczynający" IsEnabled="{Binding ŻywyGracz}">
-                        <StackPanel>
-                            <RadioButton Content="Gracz" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Gracz}}"></RadioButton>
-                            <RadioButton Content="SI" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Si}}"></RadioButton>
-                        </StackPanel>
-                    </GroupBox>
-                    <GroupBox Header="Liczby">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label>Rozmiar:</Label>
-                                <TextBox Text="{Binding DługośćBokuPlanszy}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                <StackPanel>
+                    <StackPanel IsEnabled="{Binding BrakGry}">
+                        <GroupBox Header="Tryb gry">
+                            <StackPanel>
+                                <RadioButton Content="SI vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.SiVsSi}}"></RadioButton>
+                                <RadioButton Content="Gracz vs SI" GroupName="Tryb" IsChecked="{Binding Path=Tryb, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:TrybGry.GraczVsSi}}"></RadioButton>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label>Zwycięska liczba pól:</Label>
-                                <TextBox Text="{Binding ZwycięskaLiczbaPól}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                        </GroupBox>
+                        <GroupBox Header="Zaczynający" IsEnabled="{Binding ŻywyGracz}">
+                            <StackPanel>
+                                <RadioButton Content="Gracz" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Gracz}}"></RadioButton>
+                                <RadioButton Content="SI" GroupName="KtoZaczyna" IsChecked="{Binding Path=KtoZaczyna, Converter={StaticResource EnumNaZaznaczniePolaRadioConverter}, ConverterParameter={x:Static kik:Zaczynający.Si}}"></RadioButton>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label>Głębokość rekurencji:</Label>
-                                <TextBox Text="{Binding GłębokośćRekurencji}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                        </GroupBox>
+                        <GroupBox Header="Liczby">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Rozmiar:</Label>
+                                    <TextBox Text="{Binding DługośćBokuPlanszy}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Zwycięska liczba pól:</Label>
+                                    <TextBox Text="{Binding ZwycięskaLiczbaPól}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Głębokość rekurencji:</Label>
+                                    <TextBox Text="{Binding GłębokośćRekurencji}" Style="{StaticResource LiczbowePoleTekstowe}"></TextBox>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
-                    <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
+                        </GroupBox>
+                        <Button FontSize="30" Command="{Binding RozpoczęcieGry}">Start!</Button>
+                    </StackPanel>
+                    <Button FontSize="30" Command="{Binding ZakończenieGry}" IsEnabled="{Binding BrakGry, Converter={StaticResource BooleanNaOdwrotnośćConverter}}">Stop</Button>
                     <GroupBox Header="Status gry">
                         <Label Content="{Binding Wynik, Converter={StaticResource WynikGryNaTreśćEtykiety}}" Style="{StaticResource EtykietaStatusu}"></Label>
                     </GroupBox>
@@ -106,8 +110,7 @@
                                 </Binding.ConverterParameter>
                             </Binding>
                         </GroupBox.Visibility>
-                        <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}">
-                        </Label>
+                        <Label Content="{Binding RuchGracza, Converter={StaticResource CzyjaKolejkaConverter}}" Style="{StaticResource EtykietaStatusu}"></Label>
                     </GroupBox>
                 </StackPanel>
             </Grid>

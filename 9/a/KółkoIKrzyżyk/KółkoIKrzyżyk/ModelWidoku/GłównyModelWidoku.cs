@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Threading;
+using System.Threading;
+using System.Collections.ObjectModel;
 using KółkoIKrzyżyk.Properties;
 
 namespace KółkoIKrzyżyk.ModelWidoku
@@ -13,11 +15,13 @@ namespace KółkoIKrzyżyk.ModelWidoku
     public class GłównyModelWidoku : ObiektModelWidoku
     {
         bool _ruchKółka;
-        DispatcherTimer _minutnik;
+        Thread _wątekGry;
         Algorytmy.KierunekZwycięskiejLinii _kierunek;
+        object _lock;
 
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
+        public Komenda ZakończenieGry { get; private set; }
         public Pole OstatnioWypełnionePole { get; private set; }
 
         TrybGry _tryb;
@@ -150,7 +154,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 ustawienia.Save();
             }
         }
-        
+
 
         public bool ŻywyGracz
         {
@@ -159,19 +163,19 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         public GłównyModelWidoku()
         {
-            _minutnik = new DispatcherTimer();
-            _minutnik.Interval = TimeSpan.FromSeconds(1);
-            _minutnik.Tick += minutnik_Tick;
-
+            _lock = new object();
             Settings ustawienia = Settings.Default;
             RozpoczęcieGry = new Komenda(RozpocznijGrę);
-            WykonanieRuchu = new Komenda(WykonajRuch);
+            WykonanieRuchu = new Komenda(WykonajRuchJakoGracz);
+            ZakończenieGry = new Komenda(() => Current_Exit(null, null));
             DługośćBokuPlanszy = ustawienia.DługośćBokuPlanszy;
             ZwycięskaLiczbaPól = ustawienia.ZwycięskaLiczbaPól;
             GłębokośćRekurencji = ustawienia.GłębokośćRekurencji;
             Tryb = ustawienia.TrybGry;
             KtoZaczyna = ustawienia.Zaczynający;
             BrakGry = true;
+
+            Application.Current.Exit += Current_Exit;
         }
 
         void RozpocznijGrę()
@@ -179,20 +183,49 @@ namespace KółkoIKrzyżyk.ModelWidoku
             BrakGry = false;
             _ruchKółka = true;
             Wynik = Algorytmy.WynikGry.Trwająca;
+            _wątekGry = new Thread(Gra);
 
             Plansza.Resetuj();
 
             if (Tryb == TrybGry.GraczVsSi && KtoZaczyna == Zaczynający.Gracz)
                 RuchGracza = true;
             else
-            {
                 RuchGracza = false;
 
-                _minutnik.Start();
-            }
+            _wątekGry.Start();
         }
 
-        void WykonajRuch(object parametr)
+        void Gra()
+        {
+            do
+            {
+                if (RuchGracza)
+                {
+                    lock (_lock)
+                        Monitor.Wait(_lock);
+
+                    RuchGracza = false;
+                    _ruchKółka = !_ruchKółka;
+                }
+
+                Thread.Sleep(1000);
+
+                Algorytmy.Pole[,] stanGry = WykonajRuchJakoKomputer();
+                Application aplikacja = Application.Current;
+                _ruchKółka = !_ruchKółka;
+
+                if (aplikacja != null)
+                    aplikacja.Dispatcher.Invoke(() => ZapiszNowyStanGry(stanGry));
+
+                if (ŻywyGracz)
+                    RuchGracza = true;
+            }
+            while (Wynik == Algorytmy.WynikGry.Trwająca);
+
+            RuchGracza = false;
+        }
+
+        void WykonajRuchJakoGracz(object parametr)
         {
             if (RuchGracza)
             {
@@ -209,15 +242,14 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
                     OstatnioWypełnionePole = pole;
                     pole.Zawartość = znak;
-                    _ruchKółka = !_ruchKółka;
-                    RuchGracza = false;
 
-                    _minutnik.Start();
+                    lock (_lock)
+                        Monitor.Pulse(_lock);
                 }
             }
         }
 
-        void minutnik_Tick(object sender, EventArgs e)
+        Algorytmy.Pole[,] WykonajRuchJakoKomputer()
         {
             Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
@@ -231,11 +263,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                     gra[i, j] = Plansza[i][j].Zawartość;
 
             if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out kierunek))
-            {
                 BrakGry = true;
-
-                _minutnik.Stop();
-            }
 
             Wynik = wynik;
             _kierunek = kierunek;
@@ -367,18 +395,24 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 }
             }
 
+            return gra;
+        }
+
+        void ZapiszNowyStanGry(Algorytmy.Pole[,] gra)
+        {
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     Plansza[i][j].Zawartość = gra[i, j];
+        }
 
-            _ruchKółka = !_ruchKółka;
+        void Current_Exit(object sender, ExitEventArgs e)
+        {
+            if (_wątekGry != null)
+                _wątekGry.Abort();
 
-            if (_tryb == TrybGry.GraczVsSi && Wynik == Algorytmy.WynikGry.Trwająca)
-            {
-                _minutnik.Stop();
-
-                RuchGracza = true;
-            }
+            BrakGry = true;
+            Wynik = Algorytmy.WynikGry.Remis;
+            OstatnioWypełnionePole = null;
         }
     }
 }
