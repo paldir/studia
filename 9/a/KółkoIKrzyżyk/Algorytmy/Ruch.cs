@@ -257,15 +257,15 @@ namespace Algorytmy
 
         bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
-            int potęga = 3;
-            
+            int potęga = 2;
+
             if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii)
             {
                 punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, potęga);
 
                 if (liczbaKółekWLinii == _zwycięskaLiczbaPól)
                 {
-                    punktyKrzyżyka = 0;
+                    punktyKrzyżyka = -punktyKółka;
                     wynik = WynikGry.Kółko;
 
                     return true;
@@ -278,7 +278,7 @@ namespace Algorytmy
 
                 if (liczbaKrzyżykówWLinii == _zwycięskaLiczbaPól)
                 {
-                    punktyKółka = 0;
+                    punktyKółka = -punktyKrzyżyka;
                     wynik = WynikGry.Krzyżyk;
 
                     return true;

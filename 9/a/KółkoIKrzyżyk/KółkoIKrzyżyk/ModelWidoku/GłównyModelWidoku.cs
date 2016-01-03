@@ -199,6 +199,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             Tryb = ustawienia.TrybGry;
             KtoZaczyna = ustawienia.Zaczynający;
             BrakGry = true;
+            LiczbaMożliwychRuchów = 1;
 
             Application.Current.Exit += Current_Exit;
         }
@@ -235,8 +236,8 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
                 if (Wynik == Algorytmy.WynikGry.Trwająca)
                 {
-                    LiczbaPrzeanalizowanychRuchów = 1;
-                    
+                    LiczbaPrzeanalizowanychRuchów = 0;
+
                     Thread.Sleep(1000);
                     WykonajRuchJakoKomputer();
 
