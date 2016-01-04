@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Ef.Models.Samochód>
+
+@{
+    ViewBag.Title = "IndexId";
+}
+
+<h2>IndexId</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Marka.Nazwa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Silnik.Nazwa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nazwa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LiczbaDrzwi)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Marka.Nazwa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Silnik.Nazwa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nazwa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LiczbaDrzwi)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SamochódId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SamochódId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SamochódId })
+        </td>
+    </tr>
+}
+
+</table>

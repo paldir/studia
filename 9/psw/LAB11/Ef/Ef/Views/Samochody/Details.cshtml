@@ -1,0 +1,50 @@
+﻿@model Ef.Models.Samochód
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Samochód</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Marka.Nazwa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Marka.Nazwa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Silnik.Nazwa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Silnik.Nazwa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nazwa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nazwa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LiczbaDrzwi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LiczbaDrzwi)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SamochódId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
