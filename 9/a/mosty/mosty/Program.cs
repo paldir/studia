@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mosty
 {
@@ -10,16 +8,16 @@ namespace mosty
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            List<Wierzchołek> G;
+            List<Wierzchołek> g;
 
-            StwórzGrafNaPodstawiePliku(out G);
+            StwórzGrafNaPodstawiePliku(out g);
             Console.WriteLine("Mosty: ");
-            Wypisz(G.First(), 0, Cel.Mosty);
+            Wypisz(g.First(), 0, Cel.Mosty);
             Console.WriteLine();
 
-            foreach (Wierzchołek w in G)
+            foreach (Wierzchołek w in g)
             {
                 w.F = w.L = 0;
                 w.Odwiedzony = false;
@@ -27,7 +25,7 @@ namespace mosty
             }
 
             Console.WriteLine("Punkty artykulacji: ");
-            Wypisz(G.First(), 0, Cel.PunktyArtykulacji);
+            Wypisz(g.First(), 0, Cel.PunktyArtykulacji);
             Console.ReadKey();
         }
 
@@ -66,8 +64,8 @@ namespace mosty
 
         static void StwórzGrafNaPodstawiePliku(out List<Wierzchołek> kolekcjaWierzchołków)
         {
-            IEnumerable<string> linie = System.IO.File.ReadAllLines("graf.txt").Where(l => !l.StartsWith("#"));
-            kolekcjaWierzchołków = new List<Wierzchołek>(linie.Count() - 1);
+            string[] linie = System.IO.File.ReadAllLines("graf.txt").Where(l => !l.StartsWith("#")).ToArray();
+            kolekcjaWierzchołków = new List<Wierzchołek>(linie.Length - 1);
             string[] przedziałNazw = linie.First().Split(' ');
             string napisPoczątkuPrzedziału = przedziałNazw[0];
             string napisKońcaPrzedziału = przedziałNazw[1];
@@ -80,7 +78,7 @@ namespace mosty
                 for (char i = Char.Parse(napisPoczątkuPrzedziału); i <= Char.Parse(napisKońcaPrzedziału); i++)
                     kolekcjaWierzchołków.Add(new Wierzchołek(i.ToString()));
 
-            for (int i = 1; i < linie.Count(); i++)
+            for (int i = 1; i < linie.Length; i++)
             {
                 string[] elementyLinii = linie.ElementAt(i).Split(' ');
 

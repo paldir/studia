@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Windows;
 using System.Threading;
-using System.Collections.ObjectModel;
 using KółkoIKrzyżyk.Properties;
 
 namespace KółkoIKrzyżyk.ModelWidoku
@@ -17,7 +9,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
         bool _ruchKółka;
         Thread _wątekGry;
         Algorytmy.KierunekZwycięskiejLinii _kierunek;
-        object _lock;
+        readonly object _lock;
 
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
@@ -256,16 +248,11 @@ namespace KółkoIKrzyżyk.ModelWidoku
         {
             if (RuchGracza)
             {
-                ModelWidoku.Pole pole = parametr as ModelWidoku.Pole;
+                Pole pole = parametr as Pole;
 
-                if (pole.Zawartość == Algorytmy.Pole.Puste)
+                if (pole != null && pole.Zawartość == Algorytmy.Pole.Puste)
                 {
-                    Algorytmy.Pole znak;
-
-                    if (_ruchKółka)
-                        znak = Algorytmy.Pole.Kółko;
-                    else
-                        znak = Algorytmy.Pole.Krzyżyk;
+                    Algorytmy.Pole znak = _ruchKółka ? Algorytmy.Pole.Kółko : Algorytmy.Pole.Krzyżyk;
 
                     OstatnioWypełnionePole = pole;
                     pole.Zawartość = znak;

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hashowanie
 {
@@ -10,10 +7,9 @@ namespace hashowanie
     {
         const int M = 1500;
 
-        static void Main(string[] args)
+        static void Main()
         {
             string[] nazwiska = System.IO.File.ReadAllLines("hash-dane.txt");
-            List<string> nazwiskaDoUsunięcia = new List<string>();
             TablicaHaszowanaZamknięcie<string> mod = new TablicaHaszowanaZamknięcie<string>(M, KonwertujNapisNaInt);
             TablicaHaszowanaOtwarcie<string> otwarta = new TablicaHaszowanaOtwarcie<string>(M, KonwertujNapisNaInt);
 

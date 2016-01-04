@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Windows.Input;
 
 namespace KółkoIKrzyżyk.ModelWidoku
 {
     public class Komenda : ICommand
     {
-        Action _akcja;
-        Action<object> _akcjaZParametrem;
+        readonly Action _akcja;
+        readonly Action<object> _akcjaZParametrem;
 
         Func<bool> _możnaWykonać;
         public Func<bool> MożnaWykonać
@@ -30,13 +25,13 @@ namespace KółkoIKrzyżyk.ModelWidoku
         public Komenda(Action akcja)
         {
             _akcja = akcja;
-            MożnaWykonać = () => { return true; };
+            MożnaWykonać = () => true;
         }
 
         public Komenda(Action<object> akcja)
         {
             _akcjaZParametrem = akcja;
-            MożnaWykonać = () => { return true; };
+            MożnaWykonać = () => true;
         }
 
         public Komenda(Action akcja, Func<bool> możnaWykonać)

@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
@@ -14,40 +8,43 @@ namespace KółkoIKrzyżyk.Widok
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string nazwaObrazka;
+            string nazwaObrazka = null;
             ModelWidoku.Pole zawartość = values[0] as ModelWidoku.Pole;
             ModelWidoku.Pole ostatnioWypełnionePole = values[1] as ModelWidoku.Pole;
 
-            switch (zawartość.Zawartość)
+            if (zawartość != null)
             {
-                case Algorytmy.Pole.Kółko:
-                    nazwaObrazka = "kolko.png";
+                switch (zawartość.Zawartość)
+                {
+                    case Algorytmy.Pole.Kółko:
+                        nazwaObrazka = "kolko.png";
 
-                    break;
+                        break;
 
-                case Algorytmy.Pole.Krzyżyk:
-                    nazwaObrazka = "krzyzyk.png";
+                    case Algorytmy.Pole.Krzyżyk:
+                        nazwaObrazka = "krzyzyk.png";
 
-                    break;
+                        break;
 
-                case Algorytmy.Pole.ZwycięskieKółko:
-                    nazwaObrazka = "zwycieskieKolko.png";
+                    case Algorytmy.Pole.ZwycięskieKółko:
+                        nazwaObrazka = "zwycieskieKolko.png";
 
-                    break;
+                        break;
 
-                case Algorytmy.Pole.ZwycięskiKrzyżyk:
-                    nazwaObrazka = "zwycieskiKrzyzyk.png";
+                    case Algorytmy.Pole.ZwycięskiKrzyżyk:
+                        nazwaObrazka = "zwycieskiKrzyzyk.png";
 
-                    break;
+                        break;
 
-                default:
-                    nazwaObrazka = "puste.png";
+                    default:
+                        nazwaObrazka = "puste.png";
 
-                    break;
+                        break;
+                }
+
+                if (zawartość == ostatnioWypełnionePole)
+                    nazwaObrazka = String.Concat("niebieski", nazwaObrazka);
             }
-
-            if (zawartość == ostatnioWypełnionePole)
-                nazwaObrazka = String.Concat("niebieski", nazwaObrazka);
 
             nazwaObrazka = String.Concat("/Obrazki/", nazwaObrazka);
 

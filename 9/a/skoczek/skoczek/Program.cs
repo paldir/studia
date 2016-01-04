@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Diagnostics;
 
 namespace skoczek
@@ -19,7 +15,7 @@ namespace skoczek
         static Pole[,] _szachownica;
         static readonly PorównywarkaPól Porównywarka = new PorównywarkaPól();
 
-        static void Main(string[] args)
+        static void Main()
         {
             bool sukces;
             _szachownica = new Pole[M, N];

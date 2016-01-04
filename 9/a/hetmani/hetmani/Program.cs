@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hetmani
 {
@@ -10,11 +7,11 @@ namespace hetmani
     {
         const int N = 8;
         static readonly Dictionary<int, bool> W = new Dictionary<int, bool>();
-        static readonly Dictionary<int, bool> NE = new Dictionary<int, bool>();
-        static readonly Dictionary<int, bool> NW = new Dictionary<int, bool>();
+        static readonly Dictionary<int, bool> Ne = new Dictionary<int, bool>();
+        static readonly Dictionary<int, bool> Nw = new Dictionary<int, bool>();
         static readonly Dictionary<int, int> K = new Dictionary<int, int>();
 
-        static void Main(string[] args)
+        static void Main()
         {
             for (int i = 1; i <= N; i++)
             {
@@ -23,10 +20,10 @@ namespace hetmani
             }
 
             for (int i = 2; i <= 2 * N; i++)
-                NE.Add(i, true);
+                Ne.Add(i, true);
 
             for (int i = 1 - N; i <= N - 1; i++)
-                NW.Add(i, true);
+                Nw.Add(i, true);
 
             bool s;
 
@@ -49,10 +46,10 @@ namespace hetmani
                 j++;
                 s = false;
 
-                if (W[j] && NE[k + j] && NW[k - j])
+                if (W[j] && Ne[k + j] && Nw[k - j])
                 {
                     K[k] = j;
-                    W[j] = NE[k + j] = NW[k - j] = false;
+                    W[j] = Ne[k + j] = Nw[k - j] = false;
 
                     if (k == N)
                         s = true;
@@ -61,7 +58,7 @@ namespace hetmani
                         Ustaw(k + 1, out s);
 
                         if (!s)
-                            W[j] = NE[k + j] = NW[k - j] = true;
+                            W[j] = Ne[k + j] = Nw[k - j] = true;
                     }
                 }
             }

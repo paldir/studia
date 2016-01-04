@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace skoczek
 {
     class PorównywarkaPól : IComparer<Pole>
     {
-        Random _los;
-        static readonly int[] _wynik = new int[] { -1, 1 };
+        readonly Random _los;
+        static readonly int[] Wynik = new int[] { -1, 1 };
 
         public PorównywarkaPól()
         {
@@ -27,7 +24,7 @@ namespace skoczek
             if (a < b)
                 return -1;
 
-            return _wynik[_los.Next(2)];
+            return Wynik[_los.Next(2)];
 
             //return x.IlośćWolnychSąsiadów.CompareTo(y.IlośćWolnychSąsiadów);
         }

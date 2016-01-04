@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorytmy
 {
     public class Ruch
     {
-        bool _perspektywaKółka;
-        int _głębokość;
-        int _zwycięskaLiczbaPól;
+        readonly bool _perspektywaKółka;
+        readonly int _głębokość;
+        readonly int _zwycięskaLiczbaPól;
         int _rozmiar;
-        Action _inkrementacjaLiczbyPrzeanalizowanychRuchów;
+        readonly Action _inkrementacjaLiczbyPrzeanalizowanychRuchów;
 
         public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól, Action inkrementacjaLiczbyPrzeanalizowanychRuchów)
         {
@@ -44,16 +41,10 @@ namespace Algorytmy
             if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
 
-            Pole znakAktualnegoGracza;
-
-            if (ruchKółka)
-                znakAktualnegoGracza = Pole.Kółko;
-            else
-                znakAktualnegoGracza = Pole.Krzyżyk;
-
+            Pole znakAktualnegoGracza = ruchKółka ? Pole.Kółko : Pole.Krzyżyk;
             int ekstremalneI = -1;
             int ekstremalneJ = -1;
-            double ekstremum = 0;
+            double ekstremum;
 
             if (maksymalizacja)
             {
@@ -221,16 +212,7 @@ namespace Algorytmy
                     }
             }
 
-            bool istniejąPustePola = false;
-
-            foreach (Pole pole in stanGry)
-                if (pole == Pole.Puste)
-                {
-                    istniejąPustePola = true;
-
-                    break;
-                }
-
+            bool istniejąPustePola = stanGry.Cast<Pole>().Any(pole => pole == Pole.Puste);
             kierunek = KierunekZwycięskiejLinii.BrakWygranej;
 
             if (!istniejąPustePola)

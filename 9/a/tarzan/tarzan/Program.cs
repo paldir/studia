@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Xml;
 
 namespace tarzan
 {
     class Program
     {
-        static ParaWęzłów[] P;
+        static ParaWęzłów[] _p;
         
-        static void Main(string[] args)
+        static void Main()
         {
             XmlDocument konfig = new XmlDocument();
 
             konfig.Load("drzewo.xml");
 
-            Węzeł korzeń = ParaWęzłów.Korzeń = new Węzeł(konfig.DocumentElement.Name);
+            if (konfig.DocumentElement != null)
+            {
+                Węzeł korzeń = ParaWęzłów.Korzeń = new Węzeł(konfig.DocumentElement.Name);
 
-            Stwórz(korzeń, konfig.DocumentElement);
+                Stwórz(korzeń, konfig.DocumentElement);
 
-            P = new ParaWęzłów[] { new ParaWęzłów("g", "d"), new ParaWęzłów("g","f"), new ParaWęzłów("b", "d") };
+                _p = new[] { new ParaWęzłów("g", "d"), new ParaWęzłów("g","f"), new ParaWęzłów("b", "d") };
 
-            Tarjan(korzeń);
+                Tarjan(korzeń);
+            }
+
             Console.ReadKey();
         }
 
@@ -45,7 +45,7 @@ namespace tarzan
             u.Kolor = ConsoleColor.Black;
             List<Węzeł> węzłyDoSprawdzenia = new List<Węzeł>();
 
-            foreach (ParaWęzłów para in P)
+            foreach (ParaWęzłów para in _p)
             {
                 Węzeł a = para.A;
                 Węzeł b = para.B;

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hashowanie
 {
-    class TablicaHaszowanaOtwarcie<T> : HaszowanaTablica<T> where T : IEquatable<T>
+    sealed class TablicaHaszowanaOtwarcie<T> : HaszowanaTablica<T> where T : IEquatable<T>
     {
         int[] _tablicaDostępu;
-        const int _pusteMiejsce = Int32.MaxValue;
-        const int _pusteMiejscePoElemencieUsuniętym = Int32.MinValue;
-        const int _normalnaWartość = 0;
-        static readonly T _wartośćDomyślna = default(T);
+        const int PusteMiejsce = Int32.MaxValue;
+        const int PusteMiejscePoElemencieUsuniętym = Int32.MinValue;
+        const int NormalnaWartość = 0;
+        static readonly T WartośćDomyślna = default(T);
 
         public T[] Tablica { get; set; }
 
@@ -31,13 +28,13 @@ namespace hashowanie
 
             while (i != M)
             {
-                int j = h(x, i);
+                int j = H(x, i);
                 int dostęp = _tablicaDostępu[j];
 
-                if (dostęp == _pusteMiejsce || dostęp == _pusteMiejscePoElemencieUsuniętym)
+                if (dostęp == PusteMiejsce || dostęp == PusteMiejscePoElemencieUsuniętym)
                 {
                     Tablica[j] = x;
-                    _tablicaDostępu[j] = _normalnaWartość;
+                    _tablicaDostępu[j] = NormalnaWartość;
                     LiczbaElementów++;
 
                     if (LiczbaElementów > M * Próg)
@@ -61,16 +58,16 @@ namespace hashowanie
 
             while (i != M)
             {
-                int j = h(x, i);
+                int j = H(x, i);
                 int dostęp = _tablicaDostępu[j];
 
-                if (dostęp == _pusteMiejsce)
+                if (dostęp == PusteMiejsce)
                     return false;
 
-                if (dostęp == _normalnaWartość && Tablica[j].Equals(x))
+                if (dostęp == NormalnaWartość && Tablica[j].Equals(x))
                 {
-                    Tablica[j] = _wartośćDomyślna;
-                    _tablicaDostępu[j] = _pusteMiejscePoElemencieUsuniętym;
+                    Tablica[j] = WartośćDomyślna;
+                    _tablicaDostępu[j] = PusteMiejscePoElemencieUsuniętym;
                     LiczbaElementów--;
 
                     return true;
@@ -88,9 +85,9 @@ namespace hashowanie
 
             while (i != M)
             {
-                int j = h(x, i);
+                int j = H(x, i);
 
-                if (_tablicaDostępu[j] == _pusteMiejsce)
+                if (_tablicaDostępu[j] == PusteMiejsce)
                     return false;
 
                 if (Tablica[j].Equals(x))
@@ -106,8 +103,8 @@ namespace hashowanie
         {
             for (int i = 0; i < M; i++)
             {
-                Tablica[i] = _wartośćDomyślna;
-                _tablicaDostępu[i] = _pusteMiejsce;
+                Tablica[i] = WartośćDomyślna;
+                _tablicaDostępu[i] = PusteMiejsce;
             }
 
             LiczbaElementów = 0;
@@ -142,12 +139,12 @@ namespace hashowanie
             }
         }
 
-        int h(T k, int i)
+        int H(T k, int i)
         {
-            return (h_1(k) + Convert.ToInt32(Math.Pow(i, 2))) % M;
+            return (H_1(k) + Convert.ToInt32(Math.Pow(i, 2))) % M;
         }
 
-        int h_1(T k)
+        int H_1(T k)
         {
             double alfa = (Math.Sqrt(5) - 1) / 2;
             double alfaRazyK = alfa * FunkcjaKonwertującaNaInt(k);

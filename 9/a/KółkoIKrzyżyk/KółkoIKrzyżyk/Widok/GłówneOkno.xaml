@@ -4,7 +4,7 @@
         xmlns:kik="clr-namespace:KółkoIKrzyżyk"
         xmlns:mw="clr-namespace:KółkoIKrzyżyk.ModelWidoku"
         xmlns:w="clr-namespace:KółkoIKrzyżyk.Widok"
-        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="Kółko i krzyżyk" ResizeMode="CanMinimize" WindowState="Maximized" Name="Okno" Icon="/KółkoIKrzyżyk;component/Obrazki/ikona.png">
     <Window.DataContext>
         <mw:GłównyModelWidoku></mw:GłównyModelWidoku>
@@ -106,7 +106,7 @@
                         <StackPanel.Visibility>
                             <Binding Path="BrakGry" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
                                 <Binding.ConverterParameter>
-                                    <System:Boolean>True</System:Boolean>
+                                    <system:Boolean>True</system:Boolean>
                                 </Binding.ConverterParameter>
                             </Binding>
                         </StackPanel.Visibility>
@@ -117,7 +117,7 @@
                             <GroupBox.Visibility>
                                 <Binding Path="RuchGracza" Converter="{StaticResource BooleanNaWidocznośćKontrolki}">
                                     <Binding.ConverterParameter>
-                                        <System:Boolean>True</System:Boolean>
+                                        <system:Boolean>True</system:Boolean>
                                     </Binding.ConverterParameter>
                                 </Binding>
                             </GroupBox.Visibility>
