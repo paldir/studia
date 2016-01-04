@@ -8,14 +8,11 @@ using System.Windows.Data;
 
 namespace KółkoIKrzyżyk.Widok
 {
-    class CzyjaKolejkaConverter : IValueConverter
+    class BooleanNaOdwrotnośćConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if ((bool)value)
-                return "gracz";
-            else
-                return "komputer";
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

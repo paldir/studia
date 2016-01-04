@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace KółkoIKrzyżyk.ModelWidoku
 {
@@ -39,9 +41,9 @@ namespace KółkoIKrzyżyk.ModelWidoku
                     this[i][j].Zawartość = Algorytmy.Pole.Puste;
         }
 
-        void pole_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void pole_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnCollectionChanged(new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
     }
 }

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Threading;
+using System.Threading;
+using System.Collections.ObjectModel;
 using KółkoIKrzyżyk.Properties;
 
 namespace KółkoIKrzyżyk.ModelWidoku
@@ -13,11 +15,13 @@ namespace KółkoIKrzyżyk.ModelWidoku
     public class GłównyModelWidoku : ObiektModelWidoku
     {
         bool _ruchKółka;
-        DispatcherTimer _minutnik;
+        Thread _wątekGry;
+        Algorytmy.KierunekZwycięskiejLinii _kierunek;
+        object _lock;
 
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
-        public Zaczynający KtoZaczyna { get; set; }
+        public Komenda ZakończenieGry { get; private set; }
         public Pole OstatnioWypełnionePole { get; private set; }
 
         TrybGry _tryb;
@@ -27,8 +31,10 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
             set
             {
-                _tryb = value;
+                Settings ustawienia = Settings.Default;
+                _tryb = ustawienia.TrybGry = value;
 
+                ustawienia.Save();
                 OnPropertyChanged("ŻywyGracz");
             }
         }
@@ -135,16 +141,43 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        Algorytmy.KierunekZwycięskiejLinii _kierunek;
-        public Algorytmy.KierunekZwycięskiejLinii Kierunek
+        Zaczynający _ktoZaczyna;
+        public Zaczynający KtoZaczyna
         {
-            get { return _kierunek; }
+            get { return _ktoZaczyna; }
 
             set
             {
-                _kierunek = value;
+                Settings ustawienia = Settings.Default;
+                _ktoZaczyna = ustawienia.Zaczynający = value;
 
-                OnPropertyChanged("Kierunek");
+                ustawienia.Save();
+            }
+        }
+
+        int _liczbaMożliwychRuchów;
+        public int LiczbaMożliwychRuchów
+        {
+            get { return _liczbaMożliwychRuchów; }
+
+            set
+            {
+                _liczbaMożliwychRuchów = value;
+
+                OnPropertyChanged("LiczbaMożliwychRuchów");
+            }
+        }
+
+        int _liczbaPrzeanalizowanychRuchów;
+        public int LiczbaPrzeanalizowanychRuchów
+        {
+            get { return _liczbaPrzeanalizowanychRuchów; }
+
+            set
+            {
+                _liczbaPrzeanalizowanychRuchów = value;
+
+                OnPropertyChanged("LiczbaPrzeanalizowanychRuchów");
             }
         }
 
@@ -155,17 +188,20 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
         public GłównyModelWidoku()
         {
-            _minutnik = new DispatcherTimer();
-            _minutnik.Interval = TimeSpan.FromSeconds(1);
-            _minutnik.Tick += minutnik_Tick;
-
+            _lock = new object();
             Settings ustawienia = Settings.Default;
             RozpoczęcieGry = new Komenda(RozpocznijGrę);
-            WykonanieRuchu = new Komenda(WykonajRuch);
+            WykonanieRuchu = new Komenda(WykonajRuchJakoGracz);
+            ZakończenieGry = new Komenda(() => Current_Exit(null, null));
             DługośćBokuPlanszy = ustawienia.DługośćBokuPlanszy;
             ZwycięskaLiczbaPól = ustawienia.ZwycięskaLiczbaPól;
             GłębokośćRekurencji = ustawienia.GłębokośćRekurencji;
+            Tryb = ustawienia.TrybGry;
+            KtoZaczyna = ustawienia.Zaczynający;
             BrakGry = true;
+            LiczbaMożliwychRuchów = 1;
+
+            Application.Current.Exit += Current_Exit;
         }
 
         void RozpocznijGrę()
@@ -173,80 +209,271 @@ namespace KółkoIKrzyżyk.ModelWidoku
             BrakGry = false;
             _ruchKółka = true;
             Wynik = Algorytmy.WynikGry.Trwająca;
+            _wątekGry = new Thread(Gra);
 
             Plansza.Resetuj();
 
             if (Tryb == TrybGry.GraczVsSi && KtoZaczyna == Zaczynający.Gracz)
                 RuchGracza = true;
             else
-            {
                 RuchGracza = false;
 
-                _minutnik.Start();
-            }
+            _wątekGry.Start();
         }
 
-        void WykonajRuch(object parametr)
+        void Gra()
+        {
+            do
+            {
+                if (RuchGracza)
+                {
+                    lock (_lock)
+                        Monitor.Wait(_lock);
+
+                    RuchGracza = false;
+                    _ruchKółka = !_ruchKółka;
+                }
+
+                if (Wynik == Algorytmy.WynikGry.Trwająca)
+                {
+                    LiczbaPrzeanalizowanychRuchów = 0;
+
+                    Thread.Sleep(1000);
+                    WykonajRuchJakoKomputer();
+
+                    _ruchKółka = !_ruchKółka;
+
+                    if (ŻywyGracz)
+                        RuchGracza = true;
+                }
+            }
+            while (Wynik == Algorytmy.WynikGry.Trwająca);
+
+            RuchGracza = false;
+        }
+
+        void WykonajRuchJakoGracz(object parametr)
         {
             if (RuchGracza)
             {
                 ModelWidoku.Pole pole = parametr as ModelWidoku.Pole;
-                Algorytmy.Pole znak;
 
-                if (_ruchKółka)
-                    znak = Algorytmy.Pole.Kółko;
-                else
-                    znak = Algorytmy.Pole.Krzyżyk;
+                if (pole.Zawartość == Algorytmy.Pole.Puste)
+                {
+                    Algorytmy.Pole znak;
 
-                OstatnioWypełnionePole = pole;
-                pole.Zawartość = znak;
-                _ruchKółka = !_ruchKółka;
-                RuchGracza = false;
+                    if (_ruchKółka)
+                        znak = Algorytmy.Pole.Kółko;
+                    else
+                        znak = Algorytmy.Pole.Krzyżyk;
 
-                _minutnik.Start();
+                    OstatnioWypełnionePole = pole;
+                    pole.Zawartość = znak;
+                    Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól, InkrementujLiczbęPrzeanalizowanychRuchów);
+                    Algorytmy.Pole[,] stanGry = KonwertujNaTypZAlgorytmu();
+                    double punktyKółka;
+                    double punktyKrzyżyka;
+                    Algorytmy.WynikGry wynik;
+
+                    if (algorytm.GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out _kierunek))
+                    {
+                        BrakGry = true;
+                        Wynik = wynik;
+
+                        PrzedstawWynikGry(stanGry, pole.I, pole.J);
+                        ZapiszNowyStanGry(stanGry);
+                    }
+
+                    lock (_lock)
+                        Monitor.Pulse(_lock);
+                }
             }
         }
 
-        void minutnik_Tick(object sender, EventArgs e)
+        void WykonajRuchJakoKomputer()
         {
-            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól);
-            Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
+            Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól, InkrementujLiczbęPrzeanalizowanychRuchów);
+            Algorytmy.Pole[,] gra = KonwertujNaTypZAlgorytmu();
             Algorytmy.WynikGry wynik;
-            Algorytmy.KierunekZwycięskiejLinii kierunek;
             int a;
             int b;
+            LiczbaMożliwychRuchów = 0;
+
+            foreach (Algorytmy.Pole pole in gra)
+                if (pole == Algorytmy.Pole.Puste)
+                    LiczbaMożliwychRuchów++;
+
+            if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out _kierunek))
+                BrakGry = true;
+
+            Wynik = wynik;
+            Application aplikacja = Application.Current;
+
+            if (wynik == Algorytmy.WynikGry.Trwająca)
+                OstatnioWypełnionePole = Plansza[a][b];
+            else
+                PrzedstawWynikGry(gra, a, b);
+
+            if (aplikacja != null)
+                aplikacja.Dispatcher.Invoke(() => ZapiszNowyStanGry(gra));
+        }
+
+        void ZapiszNowyStanGry(Algorytmy.Pole[,] gra)
+        {
+            for (int i = 0; i < DługośćBokuPlanszy; i++)
+                for (int j = 0; j < DługośćBokuPlanszy; j++)
+                    Plansza[i][j].Zawartość = gra[i, j];
+        }
+
+        Algorytmy.Pole[,] KonwertujNaTypZAlgorytmu()
+        {
+            Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
 
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     gra[i, j] = Plansza[i][j].Zawartość;
 
-            if (algorytm.AlfaBetaObcięcie(gra, out wynik, out a, out b, out kierunek))
+            return gra;
+        }
+
+        void PrzedstawWynikGry(Algorytmy.Pole[,] gra, int a, int b)
+        {
+            OstatnioWypełnionePole = null;
+
+            if (_kierunek != Algorytmy.KierunekZwycięskiejLinii.BrakWygranej)
             {
-                BrakGry = true;
+                Algorytmy.Pole poszukiwane;
+                Algorytmy.Pole zamiennik;
 
-                _minutnik.Stop();
+                if (Wynik == Algorytmy.WynikGry.Kółko)
+                {
+                    poszukiwane = Algorytmy.Pole.Kółko;
+                    zamiennik = Algorytmy.Pole.ZwycięskieKółko;
+                }
+                else
+                {
+                    poszukiwane = Algorytmy.Pole.Krzyżyk;
+                    zamiennik = Algorytmy.Pole.ZwycięskiKrzyżyk;
+                }
+
+                switch (_kierunek)
+                {
+                    case Algorytmy.KierunekZwycięskiejLinii.Poziomy:
+                        for (int j = b; j >= 0; j--)
+                            if (gra[a, j] == poszukiwane)
+                                gra[a, j] = zamiennik;
+                            else
+                                break;
+
+                        for (int j = b + 1; j < DługośćBokuPlanszy; j++)
+                            if (gra[a, j] == poszukiwane)
+                                gra[a, j] = zamiennik;
+                            else
+                                break;
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.Pionowy:
+                        for (int i = a; i >= 0; i--)
+                            if (gra[i, b] == poszukiwane)
+                                gra[i, b] = zamiennik;
+                            else
+                                break;
+
+                        for (int i = a + 1; i < DługośćBokuPlanszy; i++)
+                            if (gra[i, b] == poszukiwane)
+                                gra[i, b] = zamiennik;
+                            else
+                                break;
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdLewejDoPrawej:
+                        for (int k = 0; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a - k;
+                            int j = b - k;
+
+                            if (i >= 0 && j >= 0)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        for (int k = 1; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a + k;
+                            int j = b + k;
+
+                            if (i < DługośćBokuPlanszy && j < DługośćBokuPlanszy)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        break;
+
+                    case Algorytmy.KierunekZwycięskiejLinii.UkośnieOdPrawejDoLewej:
+                        for (int k = 0; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a - k;
+                            int j = b + k;
+
+                            if (i >= 0 && j < DługośćBokuPlanszy)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        for (int k = 1; k < DługośćBokuPlanszy; k++)
+                        {
+                            int i = a + k;
+                            int j = b - k;
+
+                            if (i < DługośćBokuPlanszy && j >= 0)
+                            {
+                                if (gra[i, j] == poszukiwane)
+                                    gra[i, j] = zamiennik;
+                                else
+                                    break;
+                            }
+                            else
+                                break;
+                        }
+
+                        break;
+                }
             }
+        }
 
-            Wynik = wynik;
-            Kierunek = kierunek;
+        void InkrementujLiczbęPrzeanalizowanychRuchów()
+        {
+            LiczbaPrzeanalizowanychRuchów++;
+        }
 
-            if (wynik == Algorytmy.WynikGry.Trwająca)
-                OstatnioWypełnionePole = Plansza[a][b];
-            else
-                OstatnioWypełnionePole = null;
+        void Current_Exit(object sender, ExitEventArgs e)
+        {
+            if (_wątekGry != null)
+                _wątekGry.Abort();
 
-            for (int i = 0; i < DługośćBokuPlanszy; i++)
-                for (int j = 0; j < DługośćBokuPlanszy; j++)
-                    Plansza[i][j].Zawartość = gra[i, j];
-
-            _ruchKółka = !_ruchKółka;
-
-            if (_tryb == TrybGry.GraczVsSi)
-            {
-                _minutnik.Stop();
-
-                RuchGracza = true;
-            }
+            BrakGry = true;
+            Wynik = Algorytmy.WynikGry.Remis;
+            OstatnioWypełnionePole = null;
         }
     }
 }
