@@ -1,0 +1,24 @@
+﻿# wiki
+#A 3 B
+#A 3 D
+#B 4 C
+#C 3 A
+#C 1 D
+#C 2 E
+#D 2 E
+#D 6 F
+#E 1 B
+#E 1 G
+#F 9 G
+#
+#
+#
+# http://lpsolve.sourceforge.net/5.5/dimacs_maxf.gif
+A 5 B
+A 15 C
+B 5 D
+B 5 E
+C 5 D
+C 5 E
+D 15 F
+E 5 F
