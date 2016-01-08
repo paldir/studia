@@ -4,19 +4,22 @@ namespace przepływ
 {
     class Krawędź
     {
-        public Wierzchołek Wierzchołek { get; private set; }
-        public float Przepływ { get; set; }
-        public float Pojemność { get; private set; }
+        public Wierzchołek S { get; private set; }
+        public Wierzchołek T { get; private set; }
+        public float Flow { get; set; }
+        public float Cap { get; private set; }
+        public Krawędź Rev { get; set; }
 
         public string Informacje
         {
-            get { return String.Format("{0} {1}/{2}", Wierzchołek.Litera, Przepływ, Pojemność); }
+            get { return String.Format("{0}->{1}:{2}/{3}", S.Litera, T.Litera, Flow, Cap); }
         }
 
-        public Krawędź(Wierzchołek wierzchołek, float pojemność)
+        public Krawędź(Wierzchołek s, Wierzchołek koniec, float cap)
         {
-            Wierzchołek = wierzchołek;
-            Pojemność = pojemność;
+            S = s;
+            T = koniec;
+            Cap = cap;
         }
     }
 }

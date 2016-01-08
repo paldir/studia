@@ -20,8 +20,8 @@ namespace przepływ
         }
 
         public char Litera { get; private set; }
-        public List<Krawędź> Krawędzie { get; private set; }
-        public Wierzchołek Rodzic { get; set; }
+        public List<Krawędź> Krawędzie { get; set; }
+        public Krawędź Pred { get; set; }
 
         public string Informacje
         {
@@ -30,8 +30,7 @@ namespace przepływ
                 StringBuilder budowniczy = new StringBuilder();
 
                 foreach (Krawędź krawędź in Krawędzie)
-                    if (krawędź.Pojemność > 0)
-                        budowniczy.AppendFormat("{0} | ", krawędź.Informacje);
+                    budowniczy.AppendFormat("{0} ", krawędź.Informacje);
 
                 return budowniczy.ToString();
             }
@@ -45,6 +44,7 @@ namespace przepływ
 
         public Wierzchołek(char litera)
             : this(Convert.ToInt32(litera) - 64)
-        { }
+        {
+        }
     }
 }
