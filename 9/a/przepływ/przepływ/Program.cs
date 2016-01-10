@@ -26,21 +26,18 @@ namespace przepływ
                 Queue<Wierzchołek> q = new Queue<Wierzchołek>();
 
                 q.Enqueue(s);
-
-                foreach (Wierzchołek wierzchołek in graf)
-                    wierzchołek.Pred = null;
+                graf.ForEach(w => w.Pred = null);
 
                 while (q.Any())
                 {
                     Wierzchołek cur = q.Dequeue();
 
-                    foreach (Krawędź e in cur.Krawędzie)
+                    foreach (Krawędź e in cur.DostępneKrawędzie)
                         if (e.T.Pred == null && e.T != s && e.Cap > e.Flow)
                         {
                             e.T.Pred = e;
 
                             q.Enqueue(e.T);
-
                         }
                 }
 
@@ -94,8 +91,8 @@ namespace przepływ
                     graf.Add(drugi);
                 }
 
-                Krawędź krawędź = new Krawędź(pierwszy, drugi, pojemność);
-                Krawędź krawędźOdwrotna = new Krawędź(drugi, pierwszy, pojemność);
+                Krawędź krawędź = new Krawędź(pierwszy, drugi, pojemność, true);
+                Krawędź krawędźOdwrotna = new Krawędź(drugi, pierwszy, pojemność, false);
                 krawędź.Rev = krawędźOdwrotna;
                 krawędźOdwrotna.Rev = krawędź;
 

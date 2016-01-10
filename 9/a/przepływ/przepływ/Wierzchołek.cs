@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace przepływ
@@ -23,13 +24,18 @@ namespace przepływ
         public List<Krawędź> Krawędzie { get; set; }
         public Krawędź Pred { get; set; }
 
+        public IEnumerable<Krawędź> DostępneKrawędzie
+        {
+            get { return Krawędzie/*.Where(k => k.Normal || (!k.Normal && k.Flow < 0))*/; }
+        }
+
         public string Informacje
         {
             get
             {
                 StringBuilder budowniczy = new StringBuilder();
 
-                foreach (Krawędź krawędź in Krawędzie)
+                foreach (Krawędź krawędź in DostępneKrawędzie)
                     budowniczy.AppendFormat("{0} ", krawędź.Informacje);
 
                 return budowniczy.ToString();
