@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace przepływ
@@ -8,6 +7,7 @@ namespace przepływ
     class Wierzchołek
     {
         int _nazwa;
+        const int RóżnicaAscii = 64;
 
         public int Nazwa
         {
@@ -16,7 +16,7 @@ namespace przepływ
             set
             {
                 _nazwa = value;
-                Litera = Convert.ToChar(Nazwa + 64);
+                Litera = Convert.ToChar(Nazwa + RóżnicaAscii);
             }
         }
 
@@ -26,7 +26,7 @@ namespace przepływ
 
         public IEnumerable<Krawędź> DostępneKrawędzie
         {
-            get { return Krawędzie/*.Where(k => k.Normal || (!k.Normal && k.Flow < 0))*/; }
+            get { return Krawędzie /*.Where(k => k.Normal || (!k.Normal && k.Flow < 0))*/; }
         }
 
         public string Informacje
@@ -49,7 +49,7 @@ namespace przepływ
         }
 
         public Wierzchołek(char litera)
-            : this(Convert.ToInt32(litera) - 64)
+            : this(Convert.ToInt32(litera) - RóżnicaAscii)
         {
         }
     }
