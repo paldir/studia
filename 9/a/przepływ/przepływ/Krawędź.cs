@@ -2,7 +2,7 @@
 
 namespace przepływ
 {
-    class Krawędź
+    internal class Krawędź
     {
         public Wierzchołek S { get; private set; }
         public Wierzchołek T { get; private set; }

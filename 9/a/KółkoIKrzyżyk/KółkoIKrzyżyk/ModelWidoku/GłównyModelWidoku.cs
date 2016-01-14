@@ -6,17 +6,17 @@ namespace KółkoIKrzyżyk.ModelWidoku
 {
     public class GłównyModelWidoku : ObiektModelWidoku
     {
-        bool _ruchKółka;
-        Thread _wątekGry;
-        Algorytmy.KierunekZwycięskiejLinii _kierunek;
-        readonly object _lock;
+        private bool _ruchKółka;
+        private Thread _wątekGry;
+        private Algorytmy.KierunekZwycięskiejLinii _kierunek;
+        private readonly object _lock;
 
         public Komenda WykonanieRuchu { get; private set; }
         public Komenda RozpoczęcieGry { get; private set; }
         public Komenda ZakończenieGry { get; private set; }
         public Pole OstatnioWypełnionePole { get; private set; }
 
-        TrybGry _tryb;
+        private TrybGry _tryb;
         public TrybGry Tryb
         {
             get { return _tryb; }
@@ -31,7 +31,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        bool _brakGry;
+        private bool _brakGry;
         public bool BrakGry
         {
             get { return _brakGry; }
@@ -44,7 +44,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        Algorytmy.WynikGry _wynik;
+        private Algorytmy.WynikGry _wynik;
         public Algorytmy.WynikGry Wynik
         {
             get { return _wynik; }
@@ -57,7 +57,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        int _długośćBokuPlanszy;
+        private int _długośćBokuPlanszy;
         public int DługośćBokuPlanszy
         {
             get { return _długośćBokuPlanszy; }
@@ -75,7 +75,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        Plansza _plansza;
+        private Plansza _plansza;
         public Plansza Plansza
         {
             get { return _plansza; }
@@ -88,7 +88,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        bool _ruchGracza;
+        private bool _ruchGracza;
         public bool RuchGracza
         {
             get { return _ruchGracza; }
@@ -101,7 +101,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        int _zwycięskaLiczbaPól;
+        private int _zwycięskaLiczbaPól;
         public int ZwycięskaLiczbaPól
         {
             get { return _zwycięskaLiczbaPól; }
@@ -119,7 +119,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        int _głębokośćRekurencji;
+        private int _głębokośćRekurencji;
         public int GłębokośćRekurencji
         {
             get { return _głębokośćRekurencji; }
@@ -133,7 +133,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        Zaczynający _ktoZaczyna;
+        private Zaczynający _ktoZaczyna;
         public Zaczynający KtoZaczyna
         {
             get { return _ktoZaczyna; }
@@ -147,7 +147,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        int _liczbaMożliwychRuchów;
+        private int _liczbaMożliwychRuchów;
         public int LiczbaMożliwychRuchów
         {
             get { return _liczbaMożliwychRuchów; }
@@ -160,7 +160,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        int _liczbaPrzeanalizowanychRuchów;
+        private int _liczbaPrzeanalizowanychRuchów;
         public int LiczbaPrzeanalizowanychRuchów
         {
             get { return _liczbaPrzeanalizowanychRuchów; }
@@ -196,7 +196,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             Application.Current.Exit += Current_Exit;
         }
 
-        void RozpocznijGrę()
+        private void RozpocznijGrę()
         {
             BrakGry = false;
             _ruchKółka = true;
@@ -205,7 +205,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
 
             Plansza.Resetuj();
 
-            if (Tryb == TrybGry.GraczVsSi && KtoZaczyna == Zaczynający.Gracz)
+            if ((Tryb == TrybGry.GraczVsSi) && (KtoZaczyna == Zaczynający.Gracz))
                 RuchGracza = true;
             else
                 RuchGracza = false;
@@ -213,7 +213,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             _wątekGry.Start();
         }
 
-        void Gra()
+        private void Gra()
         {
             do
             {
@@ -244,13 +244,13 @@ namespace KółkoIKrzyżyk.ModelWidoku
             RuchGracza = false;
         }
 
-        void WykonajRuchJakoGracz(object parametr)
+        private void WykonajRuchJakoGracz(object parametr)
         {
             if (RuchGracza)
             {
                 Pole pole = parametr as Pole;
 
-                if (pole != null && pole.Zawartość == Algorytmy.Pole.Puste)
+                if ((pole != null) && (pole.Zawartość == Algorytmy.Pole.Puste))
                 {
                     Algorytmy.Pole znak = _ruchKółka ? Algorytmy.Pole.Kółko : Algorytmy.Pole.Krzyżyk;
 
@@ -277,7 +277,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        void WykonajRuchJakoKomputer()
+        private void WykonajRuchJakoKomputer()
         {
             Algorytmy.Ruch algorytm = new Algorytmy.Ruch(_ruchKółka, GłębokośćRekurencji, ZwycięskaLiczbaPól, InkrementujLiczbęPrzeanalizowanychRuchów);
             Algorytmy.Pole[,] gra = KonwertujNaTypZAlgorytmu();
@@ -305,14 +305,14 @@ namespace KółkoIKrzyżyk.ModelWidoku
                 aplikacja.Dispatcher.Invoke(() => ZapiszNowyStanGry(gra));
         }
 
-        void ZapiszNowyStanGry(Algorytmy.Pole[,] gra)
+        private void ZapiszNowyStanGry(Algorytmy.Pole[,] gra)
         {
             for (int i = 0; i < DługośćBokuPlanszy; i++)
                 for (int j = 0; j < DługośćBokuPlanszy; j++)
                     Plansza[i][j].Zawartość = gra[i, j];
         }
 
-        Algorytmy.Pole[,] KonwertujNaTypZAlgorytmu()
+        private Algorytmy.Pole[,] KonwertujNaTypZAlgorytmu()
         {
             Algorytmy.Pole[,] gra = new Algorytmy.Pole[DługośćBokuPlanszy, DługośćBokuPlanszy];
 
@@ -323,7 +323,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
             return gra;
         }
 
-        void PrzedstawWynikGry(Algorytmy.Pole[,] gra, int a, int b)
+        private void PrzedstawWynikGry(Algorytmy.Pole[,] gra, int a, int b)
         {
             OstatnioWypełnionePole = null;
 
@@ -381,7 +381,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                             int i = a - k;
                             int j = b - k;
 
-                            if (i >= 0 && j >= 0)
+                            if ((i >= 0) && (j >= 0))
                             {
                                 if (gra[i, j] == poszukiwane)
                                     gra[i, j] = zamiennik;
@@ -397,7 +397,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                             int i = a + k;
                             int j = b + k;
 
-                            if (i < DługośćBokuPlanszy && j < DługośćBokuPlanszy)
+                            if ((i < DługośćBokuPlanszy) && (j < DługośćBokuPlanszy))
                             {
                                 if (gra[i, j] == poszukiwane)
                                     gra[i, j] = zamiennik;
@@ -416,7 +416,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                             int i = a - k;
                             int j = b + k;
 
-                            if (i >= 0 && j < DługośćBokuPlanszy)
+                            if ((i >= 0) && (j < DługośćBokuPlanszy))
                             {
                                 if (gra[i, j] == poszukiwane)
                                     gra[i, j] = zamiennik;
@@ -432,7 +432,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                             int i = a + k;
                             int j = b - k;
 
-                            if (i < DługośćBokuPlanszy && j >= 0)
+                            if ((i < DługośćBokuPlanszy) && (j >= 0))
                             {
                                 if (gra[i, j] == poszukiwane)
                                     gra[i, j] = zamiennik;
@@ -448,12 +448,12 @@ namespace KółkoIKrzyżyk.ModelWidoku
             }
         }
 
-        void InkrementujLiczbęPrzeanalizowanychRuchów()
+        private void InkrementujLiczbęPrzeanalizowanychRuchów()
         {
             LiczbaPrzeanalizowanychRuchów++;
         }
 
-        void Current_Exit(object sender, ExitEventArgs e)
+        private void Current_Exit(object sender, ExitEventArgs e)
         {
             if (_wątekGry != null)
                 _wątekGry.Abort();

@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace hashowanie
 {
-    sealed class TablicaHaszowanaOtwarcie<T> : HaszowanaTablica<T> where T : IEquatable<T>
+    internal sealed class TablicaHaszowanaOtwarcie<T> : HaszowanaTablica<T> where T : IEquatable<T>
     {
-        int[] _tablicaDostępu;
-        const int PusteMiejsce = Int32.MaxValue;
-        const int PusteMiejscePoElemencieUsuniętym = Int32.MinValue;
-        const int NormalnaWartość = 0;
-        static readonly T WartośćDomyślna = default(T);
+        private int[] _tablicaDostępu;
+        private const int PusteMiejsce = int.MaxValue;
+        private const int PusteMiejscePoElemencieUsuniętym = int.MinValue;
+        private const int NormalnaWartość = 0;
+        private static readonly T WartośćDomyślna = default(T);
 
         public T[] Tablica { get; set; }
 
@@ -31,7 +31,7 @@ namespace hashowanie
                 int j = H(x, i);
                 int dostęp = _tablicaDostępu[j];
 
-                if (dostęp == PusteMiejsce || dostęp == PusteMiejscePoElemencieUsuniętym)
+                if ((dostęp == PusteMiejsce) || (dostęp == PusteMiejscePoElemencieUsuniętym))
                 {
                     Tablica[j] = x;
                     _tablicaDostępu[j] = NormalnaWartość;
@@ -64,7 +64,7 @@ namespace hashowanie
                 if (dostęp == PusteMiejsce)
                     return false;
 
-                if (dostęp == NormalnaWartość && Tablica[j].Equals(x))
+                if ((dostęp == NormalnaWartość) && Tablica[j].Equals(x))
                 {
                     Tablica[j] = WartośćDomyślna;
                     _tablicaDostępu[j] = PusteMiejscePoElemencieUsuniętym;
@@ -139,12 +139,12 @@ namespace hashowanie
             }
         }
 
-        int H(T k, int i)
+        private int H(T k, int i)
         {
             return (H_1(k) + Convert.ToInt32(Math.Pow(i, 2))) % M;
         }
 
-        int H_1(T k)
+        private int H_1(T k)
         {
             double alfa = (Math.Sqrt(5) - 1) / 2;
             double alfaRazyK = alfa * FunkcjaKonwertującaNaInt(k);

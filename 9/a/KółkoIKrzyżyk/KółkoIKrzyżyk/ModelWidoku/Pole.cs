@@ -2,7 +2,7 @@
 {
     public class Pole : ObiektModelWidoku
     {
-        Algorytmy.Pole _zawartość;
+        private Algorytmy.Pole _zawartość;
         public Algorytmy.Pole Zawartość
         {
             get { return _zawartość; }

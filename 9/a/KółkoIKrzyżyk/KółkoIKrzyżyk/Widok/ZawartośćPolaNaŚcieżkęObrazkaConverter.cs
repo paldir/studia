@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace KółkoIKrzyżyk.Widok
 {
-    class ZawartośćPolaNaŚcieżkęDoObrazkaConverter : IMultiValueConverter
+    internal class ZawartośćPolaNaŚcieżkęDoObrazkaConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -43,10 +43,10 @@ namespace KółkoIKrzyżyk.Widok
                 }
 
                 if (zawartość == ostatnioWypełnionePole)
-                    nazwaObrazka = String.Concat("niebieski", nazwaObrazka);
+                    nazwaObrazka = string.Concat("niebieski", nazwaObrazka);
             }
 
-            nazwaObrazka = String.Concat("/Obrazki/", nazwaObrazka);
+            nazwaObrazka = string.Concat("/Obrazki/", nazwaObrazka);
 
             return new BitmapImage(new Uri(nazwaObrazka, UriKind.Relative));
         }

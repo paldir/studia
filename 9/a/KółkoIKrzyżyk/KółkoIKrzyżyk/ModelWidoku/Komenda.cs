@@ -5,10 +5,10 @@ namespace KółkoIKrzyżyk.ModelWidoku
 {
     public class Komenda : ICommand
     {
-        readonly Action _akcja;
-        readonly Action<object> _akcjaZParametrem;
+        private readonly Action _akcja;
+        private readonly Action<object> _akcjaZParametrem;
 
-        Func<bool> _możnaWykonać;
+        private Func<bool> _możnaWykonać;
         public Func<bool> MożnaWykonać
         {
             get { return _możnaWykonać; }

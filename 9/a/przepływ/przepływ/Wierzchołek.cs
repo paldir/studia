@@ -4,10 +4,10 @@ using System.Text;
 
 namespace przepływ
 {
-    class Wierzchołek
+    internal class Wierzchołek
     {
-        int _nazwa;
-        const int RóżnicaAscii = 64;
+        private int _nazwa;
+        private const int RóżnicaAscii = 64;
 
         public int Nazwa
         {

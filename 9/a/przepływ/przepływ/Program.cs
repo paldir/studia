@@ -5,9 +5,9 @@ using System.IO;
 
 namespace przepływ
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             Wierzchołek źródło;
             Wierzchołek ujście;
@@ -17,7 +17,7 @@ namespace przepływ
             Console.Write(przepływ);
         }
 
-        static float EdmondsKarp(List<Wierzchołek> graf, Wierzchołek s, Wierzchołek t)
+        private static float EdmondsKarp(List<Wierzchołek> graf, Wierzchołek s, Wierzchołek t)
         {
             float flow = 0;
 
@@ -33,7 +33,7 @@ namespace przepływ
                     Wierzchołek cur = q.Dequeue();
 
                     foreach (Krawędź e in cur.DostępneKrawędzie)
-                        if (e.T.Pred == null && e.T != s && e.Cap > e.Flow)
+                        if ((e.T.Pred == null) && (e.T != s) && (e.Cap > e.Flow))
                         {
                             e.T.Pred = e;
 
@@ -44,7 +44,7 @@ namespace przepływ
                 if (t.Pred == null)
                     break;
 
-                float df = Single.PositiveInfinity;
+                float df = float.PositiveInfinity;
 
                 for (Krawędź e = t.Pred; e != null; e = e.S.Pred)
                     df = Math.Min(df, e.Cap - e.Flow);
@@ -61,7 +61,7 @@ namespace przepływ
             return flow;
         }
 
-        static List<Wierzchołek> UtwórzGraf(out Wierzchołek źródło, out Wierzchołek ujście)
+        private static List<Wierzchołek> UtwórzGraf(out Wierzchołek źródło, out Wierzchołek ujście)
         {
             string[] linie = File.ReadAllLines("graf.txt").Where(l => !l.StartsWith("#")).ToArray();
             List<Wierzchołek> graf = new List<Wierzchołek>();

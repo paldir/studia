@@ -5,11 +5,11 @@ namespace Algorytmy
 {
     public class Ruch
     {
-        readonly bool _perspektywaKółka;
-        readonly int _głębokość;
-        readonly int _zwycięskaLiczbaPól;
-        int _rozmiar;
-        readonly Action _inkrementacjaLiczbyPrzeanalizowanychRuchów;
+        private readonly bool _perspektywaKółka;
+        private readonly int _głębokość;
+        private readonly int _zwycięskaLiczbaPól;
+        private int _rozmiar;
+        private readonly Action _inkrementacjaLiczbyPrzeanalizowanychRuchów;
 
         public Ruch(bool kółko, int głębokość, int zwycięskaLiczbaPól, Action inkrementacjaLiczbyPrzeanalizowanychRuchów)
         {
@@ -25,12 +25,12 @@ namespace Algorytmy
             double punktyKrzyżyka;
             _rozmiar = stanGry.GetLength(0);
 
-            NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, Double.NegativeInfinity, Double.PositiveInfinity, out a, out b);
+            NastępnyAlfaBetaObcięcie(stanGry, true, _perspektywaKółka, _głębokość, double.NegativeInfinity, double.PositiveInfinity, out a, out b);
 
             return GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek);
         }
 
-        double NastępnyAlfaBetaObcięcie(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość, double alfa, double beta, out int a, out int b)
+        private double NastępnyAlfaBetaObcięcie(Pole[,] stanGry, bool maksymalizacja, bool ruchKółka, int głębokość, double alfa, double beta, out int a, out int b)
         {
             double punktyKółka;
             double punktyKrzyżyka;
@@ -38,7 +38,7 @@ namespace Algorytmy
             KierunekZwycięskiejLinii kierunek;
             a = b = -1;
 
-            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || głębokość == 0)
+            if (GraZakończona(stanGry, out punktyKółka, out punktyKrzyżyka, out wynik, out kierunek) || (głębokość == 0))
                 return WartośćWyniku(punktyKółka, punktyKrzyżyka);
 
             Pole znakAktualnegoGracza = ruchKółka ? Pole.Kółko : Pole.Krzyżyk;
@@ -48,7 +48,7 @@ namespace Algorytmy
 
             if (maksymalizacja)
             {
-                ekstremum = Single.NegativeInfinity;
+                ekstremum = float.NegativeInfinity;
 
                 for (int i = 0; i < _rozmiar; i++)
                 {
@@ -80,7 +80,7 @@ namespace Algorytmy
             }
             else
             {
-                ekstremum = Single.PositiveInfinity;
+                ekstremum = float.PositiveInfinity;
 
                 for (int i = 0; i < _rozmiar; i++)
                 {
@@ -115,7 +115,7 @@ namespace Algorytmy
             return ekstremum;
         }
 
-        double WartośćWyniku(double punktyKółka, double punktyKrzyżyka)
+        private double WartośćWyniku(double punktyKółka, double punktyKrzyżyka)
         {
             if (_perspektywaKółka)
                 return punktyKółka - punktyKrzyżyka;
@@ -136,7 +136,7 @@ namespace Algorytmy
                     int liczbaPustych = 0;
                     int początekKolejnejTrójki = j + _zwycięskaLiczbaPól;
 
-                    for (int k = j; k < początekKolejnejTrójki && k < rozmiar; k++)
+                    for (int k = j; (k < początekKolejnejTrójki) && (k < rozmiar); k++)
                         SprawdźZawartośćPola(stanGry[i, k], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                     if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
@@ -155,7 +155,7 @@ namespace Algorytmy
                     int liczbaPustych = 0;
                     int początekKolejnejTrójki = i + _zwycięskaLiczbaPól;
 
-                    for (int k = i; k < początekKolejnejTrójki && k < rozmiar; k++)
+                    for (int k = i; (k < początekKolejnejTrójki) && (k < rozmiar); k++)
                         SprawdźZawartośćPola(stanGry[k, j], ref liczbaKółek, ref liczbaKrzyżyków, ref liczbaPustych);
 
                     if (OkreślZwycięzcę(liczbaKółek, liczbaKrzyżyków, liczbaPustych, ref punktyKółka, ref punktyKrzyżyka, out wynik))
@@ -227,7 +227,7 @@ namespace Algorytmy
             return false;
         }
 
-        static void SprawdźZawartośćPola(Pole pole, ref int liczbaKółek, ref int liczbaKrzyżyków, ref int liczbaPustych)
+        private static void SprawdźZawartośćPola(Pole pole, ref int liczbaKółek, ref int liczbaKrzyżyków, ref int liczbaPustych)
         {
             if (pole == Pole.Kółko)
                 liczbaKółek++;
@@ -237,11 +237,11 @@ namespace Algorytmy
                 liczbaPustych++;
         }
 
-        bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
+        private bool OkreślZwycięzcę(int liczbaKółekWLinii, int liczbaKrzyżykówWLinii, int liczbaPustych, ref double punktyKółka, ref double punktyKrzyżyka, out WynikGry wynik)
         {
-            int potęga = 2;
+            const int potęga = 2;
 
-            if (liczbaKółekWLinii > 0 && liczbaKrzyżykówWLinii == 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii)
+            if ((liczbaKółekWLinii > 0) && (liczbaKrzyżykówWLinii == 0) && (liczbaPustych == _zwycięskaLiczbaPól - liczbaKółekWLinii))
             {
                 punktyKółka += Math.Pow(Convert.ToDouble(liczbaKółekWLinii) / _zwycięskaLiczbaPól * 100, potęga);
 
@@ -254,7 +254,7 @@ namespace Algorytmy
                 }
             }
 
-            if (liczbaKółekWLinii == 0 && liczbaKrzyżykówWLinii > 0 && liczbaPustych == _zwycięskaLiczbaPól - liczbaKrzyżykówWLinii)
+            if ((liczbaKółekWLinii == 0) && (liczbaKrzyżykówWLinii > 0) && (liczbaPustych == _zwycięskaLiczbaPól - liczbaKrzyżykówWLinii))
             {
                 punktyKrzyżyka += Math.Pow(Convert.ToDouble(liczbaKrzyżykówWLinii) / _zwycięskaLiczbaPól * 100, potęga);
 
@@ -272,7 +272,7 @@ namespace Algorytmy
             return false;
         }
 
-        static Pole[,] KopiujStanGry(Pole[,] stanGry)
+        private static Pole[,] KopiujStanGry(Pole[,] stanGry)
         {
             int rozmiar = stanGry.GetLength(0);
             Pole[,] kopia = new Pole[rozmiar, rozmiar];

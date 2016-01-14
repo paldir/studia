@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace KółkoIKrzyżyk.Widok
 {
-    class BooleanNaWidocznośćKontrolki : IValueConverter
+    internal class BooleanNaWidocznośćKontrolki : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

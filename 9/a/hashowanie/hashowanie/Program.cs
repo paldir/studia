@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace hashowanie
 {
-    class Program
+    internal class Program
     {
-        const int M = 1500;
+        private const int M = 1500;
 
-        static void Main()
+        private static void Main()
         {
             string[] nazwiska = System.IO.File.ReadAllLines("hash-dane.txt");
             TablicaHaszowanaZamknięcie<string> mod = new TablicaHaszowanaZamknięcie<string>(M, KonwertujNapisNaInt);
@@ -43,7 +43,7 @@ namespace hashowanie
             Console.ReadKey();
         }
 
-        static int KonwertujNapisNaInt(string napis)
+        private static int KonwertujNapisNaInt(string napis)
         {
             //return napis.Sum(z => Convert.ToInt32(z));
             return Math.Abs(napis.GetHashCode());

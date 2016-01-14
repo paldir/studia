@@ -35,7 +35,7 @@ namespace KółkoIKrzyżyk.ModelWidoku
                     this[i][j].Zawartość = Algorytmy.Pole.Puste;
         }
 
-        void pole_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void pole_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
