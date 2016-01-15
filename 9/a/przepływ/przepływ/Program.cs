@@ -11,29 +11,30 @@ namespace przepływ
         {
             Wierzchołek źródło;
             Wierzchołek ujście;
-            List<Wierzchołek> graf = UtwórzGraf(out źródło, out ujście);
-            float przepływ = EdmondsKarp(graf, źródło, ujście);
+            List<Krawędź> krawędzie = UtwórzGraf(out źródło, out ujście);
+            int przepływ = EdmondsKarp(krawędzie, źródło, ujście);
 
-            Console.Write(przepływ);
+            //Console.Write(przepływ);
         }
 
-        private static float EdmondsKarp(List<Wierzchołek> graf, Wierzchołek s, Wierzchołek t)
+        private static int EdmondsKarp(List<Krawędź> krawędzie, Wierzchołek s, Wierzchołek t)
         {
-            float flow = 0;
+            int flow = 0;
 
             do
             {
                 Queue<Wierzchołek> q = new Queue<Wierzchołek>();
 
                 q.Enqueue(s);
-                graf.ForEach(w => w.Pred = null);
+                krawędzie.ForEach(k => k.S.Pred = null);
+                krawędzie.ForEach(k => k.T.Pred = null);
 
                 while (q.Any())
                 {
                     Wierzchołek cur = q.Dequeue();
 
-                    foreach (Krawędź e in cur.DostępneKrawędzie)
-                        if ((e.T.Pred == null) && (e.T != s) && (e.Cap > e.Flow))
+                    foreach (Krawędź e in krawędzie.Where(k => k.S == cur))
+                        if ((e.T.Pred == null) && (e.T != s) && (e.Cap - e.Flow > 0) && e.Residual > 0)
                         {
                             e.T.Pred = e;
 
@@ -44,7 +45,7 @@ namespace przepływ
                 if (t.Pred == null)
                     break;
 
-                float df = float.PositiveInfinity;
+                int df = int.MaxValue;
 
                 for (Krawędź e = t.Pred; e != null; e = e.S.Pred)
                     df = Math.Min(df, e.Cap - e.Flow);
@@ -56,15 +57,17 @@ namespace przepływ
                 }
 
                 flow += df;
-            } while (true);
+            }
+            while (true);
 
             return flow;
         }
 
-        private static List<Wierzchołek> UtwórzGraf(out Wierzchołek źródło, out Wierzchołek ujście)
+        private static List<Krawędź> UtwórzGraf(out Wierzchołek źródło, out Wierzchołek ujście)
         {
             string[] linie = File.ReadAllLines("graf.txt").Where(l => !l.StartsWith("#")).ToArray();
-            List<Wierzchołek> graf = new List<Wierzchołek>();
+            List<Wierzchołek> wierzchołki = new List<Wierzchołek>();
+            List<Krawędź> krawędzie = new List<Krawędź>();
             int liczbaLinii = linie.Length;
             string[] pierwszaLinia = linie[0].Split(' ');
 
@@ -72,23 +75,23 @@ namespace przepływ
             {
                 string[] zawartość = linie[i].Split(' ');
                 char nazwaPierwszego = Convert.ToChar(zawartość[0]);
-                float pojemność = Convert.ToSingle(zawartość[1]);
+                int pojemność = int.Parse(zawartość[1]);
                 char nazwaDrugiego = Convert.ToChar(zawartość[2]);
-                Wierzchołek pierwszy = graf.SingleOrDefault(w => w.Litera == nazwaPierwszego);
-                Wierzchołek drugi = graf.SingleOrDefault(w => w.Litera == nazwaDrugiego);
+                Wierzchołek pierwszy = wierzchołki.SingleOrDefault(w => w.Litera == nazwaPierwszego);
+                Wierzchołek drugi = wierzchołki.SingleOrDefault(w => w.Litera == nazwaDrugiego);
 
                 if (pierwszy == null)
                 {
                     pierwszy = new Wierzchołek(nazwaPierwszego);
 
-                    graf.Add(pierwszy);
+                    wierzchołki.Add(pierwszy);
                 }
 
                 if (drugi == null)
                 {
                     drugi = new Wierzchołek(nazwaDrugiego);
 
-                    graf.Add(drugi);
+                    wierzchołki.Add(drugi);
                 }
 
                 Krawędź krawędź = new Krawędź(pierwszy, drugi, pojemność, true);
@@ -96,19 +99,15 @@ namespace przepływ
                 krawędź.Rev = krawędźOdwrotna;
                 krawędźOdwrotna.Rev = krawędź;
 
-                pierwszy.Krawędzie.Add(krawędź);
-                drugi.Krawędzie.Add(krawędźOdwrotna);
+                krawędzie.Add(krawędź);
+                krawędzie.Add(krawędźOdwrotna);
             }
 
-            źródło = graf.Single(w => w.Litera == Convert.ToChar(pierwszaLinia[0]));
-            ujście = graf.Single(w => w.Litera == Convert.ToChar(pierwszaLinia[1]));
+            źródło = wierzchołki.Single(w => w.Litera == Convert.ToChar(pierwszaLinia[0]));
+            ujście = wierzchołki.Single(w => w.Litera == Convert.ToChar(pierwszaLinia[1]));
+            krawędzie = krawędzie.OrderBy(k => k.S.Nazwa).ThenBy(k => k.T.Nazwa).ToList();
 
-            graf.Sort((x, y) => x.Nazwa - y.Nazwa);
-
-            foreach (Wierzchołek wierzchołek in graf)
-                wierzchołek.Krawędzie = wierzchołek.Krawędzie.OrderBy(k => k.T.Nazwa).ToList();
-
-            return graf;
+            return krawędzie;
         }
     }
 }

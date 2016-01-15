@@ -21,15 +21,15 @@ namespace przepływ
         }
 
         public char Litera { get; private set; }
-        public List<Krawędź> Krawędzie { get; set; }
+        //public List<Krawędź> Krawędzie { get; set; }
         public Krawędź Pred { get; set; }
 
-        public IEnumerable<Krawędź> DostępneKrawędzie
+        /*public IEnumerable<Krawędź> DostępneKrawędzie
         {
-            get { return Krawędzie /*.Where(k => k.Normal || (!k.Normal && k.Flow < 0))*/; }
-        }
+            get { return Krawędzie.Where(k => k.Normal || (!k.Normal && k.Flow < 0)); }
+        }*/
 
-        public string Informacje
+        /*public string Informacje
         {
             get
             {
@@ -40,12 +40,12 @@ namespace przepływ
 
                 return budowniczy.ToString();
             }
-        }
+        }*/
 
         public Wierzchołek(int nazwa)
         {
             Nazwa = nazwa;
-            Krawędzie = new List<Krawędź>();
+            //Krawędzie = new List<Krawędź>();
         }
 
         public Wierzchołek(char litera)
