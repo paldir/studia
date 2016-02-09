@@ -1,0 +1,48 @@
+﻿@model Czat.Uzytkownik
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Rejestracja</title>
+</head>
+<body>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    
+        <fieldset>
+            <legend>Użytkownik</legend>
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Nazwa)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Nazwa)
+                @Html.ValidationMessageFor(model => model.Nazwa)
+            </div>
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Haslo)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Haslo)
+                @Html.ValidationMessageFor(model => model.Haslo)
+            </div>
+    
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+        </fieldset>
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>
