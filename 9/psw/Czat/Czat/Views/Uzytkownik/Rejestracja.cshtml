@@ -17,10 +17,10 @@
         @Html.ValidationSummary(true)
     
         <fieldset>
-            <legend>Użytkownik</legend>
+            <legend>Nowy użytkownik</legend>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.Nazwa)
+                @Html.LabelFor(model => model.Nazwa, "Nazwa użytkownika")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Nazwa)
@@ -28,7 +28,7 @@
             </div>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.Haslo)
+                @Html.LabelFor(model => model.Haslo, "Hasło")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Haslo)
@@ -36,13 +36,13 @@
             </div>
     
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Potwierdź" />
             </p>
         </fieldset>
     }
     
     <div>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Powrót", "Logowanie")
     </div>
 </body>
 </html>
