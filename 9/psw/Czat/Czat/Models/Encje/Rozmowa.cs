@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Czat.Models
+namespace Czat.Models.Encje
 {
     [Table("Rozmowa")]
     public class Rozmowa

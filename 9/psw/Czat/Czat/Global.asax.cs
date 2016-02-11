@@ -28,14 +28,11 @@ namespace Czat
 
             if (ciastko != null)
             {
-                //ciastko.Expires = DateTime.Now.AddMinutes(15);
                 FormsAuthenticationTicket bilet = FormsAuthentication.Decrypt(ciastko.Value);
-
-                //Response.Cookies.Set(ciastko);
 
                 if (bilet != null)
                 {
-                    Uzytkownik dane = JsonConvert.DeserializeObject<Uzytkownik>(bilet.UserData);
+                    DaneUzytkownika dane = JsonConvert.DeserializeObject<DaneUzytkownika>(bilet.UserData);
                     ZalogowanyUzytkownik uzytkownik = new ZalogowanyUzytkownik(dane.Id, dane.Nazwa);
                     HttpContext.Current.User = uzytkownik;
                 }

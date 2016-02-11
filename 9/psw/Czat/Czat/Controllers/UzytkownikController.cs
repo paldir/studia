@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Czat.Models;
+using Czat.Models.Encje;
 using Newtonsoft.Json;
 
 namespace Czat.Controllers
@@ -20,8 +21,6 @@ namespace Czat.Controllers
         [HttpGet]
         public ActionResult Logowanie()
         {
-            var tmp = _db.Rozmowy;
-            
             return View();
         }
 
@@ -39,15 +38,22 @@ namespace Czat.Controllers
                 return View();
             }
 
-            string informacjeUzytkownika = JsonConvert.SerializeObject(uzytkownik);
+            string nazwa = uzytkownik.Nazwa;
+            DaneUzytkownika dane = new DaneUzytkownika
+            {
+                Id = uzytkownik.Id,
+                Nazwa = nazwa
+            };
+
+            string informacjeUzytkownika = JsonConvert.SerializeObject(dane);
             DateTime teraz = DateTime.Now;
-            FormsAuthenticationTicket bilet = new FormsAuthenticationTicket(1, uzytkownik.Nazwa, teraz, teraz.AddSeconds(15), false, informacjeUzytkownika);
+            FormsAuthenticationTicket bilet = new FormsAuthenticationTicket(1, nazwa, teraz, teraz.AddSeconds(15), false, informacjeUzytkownika);
             string zaszyfrowanyBilet = FormsAuthentication.Encrypt(bilet);
             HttpCookie ciastko = new HttpCookie(FormsAuthentication.FormsCookieName, zaszyfrowanyBilet);
 
             Response.Cookies.Add(ciastko);
 
-            return RedirectToAction("Rozmowa", "Rozmowa");
+            return RedirectToAction("OknoPowitalne", "Rozmowa");
         }
 
         public ActionResult Wylogowanie()

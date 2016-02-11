@@ -127,11 +127,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model.cs" />
-    <Compile Include="Models\Rozmowa.cs" />
+    <Compile Include="Models\DaneUzytkownika.cs" />
+    <Compile Include="Models\Encje\Model.cs" />
+    <Compile Include="Models\Encje\Rozmowa.cs" />
     <Compile Include="Models\ZalogowanyUzytkownik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Uzytkownik.cs" />
+    <Compile Include="Models\Encje\Uzytkownik.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -141,6 +142,7 @@
     <Content Include="App_Data\BazaDanych_log.ldf">
       <DependentUpon>BazaDanych.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\Arkusz.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -169,7 +171,13 @@
     <Folder Include="Models\Test\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Rozmowa\Rozmowa.cshtml" />
+    <Content Include="Views\_Szablon.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rozmowa\OknoPowitalne.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rozmowa\Lista.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

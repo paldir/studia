@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 
-namespace Czat.Models
+namespace Czat.Models.Encje
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("Uzytkownik")]
     public class Uzytkownik
     {
@@ -29,14 +28,8 @@ namespace Czat.Models
         [Compare("Haslo", ErrorMessage = "Has³a nie s¹ identyczne.")]
         public string PowtorzoneHaslo { get; set; }
 
-        public ICollection<Rozmowa> Rozmowy1 { get; set; }
+        public virtual ICollection<Rozmowa> Rozmowy1 { get; set; }
 
-        public ICollection<Rozmowa> Rozmowy2 { get; set; }
-
-        public Uzytkownik()
-        {
-            Rozmowy1 = new HashSet<Rozmowa>();
-            Rozmowy2 = new HashSet<Rozmowa>();
-        }
+        public virtual ICollection<Rozmowa> Rozmowy2 { get; set; }
     }
 }

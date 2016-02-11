@@ -1,0 +1,11 @@
+﻿.kolumna {
+    width: 50%;
+}
+
+.lewaKolumna {
+    float: left;
+}
+
+.prawaKolumna {
+    display: inline-block;
+}

@@ -1,6 +1,6 @@
 using System.Data.Entity;
 
-namespace Czat.Models
+namespace Czat.Models.Encje
 {
     public class Model : DbContext
     {
