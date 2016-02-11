@@ -1,4 +1,4 @@
-﻿@model Czat.Uzytkownik
+﻿@model Czat.Models.Uzytkownik
 @{
     Layout = null;
 }
@@ -12,7 +12,7 @@
 </head>
 <body>
     <div>
-        @using (@Html.BeginForm("Logowanie", "Uzytkownik", FormMethod.Post))
+        @using (@Html.BeginForm("Logowanie"))
         {
             @Html.LabelFor(d => d.Nazwa, "Login")
             @Html.EditorFor(d => d.Nazwa)<br />
@@ -21,7 +21,6 @@
             <input type="submit" value="Zaloguj się" />
             @Html.ActionLink("Zarejestruj się", "Rejestracja")
             @Html.ValidationSummary()
-            @Html.ActionLink("Log out", "Wylogowanie")
         }
     </div>
 </body>

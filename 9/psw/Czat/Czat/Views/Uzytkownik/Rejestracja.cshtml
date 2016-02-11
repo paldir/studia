@@ -1,4 +1,4 @@
-﻿@model Czat.Uzytkownik
+﻿@model Czat.Models.Uzytkownik
 
 @{
     Layout = null;
@@ -20,7 +20,7 @@
             <legend>Nowy użytkownik</legend>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.Nazwa, "Nazwa użytkownika")
+                @Html.LabelFor(model => model.Nazwa)
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Nazwa)
@@ -28,13 +28,21 @@
             </div>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.Haslo, "Hasło")
+                @Html.LabelFor(model => model.Haslo)
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Haslo)
+                @Html.PasswordFor(model => model.Haslo)
                 @Html.ValidationMessageFor(model => model.Haslo)
             </div>
-    
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.PowtorzoneHaslo)
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(model => model.PowtorzoneHaslo)
+                @Html.ValidationMessageFor(model => model.PowtorzoneHaslo)
+            </div>
+
             <p>
                 <input type="submit" value="Potwierdź" />
             </p>

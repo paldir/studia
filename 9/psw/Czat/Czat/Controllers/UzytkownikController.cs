@@ -3,17 +3,18 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Czat.Models;
 using Newtonsoft.Json;
 
 namespace Czat.Controllers
 {
     public class UzytkownikController : Controller
     {
-        private readonly Encje _encje;
+        private readonly Model _db;
 
         public UzytkownikController()
         {
-            _encje = new Encje();
+            _db = new Model();
         }
 
         [HttpGet]
@@ -25,7 +26,9 @@ namespace Czat.Controllers
         [HttpPost]
         public ActionResult Logowanie(Uzytkownik daneLogowania)
         {
-            Uzytkownik uzytkownik = _encje.Uzytkownik.SingleOrDefault(u => string.Equals(u.Nazwa, daneLogowania.Nazwa) && string.Equals(u.Haslo, daneLogowania.Haslo));
+            Uzytkownik uzytkownik = _db.Uzytkownicy.SingleOrDefault(u => string.Equals(u.Nazwa, daneLogowania.Nazwa) && string.Equals(u.Haslo, daneLogowania.Haslo));
+
+            ModelState["PowtorzoneHaslo"].Errors.Clear();
 
             if (uzytkownik == null)
             {
@@ -34,22 +37,15 @@ namespace Czat.Controllers
                 return View();
             }
 
-            string nazwa = uzytkownik.Nazwa;
-            Uzytkownik zalogowanyUzytkownik = new Uzytkownik
-            {
-                Nazwa = nazwa,
-                Id = uzytkownik.Id
-            };
-
-            string informacjeUzytkownika = JsonConvert.SerializeObject(zalogowanyUzytkownik);
+            string informacjeUzytkownika = JsonConvert.SerializeObject(uzytkownik);
             DateTime teraz = DateTime.Now;
-            FormsAuthenticationTicket bilet = new FormsAuthenticationTicket(1, nazwa, teraz, teraz.AddSeconds(15), false, informacjeUzytkownika);
+            FormsAuthenticationTicket bilet = new FormsAuthenticationTicket(1, uzytkownik.Nazwa, teraz, teraz.AddSeconds(15), false, informacjeUzytkownika);
             string zaszyfrowanyBilet = FormsAuthentication.Encrypt(bilet);
             HttpCookie ciastko = new HttpCookie(FormsAuthentication.FormsCookieName, zaszyfrowanyBilet);
 
             Response.Cookies.Add(ciastko);
 
-            return RedirectToAction("Logowanie");
+            return RedirectToAction("Rozmowa", "Rozmowa");
         }
 
         public ActionResult Wylogowanie()
@@ -65,10 +61,22 @@ namespace Czat.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult Rejestracja(Uzytkownik uzytkownik)
         {
-            var tmp = ModelState.IsValid;
-            
+            if (ModelState.IsValid)
+            {
+                if (_db.Uzytkownicy.Any(u => string.Equals(u.Nazwa, uzytkownik.Nazwa)))
+                    ModelState["Nazwa"].Errors.Add("Nazwa użytkownika jest już używana.");
+                else
+                {
+                    _db.Uzytkownicy.Add(uzytkownik);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("Logowanie");
+                }
+            }
+
             return View();
         }
     }
