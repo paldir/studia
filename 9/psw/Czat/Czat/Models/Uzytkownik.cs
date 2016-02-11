@@ -29,17 +29,14 @@ namespace Czat.Models
         [Compare("Haslo", ErrorMessage = "Has³a nie s¹ identyczne.")]
         public string PowtorzoneHaslo { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Rozmowa> Rozmowa1 { get; set; }
+        public ICollection<Rozmowa> Rozmowy1 { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Rozmowa> Rozmowa2 { get; set; }
+        public ICollection<Rozmowa> Rozmowy2 { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Uzytkownik()
         {
-            Rozmowa1 = new HashSet<Rozmowa>();
-            Rozmowa2 = new HashSet<Rozmowa>();
+            Rozmowy1 = new HashSet<Rozmowa>();
+            Rozmowy2 = new HashSet<Rozmowa>();
         }
     }
 }

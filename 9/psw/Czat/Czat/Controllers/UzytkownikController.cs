@@ -20,6 +20,8 @@ namespace Czat.Controllers
         [HttpGet]
         public ActionResult Logowanie()
         {
+            var tmp = _db.Rozmowy;
+            
             return View();
         }
 

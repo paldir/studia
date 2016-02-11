@@ -169,9 +169,6 @@
     <Folder Include="Models\Test\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\_LayoutPage.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Rozmowa\Rozmowa.cshtml" />
   </ItemGroup>
   <PropertyGroup>

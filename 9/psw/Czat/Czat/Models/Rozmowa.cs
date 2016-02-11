@@ -15,7 +15,7 @@ namespace Czat.Models
 
         public int IdUzytkownika2 { get; set; }
 
-        public DateTime DataRozpoczecia { get; set; }
+        public DateTime OstatniaAktywnosc { get; set; }
 
         public virtual Uzytkownik Uzytkownik1 { get; set; }
 

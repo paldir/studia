@@ -17,13 +17,13 @@ namespace Czat.Models
             Database.SetInitializer<Model>(null);
 
             modelBuilder.Entity<Uzytkownik>()
-                .HasMany(e => e.Rozmowa1)
+                .HasMany(e => e.Rozmowy1)
                 .WithRequired(e => e.Uzytkownik1)
                 .HasForeignKey(e => e.IdUzytkownika1)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Uzytkownik>()
-                .HasMany(e => e.Rozmowa2)
+                .HasMany(e => e.Rozmowy2)
                 .WithRequired(e => e.Uzytkownik2)
                 .HasForeignKey(e => e.IdUzytkownika2)
                 .WillCascadeOnDelete(false);
