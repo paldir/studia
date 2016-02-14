@@ -1,1 +1,13 @@
-﻿
+﻿@using Czat.Models.Rozmowa
+@model IEnumerable<Lista>
+
+@Html.ActionLink("Nowa rozmowa", "Nowa")
+
+@foreach (Lista lista in Model)
+{
+    <div>
+        @Html.DisplayFor(a => lista.OstatniaAktywnosc)<br />
+        @Html.DisplayFor(z => lista.NazwaZnajomego)<br />
+        @Html.ActionLink("Otwórz", "Przegladaj", new { id = lista.IdRozmowy })
+    </div>
+}

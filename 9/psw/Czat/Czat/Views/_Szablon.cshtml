@@ -6,10 +6,14 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div>@Html.ActionLink("Wyloguj się", "Wylogowanie", "Uzytkownik")</div>
-    <div>@Html.Partial("~/Views/Rozmowa/Lista.cshtml")</div>
-    <div>
-        @RenderBody()
-    </div>
+    <div>Zalogowany jako: @User.Identity.Name @Html.ActionLink("Wyloguj", "Wylogowanie", "Uzytkownik")</div>
+    <table>
+        <tr>
+            <td>@{ Html.RenderAction("Lista", "Rozmowa"); }</td>
+            <td>
+                @RenderBody()
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
