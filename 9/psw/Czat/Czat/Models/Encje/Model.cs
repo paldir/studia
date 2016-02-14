@@ -11,10 +11,17 @@ namespace Czat.Models.Encje
 
         public virtual DbSet<Uzytkownik> Uzytkownicy { get; set; }
         public virtual DbSet<Rozmowa> Rozmowy { get; set; }
+        public virtual DbSet<Odpowiedz> Odpowiedzi { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<Model>(null);
+
+            modelBuilder.Entity<Uzytkownik>()
+                .HasMany(e => e.Rozmowy0)
+                .WithRequired(e => e.Uzytkownik0)
+                .HasForeignKey(e => e.IdUzytkownika0)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Uzytkownik>()
                 .HasMany(e => e.Rozmowy1)
@@ -22,10 +29,10 @@ namespace Czat.Models.Encje
                 .HasForeignKey(e => e.IdUzytkownika1)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Uzytkownik>()
-                .HasMany(e => e.Rozmowy2)
-                .WithRequired(e => e.Uzytkownik2)
-                .HasForeignKey(e => e.IdUzytkownika2)
+            modelBuilder.Entity<Rozmowa>()
+                .HasMany(e => e.Odpowiedzi)
+                .WithRequired(e => e.Rozmowa)
+                .HasForeignKey(e => e.IdRozmowy)
                 .WillCascadeOnDelete(false);
         }
     }

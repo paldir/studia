@@ -17,8 +17,8 @@ namespace Czat.Models.Rozmowa
         {
             IdRozmowy = rozmowa.Id;
             OstatniaAktywnosc = rozmowa.OstatniaAktywnosc;
-            Uzytkownik zaczynający = rozmowa.Uzytkownik1;
-            Uzytkownik odpowiadający = rozmowa.Uzytkownik2;
+            Uzytkownik zaczynający = rozmowa.Uzytkownik0;
+            Uzytkownik odpowiadający = rozmowa.Uzytkownik1;
             Uzytkownik znajomy = zaczynający == zalogowanyUzytkownik ? odpowiadający : zaczynający;
             NazwaZnajomego = znajomy.Nazwa;
         }

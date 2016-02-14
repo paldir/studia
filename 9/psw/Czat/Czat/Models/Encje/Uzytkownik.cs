@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Czat.Models.Encje
@@ -28,8 +29,13 @@ namespace Czat.Models.Encje
         [Compare("Haslo", ErrorMessage = "Has³a nie s¹ identyczne.")]
         public string PowtorzoneHaslo { get; set; }
 
+        public virtual ICollection<Rozmowa> Rozmowy0 { get; set; }
+
         public virtual ICollection<Rozmowa> Rozmowy1 { get; set; }
 
-        public virtual ICollection<Rozmowa> Rozmowy2 { get; set; }
+        public IEnumerable<Rozmowa> Rozmowy
+        {
+            get { return Rozmowy0.Concat(Rozmowy1); }
+        }
     }
 }
