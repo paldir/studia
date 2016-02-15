@@ -1,6 +1,27 @@
-﻿@{
-    ViewBag.Title = "Rozmowa z kimś";
+﻿@using Czat.Models.Rozmowa
+@model Przegladaj
+
+@{
+    ViewBag.Title = string.Concat("Rozmowa z ", Model.NazwaRozmówcy);
     Layout = "~/Views/_Szablon.cshtml";
 }
 
-Siema siema
+<h2>Rozmowa z @Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
+
+@foreach (PrzegladajOdpowiedz przegladajOdpowiedz in Model.Wypowiedzi)
+{
+    <div id="test">
+        @Html.DisplayFor(o => przegladajOdpowiedz.NazwaAutora) @Html.DisplayFor(o => przegladajOdpowiedz.Data)<br />
+        @Html.DisplayFor(o => przegladajOdpowiedz.Tresc)
+    </div>
+}
+
+@using (@Ajax.BeginForm(new AjaxOptions()
+{
+    InsertionMode = InsertionMode.InsertAfter,
+    UpdateTargetId = "test"
+}))
+{
+    @Html.TextAreaFor(p => p.Odpowiedz.Tresc)
+    <input type="submit" value="Wyślij"/>
+}

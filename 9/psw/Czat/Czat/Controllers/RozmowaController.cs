@@ -25,72 +25,63 @@ namespace Czat.Controllers
 
         public ActionResult Lista()
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = User as ZalogowanyUzytkownik;
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+            Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
+            IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.OrderByDescending(r => r.OstatniaAktywnosc);
+            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik));
 
-            if (zalogowanyUzytkownik != null)
-            {
-                Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
-                IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.OrderByDescending(r => r.OstatniaAktywnosc);
-                IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik));
-
-                return PartialView(reprezentacjeRozmów);
-            }
-
-            return PartialView();
+            return PartialView(reprezentacjeRozmów);
         }
 
         [HttpGet]
         public ActionResult Nowa()
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = User as ZalogowanyUzytkownik;
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+            IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(uzytkownik => uzytkownik.Id != zalogowanyUzytkownik.Id);
 
-            if (zalogowanyUzytkownik != null)
-            {
-                IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(uzytkownik => uzytkownik.Id != zalogowanyUzytkownik.Id);
+            Nowa nowa = new Nowa(uzytkownicy);
 
-                Nowa nowa = new Nowa(uzytkownicy);
-
-                return View(nowa);
-            }
-
-            return View();
+            return View(nowa);
         }
 
         [HttpPost]
         public ActionResult Nowa(Nowa nowa)
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = User as ZalogowanyUzytkownik;
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+            Uzytkownik znajomy = _db.Uzytkownicy.Find(nowa.IdWybranegoUzytkownika);
+            Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
+            Rozmowa rozmowa = uzytkownik.Rozmowy.SingleOrDefault(r => r.Uzytkownik0 == znajomy || r.Uzytkownik1 == znajomy);
 
-            if (zalogowanyUzytkownik != null)
+            if (rozmowa == null)
             {
-                Uzytkownik znajomy = _db.Uzytkownicy.Find(nowa.IdWybranegoUzytkownika);
-                Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
-                Rozmowa rozmowa = uzytkownik.Rozmowy.SingleOrDefault(r => r.Uzytkownik0 == znajomy || r.Uzytkownik1 == znajomy);
-
-                if (rozmowa == null)
+                rozmowa = new Rozmowa
                 {
-                    rozmowa = new Rozmowa
-                    {
-                        OstatniaAktywnosc = DateTime.Now,
-                        Uzytkownik0 = uzytkownik,
-                        Uzytkownik1 = znajomy
-                    };
+                    OstatniaAktywnosc = DateTime.Now,
+                    Uzytkownik0 = uzytkownik,
+                    Uzytkownik1 = znajomy
+                };
 
-                    _db.Rozmowy.Add(rozmowa);
-                    _db.SaveChanges();
-                }
-
-                return RedirectToAction("Przegladaj", new {id = rozmowa.Id});
+                _db.Rozmowy.Add(rozmowa);
+                _db.SaveChanges();
             }
 
-            return View();
+            return RedirectToAction("Przegladaj", new {id = rozmowa.Id});
         }
 
+        [HttpGet]
         public ActionResult Przegladaj(int id)
         {
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
             Rozmowa rozmowa = _db.Rozmowy.Find(id);
+            Przegladaj przegladaj = new Przegladaj(rozmowa, zalogowanyUzytkownik.Id);
 
-            return View();
+            return View(przegladaj);
+        }
+
+        [HttpPost]
+        public string Przegladaj(Przegladaj przegladaj)
+        {
+            return "jeeee";
         }
     }
 }
