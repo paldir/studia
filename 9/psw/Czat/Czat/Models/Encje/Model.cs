@@ -29,6 +29,12 @@ namespace Czat.Models.Encje
                 .HasForeignKey(e => e.IdUzytkownika1)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Uzytkownik>()
+                .HasMany(e => e.Odpowiedzi)
+                .WithRequired(e => e.Autor)
+                .HasForeignKey(e => e.IdAutora)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Rozmowa>()
                 .HasMany(e => e.Odpowiedzi)
                 .WithRequired(e => e.Rozmowa)

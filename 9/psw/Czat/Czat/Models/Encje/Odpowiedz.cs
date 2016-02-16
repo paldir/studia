@@ -15,12 +15,16 @@ namespace Czat.Models.Encje
         [StringLength(160)]
         public string Tresc { get; set; }
 
-        public int IdRozmowy { get; set; }
-
-        public bool Nadawca { get; set; }
-
         public DateTime Data { get; set; }
 
+        public bool Przeczytana { get; set; }
+
+        public int IdRozmowy { get; set; }
+
         public virtual Rozmowa Rozmowa { get; set; }
+
+        public int IdAutora { get; set; }
+
+        public virtual Uzytkownik Autor { get; set; }
     }
 }

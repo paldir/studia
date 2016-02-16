@@ -6,22 +6,31 @@
     Layout = "~/Views/_Szablon.cshtml";
 }
 
+<script>
+
+
+    function pobierzWiadomosci(idRozmowy) {
+        $.ajax(
+        {
+            url: "/Rozmowa/NoweWiadomosci/",
+            data: {
+                idRozmowy: "@Model.IdRozmowy"
+            }
+        });
+    }
+</script>
+
 <h2>Rozmowa z @Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
 
-@foreach (PrzegladajOdpowiedz przegladajOdpowiedz in Model.Wypowiedzi)
+@foreach (Wypowiedz wypowiedz in Model.Wypowiedzi)
 {
-    <div id="test">
-        @Html.DisplayFor(o => przegladajOdpowiedz.NazwaAutora) @Html.DisplayFor(o => przegladajOdpowiedz.Data)<br />
-        @Html.DisplayFor(o => przegladajOdpowiedz.Tresc)
-    </div>
+    Html.RenderPartial("Wypowiedz", wypowiedz);
 }
 
-@using (@Ajax.BeginForm(new AjaxOptions()
+@using (@Html.BeginForm())
 {
-    InsertionMode = InsertionMode.InsertAfter,
-    UpdateTargetId = "test"
-}))
-{
+    @Html.HiddenFor(o => o.IdRozmowy)
     @Html.TextAreaFor(p => p.Odpowiedz.Tresc)
-    <input type="submit" value="Wyślij"/>
+    <input type="submit" value="Wyślij" />
+    <input type="button" value="Odśwież" onclick="pobierzWiadomosci()" />
 }

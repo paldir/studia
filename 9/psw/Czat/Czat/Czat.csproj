@@ -134,7 +134,7 @@
     <Compile Include="Models\Rozmowa\Nowa.cs" />
     <Compile Include="Models\Encje\Odpowiedz.cs" />
     <Compile Include="Models\Rozmowa\Przegladaj.cs" />
-    <Compile Include="Models\Rozmowa\PrzegladajOdpowiedz.cs" />
+    <Compile Include="Models\Rozmowa\Wypowiedz.cs" />
     <Compile Include="Models\ZalogowanyUzytkownik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Encje\Uzytkownik.cs" />
@@ -150,6 +150,7 @@
     <Content Include="Content\Arkusz.css" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
+    <Content Include="reset.sql" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -165,6 +166,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <Content Include="Views\Rozmowa\Wypowiedz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Uzytkownik\Rejestracja.cshtml" />

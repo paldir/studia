@@ -33,6 +33,8 @@ namespace Czat.Models.Encje
 
         public virtual ICollection<Rozmowa> Rozmowy1 { get; set; }
 
+        public virtual ICollection<Odpowiedz> Odpowiedzi { get; set; }
+
         public IEnumerable<Rozmowa> Rozmowy
         {
             get { return Rozmowy0.Concat(Rozmowy1); }

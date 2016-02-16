@@ -4,7 +4,7 @@ using Czat.Models.Encje;
 
 namespace Czat.Models.Rozmowa
 {
-    public class PrzegladajOdpowiedz
+    public class Wypowiedz
     {
         public string NazwaAutora { get; private set; }
 
@@ -13,13 +13,11 @@ namespace Czat.Models.Rozmowa
 
         public string Tresc { get; private set; }
 
-        public PrzegladajOdpowiedz(Odpowiedz odpowiedz)
+        public Wypowiedz(Odpowiedz odpowiedz)
         {
             Data = odpowiedz.Data;
             Tresc = odpowiedz.Tresc;
-            Encje.Rozmowa rozmowa = odpowiedz.Rozmowa;
-            Uzytkownik autor = odpowiedz.Nadawca == false ? rozmowa.Uzytkownik0 : rozmowa.Uzytkownik1;
-            NazwaAutora = autor.Nazwa;
+            NazwaAutora = odpowiedz.Autor.Nazwa;
         }
     }
 }

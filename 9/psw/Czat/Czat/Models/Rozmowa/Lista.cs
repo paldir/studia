@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Czat.Models.Encje;
 
 namespace Czat.Models.Rozmowa
@@ -13,6 +14,8 @@ namespace Czat.Models.Rozmowa
 
         public string NazwaZnajomego { get; private set; }
 
+        public bool NoweWiadomości { get; private set; }
+
         public Lista(Encje.Rozmowa rozmowa, Uzytkownik zalogowanyUzytkownik)
         {
             IdRozmowy = rozmowa.Id;
@@ -21,6 +24,7 @@ namespace Czat.Models.Rozmowa
             Uzytkownik odpowiadający = rozmowa.Uzytkownik1;
             Uzytkownik znajomy = zaczynający == zalogowanyUzytkownik ? odpowiadający : zaczynający;
             NazwaZnajomego = znajomy.Nazwa;
+            NoweWiadomości = rozmowa.Odpowiedzi.Any(o => !o.Przeczytana);
         }
     }
 }
