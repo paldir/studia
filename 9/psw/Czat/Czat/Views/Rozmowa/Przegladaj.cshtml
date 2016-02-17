@@ -2,16 +2,22 @@
 @model Przegladaj
 
 @{
-    ViewBag.Title = string.Concat("Rozmowa z ", Model.NazwaRozmówcy);
+    ViewBag.Title = string.Concat(Model.NazwaRozmówcy, " - wiadomości");
     Layout = "~/Views/_Szablon.cshtml";
 }
 
 <script>
     function dodajNoweWiadomosci(dane) {
         var okno = document.getElementById("oknoRozmowy");
+        var oknoRozmowy = document.getElementById("zawartosc2");
+        var przewinOkno = oknoRozmowy.scrollTop >= oknoRozmowy.scrollHeight - oknoRozmowy.clientHeight;
         okno.innerHTML += dane;
 
-        setTimeout(function () { pobierzWiadomosci(); }, 10000);
+        if (przewinOkno) {
+            oknoRozmowy.scrollTop = oknoRozmowy.scrollHeight;
+        }
+
+        setTimeout(function () { pobierzWiadomosci(); }, 2000);
     }
 
     function pobierzWiadomosci() {
@@ -27,9 +33,18 @@
             }
         });
     }
+
+    function wyslijWiadomosc(event) {
+        if (event.keyCode === 13) {
+            event.target.form.submit();
+        }
+    }
 </script>
 
-<h2>Rozmowa z @Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
+@section Naglowek
+{
+    <h2>@Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
+}
 
 <div id="oknoRozmowy">
     @foreach (Wypowiedz wypowiedz in Model.Wypowiedzi)
@@ -41,11 +56,16 @@
 @using (@Html.BeginForm())
 {
     @Html.HiddenFor(o => o.IdRozmowy)
-    @Html.TextAreaFor(p => p.Odpowiedz.Tresc)
+    @Html.TextAreaFor(p => p.Odpowiedz.Tresc, new { id = "nowaWiadomosc", onkeydown = "wyslijWiadomosc(event)" })
     <input type="submit" value="Wyślij" />
-    <input type="button" value="Odśwież" onclick="pobierzWiadomosci()" />
 }
 
 <script>
     pobierzWiadomosci();
+
+    var oknoRozmowy = document.getElementById("zawartosc2");
+    oknoRozmowy.scrollTop = oknoRozmowy.scrollHeight;
+    var nowaWiadomosc = document.getElementById("nowaWiadomosc");
+
+    nowaWiadomosc.focus();
 </script>

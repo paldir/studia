@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Authentication;
 using System.Web.Mvc;
 using Czat.Models;
 using Czat.Models.Encje;
@@ -74,6 +75,10 @@ namespace Czat.Controllers
             ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
             int idZalogowanegoUzytkownika = zalogowanyUzytkownik.Id;
             Rozmowa rozmowa = _db.Rozmowy.Find(id);
+
+            if ((rozmowa.IdUzytkownika0 != idZalogowanegoUzytkownika) && (rozmowa.IdUzytkownika1 != idZalogowanegoUzytkownika))
+                throw new AuthenticationException();
+
             Przegladaj przegladaj = new Przegladaj(rozmowa, idZalogowanegoUzytkownika);
             Odpowiedz[] odpowiedzi = rozmowa.Odpowiedzi.Where(odpowiedz => !odpowiedz.Przeczytana && (odpowiedz.IdAutora != idZalogowanegoUzytkownika)).ToArray();
 
@@ -91,16 +96,20 @@ namespace Czat.Controllers
         [HttpPost]
         public ActionResult Przegladaj(Przegladaj przegladaj)
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
-            int idRozmowy = przegladaj.IdRozmowy;
-            Rozmowa rozmowa = _db.Rozmowy.Find(idRozmowy);
             Odpowiedz odpowiedz = przegladaj.Odpowiedz;
-            odpowiedz.Rozmowa = rozmowa;
-            odpowiedz.Data = rozmowa.OstatniaAktywnosc = DateTime.Now;
-            odpowiedz.IdAutora = zalogowanyUzytkownik.Id;
+            int idRozmowy = przegladaj.IdRozmowy;
 
-            _db.Odpowiedzi.Add(odpowiedz);
-            _db.SaveChanges();
+            if (!string.IsNullOrEmpty(odpowiedz.Tresc))
+            {
+                ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+                Rozmowa rozmowa = _db.Rozmowy.Find(idRozmowy);
+                odpowiedz.Rozmowa = rozmowa;
+                odpowiedz.Data = rozmowa.OstatniaAktywnosc = DateTime.Now;
+                odpowiedz.IdAutora = zalogowanyUzytkownik.Id;
+
+                _db.Odpowiedzi.Add(odpowiedz);
+                _db.SaveChanges();
+            }
 
             return RedirectToAction("Przegladaj", new {id = idRozmowy});
         }
@@ -108,8 +117,13 @@ namespace Czat.Controllers
         public string NoweWiadomosci(int idRozmowy)
         {
             ZalogowanyUzytkownik daneUzytkownika = (ZalogowanyUzytkownik) User;
+            int idZalogowanegoUzytkownika = daneUzytkownika.Id;
             Rozmowa rozmowa = _db.Rozmowy.Find(idRozmowy);
-            Odpowiedz[] nowe = rozmowa.Odpowiedzi.Where(o => !o.Przeczytana && (o.IdAutora != daneUzytkownika.Id)).ToArray();
+
+            if ((rozmowa.IdUzytkownika0 != idZalogowanegoUzytkownika) && (rozmowa.IdUzytkownika1 != idZalogowanegoUzytkownika))
+                throw new AuthenticationException();
+
+            Odpowiedz[] nowe = rozmowa.Odpowiedzi.Where(o => !o.Przeczytana && (o.IdAutora != idZalogowanegoUzytkownika)).ToArray();
 
             using (StringWriter pisarz = new StringWriter())
             {

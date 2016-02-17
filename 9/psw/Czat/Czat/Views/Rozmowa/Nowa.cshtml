@@ -5,10 +5,14 @@
     Layout = "~/Views/_Szablon.cshtml";
 }
 
-<h2>Nowa rozmowa</h2>
+@section Naglowek
+{
+    <h2>Nowa rozmowa</h2>
+}
 
 @using (@Html.BeginForm())
 {
-    @Html.LabelFor(i => i.IdWybranegoUzytkownika) @Html.DropDownListFor(i => i.IdWybranegoUzytkownika, Model.DaneUzytkownikow)
+    @Html.LabelFor(i => i.IdWybranegoUzytkownika)
+    @Html.DropDownListFor(i => i.IdWybranegoUzytkownika, Model.DaneUzytkownikow)
     <input type="submit" value="Rozpocznij" />
 }

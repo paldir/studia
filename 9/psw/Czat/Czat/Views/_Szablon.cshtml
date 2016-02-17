@@ -6,16 +6,28 @@
     <title>@ViewBag.Title</title>
     <script src="~/Scripts/jquery-2.2.0.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Arkusz.css" />
 </head>
 <body>
-    <div>Zalogowany jako: @User.Identity.Name @Html.ActionLink("Wyloguj", "Wylogowanie", "Uzytkownik")</div>
-    <table>
-        <tr>
-            <td>@{ Html.RenderAction("Lista", "Rozmowa"); }</td>
-            <td>
-                @RenderBody()
-            </td>
-        </tr>
-    </table>
+<div id="strona">
+    <div id="wylogowanie">Zalogowany jako: @User.Identity.Name @Html.ActionLink("Wyloguj", "Wylogowanie", "Uzytkownik")</div>
+    <header>
+        @RenderSection("Naglowek")
+    </header>
+    <div id="pojemnikZawartosci">
+        <div id="kolumny">
+            <div id="kolumna1" class="kolumna">
+                <div class="zawartosc">
+                    @{ Html.RenderAction("Lista", "Rozmowa"); }
+                </div>
+            </div>
+            <div id="kolumna2" class="kolumna">
+                <div id="zawartosc2" class="zawartosc">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
