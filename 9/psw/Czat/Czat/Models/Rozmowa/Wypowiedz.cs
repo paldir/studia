@@ -8,7 +8,7 @@ namespace Czat.Models.Rozmowa
     {
         public string NazwaAutora { get; private set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public DateTime Data { get; private set; }
 
         public string Tresc { get; private set; }

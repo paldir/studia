@@ -9,7 +9,7 @@ namespace Czat.Models.Rozmowa
     {
         public int IdRozmowy { get; private set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public DateTime OstatniaAktywnosc { get; private set; }
 
         public string NazwaZnajomego { get; private set; }

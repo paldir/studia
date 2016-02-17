@@ -75,11 +75,15 @@ namespace Czat.Controllers
             int idZalogowanegoUzytkownika = zalogowanyUzytkownik.Id;
             Rozmowa rozmowa = _db.Rozmowy.Find(id);
             Przegladaj przegladaj = new Przegladaj(rozmowa, idZalogowanegoUzytkownika);
+            Odpowiedz[] odpowiedzi = rozmowa.Odpowiedzi.Where(odpowiedz => !odpowiedz.Przeczytana && (odpowiedz.IdAutora != idZalogowanegoUzytkownika)).ToArray();
 
-            foreach (Odpowiedz odpowiedz in rozmowa.Odpowiedzi.Where(odpowiedz => !odpowiedz.Przeczytana && (odpowiedz.IdAutora != idZalogowanegoUzytkownika)))
-                odpowiedz.Przeczytana = true;
+            if (odpowiedzi.Any())
+            {
+                foreach (Odpowiedz odpowiedz in odpowiedzi)
+                    odpowiedz.Przeczytana = true;
 
-            _db.SaveChanges();
+                _db.SaveChanges();
+            }
 
             return View(przegladaj);
         }
@@ -105,18 +109,25 @@ namespace Czat.Controllers
         {
             ZalogowanyUzytkownik daneUzytkownika = (ZalogowanyUzytkownik) User;
             Rozmowa rozmowa = _db.Rozmowy.Find(idRozmowy);
-            IEnumerable<Odpowiedz> nowe = rozmowa.Odpowiedzi.Where(o => !o.Przeczytana && (o.IdAutora != daneUzytkownika.Id));
+            Odpowiedz[] nowe = rozmowa.Odpowiedzi.Where(o => !o.Przeczytana && (o.IdAutora != daneUzytkownika.Id)).ToArray();
 
             using (StringWriter pisarz = new StringWriter())
             {
-                foreach (Odpowiedz odpowiedz in nowe)
+                if (nowe.Any())
                 {
-                    ViewData.Model = new Wypowiedz(odpowiedz);
                     ViewEngineResult widok = ViewEngines.Engines.FindPartialView(ControllerContext, "Wypowiedz");
                     ViewContext kontekstWidoku = new ViewContext(ControllerContext, widok.View, ViewData, TempData, pisarz);
 
-                    widok.View.Render(kontekstWidoku, pisarz);
-                    widok.ViewEngine.ReleaseView(ControllerContext, widok.View);
+                    foreach (Odpowiedz odpowiedz in nowe)
+                    {
+                        odpowiedz.Przeczytana = true;
+                        ViewData.Model = new Wypowiedz(odpowiedz);
+
+                        widok.View.Render(kontekstWidoku, pisarz);
+                        widok.ViewEngine.ReleaseView(ControllerContext, widok.View);
+                    }
+
+                    _db.SaveChanges();
                 }
 
                 string wynik = pisarz.GetStringBuilder().ToString();

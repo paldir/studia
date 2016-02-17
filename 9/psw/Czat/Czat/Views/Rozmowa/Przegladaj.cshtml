@@ -7,14 +7,23 @@
 }
 
 <script>
+    function dodajNoweWiadomosci(dane) {
+        var okno = document.getElementById("oknoRozmowy");
+        okno.innerHTML += dane;
 
+        setTimeout(function () { pobierzWiadomosci(); }, 10000);
+    }
 
-    function pobierzWiadomosci(idRozmowy) {
+    function pobierzWiadomosci() {
         $.ajax(
         {
             url: "/Rozmowa/NoweWiadomosci/",
+            method: "POST",
             data: {
                 idRozmowy: "@Model.IdRozmowy"
+            },
+            success: function (dane) {
+                dodajNoweWiadomosci(dane);
             }
         });
     }
@@ -22,10 +31,12 @@
 
 <h2>Rozmowa z @Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
 
-@foreach (Wypowiedz wypowiedz in Model.Wypowiedzi)
-{
-    Html.RenderPartial("Wypowiedz", wypowiedz);
-}
+<div id="oknoRozmowy">
+    @foreach (Wypowiedz wypowiedz in Model.Wypowiedzi)
+    {
+        Html.RenderPartial("Wypowiedz", wypowiedz);
+    }
+</div>
 
 @using (@Html.BeginForm())
 {
@@ -34,3 +45,7 @@
     <input type="submit" value="Wyślij" />
     <input type="button" value="Odśwież" onclick="pobierzWiadomosci()" />
 }
+
+<script>
+    pobierzWiadomosci();
+</script>
