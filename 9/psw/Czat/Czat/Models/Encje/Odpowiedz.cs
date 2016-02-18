@@ -12,7 +12,7 @@ namespace Czat.Models.Encje
         public int Id { get; set; }
 
         [Required]
-        [StringLength(160)]
+        [StringLength(180)]
         public string Tresc { get; set; }
 
         public DateTime Data { get; set; }

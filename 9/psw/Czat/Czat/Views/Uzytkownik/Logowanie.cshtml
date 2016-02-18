@@ -9,17 +9,26 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Logowanie</title>
+    <link rel="stylesheet" href="~/Content/Arkusz.css" />
 </head>
 <body>
-    <div>
+    <div id="logowanie">
         @using (@Html.BeginForm())
         {
-            @Html.LabelFor(d => d.Nazwa, "Login")
-            @Html.EditorFor(d => d.Nazwa)<br />
-            @Html.LabelFor(d => d.Haslo)
-            @Html.PasswordFor(d => d.Haslo)<br />
-            <input type="submit" value="Zaloguj się" />
-            @Html.ActionLink("Zarejestruj się", "Rejestracja")
+            <div id="lewaKolumna">
+                <div>@Html.LabelFor(d => d.Nazwa, "Login")</div>
+                <div>@Html.LabelFor(d => d.Haslo)</div>
+                <div><input type="submit" value="Zaloguj się" /></div>
+            </div>
+            <div id="prawaKolumna">
+                <div>
+                    @Html.EditorFor(d => d.Nazwa)
+                </div>
+                <div>
+                    @Html.PasswordFor(d => d.Haslo)
+                </div>
+                @Html.ActionLink("Zarejestruj się", "Rejestracja")
+            </div>
             @Html.ValidationSummary()
         }
     </div>

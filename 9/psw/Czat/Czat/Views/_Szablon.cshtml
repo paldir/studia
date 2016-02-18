@@ -9,25 +9,28 @@
     <link rel="stylesheet" href="~/Content/Arkusz.css" />
 </head>
 <body>
-<div id="strona">
-    <div id="wylogowanie">Zalogowany jako: @User.Identity.Name @Html.ActionLink("Wyloguj", "Wylogowanie", "Uzytkownik")</div>
-    <header>
-        @RenderSection("Naglowek")
-    </header>
-    <div id="pojemnikZawartosci">
-        <div id="kolumny">
-            <div id="kolumna1" class="kolumna">
-                <div class="zawartosc">
-                    @{ Html.RenderAction("Lista", "Rozmowa"); }
+    <div id="strona">
+        <div id="wylogowanie">Zalogowany jako: @User.Identity.Name @Html.ActionLink("Wyloguj", "Wylogowanie", "Uzytkownik")</div>
+        <header>
+            @RenderSection("Naglowek")
+        </header>
+        <div id="pojemnikZawartosci">
+            <div id="kolumny">
+                <div id="kolumna1" class="kolumna">
+                    <div class="zawartosc">
+                        @{ Html.RenderAction("Lista", "Rozmowa"); }
+                    </div>
                 </div>
-            </div>
-            <div id="kolumna2" class="kolumna">
-                <div id="zawartosc2" class="zawartosc">
-                    @RenderBody()
+                <div id="kolumna2" class="kolumna">
+                    <div id="zawartosc2" class="zawartosc">
+                        @RenderBody()
+                    </div>
                 </div>
             </div>
         </div>
+        <footer>
+            @RenderSection("Stopka")
+        </footer>
     </div>
-</div>
 </body>
 </html>

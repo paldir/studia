@@ -1,6 +1,26 @@
 ﻿html, body {
     height: 100%;
     margin: 0;
+    font-family: Tahoma;
+}
+
+#logowanie {
+    margin: auto 0;
+    background-color: aqua;
+    display: inline-block;
+}
+
+#logowanie div {
+    padding: 10px;
+}
+
+#lewaKolumna {
+    float: left;
+    text-align: right;
+}
+
+#prawaKolumna input {
+    width: 100px;
 }
 
 #strona {
@@ -15,6 +35,7 @@ header {
     width: 100%;
     height: 100px;
     text-align: center;
+    overflow: hidden;
 }
 
 #pojemnikZawartosci {
@@ -25,7 +46,7 @@ header {
     left: 0;
 }
 
-#footerWrapper {
+footer {
     width: 100%;
     position: absolute;
     height: 100px;
@@ -40,23 +61,60 @@ header {
 
 .kolumna {
     height: 100%;
-    border: 1px solid black;
 }
 
 #kolumna1 {
     float: left;
     max-width: 80%;
+    width: 300px;
 }
 
     #kolumna1 .zawartosc {
         height: inherit;
         display: inline-block;
         overflow-y: auto;
+        padding: 10px;
     }
 
-#kolumna2 .zawartosc {
-    height: inherit;
-    overflow-y: auto;
+    #kolumna2 .zawartosc {
+        height: inherit;
+        overflow-y: auto;
+        border: 1px solid black;
+    }
+
+#oknoRozmowy {
+    padding: 10px;
+}
+
+textarea {
+    margin: 10px 10px 10px 300px;
+}
+
+.wypowiedz {
+    padding: 5px 0 5px 0;
+    border-bottom: 1px solid lightgray;
+}
+
+.wiersz {
+    display: table-row;
+}
+
+.autor {
+    font-weight: bold;
+    display: table-cell;
+}
+
+.data {
+    text-align: right;
+    color: gray;
+    font-size: 12px;
+    display: table-cell;
+    width: 100%;
+}
+
+.tresc {
+    padding: 5px 0 5px 0;
+    word-wrap: break-word;
 }
 
 #wylogowanie {

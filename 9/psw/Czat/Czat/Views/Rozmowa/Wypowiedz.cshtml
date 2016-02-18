@@ -1,6 +1,9 @@
 ﻿@model Czat.Models.Rozmowa.Wypowiedz
 
-<div>
-    @Html.DisplayFor(o => o.NazwaAutora) @Html.DisplayFor(o => o.Data)<br />
-    @Html.DisplayFor(o => o.Tresc)
+<div class="wypowiedz">
+    <div class="wiersz">
+        <div class="autor">@Html.DisplayFor(o => o.NazwaAutora)</div>
+        <div class="data">@Html.DisplayFor(o => o.Data)</div>
+    </div>
+    <div class="tresc">@Html.DisplayFor(o => o.Tresc)</div>
 </div>

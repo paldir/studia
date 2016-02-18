@@ -43,7 +43,7 @@
 
 @section Naglowek
 {
-    <h2>@Html.DisplayFor(p => p.NazwaRozmówcy)</h2>
+    <h3>@Model.NazwaRozmówcy</h3>
 }
 
 <div id="oknoRozmowy">
@@ -53,19 +53,21 @@
     }
 </div>
 
-@using (@Html.BeginForm())
+@section Stopka
 {
-    @Html.HiddenFor(o => o.IdRozmowy)
-    @Html.TextAreaFor(p => p.Odpowiedz.Tresc, new { id = "nowaWiadomosc", onkeydown = "wyslijWiadomosc(event)" })
-    <input type="submit" value="Wyślij" />
+    @using (@Html.BeginForm())
+    {
+        @Html.HiddenFor(o => o.IdRozmowy)
+        @Html.TextAreaFor(p => p.Odpowiedz.Tresc, 3, 60, new { id = "nowaWiadomosc", maxlength="180", onkeydown = "wyslijWiadomosc(event)" })
+    }
+
+    <script>
+        pobierzWiadomosci();
+
+        var oknoRozmowy = document.getElementById("zawartosc2");
+        oknoRozmowy.scrollTop = oknoRozmowy.scrollHeight;
+        var nowaWiadomosc = document.getElementById("nowaWiadomosc");
+
+        nowaWiadomosc.focus();
+    </script>
 }
-
-<script>
-    pobierzWiadomosci();
-
-    var oknoRozmowy = document.getElementById("zawartosc2");
-    oknoRozmowy.scrollTop = oknoRozmowy.scrollHeight;
-    var nowaWiadomosc = document.getElementById("nowaWiadomosc");
-
-    nowaWiadomosc.focus();
-</script>
