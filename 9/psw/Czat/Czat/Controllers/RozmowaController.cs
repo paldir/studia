@@ -27,10 +27,7 @@ namespace Czat.Controllers
 
         public ActionResult Lista()
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
-            Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
-            IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.Where(r => r.Odpowiedzi.Any()).OrderBy(r => r.Odpowiedzi.Any(o => !o.Przeczytana)).ThenByDescending(r => r.OstatniaAktywnosc);
-            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik));
+            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy();
 
             return PartialView(reprezentacjeRozmów);
         }
@@ -148,6 +145,35 @@ namespace Czat.Controllers
 
                 return wynik;
             }
+        }
+
+        public string AktualizacjaListy()
+        {
+            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy();
+
+            using (StringWriter pisarz = new StringWriter())
+            {
+                ViewEngineResult widok = ViewEngines.Engines.FindPartialView(ControllerContext, "Lista");
+                ViewContext kontekstWidoku = new ViewContext(ControllerContext, widok.View, ViewData, TempData, pisarz);
+                ViewData.Model = reprezentacjeRozmów;
+
+                widok.View.Render(kontekstWidoku, pisarz);
+                widok.ViewEngine.ReleaseView(ControllerContext, widok.View);
+
+                string wynik = pisarz.GetStringBuilder().ToString();
+
+                return wynik;
+            }
+        }
+
+        private IEnumerable<Lista> ModelWidokuListy()
+        {
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+            Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
+            IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.Where(r => r.Odpowiedzi.Any()).OrderByDescending(r => r.Odpowiedzi.Any(o => !o.Przeczytana)).ThenByDescending(r => r.OstatniaAktywnosc);
+            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik));
+
+            return reprezentacjeRozmów;
         }
     }
 }

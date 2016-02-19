@@ -18,7 +18,9 @@
             <div id="kolumny">
                 <div id="kolumna1" class="kolumna">
                     <div class="zawartosc">
-                        @{ Html.RenderAction("Lista", "Rozmowa"); }
+                        <div id="lista">
+                            @{ Html.RenderAction("Lista", "Rozmowa"); }
+                        </div>
                     </div>
                 </div>
                 <div id="kolumna2" class="kolumna">
@@ -32,5 +34,26 @@
             @RenderSection("Stopka")
         </footer>
     </div>
+    <script>
+        function aktualizujListe(dane) {
+            var lista = document.getElementById("lista");
+            lista.innerHTML = dane;
+
+            setTimeout(function () { pobierzAktualizacje(); }, 4000);
+        }
+
+        function pobierzAktualizacje() {
+            $.ajax(
+            {
+                url: "/Rozmowa/AktualizacjaListy/",
+                method: "POST",
+                success: function (dane) {
+                    aktualizujListe(dane);
+                }
+            });
+        }
+
+        pobierzAktualizacje();
+    </script>
 </body>
 </html>

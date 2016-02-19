@@ -12,21 +12,14 @@
     <link rel="stylesheet" href="~/Content/Arkusz.css" />
 </head>
 <body>
-    <div id="logowanie">
+    <div id="formularz">
         @using (@Html.BeginForm())
         {
-            <div id="lewaKolumna">
-                <div>@Html.LabelFor(d => d.Nazwa, "Login")</div>
-                <div>@Html.LabelFor(d => d.Haslo)</div>
-                <div><input type="submit" value="Zaloguj się" /></div>
-            </div>
-            <div id="prawaKolumna">
-                <div>
-                    @Html.EditorFor(d => d.Nazwa)
-                </div>
-                <div>
-                    @Html.PasswordFor(d => d.Haslo)
-                </div>
+            <div class="lewaKolumna">@Html.LabelFor(d => d.Nazwa, "Login")</div><div>@Html.EditorFor(d => d.Nazwa)</div>
+            <div class="lewaKolumna">@Html.LabelFor(d => d.Haslo)</div><div>@Html.PasswordFor(d => d.Haslo)</div>
+            <div id="przyciskLogowania">
+                <input type="submit" value="Zaloguj się" /><br />
+                <br />
                 @Html.ActionLink("Zarejestruj się", "Rejestracja")
             </div>
             @Html.ValidationSummary()

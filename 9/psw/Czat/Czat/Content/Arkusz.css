@@ -2,25 +2,46 @@
     height: 100%;
     margin: 0;
     font-family: Tahoma;
+    font-size: 12px;
 }
 
-#logowanie {
-    margin: auto 0;
-    background-color: aqua;
-    display: inline-block;
+a, a:visited {
+    text-decoration: none;
+    color: rgb(59, 89, 152);
 }
 
-#logowanie div {
-    padding: 10px;
+    a:hover {
+        text-decoration: underline;
+    }
+
+#formularz {
+    margin: 0 auto;
+    display: table;
 }
 
-#lewaKolumna {
+    #formularz h3 {
+        text-align: center;
+    }
+
+    #formularz div {
+        padding: 10px;
+    }
+
+.lewaKolumna {
     float: left;
+}
+
+.editor-field {
     text-align: right;
 }
 
-#prawaKolumna input {
-    width: 100px;
+#przyciskLogowania {
+    text-align: center;
+}
+
+#powitanie {
+    margin: 0 auto;
+    display: table;
 }
 
 #strona {
@@ -67,6 +88,7 @@ footer {
     float: left;
     max-width: 80%;
     width: 300px;
+    border: 1px solid black;
 }
 
     #kolumna1 .zawartosc {
@@ -76,23 +98,27 @@ footer {
         padding: 10px;
     }
 
-    #kolumna2 .zawartosc {
-        height: inherit;
-        overflow-y: auto;
-        border: 1px solid black;
-    }
+#kolumna2 .zawartosc {
+    height: inherit;
+    overflow-y: auto;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 1px 1px 0;
+}
 
 #oknoRozmowy {
     padding: 10px;
 }
 
 textarea {
-    margin: 10px 10px 10px 300px;
+    margin: 10px 10px 10px 310px;
 }
 
 .wypowiedz {
     padding: 5px 0 5px 0;
-    border-bottom: 1px solid lightgray;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(234, 234, 234);
 }
 
 .wiersz {
@@ -106,15 +132,45 @@ textarea {
 
 .data {
     text-align: right;
-    color: gray;
+    color: rgb(193, 193, 193);
     font-size: 12px;
     display: table-cell;
     width: 100%;
+    font-size: 10px;
+}
+
+.dataLista {
+    color: rgb(127, 127, 127);
 }
 
 .tresc {
     padding: 5px 0 5px 0;
     word-wrap: break-word;
+}
+
+.trescLista {
+    color: rgb(193, 193, 193);
+}
+
+.rozmowa, .nowaRozmowa {
+    padding: 5px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: rgb(234, 234, 234);
+    position: relative;
+}
+
+.rozmowa:hover {
+    background-color: rgb(245, 247, 250);
+}
+
+span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 #wylogowanie {
