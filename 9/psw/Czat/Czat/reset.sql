@@ -1,4 +1,6 @@
 ﻿DELETE FROM Odpowiedz
 DELETE FROM Rozmowa
+DELETE FROM Uzytkownik
 DBCC CHECKIDENT(Odpowiedz, RESEED, 0);
 DBCC CHECKIDENT(Rozmowa, RESEED, 0);
+DBCC CHECKIDENT(Uzytkownik, RESEED, 0);

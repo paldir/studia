@@ -181,8 +181,10 @@ namespace Czat.Controllers
 
             if (idAktywnejRozmowy != 0)
             {
-                Lista lista = reprezentacjeRozmów.Single(r => r.IdRozmowy == idAktywnejRozmowy);
-                lista.Aktywna = true;
+                Lista lista = reprezentacjeRozmów.SingleOrDefault(r => r.IdRozmowy == idAktywnejRozmowy);
+
+                if (lista != null)
+                    lista.Aktywna = true;
             }
 
             return reprezentacjeRozmów;
