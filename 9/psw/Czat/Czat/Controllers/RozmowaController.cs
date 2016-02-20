@@ -63,7 +63,7 @@ namespace Czat.Controllers
         public string SzukajUzytkownikow(string napis)
         {
             ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
-            IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(u => u.Nazwa.Contains(napis) && u.Id != zalogowanyUzytkownik.Id);
+            IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(u => u.Nazwa.StartsWith(napis) && u.Id != zalogowanyUzytkownik.Id).OrderBy(u => u.Nazwa);
             StringBuilder budowniczy = new StringBuilder();
 
             foreach (Uzytkownik uzytkownik in uzytkownicy)

@@ -14,8 +14,8 @@
         var zawartosc = nazwa.value;
         var uzytkownicy = document.getElementById("uzytkownicy");
 
-        if (zawartosc.length < 2) {
-            uzytkownicy.innerHTML = "Wpisz przynajmniej 2 znaki.";
+        if (zawartosc.length < 1) {
+            uzytkownicy.innerHTML = "";
         } else {
             $.ajax(
             {
@@ -44,11 +44,12 @@
     }
 </script>
 
-<label for="nazwa">Nazwa użytkownika</label>
-<input id="nazwa" type="text" maxlength="10" onkeyup="szukaj()" />
-<div id="uzytkownicy">
-
+<div id="wyszukiwanie">
+    <label for="nazwa">Nazwa użytkownika</label>
+    <input id="nazwa" type="text" maxlength="10" onkeyup="szukaj()" />
+    <div id="uzytkownicy"></div>
 </div>
 
 @section Stopka
 {}
+

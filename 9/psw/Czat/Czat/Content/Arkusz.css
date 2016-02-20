@@ -201,6 +201,16 @@ footer {
     background-color: rgb(235, 238, 244);
 }
 
+#wyszukiwanie {
+    padding: 10px;
+    display: table;
+    margin: 0 auto;
+}
+
+#uzytkownicy, #uzytkownicy a {
+    margin: 5px;
+}
+
 #wylogowanie {
     position: absolute;
     right: 5px;
