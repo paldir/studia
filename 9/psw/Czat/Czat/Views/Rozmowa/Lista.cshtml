@@ -7,15 +7,26 @@
 
 @foreach (Lista lista in Model)
 {
-    <div class="rozmowa">
-        <div class="wiersz">
-            <div class="autor">@Html.DisplayFor(z => lista.NazwaZnajomego)</div>
-            <div class="data dataLista">@Html.DisplayFor(a => lista.OstatniaAktywnosc)</div>
+    <div class="@(lista.NoweWiadomości ? "rozmowaZNieprzeczytanymi" : "rozmowa")">
+        <div class="tabela">
+            <div class="wiersz">
+                <div class="autor">@Html.DisplayFor(z => lista.NazwaZnajomego)</div>
+                <div class="data dataLista">@Html.DisplayFor(a => lista.OstatniaAktywnosc)</div>
+            </div>
         </div>
-        <div class="tresc trescLista">
-            @Html.DisplayFor(s => lista.Skrot)
-            @*@Html.DisplayFor(n => lista.NoweWiadomości)*@
+        <div>
+            <div class="wiersz">
+                <div class="tresc trescLista">
+                    @Html.DisplayFor(s => lista.Skrot)
+                </div>
+                @if (lista.NoweWiadomości)
+                {
+                    <div class="liczbaNowych">
+                        @Html.DisplayFor(l => lista.LiczbaNowychWiadomości) nowych
+                    </div>
+                }
+            </div>
         </div>
-        <a href="/Rozmowa/Przegladaj/@lista.IdRozmowy"><span></span></a>
+        <a href="/Rozmowa/Przegladaj/@lista.IdRozmowy"><span class="pseudoLink"></span></a>
     </div>
 }

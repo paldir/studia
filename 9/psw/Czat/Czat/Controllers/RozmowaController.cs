@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Authentication;
+using System.Text;
 using System.Web.Mvc;
 using Czat.Models;
 using Czat.Models.Encje;
@@ -32,23 +33,16 @@ namespace Czat.Controllers
             return PartialView(reprezentacjeRozmów);
         }
 
-        [HttpGet]
         public ActionResult Nowa()
         {
-            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
-            IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(uzytkownik => uzytkownik.Id != zalogowanyUzytkownik.Id).OrderBy(u => u.Nazwa);
-            Nowa nowa = new Nowa(uzytkownicy);
-
-            return View(nowa);
+            return View();
         }
 
-        [HttpPost]
-        public ActionResult Nowa(Nowa nowa)
+        public ActionResult Rozpocznij(int id)
         {
             ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
-            int idZnajomego = nowa.IdWybranegoUzytkownika;
             Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
-            Rozmowa rozmowa = uzytkownik.Rozmowy.SingleOrDefault(r => (r.IdUzytkownika0 == idZnajomego) || (r.IdUzytkownika1 == idZnajomego));
+            Rozmowa rozmowa = uzytkownik.Rozmowy.SingleOrDefault(r => (r.IdUzytkownika0 == id) || (r.IdUzytkownika1 == id));
 
             if (rozmowa == null)
             {
@@ -56,7 +50,7 @@ namespace Czat.Controllers
                 {
                     OstatniaAktywnosc = DateTime.Now,
                     Uzytkownik0 = uzytkownik,
-                    IdUzytkownika1 = idZnajomego
+                    IdUzytkownika1 = id
                 };
 
                 _db.Rozmowy.Add(rozmowa);
@@ -64,6 +58,18 @@ namespace Czat.Controllers
             }
 
             return RedirectToAction("Przegladaj", new {id = rozmowa.Id});
+        }
+
+        public string SzukajUzytkownikow(string napis)
+        {
+            ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
+            IEnumerable<Uzytkownik> uzytkownicy = _db.Uzytkownicy.Where(u => u.Nazwa.Contains(napis) && u.Id != zalogowanyUzytkownik.Id);
+            StringBuilder budowniczy = new StringBuilder();
+
+            foreach (Uzytkownik uzytkownik in uzytkownicy)
+                budowniczy.AppendFormat("<a href=\"/Rozmowa/Rozpocznij/{0}\">{1}</a><br />", uzytkownik.Id, uzytkownik.Nazwa);
+
+            return budowniczy.ToString();
         }
 
         [HttpGet]
@@ -170,8 +176,8 @@ namespace Czat.Controllers
         {
             ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
             Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
-            IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.Where(r => r.Odpowiedzi.Any()).OrderByDescending(r => r.Odpowiedzi.Any(o => !o.Przeczytana)).ThenByDescending(r => r.OstatniaAktywnosc);
-            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik));
+            IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.Where(r => r.Odpowiedzi.Any());
+            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik)).OrderByDescending(r => r.NoweWiadomości).ThenByDescending(r => r.OstatniaAktywnosc);
 
             return reprezentacjeRozmów;
         }

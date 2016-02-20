@@ -1,22 +1,54 @@
-﻿@model Czat.Models.Rozmowa.Nowa
-
-@{
+﻿@{
     ViewBag.Title = "Nowa rozmowa";
     Layout = "~/Views/_Szablon.cshtml";
 }
 
 @section Naglowek
 {
-    <h3>Nowa rozmowa</h3>
+    <h2>Nowa rozmowa</h2>
 }
 
-@using (@Html.BeginForm())
-{
-    @Html.LabelFor(i => i.IdWybranegoUzytkownika)
-    @Html.DropDownListFor(i => i.IdWybranegoUzytkownika, Model.DaneUzytkownikow)
-    <input type="submit" value="Rozpocznij" />
-}
+<script>
+    function szukaj() {
+        var nazwa = document.getElementById("nazwa");
+        var zawartosc = nazwa.value;
+        var uzytkownicy = document.getElementById("uzytkownicy");
+
+        if (zawartosc.length < 2) {
+            uzytkownicy.innerHTML = "Wpisz przynajmniej 2 znaki.";
+        } else {
+            $.ajax(
+            {
+                url: "/Rozmowa/SzukajUzytkownikow/",
+                method: "POST",
+                data: {
+                    napis: zawartosc
+                },
+                success: function (dane) {
+                    pokazWyniki(dane);
+                }
+            });
+        }
+    }
+
+    function pokazWyniki(dane) {
+        var wynik;
+
+        if (dane.length === 0)
+            wynik = "Brak użytkowników.";
+        else
+            wynik = dane;
+
+        var uzytkownicy = document.getElementById("uzytkownicy");
+        uzytkownicy.innerHTML = wynik;
+    }
+</script>
+
+<label for="nazwa">Nazwa użytkownika</label>
+<input id="nazwa" type="text" maxlength="10" onkeyup="szukaj()" />
+<div id="uzytkownicy">
+
+</div>
 
 @section Stopka
 {}
- 

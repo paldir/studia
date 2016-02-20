@@ -10,12 +10,14 @@ namespace Czat.Models.Rozmowa
     {
         public int IdRozmowy { get; private set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm:ss}")]
         public DateTime OstatniaAktywnosc { get; private set; }
 
         public string NazwaZnajomego { get; private set; }
 
         public bool NoweWiadomości { get; private set; }
+
+        public int LiczbaNowychWiadomości { get; private set; }
 
         public string Skrot { get; private set; }
 
@@ -28,9 +30,13 @@ namespace Czat.Models.Rozmowa
             Uzytkownik znajomy = zaczynający == zalogowanyUzytkownik ? odpowiadający : zaczynający;
             NazwaZnajomego = znajomy.Nazwa;
             ICollection<Odpowiedz> odpowiedzi = rozmowa.Odpowiedzi;
-            NoweWiadomości = odpowiedzi.Any(o => (o.Autor == znajomy) && !o.Przeczytana);
+            LiczbaNowychWiadomości = odpowiedzi.Count(o => (o.Autor == znajomy) && !o.Przeczytana);
             string ostatniaWiadomość = odpowiedzi.Last().Tresc;
-            Skrot = ostatniaWiadomość.Length > 60 ? string.Concat(ostatniaWiadomość.Substring(0, 20), "...") : ostatniaWiadomość;
+            const int długośćSkrótu = 20;
+            Skrot = ostatniaWiadomość.Length > długośćSkrótu ? string.Concat(ostatniaWiadomość.Substring(0, długośćSkrótu), "...") : ostatniaWiadomość;
+
+            if (LiczbaNowychWiadomości > 0)
+                NoweWiadomości = true;
         }
     }
 }

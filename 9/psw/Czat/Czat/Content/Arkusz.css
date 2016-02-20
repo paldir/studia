@@ -14,12 +14,24 @@ a, a:visited {
         text-decoration: underline;
     }
 
+textarea {
+    margin: 10px 10px 10px 310px;
+    border-style: solid;
+    border-color: rgb(224, 224, 224);
+    border-width: 1px;
+    overflow: hidden;
+}
+
+h2 {
+    margin-top: 70px;
+}
+
 #formularz {
     margin: 0 auto;
     display: table;
 }
 
-    #formularz h3 {
+    #formularz h2 {
         text-align: center;
     }
 
@@ -73,6 +85,7 @@ footer {
     height: 100px;
     bottom: 0;
     left: 0;
+    background-color: rgb(247, 247, 247);
 }
 
 #kolumny {
@@ -88,7 +101,9 @@ footer {
     float: left;
     max-width: 80%;
     width: 300px;
-    border: 1px solid black;
+    border-style: solid;
+    border-color: rgb(224, 224, 224);
+    border-width: 1px;
 }
 
     #kolumna1 .zawartosc {
@@ -102,7 +117,7 @@ footer {
     height: inherit;
     overflow-y: auto;
     border-style: solid;
-    border-color: black;
+    border-color: rgb(224, 224, 224);
     border-width: 1px 1px 1px 0;
 }
 
@@ -110,15 +125,15 @@ footer {
     padding: 10px;
 }
 
-textarea {
-    margin: 10px 10px 10px 310px;
-}
-
 .wypowiedz {
     padding: 5px 0 5px 0;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: rgb(234, 234, 234);
+}
+
+.tabela {
+    display: table;
 }
 
 .wiersz {
@@ -133,7 +148,6 @@ textarea {
 .data {
     text-align: right;
     color: rgb(193, 193, 193);
-    font-size: 12px;
     display: table-cell;
     width: 100%;
     font-size: 10px;
@@ -150,21 +164,19 @@ textarea {
 
 .trescLista {
     color: rgb(193, 193, 193);
+    display: table-cell;
+    white-space: nowrap;
 }
 
-.rozmowa, .nowaRozmowa {
-    padding: 5px;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: rgb(234, 234, 234);
-    position: relative;
+.liczbaNowych {
+    display: table-cell;
+    text-align: right;
+    color: rgb(137, 155, 193);
+    font-size: 10px;
+    width: 100%;
 }
 
-.rozmowa:hover {
-    background-color: rgb(245, 247, 250);
-}
-
-span {
+.pseudoLink {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -173,7 +185,24 @@ span {
     z-index: 1;
 }
 
+.rozmowa, .nowaRozmowa, .rozmowaZNieprzeczytanymi {
+    padding: 5px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(234, 234, 234);
+    position: relative;
+}
+
+    .rozmowa:hover {
+        background-color: rgb(245, 247, 250);
+    }
+
+.rozmowaZNieprzeczytanymi {
+    background-color: rgb(235, 238, 244);
+}
+
 #wylogowanie {
     position: absolute;
     right: 5px;
+    top: 75px;
 }

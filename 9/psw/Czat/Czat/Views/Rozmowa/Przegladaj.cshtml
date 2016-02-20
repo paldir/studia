@@ -43,7 +43,7 @@
 
 @section Naglowek
 {
-    <h3>@Model.NazwaRozmówcy</h3>
+    <h2>@Model.NazwaRozmówcy</h2>
 }
 
 <div id="oknoRozmowy">
@@ -58,7 +58,7 @@
     @using (@Html.BeginForm())
     {
         @Html.HiddenFor(o => o.IdRozmowy)
-        @Html.TextAreaFor(p => p.Odpowiedz.Tresc, 3, 60, new { id = "nowaWiadomosc", maxlength="180", onkeydown = "wyslijWiadomosc(event)" })
+        @Html.TextAreaFor(p => p.Odpowiedz.Tresc, 3, 61, new { id = "nowaWiadomosc", maxlength="180", onkeydown = "wyslijWiadomosc(event)" })
     }
 
     <script>

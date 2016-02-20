@@ -1465,7 +1465,7 @@ intellisense.annotate(jQuery.fn, {
     /// </signature>
   },
   'header': function() {
-    /// <summary>Selects all elements that are headers, like h1, h2, h3 and so on.</summary>
+    /// <summary>Selects all elements that are headers, like h1, h2, h2 and so on.</summary>
   },
   'height': function() {
     /// <signature>

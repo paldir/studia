@@ -131,7 +131,6 @@
     <Compile Include="Models\Encje\Model.cs" />
     <Compile Include="Models\Encje\Rozmowa.cs" />
     <Compile Include="Models\Rozmowa\Lista.cs" />
-    <Compile Include="Models\Rozmowa\Nowa.cs" />
     <Compile Include="Models\Encje\Odpowiedz.cs" />
     <Compile Include="Models\Rozmowa\Przegladaj.cs" />
     <Compile Include="Models\Rozmowa\Wypowiedz.cs" />
