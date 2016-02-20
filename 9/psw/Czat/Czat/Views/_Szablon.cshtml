@@ -43,12 +43,22 @@
         }
 
         function pobierzAktualizacje() {
+            var idRozmowy = document.getElementById("IdRozmowy");
+            var wartosc = 0;
+
+            if (idRozmowy != null) {
+                wartosc = idRozmowy.value;
+            }
+
             $.ajax(
             {
                 url: "/Rozmowa/AktualizacjaListy/",
                 method: "POST",
                 success: function (dane) {
                     aktualizujListe(dane);
+                },
+                data: {
+                    id: wartosc
                 }
             });
         }

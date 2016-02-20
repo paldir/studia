@@ -21,6 +21,8 @@ namespace Czat.Models.Rozmowa
 
         public string Skrot { get; private set; }
 
+        public bool Aktywna { get; set; }
+
         public Lista(Encje.Rozmowa rozmowa, Uzytkownik zalogowanyUzytkownik)
         {
             IdRozmowy = rozmowa.Id;

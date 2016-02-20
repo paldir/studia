@@ -185,7 +185,7 @@ footer {
     z-index: 1;
 }
 
-.rozmowa, .nowaRozmowa, .rozmowaZNieprzeczytanymi {
+.rozmowa, .nowaRozmowa, .rozmowaZNieprzeczytanymi, .aktywnaRozmowa {
     padding: 5px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -199,6 +199,15 @@ footer {
 
 .rozmowaZNieprzeczytanymi {
     background-color: rgb(235, 238, 244);
+}
+
+.aktywnaRozmowa {
+    background-color: rgb(109, 132, 180);
+    color: white;
+}
+
+.aktywnaRozmowa .dataLista, .aktywnaRozmowa .trescLista{
+    color: white;
 }
 
 #wyszukiwanie {

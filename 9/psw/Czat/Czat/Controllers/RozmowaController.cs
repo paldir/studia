@@ -26,9 +26,9 @@ namespace Czat.Controllers
             return View();
         }
 
-        public ActionResult Lista()
+        public ActionResult Lista(int id = 0)
         {
-            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy();
+            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy(id);
 
             return PartialView(reprezentacjeRozmów);
         }
@@ -153,9 +153,9 @@ namespace Czat.Controllers
             }
         }
 
-        public string AktualizacjaListy()
+        public string AktualizacjaListy(int id)
         {
-            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy();
+            IEnumerable<Lista> reprezentacjeRozmów = ModelWidokuListy(id);
 
             using (StringWriter pisarz = new StringWriter())
             {
@@ -172,12 +172,18 @@ namespace Czat.Controllers
             }
         }
 
-        private IEnumerable<Lista> ModelWidokuListy()
+        private IEnumerable<Lista> ModelWidokuListy(int idAktywnejRozmowy)
         {
             ZalogowanyUzytkownik zalogowanyUzytkownik = (ZalogowanyUzytkownik) User;
             Uzytkownik uzytkownik = _db.Uzytkownicy.Find(zalogowanyUzytkownik.Id);
             IEnumerable<Rozmowa> rozmowy = uzytkownik.Rozmowy.Where(r => r.Odpowiedzi.Any());
-            IEnumerable<Lista> reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik)).OrderByDescending(r => r.NoweWiadomości).ThenByDescending(r => r.OstatniaAktywnosc);
+            Lista[] reprezentacjeRozmów = rozmowy.Select(rozmowa => new Lista(rozmowa, uzytkownik)).OrderByDescending(r => r.NoweWiadomości).ThenByDescending(r => r.OstatniaAktywnosc).ToArray();
+
+            if (idAktywnejRozmowy != 0)
+            {
+                Lista lista = reprezentacjeRozmów.Single(r => r.IdRozmowy == idAktywnejRozmowy);
+                lista.Aktywna = true;
+            }
 
             return reprezentacjeRozmów;
         }
