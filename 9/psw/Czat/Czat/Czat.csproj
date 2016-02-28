@@ -179,9 +179,7 @@
   <ItemGroup>
     <Content Include="Views\Uzytkownik\Logowanie.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Test\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\_Szablon.cshtml" />
   </ItemGroup>
