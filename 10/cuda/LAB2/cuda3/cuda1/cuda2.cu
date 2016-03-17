@@ -111,9 +111,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		cudaMemcpy(dA, hA, rozmiarWektoraWBajtach, cudaMemcpyHostToDevice);
 		cudaMemcpy(dB, hB, rozmiarWektoraWBajtach, cudaMemcpyHostToDevice);
 
-		//IloczynSkalarny2 <<< 1, rozmiarWektorow >>> (dA, dB, dWynik);
+		IloczynSkalarny2 <<< 1, rozmiarWektora >>> (dA, dB, dWynik);
 		//IloczynSkalarny3 <<< 1, rozmiarWektora >>> (dA, dB, dWynik);
-		IloczynSkalarny4 <<< 1, rozmiarWektora >>> (dA, dB, dWynik);
+		//IloczynSkalarny4 <<< 1, rozmiarWektora >>> (dA, dB, dWynik);
 
 		cudaMemcpy(&hWynik, dWynik, sizeof(float), cudaMemcpyDeviceToHost);
 

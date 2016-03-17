@@ -13,9 +13,10 @@ bool InicjujCuda()
 
 	if(liczbaUrzadzen>0)
 	{
-		cudaSetDevice(0);
-
-		return true;
+		if(cudaSetDevice(0)==cudaSuccess)
+			return true;
+		else
+			return false;
 	}
 	else
 		return false;

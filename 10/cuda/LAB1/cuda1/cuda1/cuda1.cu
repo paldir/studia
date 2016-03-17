@@ -16,6 +16,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	for(int i=0; i<liczbaUrzadzen;i++)
 	{
+		int* maxThreadsDim=wlasciwosciUrzadzenia.maxThreadsDim;
+		int* maxGridSize=wlasciwosciUrzadzenia.maxGridSize;
+		
 		cudaGetDeviceProperties(&wlasciwosciUrzadzenia, i);
 
 		std::cout << "Nazwa: " << wlasciwosciUrzadzenia.name << std::endl;
@@ -24,8 +27,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::cout << "Rejestry na blok: " << wlasciwosciUrzadzenia.regsPerBlock << std::endl;
 		std::cout << "Rozmiar osnowy: " << wlasciwosciUrzadzenia.warpSize << std::endl;
 		std::cout << "Maksymalna liczba watkow na blok: " << wlasciwosciUrzadzenia.maxThreadsPerBlock << std::endl;
-		std::cout << "Maksymalny rozmiar kazdego wymiaru w bloku: " << wlasciwosciUrzadzenia.maxThreadsDim << std::endl;
-		std::cout << "Maksymalny rozmiar kazdego wymiaru w siatce: " << wlasciwosciUrzadzenia.maxGridSize << std::endl;
+		std::cout << "Maksymalny rozmiar kazdego wymiaru w bloku: " << maxThreadsDim[0] << " " << maxThreadsDim[1] << " " << maxThreadsDim[2] << std::endl;
+		std::cout << "Maksymalny rozmiar kazdego wymiaru w siatce: " << maxGridSize[0] << " " << maxGridSize[1] << " " << maxGridSize[2] << std::endl;
 		std::cout << "Taktowanie zegara: " << wlasciwosciUrzadzenia.clockRate << std::endl;
 	}
 
