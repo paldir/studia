@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace alignment
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             string[] linie = File.ReadAllLines("seq.fasta").Where(x => !x.StartsWith(">")).ToArray();
             string sekwencja1 = linie[0];
@@ -27,10 +24,10 @@ namespace alignment
             Komórka[,] macierz = new Komórka[liczbaWierszy, liczbaKolumn];
 
             for (int i = 0; i < liczbaWierszy; i++)
-                macierz[i, 0] = new Komórka { Liczba = i * d };
+                macierz[i, 0] = new Komórka {Liczba = i*d};
 
             for (int j = 0; j < liczbaKolumn; j++)
-                macierz[0, j] = new Komórka { Liczba = j * d };
+                macierz[0, j] = new Komórka {Liczba = j*d};
 
             for (int i = 1; i < liczbaWierszy; i++)
                 for (int j = 1; j < liczbaKolumn; j++)
@@ -49,7 +46,7 @@ namespace alignment
                     else
                         strzałka = Strzałka.Lewo;
 
-                    macierz[i, j] = new Komórka { Liczba = max, Strzałka = strzałka };
+                    macierz[i, j] = new Komórka {Liczba = max, Strzałka = strzałka};
                 }
 
             int k = długośćSekwencji1;
@@ -91,8 +88,7 @@ namespace alignment
                     break;
 
                 komórka = macierz[k, l];
-            }
-            while (true);
+            } while (true);
 
             Console.WriteLine(nowaSekwencja1);
             Console.WriteLine(nowaSekwencja2);
