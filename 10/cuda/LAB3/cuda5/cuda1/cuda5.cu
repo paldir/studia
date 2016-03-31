@@ -6,7 +6,11 @@
 #include <Windows.h>
 #include <cuda_runtime.h>
 
-static const int N=3;
+static const int N=64;
+static const int nKafelka=N/2;
+
+static const int nWKafelkach=N/nKafelka;
+static const int liczbaElementowWKafelku=nKafelka*nKafelka;
 
 bool InicjujCuda()
 {
@@ -25,7 +29,21 @@ bool InicjujCuda()
 		return false;
 }
 
-__global__ void IloczynMacierzy(const float* dA, const float* dB, float* wynik)
+void IloczynMacierzyCpu(const float* A, const float* B, float* wynik)
+{
+	for(int i=0; i<N; i++)
+		for(int j=0; j<N; j++)
+		{
+			float suma=0;
+
+			for(int k=0; k<N; k++)
+				suma+=A[j*N+k]*B[k*N+i];
+
+			wynik[j*N+i]=suma;
+		}
+}
+
+__global__ void IloczynMacierzyGpu(const float* dA, const float* dB, float* wynik)
 {
 	int tx=threadIdx.x;
 	int ty=threadIdx.y;
@@ -41,6 +59,51 @@ __global__ void IloczynMacierzy(const float* dA, const float* dB, float* wynik)
 	wynik[y*N+x]=suma;
 }
 
+__global__ void IloczynMacierzyGpuKafelki(const float* dA, const float* dB, float* wynik)
+{
+	int wiersz=blockIdx.y*nKafelka+threadIdx.y;
+	int kolumna=blockIdx.x*nKafelka+threadIdx.x;
+	float suma=0;
+
+	for(int k=0; k<N; k++)
+		suma+=dA[wiersz*N+k]*dB[k*N+kolumna];
+
+	wynik[wiersz*N+kolumna]=suma;
+}
+
+__global__ void IloczynMacierzyGpuKafelkiTurbo(const float* dA, const float* dB, float* wynik)
+{
+	__shared__ float kafelekA[liczbaElementowWKafelku];
+	__shared__ float kafelekB[liczbaElementowWKafelku];
+	int tx=threadIdx.x;
+	int ty=threadIdx.y;
+	int wiersz=blockIdx.y*nKafelka+ty;
+	int kolumna=blockIdx.x*nKafelka+tx;
+	float suma=0;
+	int indeksKafelka=ty*nKafelka+tx;
+	int indeksGlobalny=wiersz*N+kolumna;
+	kafelekA[indeksKafelka]=dA[indeksGlobalny];
+	kafelekB[indeksKafelka]=dB[indeksGlobalny];
+
+	__syncthreads();
+
+	for(int k=0; k<nKafelka; k++)
+		suma+=kafelekA[ty*nKafelka+k]*kafelekB[k*nKafelka+tx];
+
+	wynik[indeksGlobalny]+=suma;
+}
+
+void Wyswietl(const float* macierz, const int liczbaElementow)
+{
+	for(int i=0; i<liczbaElementow; i++)
+	{
+		if(i%N==0)
+			std::cout << std::endl;
+
+		std::cout << macierz[i] << " ";
+	}
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	if(InicjujCuda())
@@ -53,10 +116,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		float* dB;
 		float* dC;
 		int rozmiarWBajtach=liczbaElementow*sizeof(float);
-		dim3 bloki(N, N);
+		dim3 siatka(nWKafelkach, nWKafelkach);
+		dim3 bloki(nKafelka, nKafelka);
 
 		for(int i=0; i<liczbaElementow;i++)
-			hA[i]=hB[i]=i;
+		{
+			hA[i]=1.0f;
+			hB[i]=1.0f;
+		}
 
 		cudaMalloc((void**)&dA, rozmiarWBajtach);
 		cudaMalloc((void**)&dB, rozmiarWBajtach);
@@ -64,17 +131,17 @@ int _tmain(int argc, _TCHAR* argv[])
 		cudaMemcpy(dA, hA, rozmiarWBajtach, cudaMemcpyHostToDevice);
 		cudaMemcpy(dB, hB, rozmiarWBajtach, cudaMemcpyHostToDevice);
 
-		IloczynMacierzy <<< 1, bloki >>> (dA, dB, dC);
+		//IloczynMacierzyCpu(hA, hB, hC);
+		IloczynMacierzyGpuKafelkiTurbo <<< siatka, bloki >>> (dA, dB, dC);
 
 		cudaMemcpy(hC, dC, rozmiarWBajtach, cudaMemcpyDeviceToHost);
 
-		for(int i=0; i<liczbaElementow; i++)
-		{
-			if(i%N==0)
-				std::cout << std::endl;
-			
-			std::cout << hC[i] << "\t";
-		}
+		Wyswietl(hA, liczbaElementow);
+		std::cout << std::endl;
+		Wyswietl(hB, liczbaElementow);
+		std::cout << std::endl;
+		Wyswietl(hC, liczbaElementow);
+		std::cout << std::endl;
 
 		cudaFree(dA);
 		cudaFree(dB);
