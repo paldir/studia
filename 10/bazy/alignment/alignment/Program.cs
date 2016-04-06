@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace alignment
 {
@@ -10,6 +11,7 @@ namespace alignment
     {
         private static void Main()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             string[] linie = File.ReadAllLines("seq.fasta").Where(x => !x.StartsWith(">")).ToArray();
             string sekwencja1 = linie[0];
             string sekwencja2 = linie[1];
@@ -18,16 +20,32 @@ namespace alignment
             int liczbaWierszy = długośćSekwencji1 + 1;
             int liczbaKolumn = długośćSekwencji2 + 1;
             NameValueCollection konfiguracja = ConfigurationManager.AppSettings;
+            Algorytm algorytm = (Algorytm)Enum.Parse(typeof(Algorytm), konfiguracja["algorytm"].ToUpper());
             int d = int.Parse(konfiguracja["d"]);
             int nagroda = int.Parse(konfiguracja["nagroda"]);
             int kara = int.Parse(konfiguracja["kara"]);
             Komórka[,] macierz = new Komórka[liczbaWierszy, liczbaKolumn];
+            int przelicznik = -1;
+            int długośćLiczb = 0;
+
+            switch (algorytm)
+            {
+                case Algorytm.NW:
+                    przelicznik = d;
+
+                    break;
+
+                case Algorytm.SW:
+                    przelicznik = 0;
+
+                    break;
+            }
 
             for (int i = 0; i < liczbaWierszy; i++)
-                macierz[i, 0] = new Komórka {Liczba = i*d};
+                macierz[i, 0] = new Komórka { Liczba = i * przelicznik };
 
             for (int j = 0; j < liczbaKolumn; j++)
-                macierz[0, j] = new Komórka {Liczba = j*d};
+                macierz[0, j] = new Komórka { Liczba = j * przelicznik };
 
             for (int i = 1; i < liczbaWierszy; i++)
                 for (int j = 1; j < liczbaKolumn; j++)
@@ -36,17 +54,21 @@ namespace alignment
                     int skos = macierz[i - 1, j - 1].Liczba + s;
                     int góra = macierz[i - 1, j].Liczba + d;
                     int lewo = macierz[i, j - 1].Liczba + d;
-                    int max = Math.Max(skos, Math.Max(góra, lewo));
+                    int maksimum = Math.Max(skos, Math.Max(góra, lewo));
                     Strzałka strzałka;
 
-                    if (max == skos)
+                    if (algorytm == Algorytm.SW)
+                        maksimum = Math.Max(maksimum, 0);
+
+                    if (maksimum == skos)
                         strzałka = Strzałka.Skos;
-                    else if (max == góra)
+                    else if (maksimum == góra)
                         strzałka = Strzałka.Góra;
                     else
                         strzałka = Strzałka.Lewo;
 
-                    macierz[i, j] = new Komórka {Liczba = max, Strzałka = strzałka};
+                    macierz[i, j] = new Komórka {Liczba = maksimum, Strzałka = strzałka};
+                    długośćLiczb = Math.Max(długośćLiczb, maksimum.ToString().Length);
                 }
 
             int k = długośćSekwencji1;
@@ -89,6 +111,54 @@ namespace alignment
 
                 komórka = macierz[k, l];
             } while (true);
+
+            długośćLiczb += 2;
+
+            Console.Write(new string(' ', długośćLiczb*2));
+
+            for (int i = 0; i < długośćSekwencji2; i++)
+                Console.Write(sekwencja2[i].ToString().PadLeft(długośćLiczb));
+
+            Console.WriteLine();
+            Console.Write(new string(' ', długośćLiczb));
+
+            for (int j = 0; j < liczbaKolumn; j++)
+                Console.Write(macierz[0, j].Liczba.ToString().PadLeft(długośćLiczb));
+
+            Console.WriteLine();
+
+            for (int i = 1; i < liczbaWierszy; i++)
+            {
+                Console.Write(string.Concat(sekwencja1[i - 1].ToString().PadLeft(długośćLiczb), macierz[i, 0].Liczba.ToString().PadLeft(długośćLiczb)));
+                
+                for (int j = 1; j < liczbaWierszy; j++)
+                {
+                    komórka = macierz[i, j];
+                    char strzałka = ' ';
+
+                    switch (komórka.Strzałka)
+                    {
+                        case Strzałka.Góra:
+                            strzałka = '↑';
+
+                            break;
+
+                        case Strzałka.Lewo:
+                            strzałka = '←';
+
+                            break;
+
+                        case Strzałka.Skos:
+                            strzałka = '\\';
+
+                            break;
+                    }
+
+                    Console.Write(string.Concat(komórka.Liczba, strzałka).PadLeft(długośćLiczb));
+                }
+
+                Console.WriteLine();
+            }
 
             Console.WriteLine(nowaSekwencja1);
             Console.WriteLine(nowaSekwencja2);
