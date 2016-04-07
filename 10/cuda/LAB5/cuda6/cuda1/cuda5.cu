@@ -5,6 +5,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <cuda_runtime.h>
+#include <cublas_v2.h>
 
 static const int N=64;
 static const int nKafelka=N/2;
@@ -27,48 +28,6 @@ bool InicjujCuda()
 	}
 	else
 		return false;
-}
-
-void IloczynMacierzyCpu(const float* A, const float* B, float* wynik)
-{
-	for(int i=0; i<N; i++)
-		for(int j=0; j<N; j++)
-		{
-			float suma=0;
-
-			for(int k=0; k<N; k++)
-				suma+=A[j*N+k]*B[k*N+i];
-
-			wynik[j*N+i]=suma;
-		}
-}
-
-__global__ void IloczynMacierzyGpu(const float* dA, const float* dB, float* wynik)
-{
-	int tx=threadIdx.x;
-	int ty=threadIdx.y;
-	int bx=blockIdx.x;
-	int by=blockIdx.y;
-	int x=bx*blockDim.x+tx;
-	int y=by*blockDim.y+ty;
-	float suma=0;
-
-	for(int k=0; k<N; k++)
-		suma+=dA[y*N+k]*dB[k*N+x];
-
-	wynik[y*N+x]=suma;
-}
-
-__global__ void IloczynMacierzyGpuKafelki(const float* dA, const float* dB, float* wynik)
-{
-	int wiersz=blockIdx.y*nKafelka+threadIdx.y;
-	int kolumna=blockIdx.x*nKafelka+threadIdx.x;
-	float suma=0;
-
-	for(int k=0; k<N; k++)
-		suma+=dA[wiersz*N+k]*dB[k*N+kolumna];
-
-	wynik[wiersz*N+kolumna]=suma;
 }
 
 __global__ void IloczynMacierzyGpuKafelkiTurbo(const float* dA, const float* dB, float* wynik)
@@ -117,12 +76,21 @@ int _tmain(int argc, _TCHAR* argv[])
 		float hA[liczbaElementow];
 		float hB[liczbaElementow];
 		float hC[liczbaElementow];
+		float hC2[liczbaElementow];
 		float* dA;
 		float* dB;
 		float* dC;
+		float* dC2;
 		int rozmiarWBajtach=liczbaElementow*sizeof(float);
 		dim3 siatka(nWKafelkach, nWKafelkach);
 		dim3 bloki(nKafelka, nKafelka);
+		cublasHandle_t uchwyt;
+		float alfa=1;
+		float beta=0;
+		LARGE_INTEGER tyknieciaNaSekunde, tic, toc;
+
+		cublasCreate(&uchwyt);
+		QueryPerformanceFrequency(&tyknieciaNaSekunde);
 
 		for(int i=0; i<liczbaElementow;i++)
 		{
@@ -133,24 +101,42 @@ int _tmain(int argc, _TCHAR* argv[])
 		cudaMalloc((void**)&dA, rozmiarWBajtach);
 		cudaMalloc((void**)&dB, rozmiarWBajtach);
 		cudaMalloc((void**)&dC, rozmiarWBajtach);
+		cudaMalloc((void**)&dC2, rozmiarWBajtach);
 		cudaMemcpy(dA, hA, rozmiarWBajtach, cudaMemcpyHostToDevice);
 		cudaMemcpy(dB, hB, rozmiarWBajtach, cudaMemcpyHostToDevice);
 
-		//IloczynMacierzyCpu(hA, hB, hC);
-		IloczynMacierzyGpuKafelkiTurbo <<< siatka, bloki >>> (dA, dB, dC);
-
-		cudaMemcpy(hC, dC, rozmiarWBajtach, cudaMemcpyDeviceToHost);
-
-		Wyswietl(hA, liczbaElementow);
+		/*Wyswietl(hA, liczbaElementow);
 		std::cout << std::endl;
 		Wyswietl(hB, liczbaElementow);
-		std::cout << std::endl;
-		Wyswietl(hC, liczbaElementow);
+		std::cout << std::endl;*/
+
+		IloczynMacierzyGpuKafelkiTurbo <<< siatka, bloki >>> (dA, dB, dC);
+		cudaDeviceSynchronize();
+		QueryPerformanceCounter(&tic);
+		IloczynMacierzyGpuKafelkiTurbo <<< siatka, bloki >>> (dA, dB, dC);
+		cudaDeviceSynchronize();
+		QueryPerformanceCounter(&toc);
+		cudaMemcpy(hC, dC, rozmiarWBajtach, cudaMemcpyDeviceToHost);
+		//Wyswietl(hC, liczbaElementow);
+
+		std::cout << "1: " << (double)(toc.QuadPart-tic.QuadPart)/tyknieciaNaSekunde.QuadPart*1000 << std::endl;
+
+		cublasSgemm(uchwyt, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alfa, dA, N, dB, N, &beta, dC2, N);
+		cudaDeviceSynchronize();
+		QueryPerformanceCounter(&tic);
+		cublasSgemm(uchwyt, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alfa, dA, N, dB, N, &beta, dC2, N);
+		cudaDeviceSynchronize();
+		QueryPerformanceCounter(&toc);
+		cudaMemcpy(hC2, dC2, rozmiarWBajtach, cudaMemcpyDeviceToHost);
+		//Wyswietl(hC2, liczbaElementow);
+
+		std::cout << "2: " << (double)(toc.QuadPart-tic.QuadPart)/tyknieciaNaSekunde.QuadPart*1000 << std::endl;
 		std::cout << std::endl;
 
 		cudaFree(dA);
 		cudaFree(dB);
 		cudaFree(dC);
+		cublasDestroy(uchwyt);
 
 		system("pause");
 	}
