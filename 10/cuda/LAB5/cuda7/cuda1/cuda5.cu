@@ -9,7 +9,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-static const int dlugoscWektora=10;
+static const int dlugoscWektora=1500;
 static const int rozmiarOkna=5;
 
 static const int polowaRozmiaruOkna=rozmiarOkna/2;
@@ -81,6 +81,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		int* dA;
 		int* dB;
 		int rozmiarWBajtach=dlugoscWektora*sizeof(int);
+
 		srand((unsigned int)time(NULL));
 
 		for(int i=0; i<dlugoscWektora;i++)
@@ -97,7 +98,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		cudaMalloc((void**)&dB, rozmiarWBajtach);
 		cudaMemcpy(dA, hA, rozmiarWBajtach, cudaMemcpyHostToDevice);
 
-		Filtrowanie <<< 1, dlugoscWektora >>> (dA, dB);
+		Filtrowanie <<< dlugoscWektora/1024+1, 1024 >>> (dA, dB);
 
 		cudaMemcpy(hB, dB, rozmiarWBajtach, cudaMemcpyDeviceToHost);
 
@@ -128,6 +129,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		for(int i=0; i<dlugoscWektora; i++)
 			std::cout << hB[i] << " ";
+
+		std::cout << std::endl;
 
 		cudaFree(dA);
 		cudaFree(dB);
