@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
@@ -11,7 +12,7 @@ namespace alignment
     {
         private static void Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            //Console.OutputEncoding = Encoding.UTF8;
             string[] linie = File.ReadAllLines("seq.fasta").Where(x => !x.StartsWith(">")).ToArray();
             string sekwencja1 = linie[0];
             string sekwencja2 = linie[1];
@@ -27,7 +28,9 @@ namespace alignment
             Komórka[,] macierz = new Komórka[liczbaWierszy, liczbaKolumn];
             int przelicznik = -1;
             int długośćLiczb = 0;
+            Dictionary<char, Dictionary<char, int>> macierzSubstytucji = MacierzSubstytucji(konfiguracja["macierz substytucji"]);
 
+            #region przygotowanie macierzy
             switch (algorytm)
             {
                 case Algorytm.NW:
@@ -67,16 +70,46 @@ namespace alignment
                     else
                         strzałka = Strzałka.Lewo;
 
-                    macierz[i, j] = new Komórka {Liczba = maksimum, Strzałka = strzałka};
+                    macierz[i, j] = new Komórka { Liczba = maksimum, Strzałka = strzałka };
                     długośćLiczb = Math.Max(długośćLiczb, maksimum.ToString().Length);
                 }
+            #endregion
 
-            int k = długośćSekwencji1;
-            int l = długośćSekwencji2;
-            Komórka komórka = macierz[k, l];
+            #region wyświetlanie wyników
+            int k = -1;
+            int l = -1;
+            Komórka komórka = null;
             bool koniec = false;
             string nowaSekwencja1 = sekwencja1;
             string nowaSekwencja2 = sekwencja2;
+
+            switch (algorytm)
+            {
+                case Algorytm.NW:
+                    k = długośćSekwencji1;
+                    l = długośćSekwencji2;
+                    komórka = macierz[k, l];
+
+                    break;
+
+                case Algorytm.SW:
+                    komórka = macierz[0, 0];
+
+                    for (int i = 0; i < liczbaWierszy; i++)
+                        for (int j = 0; j < liczbaKolumn; j++)
+                        {
+                            Komórka aktualnaKomórka = macierz[i, j];
+
+                            if (aktualnaKomórka.Liczba > komórka.Liczba)
+                            {
+                                komórka = aktualnaKomórka;
+                                k = i;
+                                l = j;
+                            }
+                        }
+
+                    break;
+            }
 
             do
             {
@@ -114,7 +147,7 @@ namespace alignment
 
             długośćLiczb += 2;
 
-            Console.Write(new string(' ', długośćLiczb*2));
+            Console.Write(new string(' ', długośćLiczb * 2));
 
             for (int i = 0; i < długośćSekwencji2; i++)
                 Console.Write(sekwencja2[i].ToString().PadLeft(długośćLiczb));
@@ -130,8 +163,8 @@ namespace alignment
             for (int i = 1; i < liczbaWierszy; i++)
             {
                 Console.Write(string.Concat(sekwencja1[i - 1].ToString().PadLeft(długośćLiczb), macierz[i, 0].Liczba.ToString().PadLeft(długośćLiczb)));
-                
-                for (int j = 1; j < liczbaWierszy; j++)
+
+                for (int j = 1; j < liczbaKolumn; j++)
                 {
                     komórka = macierz[i, j];
                     char strzałka = ' ';
@@ -162,7 +195,53 @@ namespace alignment
 
             Console.WriteLine(nowaSekwencja1);
             Console.WriteLine(nowaSekwencja2);
+            #endregion
+
             Console.ReadKey();
+        }
+
+        private static IEnumerable<Sekwencja> BazaDanych()
+        {
+            List<Sekwencja> sekwencje = new List<Sekwencja>();
+
+            using (StreamReader strumień = new StreamReader("DataBase.fasta"))
+                while (!strumień.EndOfStream)
+                {
+                    Sekwencja sekwencja = new Sekwencja() { Nazwa = strumień.ReadLine(), Struktura = strumień.ReadLine() };
+
+                    sekwencje.Add(sekwencja);
+                }
+
+            return sekwencje;
+        }
+
+        private static Dictionary<char, Dictionary<char, int>> MacierzSubstytucji(string nazwaPliku)
+        {
+            Dictionary<char, Dictionary<char, int>> macierz = new Dictionary<char, Dictionary<char, int>>();
+            string[] linie = File.ReadAllLines(nazwaPliku).Where(l => !l.StartsWith("#")).ToArray();
+            string pierwszaLinia=linie[0];
+
+            foreach(char znak in pierwszaLinia)
+                if (znak != ' ')
+                    macierz.Add(znak, new Dictionary<char, int>());
+
+            foreach (Dictionary<char, int> słownik in macierz.Values)
+                foreach (char znak in pierwszaLinia)
+                    if (znak != ' ')
+                        słownik.Add(znak, 0);
+
+            for (int i = 1; i < linie.Length; i++)
+            {
+                string linia=linie[i];
+                int j=1;
+
+                for (int k = 1; k < linia.Length; k += 3)
+                {
+                    char znak = Char.Parse(linia.Substring(j, 3));
+                }
+            }
+
+            return macierz;
         }
     }
 }
