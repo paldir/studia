@@ -27,6 +27,7 @@ namespace alignment
 
             //WyświetlWyniki(macierz, sekwencja1, sekwencja2, algorytm, długośćLiczb);
 
+            Console.Write("Naciśnij dowolny klawisz, aby kontynuować...");
             Console.ReadKey();
         }
 
@@ -52,17 +53,18 @@ namespace alignment
                 {
                     string linia = strumień.ReadLine();
 
-                    if ((linia != null) && linia.StartsWith(">"))
-                    {
-                        Sekwencja sekwencja = new Sekwencja {Nazwa = linia};
+                    if (linia != null)
+                        if (linia.StartsWith(">"))
+                        {
+                            Sekwencja sekwencja = new Sekwencja { Nazwa = linia };
 
-                        sekwencje.Add(sekwencja);
-                    }
-                    else
-                    {
-                        Sekwencja ostatnia = sekwencje.Last();
-                        ostatnia.Struktura = string.Concat(ostatnia.Struktura, linia);
-                    }
+                            sekwencje.Add(sekwencja);
+                        }
+                        else
+                        {
+                            Sekwencja ostatnia = sekwencje.Last();
+                            ostatnia.Struktura = string.Concat(ostatnia.Struktura, linia);
+                        }
                 }
 
             return sekwencje;
@@ -79,8 +81,9 @@ namespace alignment
                 for (int j = 0; j < liczbaElementów; j++)
                 {
                     int liczba = int.Parse(linie[i + 1].Substring(1 + j*3, 3));
+                    Dictionary<char, Dictionary<char, int>>.KeyCollection klucze = macierz.Keys;
 
-                    macierz[macierz.Keys.ElementAt(i)].Add(macierz.Keys.ElementAt(j), liczba);
+                    macierz[klucze.ElementAt(i)].Add(klucze.ElementAt(j), liczba);
                 }
 
             return macierz;
@@ -118,7 +121,9 @@ namespace alignment
             for (int i = 1; i < liczbaWierszy; i++)
                 for (int j = 1; j < liczbaKolumn; j++)
                 {
-                    int s = macierzSubstytucji[sekwencja1[i - 1]][sekwencja2[j - 1]];
+                    char znak1 = sekwencja1[i - 1];
+                    char znak2 = sekwencja2[j - 1];
+                    int s = macierzSubstytucji[znak1][znak2];
                     int skos = macierz[i - 1, j - 1].Liczba + s;
                     int góra = macierz[i - 1, j].Liczba + d;
                     int lewo = macierz[i, j - 1].Liczba + d;
