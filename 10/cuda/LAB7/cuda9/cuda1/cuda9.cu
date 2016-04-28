@@ -29,18 +29,105 @@ bool InicjujCuda()
 		return false;
 }
 
-__global__ void Przeprobkuj(const int liczbaProbekNaWatek, const float* sygnal, const float* indeksy, float* wynik)
+__global__ void Przeprobkuj2(const float* sygnal, const float* indeksy, float* wynik)
 {
-	register int x=(blockIdx.x*blockDim.x+threadIdx.x)*liczbaProbekNaWatek;
+	register int x=(blockIdx.x*blockDim.x+threadIdx.x)*2;
 
-	for(int i=0; i<liczbaProbekNaWatek; i++)
-	{
-		register float indeks=indeksy[x];
-		register int pierwszyIndeks=floorf(indeks);
-		register int drugiIndeks=pierwszyIndeks+1;
-		wynik[x]=sygnal[pierwszyIndeks]*(drugiIndeks-indeks)+sygnal[drugiIndeks]*(indeks-pierwszyIndeks);
-		x++;
-	}
+	register float indeks1=indeksy[x];
+	register int pierwszyIndeks1=floorf(indeks1);
+	register int drugiIndeks1=pierwszyIndeks1+1;
+	wynik[x]=sygnal[pierwszyIndeks1]*(drugiIndeks1-indeks1)+sygnal[drugiIndeks1]*(indeks1-pierwszyIndeks1);
+	x++;
+
+	register float indeks2=indeksy[x];
+	register int pierwszyIndeks2=floorf(indeks2);
+	register int drugiIndeks2=pierwszyIndeks2+1;
+	wynik[x]=sygnal[pierwszyIndeks2]*(drugiIndeks2-indeks2)+sygnal[drugiIndeks2]*(indeks2-pierwszyIndeks2);
+	x++;
+
+	indeks1=indeks2=0;
+}
+
+__global__ void Przeprobkuj4(const float* sygnal, const float* indeksy, float* wynik)
+{
+	register int x=(blockIdx.x*blockDim.x+threadIdx.x)*4;
+
+	register float indeks1=indeksy[x];
+	register int pierwszyIndeks1=floorf(indeks1);
+	register int drugiIndeks1=pierwszyIndeks1+1;
+	wynik[x]=sygnal[pierwszyIndeks1]*(drugiIndeks1-indeks1)+sygnal[drugiIndeks1]*(indeks1-pierwszyIndeks1);
+	x++;
+
+	register float indeks2=indeksy[x];
+	register int pierwszyIndeks2=floorf(indeks2);
+	register int drugiIndeks2=pierwszyIndeks2+1;
+	wynik[x]=sygnal[pierwszyIndeks2]*(drugiIndeks2-indeks2)+sygnal[drugiIndeks2]*(indeks2-pierwszyIndeks2);
+	x++;
+
+	register float indeks3=indeksy[x];
+	register int pierwszyIndeks3=floorf(indeks3);
+	register int drugiIndeks3=pierwszyIndeks3+1;
+	wynik[x]=sygnal[pierwszyIndeks3]*(drugiIndeks3-indeks3)+sygnal[drugiIndeks3]*(indeks3-pierwszyIndeks3);
+	x++;
+
+	register float indeks4=indeksy[x];
+	register int pierwszyIndeks4=floorf(indeks4);
+	register int drugiIndeks4=pierwszyIndeks4+1;
+	wynik[x]=sygnal[pierwszyIndeks4]*(drugiIndeks4-indeks4)+sygnal[drugiIndeks4]*(indeks4-pierwszyIndeks4);
+	x++;
+}
+
+__global__ void Przeprobkuj8(const float* sygnal, const float* indeksy, float* wynik)
+{
+	register int x=(blockIdx.x*blockDim.x+threadIdx.x)*8;
+
+	register float indeks1=indeksy[x];
+	register int pierwszyIndeks1=floorf(indeks1);
+	register int drugiIndeks1=pierwszyIndeks1+1;
+	wynik[x]=sygnal[pierwszyIndeks1]*(drugiIndeks1-indeks1)+sygnal[drugiIndeks1]*(indeks1-pierwszyIndeks1);
+	x++;
+
+	register float indeks2=indeksy[x];
+	register int pierwszyIndeks2=floorf(indeks2);
+	register int drugiIndeks2=pierwszyIndeks2+1;
+	wynik[x]=sygnal[pierwszyIndeks2]*(drugiIndeks2-indeks2)+sygnal[drugiIndeks2]*(indeks2-pierwszyIndeks2);
+	x++;
+
+	register float indeks3=indeksy[x];
+	register int pierwszyIndeks3=floorf(indeks3);
+	register int drugiIndeks3=pierwszyIndeks3+1;
+	wynik[x]=sygnal[pierwszyIndeks3]*(drugiIndeks3-indeks3)+sygnal[drugiIndeks3]*(indeks3-pierwszyIndeks3);
+	x++;
+
+	register float indeks4=indeksy[x];
+	register int pierwszyIndeks4=floorf(indeks4);
+	register int drugiIndeks4=pierwszyIndeks4+1;
+	wynik[x]=sygnal[pierwszyIndeks4]*(drugiIndeks4-indeks4)+sygnal[drugiIndeks4]*(indeks4-pierwszyIndeks4);
+	x++;
+
+	register float indeks5=indeksy[x];
+	register int pierwszyIndeks5=floorf(indeks5);
+	register int drugiIndeks5=pierwszyIndeks5+1;
+	wynik[x]=sygnal[pierwszyIndeks5]*(drugiIndeks5-indeks5)+sygnal[drugiIndeks5]*(indeks5-pierwszyIndeks5);
+	x++;
+
+	register float indeks6=indeksy[x];
+	register int pierwszyIndeks6=floorf(indeks6);
+	register int drugiIndeks6=pierwszyIndeks6+1;
+	wynik[x]=sygnal[pierwszyIndeks6]*(drugiIndeks6-indeks6)+sygnal[drugiIndeks6]*(indeks6-pierwszyIndeks6);
+	x++;
+
+	register float indeks7=indeksy[x];
+	register int pierwszyIndeks7=floorf(indeks7);
+	register int drugiIndeks7=pierwszyIndeks7+1;
+	wynik[x]=sygnal[pierwszyIndeks7]*(drugiIndeks7-indeks7)+sygnal[drugiIndeks7]*(indeks7-pierwszyIndeks7);
+	x++;
+
+	register float indeks8=indeksy[x];
+	register int pierwszyIndeks8=floorf(indeks8);
+	register int drugiIndeks8=pierwszyIndeks8+1;
+	wynik[x]=sygnal[pierwszyIndeks8]*(drugiIndeks8-indeks8)+sygnal[drugiIndeks8]*(indeks8-pierwszyIndeks8);
+	x++;
 }
 
 void ZapiszWynikDoCsv(const float* sygnal, const float* wynik, const char* sciezkaPliku)
@@ -85,25 +172,27 @@ float _tmain(float argc, _TCHAR* argv[])
 		cudaMemcpy(dA, hA, rozmiarWBajtach, cudaMemcpyHostToDevice);
 		cudaMemcpy(dIndeksy, indeksy, rozmiarWBajtach, cudaMemcpyHostToDevice);
 
-		//Przeprobkuj <<< 1, liczbaProbek/2 >>> (2, dA, dIndeksy, dB);	
+		Przeprobkuj2 <<< 1, liczbaProbek/2 >>> (dA, dIndeksy, dB);	
+		Przeprobkuj4 <<< 1, liczbaProbek/4 >>> (dA, dIndeksy, dB);	
+		Przeprobkuj8 <<< 1, liczbaProbek/8 >>> (dA, dIndeksy, dB);	
 
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&tic);
-		Przeprobkuj <<< 1, liczbaProbek/2 >>> (2, dA, dIndeksy, dB);	
+		Przeprobkuj2 <<< 1, liczbaProbek/2 >>> (dA, dIndeksy, dB);	
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&toc);
 		std::cout << "2: " << (double)(toc.QuadPart-tic.QuadPart)/tyknieciaNaSekunde.QuadPart*1000 << std::endl;
 
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&tic);
-		Przeprobkuj <<< 1, liczbaProbek/4 >>> (4, dA, dIndeksy, dB);	
+		Przeprobkuj4 <<< 1, liczbaProbek/4 >>> (dA, dIndeksy, dB);	
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&toc);
 		std::cout << "4: " << (double)(toc.QuadPart-tic.QuadPart)/tyknieciaNaSekunde.QuadPart*1000 << std::endl;
 
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&tic);
-		Przeprobkuj <<< 1, liczbaProbek/8 >>> (8, dA, dIndeksy, dB);	
+		Przeprobkuj8 <<< 1, liczbaProbek/8 >>> (dA, dIndeksy, dB);	
 		cudaDeviceSynchronize();
 		QueryPerformanceCounter(&toc);
 		std::cout << "8: " << (double)(toc.QuadPart-tic.QuadPart)/tyknieciaNaSekunde.QuadPart*1000 << std::endl;
