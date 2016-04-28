@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -13,22 +14,35 @@ namespace alignment
         {
             //Console.OutputEncoding = Encoding.UTF8;
             NameValueCollection konfiguracja = ConfigurationManager.AppSettings;
-            Sekwencja sekwencja = OdczytajSekwencję(konfiguracja["nieznana sekwencja"]);
+            Sekwencja sekwencjaWejściowa = OdczytajSekwencję(konfiguracja["nieznana sekwencja"]);
             Algorytm algorytm = (Algorytm) Enum.Parse(typeof (Algorytm), konfiguracja["algorytm"].ToUpper());
             int d = int.Parse(konfiguracja["d"]);
             Dictionary<char, Dictionary<char, int>> macierzSubstytucji = StwórzMacierzSubstytucji(konfiguracja["macierz substytucji"]);
-            IEnumerable<Sekwencja> bazaDanych = StwórzBazęDanych();
+            Sekwencja[] bazaDanych = StwórzBazęDanych().ToArray();
 
             foreach (Sekwencja sekwencjaZBazy in bazaDanych)
             {
                 int długośćLiczb;
-                Komórka[,] macierz = StwórzMacierz(algorytm, macierzSubstytucji, sekwencja.Struktura, sekwencjaZBazy.Struktura, d, out długośćLiczb);
+                Komórka[,] macierz = StwórzMacierz(algorytm, macierzSubstytucji, sekwencjaWejściowa.Struktura, sekwencjaZBazy.Struktura, d, out długośćLiczb);
+                sekwencjaZBazy.Punkty = (from Komórka komórka in macierz select komórka.Liczba).Max();
             }
 
-            //WyświetlWyniki(macierz, sekwencja1, sekwencja2, algorytm, długośćLiczb);
+            using (StreamWriter pisarz = new StreamWriter("wyniki.txt"))
+            {
+                pisarz.WriteLine(sekwencjaWejściowa.Nazwa);
+                pisarz.WriteLine(sekwencjaWejściowa.Struktura);
+                pisarz.WriteLine();
 
-            Console.Write("Naciśnij dowolny klawisz, aby kontynuować...");
-            Console.ReadKey();
+                foreach (Sekwencja sekwencjaZBazy in bazaDanych.OrderByDescending(s => s.Punkty))
+                {
+                    pisarz.WriteLine("{0}\t{1}", sekwencjaZBazy.Nazwa, sekwencjaZBazy.Punkty);
+                    pisarz.WriteLine(sekwencjaZBazy.Struktura);
+                }
+            }
+
+            Process.Start("wyniki.txt");
+
+            //WyświetlWyniki(macierz, sekwencja1, sekwencja2, algorytm, długośćLiczb);
         }
 
         private static Sekwencja OdczytajSekwencję(string nazwaPliku)
