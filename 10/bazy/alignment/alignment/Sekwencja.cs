@@ -4,6 +4,7 @@
     {
         public string Nazwa { get; set; }
         public int Punkty { get; set; }
+        public Komórka[,] Macierz { get; set; }
 
         private string _struktura;
 

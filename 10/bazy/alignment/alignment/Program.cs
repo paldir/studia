@@ -15,17 +15,24 @@ namespace alignment
             //Console.OutputEncoding = Encoding.UTF8;
             NameValueCollection konfiguracja = ConfigurationManager.AppSettings;
             Sekwencja sekwencjaWejściowa = OdczytajSekwencję(konfiguracja["nieznana sekwencja"]);
-            Algorytm algorytm = (Algorytm) Enum.Parse(typeof (Algorytm), konfiguracja["algorytm"].ToUpper());
+            Algorytm algorytm = (Algorytm)Enum.Parse(typeof(Algorytm), konfiguracja["algorytm"].ToUpper());
             int d = int.Parse(konfiguracja["d"]);
             Dictionary<char, Dictionary<char, int>> macierzSubstytucji = StwórzMacierzSubstytucji(konfiguracja["macierz substytucji"]);
             Sekwencja[] bazaDanych = StwórzBazęDanych().ToArray();
+            int liczbaPozycji = bazaDanych.Length;
+
+            Console.WriteLine("Tworzenie macierzy podobieństwa...");
 
             foreach (Sekwencja sekwencjaZBazy in bazaDanych)
             {
                 int długośćLiczb;
                 Komórka[,] macierz = StwórzMacierz(algorytm, macierzSubstytucji, sekwencjaWejściowa.Struktura, sekwencjaZBazy.Struktura, d, out długośćLiczb);
                 sekwencjaZBazy.Punkty = (from Komórka komórka in macierz select komórka.Liczba).Max();
+                sekwencjaZBazy.Macierz = macierz;
             }
+
+            Console.WriteLine("Zakończono.");
+            Console.WriteLine("Tworzenie pliku wynikowego...");
 
             using (StreamWriter pisarz = new StreamWriter("wyniki.txt"))
             {
@@ -35,21 +42,47 @@ namespace alignment
 
                 foreach (Sekwencja sekwencjaZBazy in bazaDanych.OrderByDescending(s => s.Punkty))
                 {
+                    string nowaSekwencja1;
+                    string nowaSekwencja2;
+
+                    WyświetlWyniki(sekwencjaZBazy.Macierz, sekwencjaWejściowa.Struktura, sekwencjaZBazy.Struktura, algorytm, out nowaSekwencja1, out nowaSekwencja2);
+
+                    int długość1 = nowaSekwencja1.Length;
+                    int długość2 = nowaSekwencja2.Length;
+                    string prefiks = new string('-', Math.Abs(długość1 - długość2));
+
+                    if (długość1 < długość2)
+                        nowaSekwencja1 = nowaSekwencja1.Insert(0, prefiks);
+                    else if (długość1 > długość2)
+                        nowaSekwencja2 = nowaSekwencja2.Insert(0, prefiks);
+
                     pisarz.WriteLine("{0}\t{1}", sekwencjaZBazy.Nazwa, sekwencjaZBazy.Punkty);
-                    pisarz.WriteLine(sekwencjaZBazy.Struktura);
+                    pisarz.WriteLine(nowaSekwencja1);
+
+                    for (int i = 0; i < nowaSekwencja1.Length; i++)
+                    {
+                        char znak1 = nowaSekwencja1[i];
+                        char znak2 = nowaSekwencja2[i];
+
+                        pisarz.Write(znak1 == znak2 ? ':' : ' ');
+                    }
+
+                    pisarz.WriteLine();
+                    pisarz.WriteLine(nowaSekwencja2);
+                    pisarz.WriteLine();
                 }
             }
 
-            Process.Start("wyniki.txt");
-
-            //WyświetlWyniki(macierz, sekwencja1, sekwencja2, algorytm, długośćLiczb);
+            Console.WriteLine("Wyniki zapisane w pliku wyniki.txt ");
+            Console.WriteLine("Proszę nacisnąć dowolny klawisz, aby zakończyć program.");
+            Console.ReadKey();
         }
 
         private static Sekwencja OdczytajSekwencję(string nazwaPliku)
         {
             using (StreamReader strumień = new StreamReader(nazwaPliku))
             {
-                Sekwencja sekwencja = new Sekwencja {Nazwa = strumień.ReadLine()};
+                Sekwencja sekwencja = new Sekwencja { Nazwa = strumień.ReadLine() };
 
                 while (!strumień.EndOfStream)
                     sekwencja.Struktura = string.Concat(sekwencja.Struktura, strumień.ReadLine());
@@ -94,7 +127,7 @@ namespace alignment
             for (int i = 0; i < liczbaElementów; i++)
                 for (int j = 0; j < liczbaElementów; j++)
                 {
-                    int liczba = int.Parse(linie[i + 1].Substring(1 + j*3, 3));
+                    int liczba = int.Parse(linie[i + 1].Substring(1 + j * 3, 3));
                     Dictionary<char, Dictionary<char, int>>.KeyCollection klucze = macierz.Keys;
 
                     macierz[klucze.ElementAt(i)].Add(klucze.ElementAt(j), liczba);
@@ -127,10 +160,10 @@ namespace alignment
             }
 
             for (int i = 0; i < liczbaWierszy; i++)
-                macierz[i, 0] = new Komórka {Liczba = i*przelicznik};
+                macierz[i, 0] = new Komórka { Liczba = i * przelicznik };
 
             for (int j = 0; j < liczbaKolumn; j++)
-                macierz[0, j] = new Komórka {Liczba = j*przelicznik};
+                macierz[0, j] = new Komórka { Liczba = j * przelicznik };
 
             for (int i = 1; i < liczbaWierszy; i++)
                 for (int j = 1; j < liczbaKolumn; j++)
@@ -154,21 +187,21 @@ namespace alignment
                     else
                         strzałka = Strzałka.Lewo;
 
-                    macierz[i, j] = new Komórka {Liczba = maksimum, Strzałka = strzałka};
+                    macierz[i, j] = new Komórka { Liczba = maksimum, Strzałka = strzałka };
                     długośćLiczb = Math.Max(długośćLiczb, maksimum.ToString().Length);
                 }
 
             return macierz;
         }
 
-        private static void WyświetlWyniki(Komórka[,] macierz, string sekwencja1, string sekwencja2, Algorytm algorytm, int długośćLiczb)
+        private static void WyświetlWyniki(Komórka[,] macierz, string sekwencja1, string sekwencja2, Algorytm algorytm, out string nowaSekwencja1, out string nowaSekwencja2)
         {
             int k = -1;
             int l = -1;
             Komórka komórka = null;
             bool koniec = false;
-            string nowaSekwencja1 = sekwencja1;
-            string nowaSekwencja2 = sekwencja2;
+            nowaSekwencja1 = sekwencja1;
+            nowaSekwencja2 = sekwencja2;
             int długośćSekwencji1 = sekwencja1.Length;
             int długośćSekwencji2 = sekwencja2.Length;
             int liczbaWierszy = długośćSekwencji1 + 1;
@@ -236,57 +269,6 @@ namespace alignment
 
                     komórka = macierz[k, l];
                 } while (true);
-
-            długośćLiczb += 2;
-
-            Console.Write(new string(' ', długośćLiczb * 2));
-
-            for (int i = 0; i < długośćSekwencji2; i++)
-                Console.Write(sekwencja2[i].ToString().PadLeft(długośćLiczb));
-
-            Console.WriteLine();
-            Console.Write(new string(' ', długośćLiczb));
-
-            for (int j = 0; j < liczbaKolumn; j++)
-                Console.Write(macierz[0, j].Liczba.ToString().PadLeft(długośćLiczb));
-
-            Console.WriteLine();
-
-            for (int i = 1; i < liczbaWierszy; i++)
-            {
-                Console.Write(string.Concat(sekwencja1[i - 1].ToString().PadLeft(długośćLiczb), macierz[i, 0].Liczba.ToString().PadLeft(długośćLiczb)));
-
-                for (int j = 1; j < liczbaKolumn; j++)
-                {
-                    komórka = macierz[i, j];
-                    char strzałka = ' ';
-
-                    switch (komórka.Strzałka)
-                    {
-                        case Strzałka.Góra:
-                            strzałka = '↑';
-
-                            break;
-
-                        case Strzałka.Lewo:
-                            strzałka = '←';
-
-                            break;
-
-                        case Strzałka.Skos:
-                            strzałka = '\\';
-
-                            break;
-                    }
-
-                    Console.Write(string.Concat(komórka.Liczba, strzałka).PadLeft(długośćLiczb));
-                }
-
-                Console.WriteLine();
-            }
-
-            Console.WriteLine(nowaSekwencja1);
-            Console.WriteLine(nowaSekwencja2);
         }
     }
 }
