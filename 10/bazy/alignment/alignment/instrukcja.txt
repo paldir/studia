@@ -1,0 +1,14 @@
+﻿Plik alignment.exe.config jest plikiem tekstowym, który przechowuje konfigurację programu.
+Zawiera linijki <add key="..." value="..."/>.
+Poprzez zmiany wartości atrybutu "value" można zmieniać działanie programu.
+
+    <add key="algorytm" value="NW"/> - prawidłowe wartości to NW i SW
+    <add key="d" value="-6"/> - kara za spację
+    <add key="nieznana sekwencja" value="query_1.fasta"/> - ścieżka do pliku z poszukiwaną sekwencją
+    <add key="baza danych" value="DataBase.fasta"/> - ścieżka do pliku z bazą danych
+    <add key="macierz substytucji" value="BLOSUM62.txt"/> - ścieżka do pliku z macierzą substytucji
+
+W czasie działania programu nie jest wymagana żadna interakcja poza wciśnięciem klawisza, aby zakończyć jego wykonywanie.
+Wyniki alignmentu zapisane zostaną w pliku wyniki.txt.
+Pierwsze dwie linie tego pliku zawierają nazwę i strukturę poszukiwanej sekwencji. W kolejnych można zobaczyć porównwania tej sekwencji z bazą danych.
+Sekwencje wyświetlane są od najbardziej podobnej do najmniej podobnej. Obok nazwy sekwencji widnieje liczba zdobytych punktów.

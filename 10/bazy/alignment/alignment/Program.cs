@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -12,14 +11,12 @@ namespace alignment
     {
         private static void Main()
         {
-            //Console.OutputEncoding = Encoding.UTF8;
             NameValueCollection konfiguracja = ConfigurationManager.AppSettings;
             Sekwencja sekwencjaWejściowa = OdczytajSekwencję(konfiguracja["nieznana sekwencja"]);
             Algorytm algorytm = (Algorytm)Enum.Parse(typeof(Algorytm), konfiguracja["algorytm"].ToUpper());
             int d = int.Parse(konfiguracja["d"]);
             Dictionary<char, Dictionary<char, int>> macierzSubstytucji = StwórzMacierzSubstytucji(konfiguracja["macierz substytucji"]);
-            Sekwencja[] bazaDanych = StwórzBazęDanych().ToArray();
-            int liczbaPozycji = bazaDanych.Length;
+            Sekwencja[] bazaDanych = StwórzBazęDanych(konfiguracja["baza danych"]).ToArray();
 
             Console.WriteLine("Tworzenie macierzy podobieństwa...");
 
@@ -47,19 +44,22 @@ namespace alignment
 
                     WyświetlWyniki(sekwencjaZBazy.Macierz, sekwencjaWejściowa.Struktura, sekwencjaZBazy.Struktura, algorytm, out nowaSekwencja1, out nowaSekwencja2);
 
-                    int długość1 = nowaSekwencja1.Length;
-                    int długość2 = nowaSekwencja2.Length;
-                    string prefiks = new string('-', Math.Abs(długość1 - długość2));
+                    //if (algorytm == Algorytm.NW)
+                    {
+                        int długość1 = nowaSekwencja1.Length;
+                        int długość2 = nowaSekwencja2.Length;
+                        string prefiks = new string('-', Math.Abs(długość1 - długość2));
 
-                    if (długość1 < długość2)
-                        nowaSekwencja1 = nowaSekwencja1.Insert(0, prefiks);
-                    else if (długość1 > długość2)
-                        nowaSekwencja2 = nowaSekwencja2.Insert(0, prefiks);
+                        if (długość1 < długość2)
+                            nowaSekwencja1 = nowaSekwencja1.Insert(0, prefiks);
+                        else if (długość1 > długość2)
+                            nowaSekwencja2 = nowaSekwencja2.Insert(0, prefiks);
+                    }
 
                     pisarz.WriteLine("{0}\t{1}", sekwencjaZBazy.Nazwa, sekwencjaZBazy.Punkty);
                     pisarz.WriteLine(nowaSekwencja1);
 
-                    for (int i = 0; i < nowaSekwencja1.Length; i++)
+                    for (int i = 0; (i < nowaSekwencja1.Length) && (i < nowaSekwencja2.Length); i++)
                     {
                         char znak1 = nowaSekwencja1[i];
                         char znak2 = nowaSekwencja2[i];
@@ -91,11 +91,11 @@ namespace alignment
             }
         }
 
-        private static IEnumerable<Sekwencja> StwórzBazęDanych()
+        private static IEnumerable<Sekwencja> StwórzBazęDanych(string ścieżka)
         {
             List<Sekwencja> sekwencje = new List<Sekwencja>();
 
-            using (StreamReader strumień = new StreamReader("DataBase.fasta"))
+            using (StreamReader strumień = new StreamReader(ścieżka))
                 while (!strumień.EndOfStream)
                 {
                     string linia = strumień.ReadLine();
