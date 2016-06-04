@@ -12,3 +12,4 @@ W czasie działania programu nie jest wymagana żadna interakcja poza wciśnięc
 Wyniki alignmentu zapisane zostaną w pliku wyniki.txt.
 Pierwsze dwie linie tego pliku zawierają nazwę i strukturę poszukiwanej sekwencji. W kolejnych można zobaczyć porównwania tej sekwencji z bazą danych.
 Sekwencje wyświetlane są od najbardziej podobnej do najmniej podobnej. Obok nazwy sekwencji widnieje liczba zdobytych punktów.
+Poniżej umieszczono oryginalną sekwencję z bazy, a następnie porównanie obu sekwencji.

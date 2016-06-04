@@ -13,7 +13,7 @@ namespace alignment
         {
             NameValueCollection konfiguracja = ConfigurationManager.AppSettings;
             Sekwencja sekwencjaWejściowa = OdczytajSekwencję(konfiguracja["nieznana sekwencja"]);
-            Algorytm algorytm = (Algorytm)Enum.Parse(typeof(Algorytm), konfiguracja["algorytm"].ToUpper());
+            Algorytm algorytm = (Algorytm) Enum.Parse(typeof(Algorytm), konfiguracja["algorytm"].ToUpper());
             int d = int.Parse(konfiguracja["d"]);
             Dictionary<char, Dictionary<char, int>> macierzSubstytucji = StwórzMacierzSubstytucji(konfiguracja["macierz substytucji"]);
             Sekwencja[] bazaDanych = StwórzBazęDanych(konfiguracja["baza danych"]).ToArray();
@@ -44,7 +44,7 @@ namespace alignment
 
                     WyświetlWyniki(sekwencjaZBazy.Macierz, sekwencjaWejściowa.Struktura, sekwencjaZBazy.Struktura, algorytm, out nowaSekwencja1, out nowaSekwencja2);
 
-                    //if (algorytm == Algorytm.NW)
+                    if (algorytm == Algorytm.NW)
                     {
                         int długość1 = nowaSekwencja1.Length;
                         int długość2 = nowaSekwencja2.Length;
@@ -57,6 +57,7 @@ namespace alignment
                     }
 
                     pisarz.WriteLine("{0}\t{1}", sekwencjaZBazy.Nazwa, sekwencjaZBazy.Punkty);
+                    pisarz.WriteLine(sekwencjaZBazy.Struktura);
                     pisarz.WriteLine(nowaSekwencja1);
 
                     for (int i = 0; (i < nowaSekwencja1.Length) && (i < nowaSekwencja2.Length); i++)
@@ -82,7 +83,7 @@ namespace alignment
         {
             using (StreamReader strumień = new StreamReader(nazwaPliku))
             {
-                Sekwencja sekwencja = new Sekwencja { Nazwa = strumień.ReadLine() };
+                Sekwencja sekwencja = new Sekwencja {Nazwa = strumień.ReadLine()};
 
                 while (!strumień.EndOfStream)
                     sekwencja.Struktura = string.Concat(sekwencja.Struktura, strumień.ReadLine());
@@ -103,7 +104,7 @@ namespace alignment
                     if (linia != null)
                         if (linia.StartsWith(">"))
                         {
-                            Sekwencja sekwencja = new Sekwencja { Nazwa = linia };
+                            Sekwencja sekwencja = new Sekwencja {Nazwa = linia};
 
                             sekwencje.Add(sekwencja);
                         }
@@ -127,7 +128,7 @@ namespace alignment
             for (int i = 0; i < liczbaElementów; i++)
                 for (int j = 0; j < liczbaElementów; j++)
                 {
-                    int liczba = int.Parse(linie[i + 1].Substring(1 + j * 3, 3));
+                    int liczba = int.Parse(linie[i + 1].Substring(1 + j*3, 3));
                     Dictionary<char, Dictionary<char, int>>.KeyCollection klucze = macierz.Keys;
 
                     macierz[klucze.ElementAt(i)].Add(klucze.ElementAt(j), liczba);
@@ -160,10 +161,10 @@ namespace alignment
             }
 
             for (int i = 0; i < liczbaWierszy; i++)
-                macierz[i, 0] = new Komórka { Liczba = i * przelicznik };
+                macierz[i, 0] = new Komórka {Liczba = i*przelicznik};
 
             for (int j = 0; j < liczbaKolumn; j++)
-                macierz[0, j] = new Komórka { Liczba = j * przelicznik };
+                macierz[0, j] = new Komórka {Liczba = j*przelicznik};
 
             for (int i = 1; i < liczbaWierszy; i++)
                 for (int j = 1; j < liczbaKolumn; j++)
@@ -184,10 +185,12 @@ namespace alignment
                         strzałka = Strzałka.Skos;
                     else if (maksimum == góra)
                         strzałka = Strzałka.Góra;
-                    else
+                    else if (maksimum == lewo)
                         strzałka = Strzałka.Lewo;
+                    else
+                        strzałka = Strzałka.Brak;
 
-                    macierz[i, j] = new Komórka { Liczba = maksimum, Strzałka = strzałka };
+                    macierz[i, j] = new Komórka {Liczba = maksimum, Strzałka = strzałka};
                     długośćLiczb = Math.Max(długośćLiczb, maksimum.ToString().Length);
                 }
 
@@ -200,12 +203,12 @@ namespace alignment
             int l = -1;
             Komórka komórka = null;
             bool koniec = false;
-            nowaSekwencja1 = sekwencja1;
-            nowaSekwencja2 = sekwencja2;
             int długośćSekwencji1 = sekwencja1.Length;
             int długośćSekwencji2 = sekwencja2.Length;
             int liczbaWierszy = długośćSekwencji1 + 1;
             int liczbaKolumn = długośćSekwencji2 + 1;
+            nowaSekwencja1 = null;
+            nowaSekwencja2 = null;
 
             switch (algorytm)
             {
@@ -213,11 +216,15 @@ namespace alignment
                     k = długośćSekwencji1;
                     l = długośćSekwencji2;
                     komórka = macierz[k, l];
+                    nowaSekwencja1 = sekwencja1;
+                    nowaSekwencja2 = sekwencja2;
 
                     break;
 
                 case Algorytm.SW:
                     komórka = macierz[0, 0];
+                    nowaSekwencja1 = string.Empty;
+                    nowaSekwencja2 = string.Empty;
 
                     for (int i = 0; i < liczbaWierszy; i++)
                         for (int j = 0; j < liczbaKolumn; j++)
@@ -247,19 +254,39 @@ namespace alignment
 
                         case Strzałka.Góra:
                             k--;
-                            nowaSekwencja2 = nowaSekwencja2.Insert(l, "-");
+
+                            if (algorytm == Algorytm.NW)
+                                nowaSekwencja2 = nowaSekwencja2.Insert(l, "-");
+                            else
+                            {
+                                nowaSekwencja1 = sekwencja1[k] + nowaSekwencja1;
+                                nowaSekwencja2 = "-" + nowaSekwencja2;
+                            }
 
                             break;
 
                         case Strzałka.Lewo:
                             l--;
-                            nowaSekwencja1 = nowaSekwencja1.Insert(k, "-");
+
+                            if (algorytm == Algorytm.NW)
+                                nowaSekwencja1 = nowaSekwencja1.Insert(k, "-");
+                            else
+                            {
+                                nowaSekwencja1 = "-" + nowaSekwencja1;
+                                nowaSekwencja2 = sekwencja2[l] + nowaSekwencja2;
+                            }
 
                             break;
 
                         case Strzałka.Skos:
                             k--;
                             l--;
+
+                            if (algorytm == Algorytm.SW)
+                            {
+                                nowaSekwencja1 = sekwencja1[k] + nowaSekwencja1;
+                                nowaSekwencja2 = sekwencja2[l] + nowaSekwencja2;
+                            }
 
                             break;
                     }
